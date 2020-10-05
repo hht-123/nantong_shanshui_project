@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import { Layout, Icon, Dropdown, Menu, } from 'antd';
+import { Layout } from 'antd';
 import history from './history';
 import { removeCookie } from "../../helpers/cookies";
 import { withRouter } from 'react-router-dom';
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 import '../../style/header.less';
 import logo from '../../statistics/logo.png';
 import { nowTime } from '../../publicFunction/index';
-import { setCookie } from "../../helpers/cookies";
-import {color} from "echarts/src/export";
+// import { setCookie } from "../../helpers/cookies";
+// import {color} from "echarts/src/export";
 
 const { Header } = Layout;
 
@@ -59,55 +59,14 @@ class HeaderCustom extends Component{
     }
 
     render(){
-      const menu_property = (
-        <Menu>
-          <Menu.Item >设备信息</Menu.Item>
-          <Menu.Item >设备配置记录</Menu.Item>
-          <Menu.Item >设备调拨</Menu.Item>
-          <Menu.Item >设备调拨记录</Menu.Item>
-          <Menu.Item >设备报废</Menu.Item>
-        </Menu>
-      );
-
-      const menu_information = (
-        <Menu>
-          <Menu.Item >主机信息</Menu.Item>
-          <Menu.Item >传感器信息</Menu.Item>
-          <Menu.Item >客户信息</Menu.Item>
-        </Menu>
-      );
 
       return(
         <Header className="header-style header">
           <img alt="logo" src={logo}/>
-          {/* <Link to="/technology-system"> */}
             <span className={'header-span'}>循环水智慧管家远程监控系统</span>
-          {/* </Link> */}
-          {/* <span className="date-span">{this.state.date.toLocaleString()}</span> */}
-          <div className={"header-property"}>
-            <Dropdown overlay={menu_property} >
-              {/* <a className="ant-dropdown-link" onClick={e => e.preventDefault()} style={{color: 'white'}}>
-                <span style={{marginRight: 5}}>
-                  <Icon type="user" style={{marginRight: 10}}/>
-                  {this.props.username}
-                </span>
-                <Icon type="down" />
-              </a> */}
-                <div>固定资产</div>
-            </Dropdown>
-          </div>
-          <div className={"header-information"}>
-            <Dropdown overlay={menu_information} >
-                <div>基本信息</div>
-            </Dropdown>
-          </div>
-          <div className={"header-maintenance"}>
-            <div>运维</div>
-          </div>
         </Header>
       )
     }
 }
 
 export default withRouter(HeaderCustom)
-

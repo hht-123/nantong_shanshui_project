@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import {message, Pagination, Table} from 'antd';
 import {Model} from "../dataModule/testBone";
+import '../style/table.less';
 
 const model = new Model()
 
@@ -106,7 +107,7 @@ export default class AntdTable extends Component{
     this.setState({ currentPage: currentPage })
     this.pageChange(currentPage)
   }
-
+  
   render() {
     const { columns, data, currentPage, total, isLoading, pageSize } = this.state
     const { queryParams } = this.props

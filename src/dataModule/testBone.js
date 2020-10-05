@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { originalUrl } from './UrlList'
-import form from "eslint-plugin-jsx-a11y/src/util/implicitRoles/form";
+// import form from "eslint-plugin-jsx-a11y/src/util/implicitRoles/form";
 
 // 使用拦截器在发送请求前添加 token
 axios.interceptors.request.use(config => {
