@@ -4,7 +4,11 @@ import { Layout } from 'antd';
 import { getCookie, setCookie } from "../../helpers/cookies";
 import store from '../../store';
 import { Provider } from 'react-redux';
+<<<<<<< HEAD
 
+=======
+import EngineInfo from '../../views/basicInfo/engineInfo'
+>>>>>>> 65b929a1471f8829fcd837715630d1b531dcb8db
 import SideMenu from './SideMenu';
 import HeaderCustom from './HeaderCustom';
 import Index from '../index/index';
@@ -12,8 +16,11 @@ import Index from '../index/index';
 
 import '../../style/index.less';
 
+<<<<<<< HEAD
 import Maintenance_index from '../../views/maintenance/index';
 
+=======
+>>>>>>> 65b929a1471f8829fcd837715630d1b531dcb8db
 const { Content, Footer, Sider } = Layout;
 
 class App extends Component {
@@ -49,18 +56,16 @@ class App extends Component {
       <Layout>
         <Provider store={store}>
           <HeaderCustom collapsed={collapsed} toggle={this.toggle} username={name} />
-
           <Content>
-            {/* <HeaderMenu /> */}
-            <Layout style={{ padding: '0 0', background: '#fff' }}>
+            {/*<HeaderMenu />*/}
+            <Layout style={{ padding: '0 0', background: '#F8FAFF' }}>
               <Sider width={200} style={{ background: '#fff' }}>
                 <SideMenu />
               </Sider>
               <Content style={{ padding: '0 24px', minHeight: 'calc(100vh - 111px)' }}>
-                 <Switch>
-                  <Route exact path={'/'} component={(props) =><Index {...props}/>} /> 
-                  <Route exact path={'/app/maintenance' } component={Maintenance_index}></Route>
-                  {/* <Route component={noMatch} /> */}
+                <Switch>
+                  <Route exact path={'/'} component={(props) =><Index {...props}/>} />
+                  <Route path='/app/engine' component={EngineInfo} />
                 </Switch>
               </Content>
             </Layout>

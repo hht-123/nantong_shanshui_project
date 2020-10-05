@@ -1,3 +1,17 @@
+<<<<<<< HEAD
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import MRoute from './routes/index';
+import * as serviceWorker from './serviceWorker';
+
+ReactDOM.render(<MRoute />, document.getElementById('root'));
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister();
+=======
 /*
  * @Descripttion: 
  * @version: 
@@ -11,10 +25,20 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import MRoute from './routes/index';
 import * as serviceWorker from './serviceWorker';
+import zh_CN from 'antd/lib/locale-provider/zh_CN'
+import { LocaleProvider } from 'antd'
+import 'moment/locale/zh-cn'
 
-ReactDOM.render(<MRoute />, document.getElementById('root'));
+
+ReactDOM.render(
+    <LocaleProvider locale={zh_CN}>
+        <MRoute />
+    </LocaleProvider>,
+    document.getElementById('root')
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+>>>>>>> 509d0707df4fdabec4a77c3ffd6a38fff531dc0b

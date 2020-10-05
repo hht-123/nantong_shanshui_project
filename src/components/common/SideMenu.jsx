@@ -24,6 +24,7 @@ export default class SideMenu extends Component {
         mode="inline"
         style={{ height: 'calc(100% - 3rem)', marginTop: '3rem' }}
       >
+<<<<<<< HEAD
         <SubMenu
           key="sub1"
           title={
@@ -38,6 +39,20 @@ export default class SideMenu extends Component {
           <Menu.Item key="3">option3</Menu.Item>
           <Menu.Item key="4">option4</Menu.Item> */}
         </SubMenu>
+=======
+<<<<<<< HEAD
+        <Menu.Item key="0">
+            <Icon type="pie-chart" />
+            <span>运维</span>
+        </Menu.Item>
+
+=======
+        <Menu.Item key="1">
+            <Icon type="pie-chart" />
+            <span>运维</span>
+          </Menu.Item>
+>>>>>>> f9221ca42c36ace4f96d3531d992be76c1fdc0f9
+>>>>>>> 65b929a1471f8829fcd837715630d1b531dcb8db
         <SubMenu
           key="sub2"
           title={
@@ -47,7 +62,13 @@ export default class SideMenu extends Component {
                 </span>
           }
         >
+<<<<<<< HEAD
+=======
           {/*<Link to="/technology-system/check/sample-frame">样架测量检验</Link>*/}
+<<<<<<< HEAD
+=======
+>>>>>>> f9221ca42c36ace4f96d3531d992be76c1fdc0f9
+>>>>>>> 65b929a1471f8829fcd837715630d1b531dcb8db
           <Menu.Item key="1">主机信息</Menu.Item>
           <Menu.Item key="2">传感器信息</Menu.Item>
           <Menu.Item key="3">客户信息</Menu.Item>

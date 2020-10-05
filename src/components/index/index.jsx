@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
-import { Model } from '../../dataModule/testBone'
+import '../../style/table.less';
+// 使用ajax请求导入
+// import { Model } from '../../dataModule/testBone'
 
 class Index extends Component {
   constructor(props) {
@@ -13,6 +14,7 @@ class Index extends Component {
   render() {
     return (
       <div style={{overflowX: 'auto', marginTop: 60}}>
+        123
       </div>
     )
   }
