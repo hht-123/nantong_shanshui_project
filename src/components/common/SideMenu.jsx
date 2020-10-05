@@ -24,20 +24,10 @@ export default class SideMenu extends Component {
         mode="inline"
         style={{ height: 'calc(100% - 3rem)', marginTop: '3rem' }}
       >
-        <SubMenu
-          key="sub1"
-          title={
-            <span>
-                  <Icon type="user" />
-                  运维
-                </span>
-          }
-        >
-          {/* <Menu.Item key="1">option1</Menu.Item>
-          <Menu.Item key="2">option2</Menu.Item>
-          <Menu.Item key="3">option3</Menu.Item>
-          <Menu.Item key="4">option4</Menu.Item> */}
-        </SubMenu>
+        <Menu.Item key="1">
+            <Icon type="pie-chart" />
+            <span>运维</span>
+          </Menu.Item>
         <SubMenu
           key="sub2"
           title={
