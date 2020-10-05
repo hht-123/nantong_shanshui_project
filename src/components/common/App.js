@@ -49,7 +49,7 @@ class App extends Component {
           <HeaderCustom collapsed={collapsed} toggle={this.toggle} username={name} />
           <Content>
             {/*<HeaderMenu />*/}
-            <Layout style={{ padding: '0 0', background: '#E4E4E4' }}>
+            <Layout style={{ padding: '0 0', background: '#F8FAFF' }}>
               <Sider width={200} style={{ background: '#fff' }}>
                 <SideMenu />
               </Sider>

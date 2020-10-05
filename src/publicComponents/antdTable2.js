@@ -1,118 +1,13 @@
-import { Table, Pagination, message} from 'antd';
+import { Table, Pagination } from 'antd';
 import React, { Component } from 'react';
 import '../style/table.less'
-import { Model } from "../dataModule/testBone";
-
-
-const model = new Model()
 
 class AntdTbale2 extends Component{
-    constructor(props) {
-      super (props);
-      this.state = {
-        currentPage: 1,         //当前页面
-        isLoading: false,       //是否加载
-        data: [],               //表格数据 
-        total: 15,              //一共有多少条数据
-        pageSize: 5,            //每页展示几条数据
-        showPagination: true,   //是否使用分页
-      }
-      this.totalPages = (parseInt(this.state.total / this.state.pageSize, 0) + 1);
-      this.changePage = this.changePage.bind(this);
-    }
 
-    componentDidMount() {
-      this.getCurrentPage();
-    }
-
-    //父组件需要传递 url，whetherTest
-    getCurrentPage(params) {
-      let whetherTest = true;
-      const me = this;
-      me.setState({isLoading: true})
-      model.fetch(
-        {currentPage: 2},
-        'api/engine.json',
-        'get',
-        function(response) {
-          if (whetherTest === false) {
-            me.setState({
-              isLoading: false,
-              total: response.data.count,
-              data: response.data.results,
-              currentPage: params['currentPage']
-            })
-          } else {
-            me.setState({
-              isLoading: false,
-              data: response.data.results,
-              total: response.data.count,
-            })
-          }
-        },
-        function() {
-          message.warning('加载失败，请重试')
-        },
-        whetherTest
-      )
-    }
-
-    changePage(page) {
-      
-    }
-    
     render() {
-      const {total, pageSize, showPagination, isLoading, data} = this.state;
-      console.log(this.state)
-      const changePage = this.changePage;
-      //计算一共有多少页面
-
-      const columns =  [
-          {
-            title: '主机编号',
-            dataIndex: 'engine_code',
-            align: 'center',
-            width: 100
-          },
-          {
-            title: '主机名称',
-            dataIndex: 'engine_name',
-            align: 'center',
-            width: 120
-          },
-          {
-            title: '开始生产时间',
-            dataIndex: 'begin_time',
-            align: 'center',
-            width: 120
-          },
-          {
-            title: '结束生产时间',
-            dataIndex: 'end_time',
-            align: 'center',
-            width: 120
-          },
-          {
-            title: '状态',
-            dataIndex: 'status',
-            align: 'center',
-            width: 80,
-          },
-          {
-            title: '备注',
-            dataIndex: 'note',
-            align: 'center'
-          },
-          {
-            title: '操作',
-            dataIndex: 'action',
-            align: 'center',
-            width: 80
-          }
-        ];
-
+      const {total, pageSize, showPagination, isLoading, data, columns} = this.props;
         return (
-          <div 
+          <div
             style={{
                 width: 800,
                 position: 'relative',
@@ -138,11 +33,11 @@ class AntdTbale2 extends Component{
               {showPagination?
                 <Pagination 
                 size="small" 
-                total={total}  
+                total={total}
                 showQuickJumper
                 pageSize={pageSize}
                 style={{marginRight: 0}}
-                onChange={(page) => changePage(page)}
+                onChange={(page) => this.props.changePage(page)}
               /> : null
               }
             </div>
@@ -152,3 +47,94 @@ class AntdTbale2 extends Component{
 }
 
 export default AntdTbale2;
+
+// const data = [
+//   {
+//     key: "1",
+//     engine_code: "20170606",
+//     engine_name: "水管家一代",
+//     begin_time: "2017-06-06",
+//     end_time: "2019-02-06",
+//     status: "停产",
+//     note: ""
+//   },
+//   {
+//     key: "2",
+//     engine_code: "20171209",
+//     engine_name: "水管家一代",
+//     begin_time: "2017-02-09",
+//     end_time: "",
+//     status: "在产",
+//     note: ""
+//   },
+//   {
+//     key: "3",
+//     engine_code: "20180606",
+//     engine_name: "水管家三代",
+//     begin_time: "2018-06-06",
+//     status: "在产",
+//     note: ""
+//   },
+//   {
+//     key: "4",
+//     engine_code: "20170606",
+//     engine_name: "水管家一代",
+//     begin_time: "2017-06-06",
+//     end_time: "2019-02-06",
+//     status: "停产",
+//     note: ""
+//   },
+//   {
+//     key: "5",
+//     engine_code: "20171209",
+//     engine_name: "水管家一代",
+//     begin_time: "2017-02-09",
+//     end_time: "",
+//     status: "在产",
+//     note: ""
+//   }
+// ]
+
+// const columns =  [
+//   {
+//     title: '主机编号',
+//     dataIndex: 'engine_code',
+//     align: 'center',
+//     width: 100
+//   },
+//   {
+//     title: '主机名称',
+//     dataIndex: 'engine_name',
+//     align: 'center',
+//     width: 120
+//   },
+//   {
+//     title: '开始生产时间',
+//     dataIndex: 'begin_time',
+//     align: 'center',
+//     width: 120
+//   },
+//   {
+//     title: '结束生产时间',
+//     dataIndex: 'end_time',
+//     align: 'center',
+//     width: 120
+//   },
+//   {
+//     title: '状态',
+//     dataIndex: 'status',
+//     align: 'center',
+//     width: 80,
+//   },
+//   {
+//     title: '备注',
+//     dataIndex: 'note',
+//     align: 'center'
+//   },
+//   {
+//     title: '操作',
+//     dataIndex: 'action',
+//     align: 'center',
+//     width: 80
+//   }
+// ];
