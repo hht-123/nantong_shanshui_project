@@ -1,11 +1,3 @@
-/*
- * @Descripttion: 
- * @version: 
- * @Author: 唐帆
- * @Date: 2020-04-29 21:16:38
- * @LastEditors: 唐帆
- * @LastEditTime: 2020-04-30 09:56:40
- */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
