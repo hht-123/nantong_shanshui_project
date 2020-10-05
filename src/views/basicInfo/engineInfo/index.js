@@ -31,7 +31,7 @@ class EngineInfo extends Component{
 
                     <div className="inputWrapper" >
                         <div className="input">主机编号:</div>
-                        <Input size={size} style={{width: "300px"}}/>
+                        <Input  style={{width: "300px"}}/>
                     </div>
                     
                 </div>

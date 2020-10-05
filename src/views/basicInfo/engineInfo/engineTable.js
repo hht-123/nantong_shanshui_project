@@ -1,4 +1,4 @@
-import { Table, Pagination, message, Icon} from 'antd';
+import { Table, Pagination, message} from 'antd';
 import React, { Component } from 'react';
 import { Model } from "../../../dataModule/testBone";
 
@@ -44,7 +44,7 @@ class EngineTable extends Component{
           } else {
             me.setState({
               isLoading: false,
-              data: response.data.results,
+              data: response.data.data,
               total: response.data.count,
             })
           }
@@ -62,7 +62,9 @@ class EngineTable extends Component{
     
     render() {
       const {total, pageSize, showPagination, isLoading, data} = this.state;
+      const changePage = this.changePage;
       //计算一共有多少页面
+      
       const columns =  [
           {
             title: '主机编号',
@@ -103,10 +105,7 @@ class EngineTable extends Component{
             title: '操作',
             dataIndex: 'action',
             align: 'center',
-            width: 80,
-            render: (text) => (
-              <Icon type="edit" theme="twoTone" />
-            )
+            width: 80
           }
         ];
 
@@ -124,6 +123,7 @@ class EngineTable extends Component{
                 width: '100%',
                 wordBreak: 'keep-all',
                 whiteSpace: 'nowrap',
+                fontSize: '5px',
               }} 
               classname='engine-table' 
               dataSource={data} 
@@ -141,7 +141,7 @@ class EngineTable extends Component{
                 showQuickJumper
                 pageSize={pageSize}
                 style={{marginRight: 0}}
-                onChange={(page) => this.changePage(page)}
+                onChange={(page) => changePage(page)}
               /> : null
               }
             </div>
