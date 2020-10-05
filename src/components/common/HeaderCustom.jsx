@@ -84,6 +84,7 @@ class HeaderCustom extends Component{
             <span className={'header-span'}>循环水智慧管家远程监控系统</span>
           {/* </Link> */}
           {/* <span className="date-span">{this.state.date.toLocaleString()}</span> */}
+          {/* <div className='contain'> */}
           <div className={"header-property"}>
             <Dropdown overlay={menu_property} >
               {/* <a className="ant-dropdown-link" onClick={e => e.preventDefault()} style={{color: 'white'}}>
@@ -104,10 +105,10 @@ class HeaderCustom extends Component{
           <div className={"header-maintenance"}>
             <div>运维</div>
           </div>
+          {/* </div> */}
         </Header>
       )
     }
 }
 
 export default withRouter(HeaderCustom)
-

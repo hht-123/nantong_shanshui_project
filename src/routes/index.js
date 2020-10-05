@@ -21,10 +21,10 @@ class MRoute extends Component {
     return (
       <Router history={history}>
         <Switch>
-          <Route exact path="/" component={Home} />
+          {/* <Route exact path="/" component={Home} /> */}
           <Route path="/app" component={App} />
-          <Route path="/login" component={Login} />
-          <Route component={NoMatch} />
+          {/* <Route path="/login" component={Login} />
+          <Route component={NoMatch} /> */}
         </Switch>
       </Router>   
     );

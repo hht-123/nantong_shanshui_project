@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {setCookie} from "../../helpers/cookies";
 import '../../style/login.less';
 import { Form, Icon, Input, Button, Checkbox, message, Spin } from 'antd';
-
 const FormItem = Form.Item;
 
 const users = [{

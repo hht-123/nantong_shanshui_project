@@ -169,7 +169,7 @@ export class Model extends ModelMap{
   save(params = null, url='', thenFun = null, catchFun = null) {
     this.fetch(params, url, 'post', thenFun, catchFun)
 	}
-  
+
   validate(params) {
     // let filterResult = true
     // for (let i in params) {
@@ -264,22 +264,18 @@ export class Collection extends ModelArray{
 // let testNum = 12
 // bone.set('cloneMap1', 'cloneMap1')
 // bone.set('cloneMap2', 'cloneMap2')
-// // console.log(bone.toJSON(testObject))
+// console.log(bone.toJSON(testObject))
 // bone.fetch({ab: 'ab', cd: 'cd'}, 'get')
-// let testObject2 = { test1: 'a', test2: {} }
+// // let testObject2 = { test1: 'a', test2: {} }
 // // let testObject3 = { test1: 'a', test2: [] }
 // // console.log(bone.validate(testObject3))
-// // console.log(bone.get('cloneMap1'))
-// // console.log(bone.clone()) 
+// console.log(bone.get('cloneMap1'))
+// console.log(bone.clone())
 
-// // const bone2 = new Model()
-// // bone2.set('123', '123')
-// // bone2.set('456', '456')
 // const collection = new Collection()
 // collection.push(bone)
-// // collection.push(bone2)
+// console.log(collection.modelArray)
 // // console.log(collection.modelArray)
-// // console.log(collection.modelArray)
-// // console.log(collection.clone())
+// console.log(collection.clone())
 // collection.fetch({}, 'get', 'project.json', collection.add)
 // console.log('collection', collection.modelArray)

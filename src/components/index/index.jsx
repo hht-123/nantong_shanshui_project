@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-// 使用ajax请求导入
-// import { Model } from '../../dataModule/testBone'
+
+import { Model } from '../../dataModule/testBone'
 
 class Index extends Component {
   constructor(props) {

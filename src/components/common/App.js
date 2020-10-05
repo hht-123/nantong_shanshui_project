@@ -11,6 +11,8 @@ import noMatch from './404';
 
 import '../../style/index.less';
 
+import Maintenance_index from '../../views/maintenance/index';
+
 const { Content, Footer} = Layout;
 
 class App extends Component {
@@ -48,20 +50,16 @@ class App extends Component {
           <HeaderCustom collapsed={collapsed} toggle={this.toggle} username={name} />
 
           <Content>
-            {/*<HeaderMenu />*/}
+            {/* <HeaderMenu /> */}
             <Layout style={{ padding: '0 0', background: '#fff' }}>
-              {/* <Sider width={200} style={{ background: '#fff' }}>
+              <Sider width={200} style={{ background: '#fff' }}>
                 <SideMenu />
               </Sider>
-              <Breadcrumb style={{ margin: '3.4rem 2rem 0' }}>
-                <Breadcrumb.Item>Home</Breadcrumb.Item>
-                <Breadcrumb.Item>List</Breadcrumb.Item>
-                <Breadcrumb.Item>App</Breadcrumb.Item>
-              </Breadcrumb> */}
               <Content style={{ padding: '0 24px', minHeight: 'calc(100vh - 111px)' }}>
-                <Switch>
-                  <Route exact path={'/'} component={(props) =><Index {...props}/>} />
-                  <Route component={noMatch} />
+                 <Switch>
+                  <Route exact path={'/'} component={(props) =><Index {...props}/>} /> 
+                  <Route exact path={'/app/maintenance' } component={Maintenance_index}></Route>
+                  {/* <Route component={noMatch} /> */}
                 </Switch>
               </Content>
             </Layout>
