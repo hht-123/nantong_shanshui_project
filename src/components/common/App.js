@@ -5,15 +5,16 @@ import { getCookie, setCookie } from "../../helpers/cookies";
 import store from '../../store';
 import { Provider } from 'react-redux';
 
+import SideMenu from './SideMenu';
 import HeaderCustom from './HeaderCustom';
 import Index from '../index/index';
-import noMatch from './404';
+// import noMatch from './404';
 
 import '../../style/index.less';
 
 import Maintenance_index from '../../views/maintenance/index';
 
-const { Content, Footer} = Layout;
+const { Content, Footer, Sider } = Layout;
 
 class App extends Component {
   state = {
