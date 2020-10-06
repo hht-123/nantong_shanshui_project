@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import '../../../style/wrapper.less'
 import './engine.less'
 import EngineTable from './engineTable';
-import { DatePicker,Button, Input, message, Modal } from 'antd';
+import { DatePicker,Button, Input, message } from 'antd';
 import { Model } from "../../../dataModule/testBone";
+import AddModal from './addModal';
 
 const model = new Model();
 const {RangePicker} = DatePicker;
@@ -19,22 +20,24 @@ class EngineInfo extends Component{
       showPagination: true,   //是否分页
       isLoading: false,       //是否加载
       data: [],               //表格数据 
-      total: 15,              //一共有多少条数据
+      total: 0,             //一共有多少条数据
       keyValue: "",           //用于重置
       search_engine_code: "",   //主机编号
       search_begin_time: [],    //开始时间
       search_end_time:[],       //结束时间
-      visible: false         //Modal是否显示
+      addModalVisible: false,   //addModal是否显示
+      editModalVisible:  false  //editModal是否显示
     }
+
     this.handleChange = this.handleChange.bind(this);
     this.handleBeginTime = this.handleBeginTime.bind(this);
     this.handleEndTime = this.handleEndTime.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.getPage = this.getPage.bind(this);
     this.getSize = this.getSize.bind(this);
-    this.showModal = this.showModal.bind(this);
-    this.handleOk = this.handleOk.bind(this);
-    this.handleCancel = this.handleCancel.bind(this);
+    this.showAddModal = this.showAddModal.bind(this);
+    this.closeAddModal = this.closeAddModal.bind(this);
+    this.showEditModal = this.showEditModal.bind(this);
   }
 
   componentDidMount() {
@@ -123,33 +126,26 @@ class EngineInfo extends Component{
     this.getCurrentPage(params);
   }
   //显示弹窗
-  showModal()  {
+  showAddModal()  {
     this.setState({
-      visible: true,
+      addModalVisible: true,
     });
   };
-  //弹窗确定按钮事件
-  handleOk() {
+
+  closeAddModal(visible) {
     this.setState({
-      ModalText: 'The modal will be closed after two seconds',
-      confirmLoading: true,
-    });
-    setTimeout(() => {
-      this.setState({
-        visible: false,
-        confirmLoading: false,
-      });
-    }, 2000);
-  };
-  //取消按钮事件
-  handleCancel() {
+      addModalVisible: visible
+    })
+  }
+
+  showEditModal() {
     this.setState({
-      visible: false,
+      editModalVisible: true,
     });
-  };
+  }
   
   render() {
-    const {data, isLoading, showPagination, size, total, confirmLoading, visible} = this.state;
+    const {data, isLoading, showPagination, size, total, addModalVisible , editModalVisible} = this.state;
     const tableDate = [];
     data.map((item) => {
       tableDate.push({
@@ -202,19 +198,12 @@ class EngineInfo extends Component{
                 <div style={{marginTop: "15px"}}>
                     <Button type="primary" className="button">搜索</Button>
                     <Button type="primary" className="button" onClick={this.handleReset}>重置</Button>
-                    <Button type="primary" className="button" onClick={this.showModal}>新增主机</Button>
+                    <Button type="primary" className="button" onClick={this.showAddModal}>新增主机</Button>
                 </div>
-                <div>
-                <Modal
-                  title="新增主机"
-                  visible={visible}
-                  onOk={this.handleOk}
-                  confirmLoading={confirmLoading}
-                  onCancel={this.handleCancel}
-                >
-                  <div>content</div>
-                </Modal>
-                </div>
+                <AddModal
+                  visible={addModalVisible}
+                  cancel={this.closeAddModal}
+                />
             </div>
           <div className='tableWrapper'>
             <EngineTable
