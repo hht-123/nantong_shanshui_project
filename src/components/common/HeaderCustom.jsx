@@ -63,7 +63,11 @@ class HeaderCustom extends Component{
       return(
         <Header className="header-style header">
           <img alt="logo" src={logo}/>
+          {/* <Link to="/technology-system"> */}
             <span className={'header-span'}>循环水智慧管家远程监控系统</span>
+          {/* </Link> */}
+          {/* <span className="date-span">{this.state.date.toLocaleString()}</span> */}
+          
         </Header>
       )
     }

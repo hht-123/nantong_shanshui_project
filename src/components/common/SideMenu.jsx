@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import { Menu, Icon } from 'antd';
+import {Link} from 'react-router-dom';
 // import { Link } from "react-router-dom";
 
 // import { getUserName } from '../../publicFunction';
@@ -24,10 +25,15 @@ export default class SideMenu extends Component {
         mode="inline"
         style={{ height: 'calc(100% - 3rem)', marginTop: '3rem' }}
       >
+        
         <Menu.Item key="0">
-            <Icon type="pie-chart" />
-            <span>运维</span>
+            <Link to="/app/maintenance">
+              <Icon type="pie-chart" />
+              <span>运维</span>
+            </Link>
           </Menu.Item>
+        
+
         <SubMenu
           key="sub2"
           title={
@@ -37,9 +43,12 @@ export default class SideMenu extends Component {
                 </span>
           }
         >
-          <Menu.Item key="1">主机信息</Menu.Item>
+
+          <Menu.Item key="1"><Link to="/app/engine">主机信息</Link></Menu.Item>
           <Menu.Item key="2">传感器信息</Menu.Item>
-          <Menu.Item key="3">客户信息</Menu.Item>
+          
+          <Menu.Item key="3"><Link to="/app/message">客户信息</Link></Menu.Item>
+          
         </SubMenu>
         <SubMenu
           key="sub3"
