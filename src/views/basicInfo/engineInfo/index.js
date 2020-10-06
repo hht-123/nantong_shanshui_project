@@ -10,13 +10,14 @@ const model = new Model();
 const {RangePicker} = DatePicker;
 const dataSize = 'middle';
 
+
 class EngineInfo extends Component{
   constructor(props) {
     super (props);
     this.state = {
       confirmLoading: false,
       whetherTest: false,     //是否是测试  true为是 false为否
-      url:'page/',
+      url:'app/page/',
       showPagination: true,   //是否分页
       isLoading: false,       //是否加载
       data: [],               //表格数据 
@@ -145,7 +146,7 @@ class EngineInfo extends Component{
   }
   
   render() {
-    const {data, isLoading, showPagination, size, total, addModalVisible , editModalVisible} = this.state;
+    const {data, isLoading, showPagination, size, total, addModalVisible , editModalVisible, whetherTest} = this.state;
     const tableDate = [];
     data.map((item) => {
       tableDate.push({
@@ -201,6 +202,7 @@ class EngineInfo extends Component{
                     <Button type="primary" className="button" onClick={this.showAddModal}>新增主机</Button>
                 </div>
                 <AddModal
+                  whetherTest={whetherTest}
                   visible={addModalVisible}
                   cancel={this.closeAddModal}
                 />

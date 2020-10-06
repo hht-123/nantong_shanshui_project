@@ -1,8 +1,9 @@
 import React,{ Component } from 'react';
-import { Modal, Form, Input, DatePicker, message } from 'antd';
+import { Modal, Form, Input, DatePicker, message, Button} from 'antd';
 import { Model } from "../../../dataModule/testBone";
 
 const model = new Model();
+
 class AddModal extends Component {
     constructor(props) {
         super (props);
@@ -11,7 +12,8 @@ class AddModal extends Component {
             engine_name: '',
             begin_time:'',
             end_time:'',
-            note:'',   
+            note:'',
+            url: 'main_engine/'   
         }
         this.handleOk = this.handleOk.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
@@ -21,67 +23,55 @@ class AddModal extends Component {
     }
 
     createNewEngine(params) {
-        for (let i in params) {
-          if (params[i] === null) {
-            params[i] = ''
-          }
-        }
         let me = this;
         model.fetch(
           params,
           me.state.url,
           'post',
-          function(response) {
-            if (me.state.whetherTest === false) {
-              me.setState({
-                isLoading: false,
-                total: response.data.count,
-                data: response.data.data,
-                currentPage: params['currentPage']
-              })
-            } else {
-              me.setState({
-                isLoading: false,
-                data: response.data.data,
-              })
-            }
+          function() {
+            me.props.cancel(false)
+            me.setState({
+                confirmLoading: false,
+            })
           },
           function() {
-            message.warning('加载失败，请重试')
+            message.warning('发送数据失败，请重试')
           },
-          this.state.whetherTest
+          this.props.whetherTest 
         )
       }
 
-    handleOk(e) {
-        console.log(e);
+    handleOk() {
+        const {validateFields} = this.props.form;
+        validateFields();
+        if(this.state.engine_name === '') return
+        let params = {
+            engine_name: this.state.engine_name,
+            begin_time: this.state.begin_time,
+            end_time: this.state.end_time,
+            note: this.state.note
+        }
         this.setState({
           confirmLoading: true,
         });
-        
-        setTimeout(() => {
-          this.setState({
-            visible: false,
-            confirmLoading: false,
-          });
-          this.props.cancel(false)
-        }, 500);
+        this.createNewEngine(params)
       };
+    
     //取消按钮事件
     handleCancel() {
-    this.props.cancel(false)
+        this.props.cancel(false)
     };
 
     handleChange(e) {
-    this.setState({
-        [e.target.name] : e.target.value
-    })
+        this.setState({
+            [e.target.name] : e.target.value
+        })
     }
     
     getStartDate(date, dateString) {
-    this.setState({
-        begin_time:dateString
-    })
+        this.setState({
+            begin_time:dateString
+        })
     } 
 
     getEndDate(date, dateString) {
@@ -90,8 +80,11 @@ class AddModal extends Component {
         })
     }
 
+
     render() {
+        
         const {visible} = this.props;
+        const { getFieldDecorator } = this.props.form;
         const {confirmLoading, engine_name, note} = this.state;
         console.log(this.state);
         
@@ -103,25 +96,29 @@ class AddModal extends Component {
               span: 16,
             },
           };
-        
-          console.log(this.state);
         return (
         <div>
             <Modal
                 title="新增主机"
                 visible={visible}
-                onOk={this.handleOk}
                 confirmLoading={confirmLoading}
-                onCancel={this.handleCancel}
                 destroyOnClose={true}
-            >
+                onOk={this.handleOk}
+                onCancel={this.handleCancel}
+                >
                 <div>
-                    <Form {...formItemLayout}>
+                    <Form {...formItemLayout} ref='engineForm' onSubmit={this.onSubmit}>
                         <Form.Item
                             label="主机名称"
                             colon
                         >
-                        <Input  name="engine_name" onChange={this.handleChange} value={engine_name}/>
+                            {getFieldDecorator('engine_name', {
+                                rules: [{ required: true, message: '请输入主机名称' }],
+                            })(
+                                <Input  name="engine_name" onChange={this.handleChange} />
+                            )}
+                        
+                        
                         </Form.Item>
 
                         <Form.Item
@@ -150,6 +147,6 @@ class AddModal extends Component {
         </div>
         )
     }
-} 
+}
 
-export default AddModal;
+export default Form.create()(AddModal);
