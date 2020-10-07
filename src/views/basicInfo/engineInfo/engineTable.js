@@ -6,7 +6,9 @@ class EngineTable extends Component{
   
 
     render() {
-      const {isLoading, data, total, showPagination, changePage,changeSize } = this.props;
+      const {isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
+      console.log(currentPage);
+
       const columns =  [
         {
           title: '主机编号',
@@ -48,9 +50,9 @@ class EngineTable extends Component{
           dataIndex: 'action',
           align: 'center',
           width: 80,
-          render: (text, record, index) => (
-              <Icon type="edit" theme="twoTone" />
-          )
+          render: (text, record, index) => {
+            return <Icon type="edit" theme="twoTone" onClick={() => this.props.showEditModal(record)}/>
+          }
         }
       ];
 
@@ -76,20 +78,21 @@ class EngineTable extends Component{
               bordered
               pagination={false}
               size='middle'
-              loading={isLoading}
+              loading={ isLoading }
             />
-            <div style={{marginTop:15, position: 'absolute', right: '0%' }}>
+            <div style={{ marginTop:15, position: 'absolute', right: '0%' }}>
               {showPagination?
                 <Pagination 
-                size="small" 
-                total={total}  
-                showQuickJumper
-                style={{marginRight: 0}}
-                showSizeChanger
-                pageSizeOptions={['10','20','30','40',]}
-                onChange={(page,pageSize) => changePage(page, pageSize)}
-                onShowSizeChange	={(current, size) => changeSize(current,size)}
-              /> : null
+                  size="small"
+                  current={currentPage} 
+                  total={total}  
+                  showQuickJumper
+                  style={{marginRight: 0}}
+                  showSizeChanger
+                  pageSizeOptions={['10','20','30','40',]}
+                  onChange={(page,pageSize) => changePage(page, pageSize)}
+                  onShowSizeChange={(current, size) => changeSize(current,size)}
+                /> : null
               }
             </div>
           </div>

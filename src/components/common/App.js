@@ -4,16 +4,23 @@ import { Layout } from 'antd';
 import { getCookie, setCookie } from "../../helpers/cookies";
 import store from '../../store';
 import { Provider } from 'react-redux';
+import '../../style/index.less';
 
-import EngineInfo from '../../views/basicInfo/engineInfo'
 import SideMenu from './SideMenu';
 import HeaderCustom from './HeaderCustom';
 import Index from '../index/index';
 // import noMatch from './404';
-
+import EngineInfo from '../../views/basicInfo/engineInfo'
+import SensorInfo from '../../views/basicInfo/sensorInfo' 
 import MaintenanceIndex from '../../views/maintenance/index';
+<<<<<<< HEAD
 import MessageIndex from '../../views/Message/MessageIndex';
 import '../../style/index.less';
+=======
+import Monitor from '../../views/maintenance/monitor';
+import MessageCuster from '../../views/Message/MessageCuster';
+
+>>>>>>> 1acacde35e09cf86fc1032a7e0d259a2233729cd
 
 
 
@@ -62,8 +69,14 @@ class App extends Component {
                   <Route exact path={'/'} component={(props) =><Index {...props}/>} />
                   <Route path='/app/engine' component={EngineInfo} />
                   <Route path='/app/maintenance' component={MaintenanceIndex} />
+<<<<<<< HEAD
                   <Route path='/app/message' component={MessageIndex} />
                   
+=======
+                  <Route path='/app/monitor' component={Monitor} />
+                  <Route path='/app/message' component={MessageCuster} />
+                  <Route path='/app/sensor' component={SensorInfo} />
+>>>>>>> 1acacde35e09cf86fc1032a7e0d259a2233729cd
                 </Switch>
               </Content>
             </Layout>

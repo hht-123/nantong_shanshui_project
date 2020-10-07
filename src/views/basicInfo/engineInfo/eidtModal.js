@@ -1,19 +1,21 @@
 import React,{ Component } from 'react';
-import { Modal, Form, Input, DatePicker, message } from 'antd';
+import { Modal, Form, Input, DatePicker, message, Select  } from 'antd';
 import { Model } from "../../../dataModule/testBone";
 
 const model = new Model();
 
-class AddModal extends Component {
+class EditModal extends Component {
     constructor(props) {
         super (props);
         this.state = {
             confirmLoading: false,
             engine_name: '',
-            begin_time:'',
+            // begin_time:'',
             end_time:'',
             note:'',
-            url: 'main_engine/'   
+            status: '',
+            url: '',
+            aid: '',  
         }
         this.handleOk = this.handleOk.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
@@ -22,12 +24,26 @@ class AddModal extends Component {
         this.getEndDate = this.getEndDate.bind(this);
     }
 
-    createNewEngine(params) {
+    componentDidUpdate(prevProps) {
+        if(this.props.editInfo !== prevProps.editInfo){
+            let editInfo = this.props.editInfo;
+            this.setState({
+                aid: editInfo.key,
+                engine_name: editInfo.engine_name,
+                status: editInfo.status,
+                note: editInfo.note === undefined? '':editInfo.note,
+                end_time: editInfo.end_time,
+                url: `main_engine/${editInfo.key}/`
+            })
+        }
+    }
+
+    editEngineInfo(params) {
         let me = this;
         model.fetch(
           params,
           me.state.url,
-          'post',
+          'put',
           function() {
             me.props.cancel(false)
             me.setState({
@@ -35,7 +51,7 @@ class AddModal extends Component {
             })
           },
           function() {
-            message.warning('发送数据失败，请重试')
+            message.warning('修改失败，请重试')
             setTimeout(() => {
                 me.setState({
                   confirmLoading: false,
@@ -45,21 +61,23 @@ class AddModal extends Component {
           this.props.whetherTest 
         )
       }
-
+    
     handleOk() {
         const {validateFields} = this.props.form;
         validateFields();
         if(this.state.engine_name === '') return
         let params = {
             engine_name: this.state.engine_name,
-            begin_time: this.state.begin_time,
+            // begin_time: this.state.begin_time,
             end_time: this.state.end_time,
+            status: this.state.status,
             note: this.state.note
         }
         this.setState({
           confirmLoading: true,
         });
-        this.createNewEngine(params)
+        this.editEngineInfo(params);
+        window.location.reload()
       };
     
     //取消按钮事件
@@ -85,13 +103,11 @@ class AddModal extends Component {
         })
     }
 
-
     render() {
-        
         const {visible} = this.props;
-        const { getFieldDecorator } = this.props.form;
-        const {confirmLoading, note} = this.state;
-        
+        const {getFieldDecorator} = this.props.form;
+        const {confirmLoading,engine_name, note} = this.state;
+        const { Option } = Select;
         const formItemLayout = {
             labelCol: {
               span: 5
@@ -100,6 +116,7 @@ class AddModal extends Component {
               span: 16,
             },
           };
+
         return (
         <div>
             <Modal
@@ -118,32 +135,46 @@ class AddModal extends Component {
                         >
                             {getFieldDecorator('engine_name', {
                                 rules: [{ required: true, message: '请输入主机名称' }],
+                                initialValue: engine_name
                             })(
-                                <Input  name="engine_name" onChange={this.handleChange} />
+                                <Input name="engine_name" onChange={this.handleChange} />
                             )}
-                        
                         
                         </Form.Item>
 
-                        <Form.Item
+                        {/* <Form.Item
                             label="开始生产日期"
                             colon
                         >
                         <DatePicker name="begin_time" style={{width: '315px'}} onChange={this.getStartDate}/>
-                        </Form.Item>
+                        </Form.Item> */}
 
                         <Form.Item
                             label="结束生产日期"
                             colon
                         >
-                        <DatePicker style={{width: '315px'}}  onChange={this.getEndDate}/>
+                                <DatePicker style={{width: '315px'}}  onChange={this.getEndDate} />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="状态"
+                            colon
+                        >
+                        <Select name='' defaultValue="在产" style={{ width: 120 }}>
+                            <Option value="1">在产</Option>
+                            <Option value="0">停产</Option>
+                        </Select>
                         </Form.Item>
 
                         <Form.Item
                             label="备注"
                             colon
                         >
-                        <Input  name="note" onChange={this.handleChange} value={note} />
+                            {getFieldDecorator('note', {
+                                initialValue: note===undefined? '': note  
+                            })(
+                                <Input  name="note" onChange={this.handleChange}/>
+                            )}
                         </Form.Item>
                     </Form>
                 </div>
@@ -153,4 +184,4 @@ class AddModal extends Component {
     }
 }
 
-export default Form.create()(AddModal);
+export default Form.create()(EditModal);

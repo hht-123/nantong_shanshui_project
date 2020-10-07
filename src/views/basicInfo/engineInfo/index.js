@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import '../../../style/wrapper.less'
-import './engine.less'
+import './style.less'
 import EngineTable from './engineTable';
 import { DatePicker,Button, Input, message } from 'antd';
 import { Model } from "../../../dataModule/testBone";
 import AddModal from './addModal';
+import EditModal from './eidtModal';
 
 const model = new Model();
 const {RangePicker} = DatePicker;
@@ -16,43 +17,32 @@ class EngineInfo extends Component{
     super (props);
     this.state = {
       confirmLoading: false,
+      currentPage: 1,
       whetherTest: false,     //是否是测试  true为是 false为否
-      url:'app/page/',
-      showPagination: true,   //是否分页
-      isLoading: false,       //是否加载
-      data: [],               //表格数据 
-      total: 0,             //一共有多少条数据
-      keyValue: "",           //用于重置
+      url:'main_engine/',
+      showPagination: true,     //是否分页
+      isLoading: false,         //是否加载
+      data: [],                 //表格数据 
+      total: 0,                 //一共有多少条数据
+      keyValue: "",             //用于重置
       search_engine_code: "",   //主机编号
       search_begin_time: [],    //开始时间
       search_end_time:[],       //结束时间
       addModalVisible: false,   //addModal是否显示
-      editModalVisible:  false  //editModal是否显示
+      editModalVisible:  false,  //editModal是否显示
+      editInfo: {},             //获取到编辑行的信息
     }
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleBeginTime = this.handleBeginTime.bind(this);
-    this.handleEndTime = this.handleEndTime.bind(this);
-    this.handleReset = this.handleReset.bind(this);
-    this.getPage = this.getPage.bind(this);
-    this.getSize = this.getSize.bind(this);
-    this.showAddModal = this.showAddModal.bind(this);
-    this.closeAddModal = this.closeAddModal.bind(this);
-    this.showEditModal = this.showEditModal.bind(this);
   }
 
+
   componentDidMount() {
-    let startParams = {
-      currentPage: 1,
-      page: 1,
-      size: 10,
-    }
-    this.getCurrentPage(startParams);
+    let params = this.getparams();
+    this.getCurrentPage(params);
   }
   //保存输入框的内容
   getCurrentPage(params) {
     for (let i in params) {
-      if (params[i] === null) {
+      if (params[i] === undefined || params[i] === null) {
         params[i] = ''
       }
     }
@@ -67,8 +57,8 @@ class EngineInfo extends Component{
           me.setState({
             isLoading: false,
             total: response.data.count,
-            data: response.data.data,
-            currentPage: params['currentPage']
+            data: response.data.results,
+            currentPage: params['currentPage'],
           })
         } else {
           me.setState({
@@ -84,83 +74,137 @@ class EngineInfo extends Component{
     )
   }
 
-  handleChange(e) {
+  getparams(currentPage=1, size=10, engine_code=null, search_begin_time=null, search_end_time=null) {
+    let params = {};
+    let begin_time_gte = null;
+    let begin_time_lte = null;
+    let end_time_gte = null;
+    let end_time_lte = null;
+    if(search_begin_time !== null){
+      [begin_time_gte, begin_time_lte] = this.handleDate(search_begin_time);
+    }
+    if(search_end_time !== null){
+      [end_time_gte, end_time_lte]= this.handleDate(search_end_time);
+    }
+    params = {
+      currentPage,
+      size,
+      engine_code,
+      begin_time_gte,
+      begin_time_lte,
+      end_time_gte,
+      end_time_lte
+    }
+    return params;
+  }
+  //输入框的获取
+  handleChange = (e) => {
     this.setState({
       [e.target.name] : e.target.value
     })
   }
   //搜索的开始时间
-  handleBeginTime(value, dateString) {
+  handleBeginTime = (value, dateString) => {
     this.setState({
       search_begin_time: dateString
     })
   }
   //搜索的结束时间
-  handleEndTime(value, dateString) {
-    console.log(dateString)
+  handleEndTime = (value, dateString) => {
     this.setState({
-      'end_time': dateString
+      search_end_time: dateString
     })
-    console.log(this.state.end_time);
   }
   //重置按钮
-  handleReset() {
+  handleReset = () => {
+    let params = this.getparams();
+    this.getCurrentPage(params);
     this.setState({
-      search_engine_code: '',
-      keyValue: new Date()
+      search_engine_code: null,
+      keyValue: new Date(),
+      search_begin_time: null,
+      search_end_time: null,
+      currentPage: 1
     })
+    this.getCurrentPage(params);
   }
   //翻页获取内容
-  getPage(page, pageSize) {
-    let params = {
-      page: page,
-      size: pageSize
-    }
+  getPage = (currentPage, pageSize) => {
+    const { search_engine_code, search_begin_time, search_end_time } = this.state;
+    const params = this.getparams(currentPage, pageSize, search_engine_code, search_begin_time, search_end_time)
     this.getCurrentPage(params);
   }
   //改变pageSIze获取内容
-  getSize(current, size){
-    let params = {
-      page: current,
-      size: size
-    }
-    this.getCurrentPage(params);
+  getSize = (current, size) => {
+    const { search_engine_code, search_begin_time, search_end_time } = this.state;
+    const params = this.getparams(1, size, search_engine_code, search_begin_time, search_end_time)
+    this.getCurrentPage(params); 
   }
-  //显示弹窗
-  showAddModal()  {
+  //显示增加弹窗
+  showAddModal = () => {
     this.setState({
       addModalVisible: true,
     });
   };
-
-  closeAddModal(visible) {
+  //关闭弹窗
+  closeModal = (visible) => {
     this.setState({
-      addModalVisible: visible
+      addModalVisible: visible,
+      editModalVisible: visible
     })
   }
-
-  showEditModal() {
+  //显示编辑弹窗 text为改行的内容
+  showEditModal = (record) => {
     this.setState({
       editModalVisible: true,
     });
+    record === undefined? null :
+    this.setState({
+      editInfo:record
+    })
+  }
+
+  statusSWift(status) {
+    if(status === '1'){
+      return '在产'
+    }else if(status === '0'){
+      return '停产'
+    }
+  }
+
+  handleDate(preDate) {
+    if(preDate !== undefined){
+      let gte = preDate[0];
+      let lte = preDate[1];
+      return [gte,lte]
+    }
+  }
+  //搜索按钮
+  searchInfo = () => {
+    const {search_engine_code, search_begin_time, search_end_time} = this.state;
+    let params = this.getparams(1,10,search_engine_code,search_begin_time,search_end_time);
+    this.getCurrentPage(params);
   }
   
   render() {
-    const {data, isLoading, showPagination, size, total, addModalVisible , editModalVisible, whetherTest} = this.state;
+    const {data, isLoading, showPagination, size, total, addModalVisible , editModalVisible, whetherTest, editInfo, currentPage} = this.state;
     const tableDate = [];
-    data.map((item) => {
-      tableDate.push({
-        key: item.aid,
-        engine_code: item.engine_code,
-        engine_name: item.engine_name,
-        begin_time: item.begin_time,
-        end_time: item.end_time,
-        note: item.node,
-        status: parseInt((item.status),0)===1? '在产': '停产',
+    if(data !== undefined) {
+      data.map((item) => {
+        tableDate.push({
+          key: item.aid,
+          engine_code: item.engine_code,
+          engine_name: item.engine_name,
+          begin_time: item.begin_time,
+          end_time: item.end_time,
+          note: item.node,
+          status: this.statusSWift(item.status),
+        })
+        return null;
       })
-      return null;
-    })
-
+    }
+    
+    
     return (
       <div>
         <div className='name'>主机信息：</div>
@@ -197,14 +241,14 @@ class EngineInfo extends Component{
               </div>
                 <div className="line"></div>
                 <div style={{marginTop: "15px"}}>
-                    <Button type="primary" className="button">搜索</Button>
+                    <Button type="primary" className="button" onClick={this.searchInfo}>搜索</Button>
                     <Button type="primary" className="button" onClick={this.handleReset}>重置</Button>
                     <Button type="primary" className="button" onClick={this.showAddModal}>新增主机</Button>
                 </div>
                 <AddModal
                   whetherTest={whetherTest}
                   visible={addModalVisible}
-                  cancel={this.closeAddModal}
+                  cancel={this.closeModal}
                 />
               </div>
           <div className='tableWrapper'>
@@ -216,7 +260,17 @@ class EngineInfo extends Component{
               total={total}
               changePage={this.getPage}
               changeSize={this.getSize}
+              showEditModal={this.showEditModal}
+              currentPage={currentPage}
             />
+            <EditModal
+              whetherTest={whetherTest}
+              visible={editModalVisible}
+              cancel={this.closeModal}
+              showEditModal={this.showEditModal}
+              editInfo={editInfo}
+            />
+            
           </div>
         </div>
       </div>
