@@ -1,6 +1,8 @@
 import React,{ Component } from 'react';
 import { Modal, Form, Input, DatePicker, message, Select  } from 'antd';
 import { Model } from "../../../dataModule/testBone";
+import './style.less'
+import { enginInfoUrl } from '../../../dataModule/UrlList'
 
 const model = new Model();
 
@@ -17,11 +19,6 @@ class EditModal extends Component {
             url: '',
             aid: '',  
         }
-        this.handleOk = this.handleOk.bind(this);
-        this.handleCancel = this.handleCancel.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.getStartDate = this.getStartDate.bind(this);
-        this.getEndDate = this.getEndDate.bind(this);
     }
 
     componentDidUpdate(prevProps) {
@@ -33,7 +30,7 @@ class EditModal extends Component {
                 status: editInfo.status,
                 note: editInfo.note === undefined? '':editInfo.note,
                 end_time: editInfo.end_time,
-                url: `main_engine/${editInfo.key}/`
+                url: `${enginInfoUrl}/${editInfo.key}/`
             })
         }
     }
@@ -62,7 +59,7 @@ class EditModal extends Component {
         )
       }
     
-    handleOk() {
+    handleOk = () => {
         const {validateFields} = this.props.form;
         validateFields();
         if(this.state.engine_name === '') return
@@ -81,32 +78,32 @@ class EditModal extends Component {
       };
     
     //取消按钮事件
-    handleCancel() {
+    handleCancel = () => {
         this.props.cancel(false)
     };
 
-    handleChange(e) {
+    handleChange = (e) => {
         this.setState({
             [e.target.name] : e.target.value
         })
     }
     
-    getStartDate(date, dateString) {
+    getStartDate = (date, dateString) => {
         this.setState({
             begin_time:dateString
         })
     } 
 
-    getEndDate(date, dateString) {
+    getEndDate = (date, dateString) => {
         this.setState({
             end_time:dateString
         })
     }
 
     render() {
-        const {visible} = this.props;
-        const {getFieldDecorator} = this.props.form;
-        const {confirmLoading,engine_name, note} = this.state;
+        const { visible } = this.props;
+        const { getFieldDecorator } = this.props.form;
+        const { confirmLoading,engine_name, note } = this.state;
         const { Option } = Select;
         const formItemLayout = {
             labelCol: {
@@ -121,14 +118,14 @@ class EditModal extends Component {
         <div>
             <Modal
                 title="新增主机"
-                visible={visible}
-                confirmLoading={confirmLoading}
-                destroyOnClose={true}
-                onOk={this.handleOk}
-                onCancel={this.handleCancel}
+                visible={ visible }
+                confirmLoading={ confirmLoading }
+                destroyOnClose={ true }
+                onOk={ this.handleOk }
+                onCancel={ this.handleCancel }
                 >
                 <div>
-                    <Form {...formItemLayout} ref='engineForm' onSubmit={this.onSubmit}>
+                    <Form { ...formItemLayout } ref='engineForm' onSubmit={ this.onSubmit }>
                         <Form.Item
                             label="主机名称"
                             colon
@@ -153,7 +150,7 @@ class EditModal extends Component {
                             label="结束生产日期"
                             colon
                         >
-                                <DatePicker style={{width: '315px'}}  onChange={this.getEndDate} />
+                                <DatePicker className="date" onChange={this.getEndDate} />
                         </Form.Item>
 
                         <Form.Item

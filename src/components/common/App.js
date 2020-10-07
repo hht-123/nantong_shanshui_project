@@ -14,7 +14,12 @@ import EngineInfo from '../../views/basicInfo/engineInfo'
 import SensorInfo from '../../views/basicInfo/sensorInfo' 
 import MaintenanceIndex from '../../views/maintenance/index';
 import MessageIndex from '../../views/Message/MessageIndex';
+import '../../style/index.less';
 import Monitor from '../../views/maintenance/monitor';
+
+
+
+
 
 const { Content, Footer, Sider } = Layout;
 
