@@ -12,8 +12,9 @@ import Index from '../index/index';
 // import noMatch from './404';
 
 import MaintenanceIndex from '../../views/maintenance/index';
-import MessageCuster from '../../views/Message/MessageCuster';
+import MessageIndex from '../../views/Message/MessageIndex';
 import '../../style/index.less';
+
 
 
 const { Content, Footer, Sider } = Layout;
@@ -62,7 +63,8 @@ class App extends Component {
                   <Route exact path={'/'} component={(props) =><Index {...props}/>} />
                   <Route path='/app/engine' component={EngineInfo} />
                   <Route path='/app/maintenance' component={MaintenanceIndex} />
-                  <Route path='/app/message' component={MessageCuster} />
+                  <Route path='/app/message' component={MessageIndex} />
+                  
                 </Switch>
               </Content>
             </Layout>
