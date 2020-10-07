@@ -6,8 +6,7 @@ class EngineTable extends Component{
   
 
     render() {
-      const {isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
-      console.log(currentPage);
+      const { isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
 
       const columns =  [
         {
@@ -57,7 +56,7 @@ class EngineTable extends Component{
       ];
 
         return (
-          <div 
+          <div
             style={{
                 width: '100%',
                 position: 'relative',
@@ -73,10 +72,10 @@ class EngineTable extends Component{
                 fontSize: '5px',
               }} 
               classname='engine-table' 
-              dataSource={data} 
-              columns={columns} 
+              dataSource={ data } 
+              columns={ columns } 
               bordered
-              pagination={false}
+              pagination={ false }
               size='middle'
               loading={ isLoading }
             />
@@ -84,14 +83,14 @@ class EngineTable extends Component{
               {showPagination?
                 <Pagination 
                   size="small"
-                  current={currentPage} 
-                  total={total}  
+                  current={ currentPage } 
+                  total={ total }  
                   showQuickJumper
-                  style={{marginRight: 0}}
+                  style={{ marginRight: 0 }}
                   showSizeChanger
                   pageSizeOptions={['10','20','30','40',]}
-                  onChange={(page,pageSize) => changePage(page, pageSize)}
-                  onShowSizeChange={(current, size) => changeSize(current,size)}
+                  onChange={(page, pageSize) => changePage(page, pageSize)}
+                  onShowSizeChange={(current, size) => changeSize(current, size)}
                 /> : null
               }
             </div>
