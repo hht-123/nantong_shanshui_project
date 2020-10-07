@@ -6,7 +6,9 @@ class EngineTable extends Component{
   
 
     render() {
-      const {isLoading, data, total, showPagination, changePage,changeSize } = this.props;
+      const {isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
+      console.log(currentPage);
+
       const columns =  [
         {
           title: '主机编号',
@@ -48,9 +50,9 @@ class EngineTable extends Component{
           dataIndex: 'action',
           align: 'center',
           width: 80,
-          render: (text, record, index) => (
-              <Icon type="edit" theme="twoTone" />
-          )
+          render: (text, record, index) => {
+            return <Icon type="edit" theme="twoTone" onClick={() => this.props.showEditModal(record)}/>
+          }
         }
       ];
 
@@ -81,7 +83,8 @@ class EngineTable extends Component{
             <div style={{marginTop:15, position: 'absolute', right: '0%' }}>
               {showPagination?
                 <Pagination 
-                size="small" 
+                size="small"
+                current={currentPage} 
                 total={total}  
                 showQuickJumper
                 style={{marginRight: 0}}
