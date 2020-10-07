@@ -47,7 +47,6 @@ class App extends Component {
     // } else {
     //   name = JSON.parse(getCookie("mspa_user")).username;
     // }
-
     return (
       <Layout>
         <Provider store={store}>
