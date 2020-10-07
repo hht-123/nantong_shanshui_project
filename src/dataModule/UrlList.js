@@ -6,4 +6,4 @@
  * @LastEditors: 唐帆
  * @LastEditTime: 2020-04-30 10:46:26
  */
-export const originalUrl = 'http://10.41.54.88:8000/api/';
+export const originalUrl = 'http://10.21.1.48:8000/';

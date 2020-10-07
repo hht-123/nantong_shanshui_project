@@ -4,17 +4,18 @@ import { Layout } from 'antd';
 import { getCookie, setCookie } from "../../helpers/cookies";
 import store from '../../store';
 import { Provider } from 'react-redux';
+import '../../style/index.less';
 
-import EngineInfo from '../../views/basicInfo/engineInfo'
 import SideMenu from './SideMenu';
 import HeaderCustom from './HeaderCustom';
 import Index from '../index/index';
 // import noMatch from './404';
-
+import EngineInfo from '../../views/basicInfo/engineInfo'
+import SensorInfo from '../../views/basicInfo/sensorInfo' 
 import MaintenanceIndex from '../../views/maintenance/index';
 import Monitor from '../../views/maintenance/monitor';
 import MessageCuster from '../../views/Message/MessageCuster';
-import '../../style/index.less';
+
 
 
 const { Content, Footer, Sider } = Layout;
@@ -47,7 +48,6 @@ class App extends Component {
     // } else {
     //   name = JSON.parse(getCookie("mspa_user")).username;
     // }
-
     return (
       <Layout>
         <Provider store={store}>
@@ -65,6 +65,7 @@ class App extends Component {
                   <Route path='/app/maintenance' component={MaintenanceIndex} />
                   <Route path='/app/monitor' component={Monitor} />
                   <Route path='/app/message' component={MessageCuster} />
+                  <Route path='/app/sensor' component={SensorInfo} />
                 </Switch>
               </Content>
             </Layout>

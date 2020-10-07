@@ -10,6 +10,7 @@ class AntdTbale2 extends Component{
           <div
             style={{
                 width: 800,
+                width: '100%',
                 position: 'relative',
             }}
           >
@@ -37,7 +38,9 @@ class AntdTbale2 extends Component{
                 showQuickJumper
                 pageSize={pageSize}
                 style={{marginRight: 0}}
-                onChange={(page) => this.props.changePage(page)}
+                showSizeChanger
+                pageSizeOptions={['5','10','15','20','30',]}
+                onChange={(page, pageSize) => this.props.changePage(page ,pageSize)}
               /> : null
               }
             </div>
