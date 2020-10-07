@@ -13,8 +13,11 @@ import Index from '../index/index';
 import EngineInfo from '../../views/basicInfo/engineInfo'
 import SensorInfo from '../../views/basicInfo/sensorInfo' 
 import MaintenanceIndex from '../../views/maintenance/index';
+import MessageIndex from '../../views/Message/MessageIndex';
+import '../../style/index.less';
 import Monitor from '../../views/maintenance/monitor';
-import MessageCuster from '../../views/Message/MessageCuster';
+
+
 
 
 
@@ -63,8 +66,8 @@ class App extends Component {
                   <Route exact path={'/'} component={(props) =><Index {...props}/>} />
                   <Route path='/app/engine' component={EngineInfo} />
                   <Route path='/app/maintenance' component={MaintenanceIndex} />
+                  <Route path='/app/message' component={MessageIndex} />
                   <Route path='/app/monitor' component={Monitor} />
-                  <Route path='/app/message' component={MessageCuster} />
                   <Route path='/app/sensor' component={SensorInfo} />
                 </Switch>
               </Content>
