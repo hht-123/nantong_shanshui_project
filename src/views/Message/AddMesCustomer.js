@@ -10,22 +10,22 @@ class AddMesCustomer extends Component{
         this.state = {
             confirmLoading: false,
             client_code: '',
-            client_unit:'',
-            client_address:'',
-            client_zip_code:'',
-            client_industry:'',
-            unit_phone:'',
-            unit_fax:'',
-            note:'',  
-            url:'add_mes/' 
+            client_unit: '',
+            client_address: '',
+            client_zip_code: '',
+            client_industry: '',
+            unit_phone: '',
+            unit_fax: '',
+            note: '',  
+            url: 'add_mes/' ,
         }
         this.handleOk = this.handleOk.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
         //this.handleChange = this.handleChange.bind(this);
     }
 
-        //fetch函数进行数据传输,fetch在reactjs中等同于 XMLHttpRequest
-    createNewCuster(params) {
+    //fetch函数进行数据传输,fetch在reactjs中等同于 XMLHttpRequest
+    createNewCustomer(params) {
         let me = this;
         model.fetch(
           params,
@@ -72,7 +72,7 @@ class AddMesCustomer extends Component{
         this.props.cancel(false)
     };
 
-    andleChange(e) {
+    handleChange(e) {
         this.setState({
             [e.target.name] : e.target.value
         })
@@ -80,17 +80,16 @@ class AddMesCustomer extends Component{
         
     render(){
         const { getFieldDecorator } = this.props.form;
-        const {
-            confirmLoading, 
-            client_code,
-            client_unit,
-            client_address,
-            client_zip_code,
-            client_industry,
-            client_province,
-            unit_phone,
-            unit_fax,
-            note} = this.state;
+        const { confirmLoading, 
+                client_code,
+                client_unit,
+                client_address,
+                client_zip_code,
+                client_industry,
+                client_province,
+                unit_phone,
+                unit_fax,
+                note} = this.state;
         console.log(this.state);
         
         const formItemLayout = {
@@ -110,7 +109,7 @@ class AddMesCustomer extends Component{
                 onOk={this.handleOk}                      //点击确定回调
                 confirmLoading={confirmLoading}            //确定按钮 loading
                 onCancel={this.handleCancel}                //点击遮罩层或右上角叉或取消按钮的回调
-                destroyOnClose={true}                //关闭时销毁 Modal 里的子元素         默认关闭后状态不会自动清空, 如果希望每次打开都是新内容，请设置 destroyOnClose
+                destroyOnClose={true}                //关闭时销毁 Modal 里的子元素  默认关闭后状态不会自动清空, 如果希望每次打开都是新内容，请设置 destroyOnClose
             >
                 <div>      {/* formItemLayout标签布局 */}                                 
                     <Form {...formItemLayout}  ref='customerForm' onSubmit={this.onSubmit}>

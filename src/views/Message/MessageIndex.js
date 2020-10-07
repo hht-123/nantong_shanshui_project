@@ -24,7 +24,7 @@ class MessageIndex extends Component{
             keyValue: "",           //用于重置
             client_unit: "",        //客户单位
             Visible: false,   //addMesCustomer是否显示
-            editModelVisible:  false  //editModal是否显示
+            editModelVisible: false  //editModal是否显示
         }
         //this.handleChange = this.handleChange.bind(this);
         this.handleReset = this.handleReset.bind(this);
@@ -43,72 +43,69 @@ class MessageIndex extends Component{
           size: 10,
         }
         this.getCurrentPage(startParams);
-      }
+    }
 
     
-  getCurrentPage(params) {
-    for (let i in params) {
-      if (params[i] === null) {
-        params[i] = ''
-      }
-    }
-    let me = this;
-    this.setState({isLoading: true})
-    model.fetch(
-      params,
-      me.state.url,
-      'get',
-      function(response) {
-        if (me.state.whetherTest === false) {
-          me.setState({
-            isLoading: false,
-            total: response.data.count,
-            data: response.data.data,
-            currentPage: params['currentPage']
-          })
-        } else {
-          me.setState({
-            isLoading: false,
-            data: response.data.data,
-          })
+    getCurrentPage(params) {
+        for (let i in params) {
+            if (params[i] === null) {
+                params[i] = ''
+            }
         }
-      },
-      function() {
-        message.warning('加载失败，请重试')
-      },
-      this.state.whetherTest
-    )
-  }
+        let me = this;            //让this指向不会出错
+        this.setState({isLoading: true})
+        model.fetch(
+            params,
+            me.state.url,
+            'get',
+            function(response) {
+                if (me.state.whetherTest === false) {
+                me.setState({
+                    isLoading: false,
+                    total: response.data.count,
+                    data: response.data.data,
+                    currentPage: params['currentPage']
+                })
+                } else {
+                    me.setState({
+                        isLoading: false,
+                        data: response.data.data,
+                    })
+                }
+            },
+            function() {
+                message.warning('加载失败，请重试')
+            },
+            this.state.whetherTest
+        )
+    }
     
-     //重置按钮
-     handleReset(){
+    //重置按钮
+    handleReset(){
         this.setState({
             client_unit:"",
             keyValue: new Date()
         })   
-    }
-
-
-
+    };
 
     //弹窗显示
     showAddModal = () =>  {
         this.setState({
             Visible: true,
         });
-      };
+    };
     
     closeAddModal() {
         this.setState({
             Visible: false
         })
-      }
+    };
     
     showEditModal() {
         this.setState({
           editModalVisible: true,
         });
-      }
+    };
    
 
     render(){
