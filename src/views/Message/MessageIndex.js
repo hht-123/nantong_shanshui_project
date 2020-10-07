@@ -5,6 +5,7 @@ import '../Message/style/Message.less';
 import MessageTable from './MessageTable';
 import AddMesCustomer from './AddMesCustomer';
 import {Model} from '../../dataModule/testBone';
+import {messageCUrl} from '../../dataModule/UrlList';
 
 
 const model = new Model();
@@ -16,7 +17,6 @@ class MessageIndex extends Component{
         this.state={
             confirmLoading: false,
             whetherTest: false,     //是否是测试  true为是 false为否
-            url:'Mes/',
             showPagination: true,   //是否分页
             isLoading: false,       //是否加载
             data: [],               //表格数据 
@@ -35,9 +35,9 @@ class MessageIndex extends Component{
         //this.showEditModal = this.showEditModal.bind(this);
     }
 
-    //生命周期
+    //生命周期函数
     componentDidMount() {
-        let startParams = {
+        const startParams = {
           currentPage: 1,
           page: 1,
           size: 10,
@@ -45,7 +45,7 @@ class MessageIndex extends Component{
         this.getCurrentPage(startParams);
     }
 
-    
+    //获取数据
     getCurrentPage(params) {
         for (let i in params) {
             if (params[i] === null) {
@@ -56,14 +56,15 @@ class MessageIndex extends Component{
         this.setState({isLoading: true})
         model.fetch(
             params,
-            me.state.url,
+            messageCUrl,
             'get',
             function(response) {
                 if (me.state.whetherTest === false) {
+                    console.log(response.data);
                 me.setState({
                     isLoading: false,
                     total: response.data.count,
-                    data: response.data.data,
+                    data: response.data,
                     currentPage: params['currentPage']
                 })
                 } else {

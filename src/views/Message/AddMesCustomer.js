@@ -21,7 +21,7 @@ class AddMesCustomer extends Component{
         }
         this.handleOk = this.handleOk.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
-        //this.handleChange = this.handleChange.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     //fetch函数进行数据传输,fetch在reactjs中等同于 XMLHttpRequest
@@ -119,6 +119,7 @@ class AddMesCustomer extends Component{
                         >
                         <Input  name="client_code" onChange={this.handleChange} value={client_code}/>      
                         </Form.Item>
+
                         <Form.Item
                             label="客户单位"
                             colon
@@ -129,36 +130,42 @@ class AddMesCustomer extends Component{
                             <Input  name="client_unit" onChange={this.handleChange} value={client_unit}/> //onChange	输入框内容变化时的回调 value	输入框内容
                         )}
                         </Form.Item>
+
                         <Form.Item
                             label="客户地址"
                             colon
                         >
                         <Input  name="client_address" onChange={this.handleChange} value={client_address}/>
                         </Form.Item>
+
                         <Form.Item
                             label="客户邮编"
                             colon
                         >
                         <Input  name="client_zip_code" onChange={this.handleChange} value={client_zip_code}/>
                         </Form.Item>
+
                         <Form.Item
                             label="客户行业"
                             colon
                         >
                         <Input  name="client_industry" onChange={this.handleChange} value={client_industry}/>
                         </Form.Item>
+
                         <Form.Item
                             label="单位电话"
                             colon
                         >
                         <Input  name="unit_phone" onChange={this.handleChange} value={unit_phone}/>
                         </Form.Item>
+
                         <Form.Item
                         label="单位传真"
                         colon
                         >
                         <Input  name="unit_fax" onChange={this.handleChange} value={unit_fax}/>
                         </Form.Item>
+
                         <Form.Item
                         label="客户省份"
                         colon
@@ -169,6 +176,7 @@ class AddMesCustomer extends Component{
                         <Input  name="client_province" onChange={this.handleChange} value={client_province}/>
                         )}
                         </Form.Item>
+
                         <Form.Item
                             label="备注"
                             colon
