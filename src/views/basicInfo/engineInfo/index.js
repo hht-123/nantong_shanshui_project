@@ -32,17 +32,6 @@ class EngineInfo extends Component{
       editModalVisible:  false,  //editModal是否显示
       editInfo: {},             //获取到编辑行的信息
     }
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleBeginTime = this.handleBeginTime.bind(this);
-    this.handleEndTime = this.handleEndTime.bind(this);
-    this.handleReset = this.handleReset.bind(this);
-    this.getPage = this.getPage.bind(this);
-    this.getSize = this.getSize.bind(this);
-    this.showAddModal = this.showAddModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
-    this.showEditModal = this.showEditModal.bind(this);
-    this.searchInfo = this.searchInfo.bind(this);
   }
 
 
@@ -109,64 +98,63 @@ class EngineInfo extends Component{
     return params;
   }
   //输入框的获取
-  handleChange(e) {
+  handleChange = (e) => {
     this.setState({
       [e.target.name] : e.target.value
     })
   }
   //搜索的开始时间
-  handleBeginTime(value, dateString) {
+  handleBeginTime = (value, dateString) => {
     this.setState({
       search_begin_time: dateString
     })
   }
   //搜索的结束时间
-  handleEndTime(value, dateString) {
+  handleEndTime = (value, dateString) => {
     this.setState({
       search_end_time: dateString
     })
   }
   //重置按钮
-  handleReset() {
+  handleReset = () => {
     let params = this.getparams();
     this.getCurrentPage(params);
     this.setState({
       search_engine_code: null,
       keyValue: new Date(),
       search_begin_time: null,
-      search_end_time:null,
-      currentPage:1
+      search_end_time: null,
+      currentPage: 1
     })
     this.getCurrentPage(params);
   }
   //翻页获取内容
-  getPage(currentPage, pageSize) {
-    const {search_engine_code, search_begin_time, search_end_time} = this.state;
-    let params = this.getparams(currentPage,pageSize,search_engine_code,search_begin_time,search_end_time)
+  getPage = (currentPage, pageSize) => {
+    const { search_engine_code, search_begin_time, search_end_time } = this.state;
+    const params = this.getparams(currentPage, pageSize, search_engine_code, search_begin_time, search_end_time)
     this.getCurrentPage(params);
   }
   //改变pageSIze获取内容
-  getSize(current, size){
-    const {search_engine_code, search_begin_time, search_end_time} = this.state;
-    let params = this.getparams(1,size,search_engine_code,search_begin_time,search_end_time)
-    this.setState({currentPage:1})
-    this.getCurrentPage(params);
+  getSize = (current, size) => {
+    const { search_engine_code, search_begin_time, search_end_time } = this.state;
+    const params = this.getparams(1, size, search_engine_code, search_begin_time, search_end_time)
+    this.getCurrentPage(params); 
   }
   //显示增加弹窗
-  showAddModal()  {
+  showAddModal = () => {
     this.setState({
       addModalVisible: true,
     });
   };
   //关闭弹窗
-  closeModal(visible) {
+  closeModal = (visible) => {
     this.setState({
       addModalVisible: visible,
       editModalVisible: visible
     })
   }
   //显示编辑弹窗 text为改行的内容
-  showEditModal(record) {
+  showEditModal = (record) => {
     this.setState({
       editModalVisible: true,
     });
@@ -192,7 +180,7 @@ class EngineInfo extends Component{
     }
   }
   //搜索按钮
-  searchInfo() {
+  searchInfo = () => {
     const {search_engine_code, search_begin_time, search_end_time} = this.state;
     let params = this.getparams(1,10,search_engine_code,search_begin_time,search_end_time);
     this.getCurrentPage(params);

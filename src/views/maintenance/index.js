@@ -52,32 +52,30 @@ class MaintenanceIndex extends Component {
         
     }
 
+    handleChange = (value) => {
+      console.log(value);
+      this.setState({
+        status: value
+      })
+    }
 
   render() {
 
     const { Option } = Select;
 
     //将数据分组
-    var Newdata = {}
-    let getGroup=(data,key)=>{
-        let groups={};
-        data.forEach(c=>{
-            let value=c[key];
-            groups[value]=groups[value]||[];
-            groups[value].push(c);
-    });
-    return groups;
+    let getGroup = (data,key) => {
+      let groups = {};
+      data.forEach( c => {
+          let value = c[key];
+          groups[value] = groups[value]||[];
+          groups[value].push(c);
+      });
+      return groups;
     }
-    Newdata = getGroup(this.state.data,'area')
+    const Newdata = getGroup(this.state.data,'area')
     // console.log(Newdata)
   
-
-    function handleChange(value) {
-        console.log(value);
-        this.setState({
-          status: value
-        })
-      }
     
     return (
         <div>
@@ -92,7 +90,7 @@ class MaintenanceIndex extends Component {
                 <Input className='user' name='user_company' value={ this.state.user_company } onChange={ this.changeValue} />
                 <div className='search-status'>设备状态:</div>
                 <div className='status'>
-                    <Select size='small' defaultValue="0" style={{ width: 120, } } onChange={handleChange.bind(this)}>
+                    <Select size='small' defaultValue="0" style={{ width: 120, }} onChange={this.handleChange}>
                         <Option value="0">在线</Option>
                         <Option value="1">报修</Option>
                         <Option value="2">停运</Option>
@@ -109,11 +107,11 @@ class MaintenanceIndex extends Component {
                     <Button type="primary">新增交付属性</Button>
                 </div>
             </div >
-            {Object.keys(Newdata).map( (key,index) => 
+            {Object.keys(Newdata).map((key,index) => 
                 <div key={index} className='content' >
                     <div className="areaName" style={{overflowX: 'auto', marginTop: 40}}>{key}</div>
                     <div className='line-bottom'></div>
-                    { Newdata[key].map( (item,index) => {
+                    { Newdata[key].map((item,index) => {
                       return <Equipment key={index} equipment_number={item.equipment_number} user_company={item.user_company} status={item.status} />
                     })}
                 </div>
@@ -122,7 +120,7 @@ class MaintenanceIndex extends Component {
     )
   }
 
-  changeValue(e) {
+  changeValue = (e) => {
     const newForm = {...this.state}
     newForm[e.target.name] = e.target.value
     this.setState(newForm)
