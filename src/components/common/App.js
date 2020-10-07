@@ -12,6 +12,7 @@ import Index from '../index/index';
 // import noMatch from './404';
 
 import MaintenanceIndex from '../../views/maintenance/index';
+import Monitor from '../../views/maintenance/monitor';
 import MessageCuster from '../../views/Message/MessageCuster';
 import '../../style/index.less';
 
@@ -62,6 +63,7 @@ class App extends Component {
                   <Route exact path={'/'} component={(props) =><Index {...props}/>} />
                   <Route path='/app/engine' component={EngineInfo} />
                   <Route path='/app/maintenance' component={MaintenanceIndex} />
+                  <Route path='/app/monitor' component={Monitor} />
                   <Route path='/app/message' component={MessageCuster} />
                 </Switch>
               </Content>

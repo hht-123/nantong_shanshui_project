@@ -7,15 +7,54 @@ import Shebei from '../../../statistics/shebei.png';
 
 class Equipment extends Component {
 
-  render() {
+  constructor(props) {
+    super(props);
+    this.state = {
+        
+    }
+    this.enterEquipment = this.enterEquipment.bind(this);
+  }
 
+  componentDidMount() {
+  }
+
+  handleStatus(numb) {
+    if ( numb === '0' ) {
+      return  '在线'
+    }else if (numb === '1') {
+      return  '报修'
+    }else if (numb === '2') {
+      return  '停运'
+    }else if (numb === '3') {
+      return  '维护'
+    }
+  }
+
+  handleStatusColor(numb) {
+    if ( numb === '0' ) {
+      return  { background:'greenyellow'}
+    }else if (numb === '1') {
+      return  { background:'red'}
+    }else if (numb === '2') {
+      return  { background:'gray'}
+    }else if (numb === '3') {
+      return  { background:'bule'}
+    }
+  }
+
+  enterEquipment = () => {
+    console.log(this.props.equipment_number)
+  }
+
+  render() {
+    
     return (
-                <div className='equipment'>
-                    <img className='Pic-equipment' alt='shebei' src={Shebei} />
-                    <div className='equipmentID'>S1905190101</div>
-                    <div className='company'>一汽锡柴</div>
-                    <div className='status'>报修</div>
-                </div>
+                <span className='equipment'>
+                    <img className='Pic-equipment' alt='shebei' src={Shebei} onClick={this.enterEquipment} />
+                    <div className='equipmentID'>{this.props.equipment_number}</div>
+                    <div className='company'>{this.props.user_company}</div>
+                    <div className='status' style={this.handleStatusColor(this.props.status)} > {this.handleStatus(this.props.status)}</div>
+                </span>
     )
   }
 }
