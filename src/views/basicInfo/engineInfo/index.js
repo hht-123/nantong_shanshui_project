@@ -206,7 +206,7 @@ class EngineInfo extends Component{
                   visible={addModalVisible}
                   cancel={this.closeAddModal}
                 />
-            </div>
+              </div>
           <div className='tableWrapper'>
             <EngineTable
               data={tableDate}

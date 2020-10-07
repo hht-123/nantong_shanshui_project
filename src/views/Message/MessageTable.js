@@ -1,8 +1,6 @@
-import { Table, Pagination, message, Icon} from 'antd';
+import { Table, Pagination,  Icon} from 'antd';
 import React, { Component } from 'react';
-import { Model } from '../../dataModule/testBone';
 
-const model = new Model()
 
 class MessageTable extends Component{
     constructor(props) {
@@ -15,50 +13,9 @@ class MessageTable extends Component{
         pageSize: 5,            //每页展示几条数据
         showPagination: true,   //是否使用分页
       }
-      this.totalPages = (parseInt(this.state.total / this.state.pageSize, 0) + 1);
-      this.changePage = this.changePage.bind(this);
-    }
-
-    componentDidMount() {
-      this.getCurrentPage();
-    }
-
-    //父组件需要传递 url，whetherTest
-    getCurrentPage(params) {
-      let whetherTest = true;
-      const me = this;
-      me.setState({isLoading: true})
-      model.fetch(
-        {currentPage: 2},
-        'api/message.json',
-        'get',
-        function(response) {
-          if (whetherTest === false) {
-            me.setState({
-              isLoading: false,
-              total: response.data.count,
-              data: response.data.results,
-              currentPage: params['currentPage']
-            })
-          } else {
-            me.setState({
-              isLoading: false,
-              data: response.data.results,
-              total: response.data.count,
-            })
-          }
-        },
-        function() {
-          message.warning('加载失败，请重试')
-        },
-        whetherTest
-      )
-    }
-
-    changePage(page) {
       
     }
-    
+
     render() {
       const {total, pageSize, showPagination, isLoading, data} = this.state;
       //计算一共有多少页面

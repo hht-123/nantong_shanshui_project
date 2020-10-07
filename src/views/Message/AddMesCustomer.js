@@ -1,5 +1,5 @@
 import React,{ Component } from 'react';
-import { Modal, Form, Input,  message } from 'antd';
+import { Modal, Form, Input, message} from 'antd';
 
 import {Model} from '../../dataModule/testBone';
 const model = new Model();
@@ -8,7 +8,6 @@ class AddMesCustomer extends Component{
     constructor(props) {
         super (props);
         this.state = {
-            visible: false,
             confirmLoading: false,
             client_code: '',
             client_unit:'',
@@ -22,7 +21,7 @@ class AddMesCustomer extends Component{
         }
         this.handleOk = this.handleOk.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
-        this.handleChange = this.handleChange.bind(this);
+        //this.handleChange = this.handleChange.bind(this);
     }
 
         //fetch函数进行数据传输,fetch在reactjs中等同于 XMLHttpRequest
@@ -45,11 +44,13 @@ class AddMesCustomer extends Component{
         )
     }
 
+
     handleOk(e) {
-        const {validateFields} = this.props.form;
-        validateFields();
+        const {validateFields} = this.props.form; 
+
+        validateFields();          //校验并获取一组输入域的值
         if(this.state.client_unit === '') return
-        let params = {
+        const params = {
             client_code:this.state.client_code,
             client_unit:this.state.client_unit,
             client_address:this.state.client_address,
@@ -62,27 +63,25 @@ class AddMesCustomer extends Component{
         }
         this.setState({
             confirmLoading: true,
-          });
-          this.createNewCuster(params)
+        });
+        this.createNewCuster(params)
     };
 
     //取消按钮事件
-    handleCancel = e => {
-        console.log(e);
-        this.setState({
-          visible: false,
-        });
-      };
+    handleCancel() {
+        this.props.cancel(false)
+    };
 
-    handleChange(e) {
+    andleChange(e) {
         this.setState({
             [e.target.name] : e.target.value
         })
     }
         
     render(){
-        
-        const {confirmLoading, 
+        const { getFieldDecorator } = this.props.form;
+        const {
+            confirmLoading, 
             client_code,
             client_unit,
             client_address,
@@ -91,42 +90,45 @@ class AddMesCustomer extends Component{
             client_province,
             unit_phone,
             unit_fax,
-             note} = this.state;
+            note} = this.state;
         console.log(this.state);
         
         const formItemLayout = {
             labelCol: {
-              span: 5
+              span: 5      //左边留白大小
             },
             wrapperCol: {
-              span: 16,
+              span: 16,          // 内容区大小（两者和不能!>24
             },
         };
         
-          console.log(this.state);
         return(
             <div>
             <Modal
                 title="新增客户信息"
-                visible={this.state.visible}
-                onOk={this.handleOk}
-                confirmLoading={confirmLoading}
-                onCancel={this.handleCancel}
-                destroyOnClose={true}
+                visible={this.props.Visible}               //对话框是否可见  这个地方通过this.props.Visible 接收到父组件传过来的Visible
+                onOk={this.handleOk}                      //点击确定回调
+                confirmLoading={confirmLoading}            //确定按钮 loading
+                onCancel={this.handleCancel}                //点击遮罩层或右上角叉或取消按钮的回调
+                destroyOnClose={true}                //关闭时销毁 Modal 里的子元素         默认关闭后状态不会自动清空, 如果希望每次打开都是新内容，请设置 destroyOnClose
             >
-                <div>                                       
+                <div>      {/* formItemLayout标签布局 */}                                 
                     <Form {...formItemLayout}  ref='customerForm' onSubmit={this.onSubmit}>
                         <Form.Item
                             label="客户编号"
                             colon
                         >
-                        <Input  name="client_code" onChange={this.handleChange} value={client_code}/>
+                        <Input  name="client_code" onChange={this.handleChange} value={client_code}/>      
                         </Form.Item>
                         <Form.Item
                             label="客户单位"
                             colon
                         >
-                        <Input  name="client_unit" onChange={this.handleChange} value={client_unit}/>
+                            {getFieldDecorator('client_unit', {
+                            rules: [{ required: true, message: '请输入客户单位' }],            //getFieldDecorator()  自定义校验方法,设置此项为必填项
+                        })(
+                            <Input  name="client_unit" onChange={this.handleChange} value={client_unit}/> //onChange	输入框内容变化时的回调 value	输入框内容
+                        )}
                         </Form.Item>
                         <Form.Item
                             label="客户地址"
@@ -162,7 +164,11 @@ class AddMesCustomer extends Component{
                         label="客户省份"
                         colon
                         >
+                        {getFieldDecorator('client_province', {
+                            rules: [{ required: true, message: '请输入客户省份' }],            //getFieldDecorator()  设置此项为必填项
+                        })(
                         <Input  name="client_province" onChange={this.handleChange} value={client_province}/>
+                        )}
                         </Form.Item>
                         <Form.Item
                             label="备注"
