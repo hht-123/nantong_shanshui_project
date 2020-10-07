@@ -2,7 +2,6 @@ import { Table, Pagination, message, Icon} from 'antd';
 import React, { Component } from 'react';
 import { Model } from '../../dataModule/testBone';
 
-
 const model = new Model()
 
 class MessageTable extends Component{
