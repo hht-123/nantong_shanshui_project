@@ -117,7 +117,7 @@ class EditModal extends Component {
         return (
         <div>
             <Modal
-                title="新增主机"
+                title="编辑主机"
                 visible={ visible }
                 confirmLoading={ confirmLoading }
                 destroyOnClose={ true }
