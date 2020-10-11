@@ -56,7 +56,7 @@ class AddModal extends Component {
           confirmLoading: true,
         });
         this.createNewEngine(params)
-      };
+    };
     
     //取消按钮事件
     handleCancel = () => {

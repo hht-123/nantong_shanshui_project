@@ -167,10 +167,8 @@ class EngineInfo extends Component{
     this.setState({
       editModalVisible: true,
     });
-    record === undefined ? null :
-    this.setState({
-      editInfo:record
-    })
+    // eslint-disable-next-line no-unused-expressions
+    record === undefined ? null : this.setState({editInfo:record})
   }
 
   statusSWift(status) {
@@ -196,7 +194,7 @@ class EngineInfo extends Component{
   }
   
   render() {
-    const {data, isLoading, showPagination, size, total, addModalVisible , editModalVisible, whetherTest, editInfo, currentPage} = this.state;
+    const {data, isLoading, showPagination, size, total, addModalVisible, editModalVisible, whetherTest, editInfo, currentPage} = this.state;
     const tableDate = [];
     if(data !== undefined) {
       data.map((item) => {

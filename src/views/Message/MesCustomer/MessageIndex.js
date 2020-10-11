@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Input,Button, message } from 'antd';
-import '../../style/wrapper.less';
-import '../Message/style/Message.less';
+import '../../../style/wrapper.less';
+import '../../Message/style/Message.less';
 import MessageTable from './MessageTable';
 import AddMesCustomer from './AddMesCustomer';
-import {Model} from '../../dataModule/testBone';
-import {messageCUrl} from '../../dataModule/UrlList';
+import {Model} from '../../../dataModule/testBone';
+import {messageCUrl} from '../../../dataModule/UrlList';
+import EditMesModal from './editMesModal';
 
 
 const model = new Model();
@@ -16,40 +17,31 @@ class MessageIndex extends Component{
         super(props);
         this.state={
             confirmLoading: false,
+            currentPage: 1,
             whetherTest: false,     //是否是测试  true为是 false为否
             showPagination: true,   //是否分页
             isLoading: false,       //是否加载
             data: [],               //表格数据 
             total: 0,              //一共有多少条数据
             keyValue: "",           //用于重置
-            client_unit: "",        //客户单位
+            search_client_unit: "",        //客户单位
             Visible: false,   //addMesCustomer是否显示
-            editModelVisible: false  //editModal是否显示
-        }
-        //this.handleChange = this.handleChange.bind(this);
-        this.handleReset = this.handleReset.bind(this);
-        /* this.getPage = this.getPage.bind(this);
-        this.getSize = this.getSize.bind(this); */
-        this.showAddModal = this.showAddModal.bind(this);
-        this.closeAddModal = this.closeAddModal.bind(this);
-        //this.showEditModal = this.showEditModal.bind(this);
+            editModelVisible: false , //editModal是否显示
+            editInfo: {},             //获取到编辑行的信息
+        }  
     }
 
     //生命周期函数
     componentDidMount() {
-        const startParams = {
-          currentPage: 1,
-          page: 1,
-          size: 10,
-        }
-        this.getCurrentPage(startParams);
+        let params = this.getParams();
+        this.getCurrentPage(params);
     }
 
     //获取数据
     getCurrentPage(params) {
         for (let i in params) {
-            if (params[i] === null) {
-                params[i] = ''
+            if (params[i] === undefined || params[i] === null) {
+              params[i] = ''
             }
         }
         let me = this;            //让this指向不会出错
@@ -60,13 +52,12 @@ class MessageIndex extends Component{
             'get',
             function(response) {
                 if (me.state.whetherTest === false) {
-                    console.log(response.data);
-                me.setState({
-                    isLoading: false,
-                    total: response.data.count,
-                    data: response.data,
-                    currentPage: params['currentPage']
-                })
+                    me.setState({
+                        isLoading: false,
+                        total: response.data.count,
+                        data: response.data.results,
+                        currentPage: params['currentPage']
+                    })
                 } else {
                     me.setState({
                         isLoading: false,
@@ -80,14 +71,58 @@ class MessageIndex extends Component{
             this.state.whetherTest
         )
     }
+
+    getParams(currentPage=1, size=10, client_unit=null) {
+        let params = {};
+        params = {
+          currentPage,
+          size,
+          client_unit,
+        }
+        return params;
+    }
+
+
+    //输入框的获取
+    handleChange = (e) => {
+        this.setState({
+        [e.target.name] : e.target.value
+        })
+    }
+
+    //搜索按钮
+    searchInfo = () => {
+        const { search_client_unit } = this.state;
+        let params = this.getParams( 1, 10, search_client_unit );
+        this.getCurrentPage(params);
+    }
     
     //重置按钮
-    handleReset(){
+    handleReset = () => {
+        let params = this.getParams();
+        this.getCurrentPage(params);
         this.setState({
-            client_unit:"",
-            keyValue: new Date()
-        })   
-    };
+            search_client_unit: null,
+            keyValue: new Date(),
+            currentPage: 1
+        })
+        this.getCurrentPage(params);
+    }
+
+    //翻页获取内容
+    getPage = (currentPage, pageSize) => {
+        const { search_client_unit } = this.state;
+        const params = this.getParams(currentPage, pageSize, search_client_unit)
+        this.getCurrentPage(params);
+    }
+
+    //改变pageSize获取内容
+    getSize = (current, size) => {
+        const { search_client_unit } = this.state;
+        const params = this.getParams(1, size, search_client_unit)
+        this.getCurrentPage(params);
+        document.scrollingElement.scrollTop = 0
+    }
 
     //弹窗显示
     showAddModal = () =>  {
@@ -96,17 +131,31 @@ class MessageIndex extends Component{
         });
     };
     
-    closeAddModal() {
+    closeAddModal = () => {
         this.setState({
-            Visible: false
+            Visible: false,
+            editModalVisible: false,
         })
-    };
+    }
     
-    showEditModal() {
+    //显示编辑弹窗 
+    showEditModal = (record) => {
         this.setState({
-          editModalVisible: true,
+            editModalVisible: true,
         });
-    };
+        // eslint-disable-next-line no-unused-expressions
+        record === undefined ? null :
+        this.setState({
+            editInfo: record
+        })
+    }
+
+    //搜索按钮
+    searchInfo = () => {
+        const { client_unit } = this.state;
+        let params = this.getParams( 1, 10, client_unit);
+        this.getCurrentPage(params);
+    }
    
 
     render(){
@@ -122,7 +171,6 @@ class MessageIndex extends Component{
             client_industry:item.client_industry,
             unit_phone:item.unit_phone,
             unit_fax:item.unit_fax,
-            client_province:item.client_province,
             note: item.note
         })
         return null;
@@ -146,7 +194,7 @@ class MessageIndex extends Component{
                                 </div>
                                 <div>
                                     <div className="right">
-                                        <Button type="primary" className="span" >搜索</Button>
+                                        <Button type="primary" className="span" onClick={ this.searchInfo }>搜索</Button>
                                         <Button type="primary" className="span" onClick={this.handleReset}>重置</Button>
                                         <Button type="primary" className="span" onClick={this.showAddModal}>创建客户信息</Button>
                                     </div>
@@ -159,7 +207,24 @@ class MessageIndex extends Component{
                             </div>
                         </div>  
                         <div className="table">
-                            <MessageTable/>
+                            <MessageTable
+                                data={ tableDate }
+                                isLoading={ this.state.isLoading }
+                                showPagination={ this.state.showPagination }
+                                size={ this.state.size }
+                                total={ this.state.total }
+                                changePage={ this.getPage }
+                                changeSize={ this.getSize }
+                                currentPage={ this.state.currentPage }
+                                showEditModal={ this.showEditModal }
+                            />
+                            <EditMesModal
+                                whetherTest={ whetherTest }
+                                visible={ this.state.editModalVisible }
+                                cancel={ this.closeAddModal }
+                                showEditModal={ this.showEditModal }
+                                editInfo={ this.state.editInfo }
+                            />
                         </div> 
                 </div> 
            </div>  

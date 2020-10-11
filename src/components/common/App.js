@@ -13,7 +13,8 @@ import Index from '../index/index';
 import EngineInfo from '../../views/basicInfo/engineInfo'
 import SensorInfo from '../../views/basicInfo/sensorInfo' 
 import MaintenanceIndex from '../../views/maintenance/index';
-import MessageIndex from '../../views/Message/MessageIndex';
+import MessageIndex from '../../views/Message/MesCustomer/MessageIndex';
+import ContactIndex from '../../views/Message/BaseMesCustomer/ContactIndex';
 import '../../style/index.less';
 import Monitor from '../../views/maintenance/monitor';
 
@@ -69,6 +70,7 @@ class App extends Component {
                   <Route path='/app/message' component={MessageIndex} />
                   <Route path='/app/monitor' component={Monitor} />
                   <Route path='/app/sensor' component={SensorInfo} />
+                  <Route path='/app/contact' component={ContactIndex} />
                 </Switch>
               </Content>
             </Layout>

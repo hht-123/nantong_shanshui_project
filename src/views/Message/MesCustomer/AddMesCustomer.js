@@ -1,7 +1,8 @@
 import React,{ Component } from 'react';
 import { Modal, Form, Input, message} from 'antd';
 
-import {Model} from '../../dataModule/testBone';
+import {Model} from '../../../dataModule/testBone';
+import {messageCUrl} from '../../../dataModule/UrlList';
 const model = new Model();
 
 class AddMesCustomer extends Component{
@@ -9,7 +10,6 @@ class AddMesCustomer extends Component{
         super (props);
         this.state = {
             confirmLoading: false,
-            client_code: '',
             client_unit: '',
             client_address: '',
             client_zip_code: '',
@@ -19,9 +19,6 @@ class AddMesCustomer extends Component{
             note: '',  
             url: 'add_mes/' ,
         }
-        this.handleOk = this.handleOk.bind(this);
-        this.handleCancel = this.handleCancel.bind(this);
-        this.handleChange = this.handleChange.bind(this);
     }
 
     //fetch函数进行数据传输,fetch在reactjs中等同于 XMLHttpRequest
@@ -29,7 +26,7 @@ class AddMesCustomer extends Component{
         let me = this;
         model.fetch(
           params,
-          me.state.url,
+          messageCUrl,
           'post',
           function() {
             me.props.cancel(false)
@@ -38,14 +35,19 @@ class AddMesCustomer extends Component{
             })
           },
           function() {
-            message.warning('加载失败，请重试')
+            message.warning('发送数据失败，请重试')
+            setTimeout(() => {
+                me.setState({
+                  confirmLoading: false,
+                });
+              }, 2000)
           },
-          this.props.whetherTest
+          this.props.whetherTest 
         )
-    }
+      }
 
 
-    handleOk(e) {
+    handleOk = () => {
         const {validateFields} = this.props.form; 
 
         validateFields();          //校验并获取一组输入域的值
@@ -58,35 +60,35 @@ class AddMesCustomer extends Component{
             client_industry:this.state.client_industry,
             unit_phone:this.state.unit_phone,
             unit_fax:this.state.unit_fax,
-            client_province:this.state.client_province,
+            region:this.state.region,
             note: this.state.note
         }
         this.setState({
             confirmLoading: true,
         });
-        this.createNewCuster(params)
+        this.createNewCustomer(params)
     };
 
     //取消按钮事件
-    handleCancel() {
+    handleCancel = () => {
         this.props.cancel(false)
     };
+        
 
-    handleChange(e) {
+    handleChange = (e) => {
         this.setState({
-            [e.target.name] : e.target.value
+            [e.target.name]: e.target.value
         })
     }
         
     render(){
         const { getFieldDecorator } = this.props.form;
         const { confirmLoading, 
-                client_code,
                 client_unit,
                 client_address,
                 client_zip_code,
                 client_industry,
-                client_province,
+                region,
                 unit_phone,
                 unit_fax,
                 note} = this.state;
@@ -113,12 +115,6 @@ class AddMesCustomer extends Component{
             >
                 <div>      {/* formItemLayout标签布局 */}                                 
                     <Form {...formItemLayout}  ref='customerForm' onSubmit={this.onSubmit}>
-                        <Form.Item
-                            label="客户编号"
-                            colon
-                        >
-                        <Input  name="client_code" onChange={this.handleChange} value={client_code}/>      
-                        </Form.Item>
 
                         <Form.Item
                             label="客户单位"
@@ -170,10 +166,10 @@ class AddMesCustomer extends Component{
                         label="客户省份"
                         colon
                         >
-                        {getFieldDecorator('client_province', {
+                        {getFieldDecorator('region', {
                             rules: [{ required: true, message: '请输入客户省份' }],            //getFieldDecorator()  设置此项为必填项
                         })(
-                        <Input  name="client_province" onChange={this.handleChange} value={client_province}/>
+                        <Input  name="region" onChange={this.handleChange} value={region}/>
                         )}
                         </Form.Item>
 
