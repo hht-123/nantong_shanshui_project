@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Layout } from 'antd';
 import { getCookie, setCookie } from "../../helpers/cookies";
-import store from '../../store';
+import store from '../../store'
 import { Provider } from 'react-redux';
 import '../../style/index.less';
 
@@ -17,10 +17,13 @@ import MessageIndex from '../../views/Message/MesCustomer/MessageIndex';
 import ContactIndex from '../../views/Message/BaseMesCustomer/ContactIndex';
 import '../../style/index.less';
 import Monitor from '../../views/maintenance/monitor';
+import { connect } from 'react-redux';
+import { Model } from '../../dataModule/testBone';
+import { actionCreators } from '../index/store';
 
 
 
-
+const model = new Model();
 
 const { Content, Footer, Sider } = Layout;
 
@@ -64,18 +67,17 @@ class App extends Component {
               </Sider>
               <Content style={{ padding: '0 24px', minHeight: 'calc(100vh - 111px)' }}>
                 <Switch>
-                  <Route exact path={'/'} component={(props) =><Index {...props}/>} />
+                  <Route exact path='/app' component={(props) =><Index {...props}/>} />
                   <Route path='/app/engine' component={EngineInfo} />
                   <Route path='/app/maintenance' component={MaintenanceIndex} />
                   <Route path='/app/message' component={MessageIndex} />
-                  <Route path='/app/monitor' component={Monitor} />
+                  <Route path='/app/monitor/:equipment_aid' component={Monitor} />
                   <Route path='/app/sensor' component={SensorInfo} />
                   <Route path='/app/contact' component={ContactIndex} />
                 </Switch>
               </Content>
             </Layout>
           </Content>
-
           <Footer style={{ textAlign: 'center', backgroundColor: "#778899", color: "white" }}>
             <span style={{ display: "block" }}>公司地址：上海市杨浦区军工路516号上海理工大学</span>
             <span style={{ display: "block" }}>联系电话：12345</span>

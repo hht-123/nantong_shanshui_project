@@ -10,3 +10,8 @@ export const originalUrl = 'http://10.21.1.106:8000/';
 export const enginInfoUrl = 'main_engine/';
 export const messageCUrl = 'client/';
 
+export const sensorInfoUrl = 'app/typemodel/';
+export const sensorTypeUrl= 'sensor_type/';
+export const maintenanceUrl = 'app/operation/';
+// export const equipmentUrl =  'app/operation/';
+export const equipmentUrl = 'app/real_time_monitoring/'

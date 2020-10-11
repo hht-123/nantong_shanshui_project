@@ -1,0 +1,70 @@
+{
+    "success": true,
+    "data" : [
+        {
+            "equipment_code": "S1905190101",
+            "client_unit": "一汽锡柴",
+            "status":"0",
+            "region":"江苏地区"
+        },{
+            "equipment_code": "S1905190102",
+            "client_unit": "一汽锡柴",
+            "status":"1",
+            "region":"江苏地区"
+        },{
+            "equipment_code": "S1905190103",
+            "client_unit": "一汽锡柴",
+            "status":"2",
+            "region":"江苏地区"
+        },{
+            "equipment_code": "S1905190104",
+            "client_unit": "一汽锡柴",
+            "status":"3",
+            "region":"江苏地区"
+        },{
+            "equipment_code": "S1905190201",
+            "client_unit": "南京依维柯",
+            "status":"3",
+            "region":"江苏地区"
+        },{
+            "equipment_code": "S1905190201",
+            "client_unit": "南京依维柯",
+            "status":"0",
+            "region":"江苏地区"
+        },{
+            "equipment_code": "S1905190301",
+            "client_unit": "中电14所",
+            "status":"0",
+            "region":"江苏地区"
+        },{
+            "equipment_code": "S1905190301",
+            "client_unit": "中电14所",
+            "status":"0",
+            "region":"江苏地区"
+        },{
+            "equipment_code": "S1905190301",
+            "client_unit": "江南造船厂",
+            "status":"0",
+            "region":"上海地区"
+        },{
+            "equipment_code": "S1905190301",
+            "client_unit": "江南造船厂",
+            "status":"1",
+            "region":"上海地区"
+        },{
+            "equipment_code": "S1905190301",
+            "client_unit": "江南造船厂",
+            "status":"2",
+            "region":"上海地区"
+        },{
+            "equipment_code": "S1905190301",
+            "client_unit": "江南造船厂",
+            "status":"0",
+            "region":"浙江地区"
+        },{
+            "equipment_code": "S1905190301",
+            "client_unit": "江南造船厂",
+            "status":"0",
+            "region":"浙江地区"
+        }
+    ]}

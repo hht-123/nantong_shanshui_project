@@ -50,13 +50,16 @@ class AddModal extends Component {
             engine_name: this.state.engine_name,
             begin_time: this.state.begin_time,
             end_time: this.state.end_time,
+            status: '123123',
             note: this.state.note
         }
         this.setState({
           confirmLoading: true,
         });
-        this.createNewEngine(params)
-    };
+        console.log(params);
+        this.createNewEngine(params);
+        window.location.reload();
+      };
     
     //取消按钮事件
     handleCancel = () => {
@@ -105,7 +108,7 @@ class AddModal extends Component {
                 onCancel={ this.handleCancel }
                 >
                 <div>
-                    <Form { ...formItemLayout } ref='engineForm' onSubmit={ this.onSubmit }>
+                    <Form { ...formItemLayout }>
                         <Form.Item
                             label="主机名称"
                             colon

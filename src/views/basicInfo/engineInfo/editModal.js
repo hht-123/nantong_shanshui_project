@@ -30,7 +30,7 @@ class EditModal extends Component {
                 status: editInfo.status,
                 note: editInfo.note === undefined? '':editInfo.note,
                 end_time: editInfo.end_time,
-                url: `${enginInfoUrl}/${editInfo.key}/`
+                url: `${enginInfoUrl}${editInfo.key}/`
             })
         }
     }
@@ -100,7 +100,14 @@ class EditModal extends Component {
         })
     }
 
+    handleSelect = (string) => {
+        this.setState({
+            status: string
+        })
+    }
+
     render() {
+
         const { visible } = this.props;
         const { getFieldDecorator } = this.props.form;
         const { confirmLoading,engine_name, note } = this.state;
@@ -117,7 +124,7 @@ class EditModal extends Component {
         return (
         <div>
             <Modal
-                title="新增主机"
+                title="主机编辑"
                 visible={ visible }
                 confirmLoading={ confirmLoading }
                 destroyOnClose={ true }
@@ -157,9 +164,9 @@ class EditModal extends Component {
                             label="状态"
                             colon
                         >
-                        <Select name='' defaultValue="在产" style={{ width: 120 }}>
-                            <Option value="1">在产</Option>
-                            <Option value="0">停产</Option>
+                        <Select name='' defaultValue="在产" style={{ width: 120 }} onSelect={(string) => this.handleSelect(string)}>
+                            <Option value="在产">在产</Option>
+                            <Option value="停产">停产</Option>
                         </Select>
                         </Form.Item>
 
