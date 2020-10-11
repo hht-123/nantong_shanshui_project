@@ -65,14 +65,14 @@ class App extends Component {
                 <SideMenu />
               </Sider>
               <Content style={{ padding: '0 24px', minHeight: 'calc(100vh - 111px)' }}>
-                  <Switch>
-                    <Route exact path='/app' component={(props) =><Index {...props}/>} />
-                    <Route path='/app/engine' component={EngineInfo} />
-                    <Route path='/app/maintenance' component={MaintenanceIndex} />
-                    <Route path='/app/message' component={MessageIndex} />
-                    <Route path='/app/monitor' component={Monitor} />
-                    <Route path='/app/sensor' component={SensorInfo} />
-                  </Switch>
+                <Switch>
+                  <Route exact path='/app' component={(props) =><Index {...props}/>} />
+                  <Route path='/app/engine' component={EngineInfo} />
+                  <Route path='/app/maintenance' component={MaintenanceIndex} />
+                  <Route path='/app/message' component={MessageIndex} />
+                  <Route path='/app/monitor/:equipment_aid' component={Monitor} />
+                  <Route path='/app/sensor' component={SensorInfo} />
+                </Switch>
               </Content>
             </Layout>
           </Content>
