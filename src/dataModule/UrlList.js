@@ -12,5 +12,8 @@ export const messageCUrl = 'client/';
 
 export const sensorInfoUrl = 'app/typemodel/';
 export const sensorTypeUrl= 'sensor_type/';
+
 export const maintenanceUrl = 'app/operation/';
 export const equipmentUrl = 'app/real_time_monitoring/'
+export const equipMaintainUrl = 'app/maintenance/'
+export const addEquipMaintainUrl = 'equipment_maintenance/'
