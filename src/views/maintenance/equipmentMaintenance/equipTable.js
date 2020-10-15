@@ -2,46 +2,61 @@ import { Table, Pagination, Icon } from 'antd';
 import React, { Component } from 'react';
 
 
-class EngineTable extends Component{
-  
+class EquipMaintenanceTable extends Component{
+    handleStatusColor = (numb) => {
+      if ( numb === '等待维护' ) {
+        return  { color : 'red '}
+      }else if ( numb === '维护未结束' ) {
+        return  { color : 'red '}
+      }
+    }
+
     render() {
       const { isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
 
       const columns =  [
         {
-          title: '主机编号',
-          dataIndex: 'engine_code',
-          align: 'center',
-          width: 100
-        },
-        {
-          title: '主机名称',
-          dataIndex: 'engine_name',
+          title: '报修时间',
+          dataIndex: 'repair_time',
           align: 'center',
           width: 120
         },
         {
-          title: '开始生产时间',
-          dataIndex: 'begin_time',
+          title: '维护时间',
+          dataIndex: 'maintain_time',
           align: 'center',
           width: 120
         },
         {
-          title: '结束生产时间',
-          dataIndex: 'end_time',
+          title: '维护原因',
+          dataIndex: 'maintain_cause',
           align: 'center',
           width: 120
         },
         {
-          title: '状态',
-          dataIndex: 'status',
+          title: '设备状况描述',
+          dataIndex: 'fault_description',
           align: 'center',
-          width: 80,
         },
         {
-          title: '备注',
-          dataIndex: 'note',
-          align: 'center'
+          title: '维护结果',
+          dataIndex: 'maintain_result',
+          align: 'center',
+          width: 120,
+          render: text => <div style={this.handleStatusColor(text)}>{text}</div>
+        },
+        {
+          title: '维护状态',
+          dataIndex: 'maintain_status',
+          align: 'center',
+          width: 120,
+          render: text => <div style={this.handleStatusColor(text)}>{text}</div>
+        },
+        {
+            title: '负责人',
+            dataIndex: 'responsible_person',
+            align: 'center',
+            width: 120
         },
         {
           title: '操作',
@@ -57,7 +72,7 @@ class EngineTable extends Component{
         return (
           <div
             style={{
-                width: '100%',
+                width: '120%',
                 position: 'relative',
                 marginBottom: '30px'
             }}
@@ -98,4 +113,4 @@ class EngineTable extends Component{
     }
 }
 
-export default EngineTable;
+export default EquipMaintenanceTable;

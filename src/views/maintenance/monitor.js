@@ -6,9 +6,11 @@ import Line from './publicComponents/sensorLine';
 import { equipmentUrl } from '../../dataModule/UrlList';
 
 import { Icon, Tabs } from 'antd';
+import { Link } from 'react-router-dom';
 
 const model = new Model()
 const { TabPane } = Tabs;
+
 
 class Monitor extends Component{
   constructor(props) {
@@ -148,6 +150,7 @@ class Monitor extends Component{
   // }
 
   render() {
+    const equipment_id = this.props.match.params.equipment_aid;
     return (
       <div className='monitor'>
         <span className='name'>设备编号：{ this.state.equipmentData.equipment_code }</span>
@@ -155,7 +158,7 @@ class Monitor extends Component{
         <div className='wrapper'>
             <div className='table'>
                 <span ><Icon className='icon' type="warning" theme="filled" /><div className='describe' >水质提醒记录</div></span>
-                <span className='main'><Icon className='icon' type="tool" theme="filled" /><div className='describe' >设备维护</div></span>
+                <Link to={`/app/equipmentMaintenance/${ equipment_id}`}><span className='main'><Icon className='icon' type="tool" theme="filled" /><div className='describe' >设备维护</div></span></Link>
                 <span className='main'><Icon className='icon' type="dashboard" theme="filled" /><div className='describe' >传感器标定</div></span>
                 <span className='main'><Icon className='icon' type="video-camera" theme="filled" /><div className='describe' >视频监控</div></span>
                 <span className='main'><div className='statusColor' style={ this.handleStatusColor(this.state.equipmentData.status) } >{ this.handleStatus(this.state.equipmentData.status) }</div><div className='status' >设备状态</div></span>

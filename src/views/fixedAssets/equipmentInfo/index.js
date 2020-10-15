@@ -115,9 +115,6 @@ class EpuipmentInfo extends Component {
     const { searchEngineCode, searchEquipmentCode, isLoading, showPagination, size, total} = this.state;
     const tableDate = this.handleData();
 
-    console.log(this.state.data);
-    console.log(tableDate);
-
     return(
       <div>
         <div className='name'>设备信息：</div>
