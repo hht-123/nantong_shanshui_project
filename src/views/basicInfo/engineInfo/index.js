@@ -16,10 +16,9 @@ class EngineInfo extends Component{
   constructor(props) {
     super (props);
     this.state = {
-      search: false,          //是否搜索
-      confirmLoading: false,
+      search: false,            //是否搜索
       currentPage: 1,
-      whetherTest: false,     //是否是测试  true为是 false为否
+      whetherTest: false,       //是否是测试  true为是 false为否
       showPagination: true,     //是否分页
       isLoading: false,         //是否加载
       data: [],                 //表格数据 
@@ -34,7 +33,6 @@ class EngineInfo extends Component{
     }
   }
 
-  handleType() {}
 
   componentDidMount() {
     let params = this.getparams();
@@ -207,24 +205,29 @@ class EngineInfo extends Component{
       search: true,
     })
   }
-  
-  render() {
-    const {data, isLoading, showPagination, size, total, addModalVisible, editModalVisible, whetherTest, editInfo, currentPage} = this.state;
-    const tableDate = [];
+
+  handleData = () => {
+    const { data } = this.state;
     if(data !== undefined) {
-      data.map((item) => {
-        tableDate.push({
+      const tableDate = data.map((item) =>({
           key: item.aid,
           engine_code: item.engine_code,
           engine_name: item.engine_name,
           begin_time: item.begin_time,
           end_time: item.end_time,
-          note: item.node,
+          note: item.note,
           status: this.statusSWift(item.status),
-        })
-        return null;
-      })
+        }))
+      return tableDate;
     }
+  }
+
+
+  
+  render() {
+    const {isLoading, showPagination, size, total, addModalVisible, editModalVisible, whetherTest, editInfo, currentPage} = this.state;
+    const tableDate = this.handleData();
+    
     
     return (
       <div>

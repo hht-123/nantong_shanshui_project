@@ -10,20 +10,17 @@ import SideMenu from './SideMenu';
 import HeaderCustom from './HeaderCustom';
 import Index from '../index/index';
 // import noMatch from './404';
-import EngineInfo from '../../views/basicInfo/engineInfo'
-import SensorInfo from '../../views/basicInfo/sensorInfo' 
+import EngineInfo from '../../views/basicInfo/engineInfo';
+import SensorInfo from '../../views/basicInfo/sensorInfo';
+import EpuipmentInfo from '../../views/fixedAssets/equipmentInfo';
 import MaintenanceIndex from '../../views/maintenance/index';
 import MessageIndex from '../../views/Message/MesCustomer/MessageIndex';
 import ContactIndex from '../../views/Message/BaseMesCustomer/ContactIndex';
 import '../../style/index.less';
 import Monitor from '../../views/maintenance/monitor';
-import { connect } from 'react-redux';
-import { Model } from '../../dataModule/testBone';
-import { actionCreators } from '../index/store';
 
+import { actionCreators as indexActionCreators } from '../index/store';
 
-
-const model = new Model();
 
 const { Content, Footer, Sider } = Layout;
 
@@ -44,6 +41,7 @@ class App extends Component {
     if (getCookie("mspa_SiderCollapsed") === null) {
       setCookie("mspa_SiderCollapsed", false);
     }
+    store.dispatch(indexActionCreators.getSensorType())   //获取所有传感器的类型
   }
 
   render() {
@@ -65,15 +63,16 @@ class App extends Component {
               <Sider width={200} style={{ background: '#fff' }}>
                 <SideMenu />
               </Sider>
-              <Content style={{ padding: '0 24px', minHeight: 'calc(100vh - 111px)' }}>
+              <Content style={{ padding: '0 24px', minHeight: 'calc(100vh - 111px)', overflowX: 'auto'}}>
                 <Switch>
                   <Route exact path='/app' component={(props) =><Index {...props}/>} />
                   <Route path='/app/engine' component={EngineInfo} />
                   <Route path='/app/maintenance' component={MaintenanceIndex} />
                   <Route path='/app/message' component={MessageIndex} />
                   <Route path='/app/monitor/:equipment_aid' component={Monitor} />
-                  <Route path='/app/sensor' component={SensorInfo} />
+                  <Route path='/app/sensor' component={(props) =><SensorInfo {...props}/>} />
                   <Route path='/app/contact' component={ContactIndex} />
+                  <Route path='/app/equipment' component={EpuipmentInfo} />
                 </Switch>
               </Content>
             </Layout>
