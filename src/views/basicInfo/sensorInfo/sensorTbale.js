@@ -27,6 +27,12 @@ class SensorTable extends Component{
           width: 150
         },
         {
+          title: '标定理论值',
+          dataIndex: 'theoretical_value',
+          align: 'center',
+          width: 100
+        },
+        {
           title: '默认补偿值',
           dataIndex: 'default_compensation',
           align: 'center',
@@ -69,7 +75,7 @@ class SensorTable extends Component{
         return (
           <div
             style={{
-                width: '90%',
+                width: '100%',
                 position: 'relative',
                 marginBottom: '30px'
             }}

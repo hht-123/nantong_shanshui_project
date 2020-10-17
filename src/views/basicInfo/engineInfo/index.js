@@ -142,7 +142,7 @@ class EngineInfo extends Component{
     }
     const params = this.getparams(1, size, search_engine_code, search_begin_time, search_end_time)
     this.getCurrentPage(params);
-    document.scrollingElement.scrollTop = 0
+    document.scrollingElement.scrollTop = 0;
   }
 
   //显示增加弹窗
@@ -194,7 +194,7 @@ class EngineInfo extends Component{
 
   //重置按钮
   handleReset = () => {
-    let params = this.getparams();
+    const params = this.getparams();
     this.getCurrentPage(params);
     this.setState({
       search_engine_code: null,

@@ -230,6 +230,7 @@ class SensorInfo extends Component {
           sensor_model: item.sensor_model,
           sensor_code: parseInt(item.sensor_code, 0),
           sensor_threshold: item.sensor_threshold,
+          theoretical_value: item.theoretical_value,
           notice_content: item.notice_content,
           default_compensation: item.default_compensation,
           status: this.statusSWift(item.status),

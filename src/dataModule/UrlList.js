@@ -18,6 +18,7 @@ export const addSensorModelUrl = 'sensor_model/';
 export const addSensorUrl = 'sensor/';
 
 export const epuipmentInfoUrl = 'app/equipment_to_engine_name/';
+export const sensorOfequipmentUrl = 'app/equipment_to_sensor3/';
 
 export const maintenanceUrl = 'app/operation/';
 export const equipmentUrl = 'app/real_time_monitoring/'
