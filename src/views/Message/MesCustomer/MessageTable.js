@@ -1,5 +1,6 @@
 import { Table, Pagination,  Icon,Button } from 'antd';
 import React, { Component } from 'react';
+import '../style/messtable.less';
 import {Link} from 'react-router-dom';
 
 
@@ -51,8 +52,8 @@ class MessageTable extends Component{
             title: '联系人',
             dataIndex: 'contact_person',
             align: 'center',
-            render:() => {
-              return <Button type="primary"><Link to="/app/contact">查看</Link></Button>
+            render:(text, record, index) => {
+              return  <Button type="primary"><Link to={`/app/contact/${record.key}`}>查看</Link></Button> 
             }
           },
 
@@ -60,10 +61,14 @@ class MessageTable extends Component{
             title: '操作',
             dataIndex: 'action',
             align: 'center',
-            width: 80,
+            width: 200,
             render: (text, record, index) => {
               //<icon 图标
-              return (<Icon type="edit" theme="twoTone" onClick={() => this.props.showEditModal(record)}/>)
+              return (
+                <div>
+                  <Icon type="edit" theme="twoTone" className="edit" style={{fontSize:'20px'}} onClick={() => this.props.showEditModal(record)}/>          
+                  <Icon type="delete" theme="twoTone"  style={{fontSize:'20px' }} onClick={() => this.props.Delete(record)} />
+                </div>)
             }
           }
         ];
@@ -92,7 +97,7 @@ class MessageTable extends Component{
               loading={isLoading}
             />
             <div style={{ marginTop:15, position: 'absolute', right: '0%' }}>
-              {showPagination?
+              {showPagination?         //分页
                 <Pagination 
                   size="small"
                   current={ currentPage } 
