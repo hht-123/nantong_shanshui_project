@@ -15,15 +15,20 @@ import SensorInfo from '../../views/basicInfo/sensorInfo';
 import Equipment from '../../views/fixedAssets/equipmentInfo/route';
 import MaintenanceIndex from '../../views/maintenance/index';
 import MessageIndex from '../../views/Message/MesCustomer/MessageIndex';
-import ContactIndex from '../../views/Message/BaseMesCustomer/ContactIndex';
+import ContactIndex from '../../views/Message/ContactMes/ContactIndex';
+
 import '../../style/index.less';
 import Monitor from '../../views/maintenance/monitor';
+//import { connect } from 'react-redux';
+//import { Model } from '../../dataModule/testBone';
+//import { actionCreators } from '../index/store';
 import EquipmentMaintenance from '../../views/maintenance/equipmentMaintenance/equipmentMaintenance';
 
 
 
 import { actionCreators as indexActionCreators } from '../index/store';
 
+//const model = new Model();
 
 const { Content, Footer, Sider } = Layout;
 
@@ -75,6 +80,12 @@ class App extends Component {
                   <Route path='/app/monitor/:equipment_aid' component={Monitor} />
                   <Route path='/app/sensor' component={(props) =><SensorInfo {...props}/>} />
                   <Route path='/app/equipmentMaintenance/:equipment_id' component={EquipmentMaintenance} />
+<<<<<<< HEAD
+=======
+                  <Route path='/app/sensor' component={SensorInfo} />
+                  <Route path='/app/contact/:client_id' component={ContactIndex} />
+                 
+>>>>>>> b681684133a82f1bb335cd011461a399f5fab0ab
                   <Route path='/app/contact' component={ContactIndex} />
                   <Route path='/app/equipment' component={(props) => <Equipment {...props}/>} />
                 </Switch>

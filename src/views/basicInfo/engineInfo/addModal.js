@@ -58,8 +58,13 @@ class AddModal extends Component {
           confirmLoading: true,
         });
         this.createNewEngine(params);
+<<<<<<< HEAD
         this.props.getCurrentPage({currentPage: 1, size: 10});
       };
+=======
+        window.location.reload();
+    };
+>>>>>>> b681684133a82f1bb335cd011461a399f5fab0ab
     
     //取消按钮事件
     handleCancel = () => {

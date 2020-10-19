@@ -42,6 +42,7 @@ class EditMesModal extends Component{
         }
     }
 
+    //修改完以后，提交数据
     editEngineInfo(params) {
         let me = this;
         model.fetch(
