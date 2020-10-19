@@ -2,53 +2,42 @@ import { Table, Pagination, Icon } from 'antd';
 import React, { Component } from 'react';
 
 
-class SensorTable extends Component{
+class EquipmentTable extends Component{
+  
 
     render() {
       const { isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
 
       const columns =  [
         {
-          title: '传感器编号',
-          dataIndex: 'sensor_code',
+          title: '主机编号',
+          dataIndex: 'engine_code',
           align: 'center',
-          width: 120,
+          width: 120
         },
         {
-          title: '传感器类型',
-          dataIndex: 'type_name',
+          title: '主机名称',
+          dataIndex: 'engine_name',
           align: 'center',
-          width: 150
+          width: 120
         },
         {
-          title: '传感器型号',
-          dataIndex: 'sensor_model',
+          title: '设备编号',
+          dataIndex: 'equipment_code',
           align: 'center',
-          width: 150
+          width: 120
         },
         {
-          title: '默认补偿值',
-          dataIndex: 'default_compensation',
+          title: '仓库',
+          dataIndex: 'storehouse',
           align: 'center',
-          width: 100
+          width: 80
         },
         {
-          title: '传感器阈值',
-          dataIndex: 'sensor_threshold',
+          title: '库位',
+          dataIndex: 'storage_location',
           align: 'center',
-          width: 100
-        },
-        {
-          title: '提示内容',
-          dataIndex: 'notice_content',
-          align: 'center',
-          width: 150
-        },
-        {
-          title: '状态',
-          dataIndex: 'status',
-          align: 'center',
-          width: 80,
+          width: 80
         },
         {
           title: '备注',
@@ -59,7 +48,7 @@ class SensorTable extends Component{
           title: '操作',
           dataIndex: 'action',
           align: 'center',
-          width: 80,
+          width: 200,
           render: (text, record, index) => {
             return <Icon type="edit" theme="twoTone" onClick={() => this.props.showEditModal(record)}/>
           }
@@ -69,7 +58,7 @@ class SensorTable extends Component{
         return (
           <div
             style={{
-                width: '90%',
+                width: '70%',
                 position: 'relative',
                 marginBottom: '30px'
             }}
@@ -110,4 +99,4 @@ class SensorTable extends Component{
     }
 }
 
-export default SensorTable;
+export default EquipmentTable;

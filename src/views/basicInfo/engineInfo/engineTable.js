@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 
 class EngineTable extends Component{
   
-
     render() {
       const { isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
 

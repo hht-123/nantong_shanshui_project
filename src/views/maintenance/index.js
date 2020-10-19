@@ -150,7 +150,8 @@ class MaintenanceIndex extends Component {
 
   render() {
     const { Option } = Select;
-    const Newdata = this.getGroup(this.state.data,'region')
+    const Newdata = this.getGroup(this.state.data,'region');
+    const allowClear = true;
     // console.log(Newdata)
 
     return (
@@ -166,7 +167,7 @@ class MaintenanceIndex extends Component {
                 <Input className='user' name='client_unit' value={ this.state.client_unit } onChange={ this.changeValue } />
                 <div className='search-status'>设备状态:</div>
                 <div className='status'>
-                    <Select size='small' defaultValue="0" style={{ width: 120, }} onChange={ this.handleChange }>
+                    <Select size='small' allowClear={ allowClear }  style={{ width: 120, }} onChange={ this.handleChange }>
                         <Option value="0">在线</Option>
                         <Option value="1">报修</Option>
                         <Option value="2">停运</Option>

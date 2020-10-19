@@ -2,58 +2,61 @@ import { Table, Pagination, Icon } from 'antd';
 import React, { Component } from 'react';
 
 
-class SensorTable extends Component{
+class EquipMaintenanceTable extends Component{
+    handleStatusColor = (numb) => {
+      if ( numb === '等待维护' ) {
+        return  { color : 'red '}
+      }else if ( numb === '维护未结束' ) {
+        return  { color : 'red '}
+      }
+    }
 
     render() {
       const { isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
 
       const columns =  [
         {
-          title: '传感器编号',
-          dataIndex: 'sensor_code',
+          title: '报修时间',
+          dataIndex: 'repair_time',
+          align: 'center',
+          width: 120
+        },
+        {
+          title: '维护时间',
+          dataIndex: 'maintain_time',
+          align: 'center',
+          width: 120
+        },
+        {
+          title: '维护原因',
+          dataIndex: 'maintain_cause',
+          align: 'center',
+          width: 120
+        },
+        {
+          title: '设备状况描述',
+          dataIndex: 'fault_description',
+          align: 'center',
+        },
+        {
+          title: '维护结果',
+          dataIndex: 'maintain_result',
           align: 'center',
           width: 120,
+          render: text => <div style={this.handleStatusColor(text)}>{text}</div>
         },
         {
-          title: '传感器类型',
-          dataIndex: 'type_name',
+          title: '维护状态',
+          dataIndex: 'maintain_status',
           align: 'center',
-          width: 150
+          width: 120,
+          render: text => <div style={this.handleStatusColor(text)}>{text}</div>
         },
         {
-          title: '传感器型号',
-          dataIndex: 'sensor_model',
-          align: 'center',
-          width: 150
-        },
-        {
-          title: '默认补偿值',
-          dataIndex: 'default_compensation',
-          align: 'center',
-          width: 100
-        },
-        {
-          title: '传感器阈值',
-          dataIndex: 'sensor_threshold',
-          align: 'center',
-          width: 100
-        },
-        {
-          title: '提示内容',
-          dataIndex: 'notice_content',
-          align: 'center',
-          width: 150
-        },
-        {
-          title: '状态',
-          dataIndex: 'status',
-          align: 'center',
-          width: 80,
-        },
-        {
-          title: '备注',
-          dataIndex: 'note',
-          align: 'center'
+            title: '负责人',
+            dataIndex: 'responsible_person',
+            align: 'center',
+            width: 120
         },
         {
           title: '操作',
@@ -69,7 +72,7 @@ class SensorTable extends Component{
         return (
           <div
             style={{
-                width: '90%',
+                width: '120%',
                 position: 'relative',
                 marginBottom: '30px'
             }}
@@ -110,4 +113,4 @@ class SensorTable extends Component{
     }
 }
 
-export default SensorTable;
+export default EquipMaintenanceTable;
