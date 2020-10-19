@@ -3,13 +3,16 @@ import { Model } from '../../dataModule/testBone';
 
 import  './style/monitor.less';
 import Line from './publicComponents/sensorLine';
-import { equipmentUrl } from '../../dataModule/UrlList';
+import CompanyInfo from './publicComponents/companyInfo';
+import EquipInfo from './publicComponents/equipInfo';
+import { equipmentUrl, sensorDataUrl, device, clientUrl } from '../../dataModule/UrlList';
 
-import { Icon, Tabs } from 'antd';
+import { Icon, Tabs, DatePicker, Button, PageHeader, message } from 'antd';
 import { Link } from 'react-router-dom';
 
 const model = new Model()
 const { TabPane } = Tabs;
+const {RangePicker} = DatePicker;
 
 
 class Monitor extends Component{
@@ -19,17 +22,38 @@ class Monitor extends Component{
       equipmentData: [],
       sensorData:[],
       whetherTest: false, 
-      whetherTest1: true,
-      // hover: false,
+      whetherTest1: false,
+      search_begin_time: [],    //开始时间
+      equipSensor:[],
+      CompanyModalVisible: false,  //客户信息是否显示
+      equipModalVisible:false,    //设备详情是否显示
+      companyInfo: [],
+      equipmentInfo:[],
     }
   }
 
   componentDidMount() {
     console.log(this.props.match.params.equipment_aid);
     const equipment_aid = this.props.match.params.equipment_aid;
-    let params = this.getparams(equipment_aid)
-    this.getEquipmentData(params)
-    this.getSensorData('11:11')
+    // 获得设备编号和客户公司
+    let params = this.getparams(equipment_aid);
+    this.getEquipmentData(params);
+    //获得传感器的数据
+    const { search_begin_time } = this.state;
+    let params1 = this.getSensorParams("001",search_begin_time);
+    this.getSensorData(params1);
+    //获得设备对应的传感器
+    let sensor = this.getSensor("001");
+    this.getSensors(sensor);
+    //设置定时器
+    this.intervalId = setInterval(() => {
+      let params2 = this.getSensorParams("001",search_begin_time);
+      this.getSensorData(params2);
+    }, 300000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.intervalId)
   }
 
   getparams( equipment_id=null ) {
@@ -71,6 +95,21 @@ class Monitor extends Component{
     )
   }
 
+  getSensorParams( deviceNum='001', search_begin_time=null) {
+    let params = {};
+    let begin_time = null;
+    let end_time = null;
+    if(search_begin_time !== null) {
+      [begin_time, end_time] = this.handleDate(search_begin_time);
+    }
+    params = {
+      deviceNum,
+      begin_time,
+      end_time,
+    }
+    return params;
+  }
+
   getSensorData(params) {
     for (let i in params) {
       if (params[i] === undefined || params[i] === null) {
@@ -80,18 +119,57 @@ class Monitor extends Component{
     let me = this;
     model.fetch(
       params,
-      'api/sensor.json',
+      sensorDataUrl,
       'get',
       function(response) {
         if (me.state.whetherTest1 === false) {
           me.setState({
-            sensorData: response.data.data
-          })
+            sensorData: response.data
+          }) 
+          // console.log(me.state.sensorData)
         } else {
           me.setState({
             sensorData: response.data.data,
           })
           console.log(me.state.sensorData)
+        }
+      },
+      function() {
+        message.warning('没有该时段数据')
+      },
+      this.state.whetherTest1
+    )
+  }
+
+  //  获得设备对应的传感器
+  getSensor( deviceNum='001' ) {
+    let params = {};
+    params = {
+      deviceNum,
+    }
+    return params;
+  } 
+  getSensors(params) {
+    for (let i in params) {
+      if (params[i] === undefined || params[i] === null) {
+        params[i] = ''
+      }
+    }
+    let me = this;
+    model.fetch(
+      params,
+      device,
+      'get',
+      function(response) {
+        if (me.state.whetherTest1 === false) {
+          me.setState({
+            equipSensor: response.data
+          }) 
+          console.log(me.state.equipSensor)
+        } else {
+          me.setState({
+            equipSensor: response.data.data,
+          })
         }
       },
       function() {
@@ -129,46 +207,164 @@ class Monitor extends Component{
     }
   }
 
-  // onMouseEnter = () => {
-  //   this.setState({
-  //       hover: true,
-  //   });
-  // }
+  //搜索的开始时间
+  handleBeginTime = (value, dateString) => {
+    this.setState({
+      search_begin_time: dateString
+    })
+    console.log(dateString)
+  }
 
-  // onMouseLeave = () => {
-  //   this.setState({
-  //       hover: false,
-  //   })
-  // }
+  handleDate(preDate) {
+    if(preDate !== undefined){
+      let gte = preDate[0];
+      let lte = preDate[1];
+      return [gte,lte]
+    }
+  }
 
-  // linkStyle = () => {
-  //   if (this.state.hover) {
-  //   return  {color: '#1890FF', fontSize: '18px'}
-  //   } else {
-  //   return  {}
-  //   }
-  // }
+  //搜索按钮
+  searchInfo = () => {
+    // this.setState({search: true});
+    const { search_begin_time } = this.state;
+    let params = this.getSensorParams("001",search_begin_time);
+    this.getSensorData(params);
+  }
+
+  //显示客户信息弹窗
+  showCompanyModal = () => {
+    this.setState({
+      CompanyModalVisible: true,
+    });
+       let me = this;
+        model.fetch(
+          '11:11',
+          `${clientUrl}${this.state.equipmentData.client_id}/`,
+          'get',
+          function(response) {
+            if (me.state.whetherTest === false) {
+              me.setState({
+                companyInfo: response.data
+              }) 
+              console.log(me.state.companyInfo)
+            } else {
+              me.setState({
+                companyInfo: response.data.data,
+              })
+            }
+          },
+          function() {
+            message.warning('请重试')
+          },
+          this.state.whetherTest 
+        )
+  };
+
+  //显示设备详情弹窗
+  showEquipmentModal = () => {
+    this.setState({
+      equipModalVisible: true,
+    });
+  };
+
+  //关闭弹窗
+  closeModal = (visible) => {
+    this.setState({
+      CompanyModalVisible: visible,
+      equipModalVisible: visible,
+    })
+  }
 
   render() {
     const equipment_id = this.props.match.params.equipment_aid;
+    const { whetherTest, CompanyModalVisible, equipModalVisible } = this.state
+    const time = [];
+    const pH =[];
+    const orp = [];
+    const conduct = [];
+    if (this.state.sensorData !== undefined ) {
+        this.state.sensorData.map((item, index) => {
+          time.push(item.time)
+          pH.push(item.ph)
+          orp.push(item.orp)
+          conduct.push(item.conduct)
+          return null;
+      })
+    }
+
+    function commitInfo(item)  {
+      if (item === 'PH传感器' ) {
+        return  pH
+      } else if (item === "COD传感器") {
+        return  orp
+      } else if (item === "电导率传感器") {
+        return  conduct
+      }
+    }
+
     return (
       <div className='monitor'>
+        <PageHeader className='row'
+          onBack={() => window.history.back()}
+          title="返回"
+        />
         <span className='name'>设备编号：{ this.state.equipmentData.equipment_code }</span>
-        <span className='company'>用户单位：{ this.state.equipmentData.client_unit }</span>
+        <span className='company' onClick={ this.showCompanyModal } >用户单位：{ this.state.equipmentData.client_unit }</span>
+        <CompanyInfo
+          whetherTest={ whetherTest }
+          visible={ CompanyModalVisible }
+          cancel={ this.closeModal }
+          data = { this.state.companyInfo }
+        />
         <div className='wrapper'>
             <div className='table'>
-                <span ><Icon className='icon' type="warning" theme="filled" /><div className='describe' >水质提醒记录</div></span>
-                <Link to={`/app/equipmentMaintenance/${ equipment_id}`}><span className='main'><Icon className='icon' type="tool" theme="filled" /><div className='describe' >设备维护</div></span></Link>
-                <span className='main'><Icon className='icon' type="dashboard" theme="filled" /><div className='describe' >传感器标定</div></span>
-                <span className='main'><Icon className='icon' type="video-camera" theme="filled" /><div className='describe' >视频监控</div></span>
-                <span className='main'><div className='statusColor' style={ this.handleStatusColor(this.state.equipmentData.status) } >{ this.handleStatus(this.state.equipmentData.status) }</div><div className='status' >设备状态</div></span>
-                <span className='main'><Icon className='icon' type="profile" theme="filled" /><div className='describe' >设备详情</div></span>
+                <span >
+                  <Link to={`/app/waterRemind/${ equipment_id}`}>
+                    <Icon className='icon' type="warning" theme="filled" />
+                    <div className='describe' >水质提醒记录</div>
+                  </Link>
+                </span>
+                <span className='main'>
+                  <Link to={`/app/equipmentMaintenance/${ equipment_id}`}>
+                    <Icon className='icon' type="tool" theme="filled" />
+                    <div className='describe' >设备维护</div>
+                  </Link>
+                </span>
+                <span className='main'>
+                <Link to={`/app/sensorCalibratin/${ equipment_id}`}>
+                    <Icon className='icon' type="dashboard" theme="filled" style={{ color: '#00A0E9' }} />
+                    <div className='describe' style={{ color: '#00A0E9' }} >传感器标定</div>
+                  </Link>
+                </span>
+                {/* <span className='main'><Icon className='icon' type="video-camera" theme="filled" /><div className='describe' >视频监控</div></span> */}
+                <span className='main'>
+                  <div className='statusColor' style={ this.handleStatusColor(this.state.equipmentData.status) } >
+                    { this.handleStatus(this.state.equipmentData.status) }
+                  </div>
+                  <div className='status' >设备状态</div>
+                </span>
+                <span className='main' onClick={ this.showEquipmentModal } >
+                  <Icon className='icon' type="profile" theme="filled" style={{ color: '#00A0E9'}} />
+                  <div className='describe' style={{ color: '#00A0E9' }} >设备详情</div>
+                </span>
+                <EquipInfo
+                  whetherTest={ whetherTest }
+                  visible={ equipModalVisible }
+                  cancel={ this.closeModal }
+                />
             </div>
-              <Tabs className='tab' defaultActiveKey="1" onChange={this.callback} type='card'>
+              <Tabs className='tab' defaultActiveKey="0" onChange={this.callback} type='card'>
                   {
-                    this.state.sensorData.map((item, index) => {
-                    return  <TabPane tab={ item.sensor_type } key={ index + 1}>
-                                <Line sensor_type={ item.sensor_type } value_code={ item.value_code } measure_value={ item.measure_value } measure_time={ item.measure_time } />
+                    this.state.equipSensor.map((item, index) => {
+                    return  <TabPane tab={ item.type_name } key={ index }>
+                                <RangePicker className='time' 
+                                  onChange={ this.handleBeginTime } 
+                                />
+                                <Button type="primary" className='search' onClick={ this.searchInfo } >搜索</Button>
+                                <Line  
+                                  Xdata = { time } 
+                                  Ydata = { commitInfo(item.type_name)}
+                                />
                             </TabPane>
                     })
                   }

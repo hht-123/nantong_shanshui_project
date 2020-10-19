@@ -270,7 +270,6 @@ class EngineInfo extends Component{
                   whetherTest={ whetherTest }
                   visible={ addModalVisible }
                   cancel={ this.closeModal }
-                  
                 />
               </div>
             <div className='tableWrapper'>
