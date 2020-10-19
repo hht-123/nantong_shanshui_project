@@ -42,6 +42,7 @@ class EditMesModal extends Component{
         }
     }
 
+    //修改完以后，提交数据
     editEngineInfo(params) {
         let me = this;
         model.fetch(
@@ -84,7 +85,8 @@ class EditMesModal extends Component{
             confirmLoading: true,
         });
         this.editEngineInfo(params);
-        window.location.reload()
+        let item = this.props.getParams();
+        this.props.getCurrentPage(item);
     };
     
     //取消按钮事件

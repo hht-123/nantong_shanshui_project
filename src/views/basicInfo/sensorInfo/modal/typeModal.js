@@ -2,6 +2,7 @@ import React,{ Component } from 'react';
 import { Modal, Form, Input, message } from 'antd';
 import '../style.less';
 import { Model } from '../../../../dataModule/testBone';
+import { addSensorTypeUrl } from '../../../../dataModule/UrlList';
 
 
 const model = new Model();
@@ -21,13 +22,14 @@ class TypeModal extends Component {
         let me = this;
         model.fetch(
             params,
-            '/',
+            addSensorTypeUrl,
             'post',
             function() {
                 me.setState({
                     confirmLoading: false,
                 })
                 me.props.cancel(false)
+                window.location.reload();
             },
             function() {
                 message.warning('发送数据失败，请重试')
@@ -44,13 +46,20 @@ class TypeModal extends Component {
     //确定事件按钮
     handleOk = () => {
         const {validateFields} = this.props.form;  //验证
+        let repeat = false;
         validateFields();
         if(this.state.sensor_type === '') return;
+        const index = this.props.types.findIndex((item) => item === this.state.sensor_type.toUpperCase())
+        if(index > -1){
+            message.warning('传感器类型已存在，检查后重新输入');
+            repeat = true
+        }
+        if(repeat === true) return;
         let params = {
             type_name: this.state.sensor_type
         }
-        this.createNewType(params)
-      };
+        this.createNewType(params);
+    };
     
     //取消按钮事件
     handleCancel = () => {
@@ -59,7 +68,7 @@ class TypeModal extends Component {
 
     handleChange = (e) => {
         this.setState({
-          [e.target.name]: e.target.value
+          [e.target.name]: (e.target.value + '传感器')
         })
     }
 

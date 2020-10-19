@@ -1,7 +1,7 @@
 import * as constants from './constants';
-import { sensorTypeUrl } from '../../../dataModule/UrlList';
 import { Model } from '../../../dataModule/testBone';
 import { message } from 'antd';
+import { sensorTypeUrl } from '../../../dataModule/UrlList';
 
 const storeSensorType = (result) => ({
     type: constants.STORE_SENSOR_TYPE,
@@ -12,8 +12,8 @@ export const  getSensorType = () => {
     const model = new Model();
     return (dispatch) => {
         model.fetch(
-            {type_name: 'PH传感器'},
-            'app/sensor_type_to_model/',
+            {sensor: 'all'},
+            sensorTypeUrl,
             'get',
             function(response) {
                 const result = response.data;

@@ -75,7 +75,7 @@ class EditModal extends Component {
         });
         this.editEngineInfo(params);
         window.location.reload()
-      };
+    };
     
     //取消按钮事件
     handleCancel = () => {

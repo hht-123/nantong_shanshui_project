@@ -18,9 +18,10 @@ class MessageIndex extends Component{
         this.state={
             confirmLoading: false,
             currentPage: 1,
+            isLoading: false,         //是否加载
+            search: false,          //是否搜索
             whetherTest: false,     //是否是测试  true为是 false为否
             showPagination: true,   //是否分页
-            isLoading: false,       //是否加载
             data: [],               //表格数据 
             total: 0,              //一共有多少条数据
             keyValue: "",           //用于重置
@@ -58,6 +59,7 @@ class MessageIndex extends Component{
                         data: response.data.results,
                         currentPage: params['currentPage']
                     })
+                    // .log(me.state.data)
                 } else {
                     me.setState({
                         isLoading: false,
@@ -72,12 +74,13 @@ class MessageIndex extends Component{
         )
     }
 
-    getParams(currentPage=1, size=10, client_unit=null) {
+    getParams( currentPage = 1, size = 10, client_code = null, client_unit=null  ) {
         let params = {};
         params = {
-          currentPage,
-          size,
-          client_unit,
+            currentPage,
+            size,
+            client_code,
+            client_unit,
         }
         return params;
     }
@@ -88,12 +91,14 @@ class MessageIndex extends Component{
         this.setState({
         [e.target.name] : e.target.value
         })
+        // console.log(this.state.search_client_unit)
     }
 
     //搜索按钮
     searchInfo = () => {
+        this.setState({search: true});
         const { search_client_unit } = this.state;
-        let params = this.getParams( 1, 10, search_client_unit );
+        let params = this.getParams( 1, 10,'', search_client_unit );
         this.getCurrentPage(params);
     }
     
@@ -104,21 +109,27 @@ class MessageIndex extends Component{
         this.setState({
             search_client_unit: null,
             keyValue: new Date(),
-            currentPage: 1
+            currentPage: 1,
+            search:true,
         })
-        this.getCurrentPage(params);
     }
 
     //翻页获取内容
     getPage = (currentPage, pageSize) => {
-        const { search_client_unit } = this.state;
-        const params = this.getParams(currentPage, pageSize, search_client_unit)
+        let [search_client_unit] = [null];
+        if(this.state.search === true){
+            search_client_unit = this.state.search_client_unit;
+        }
+        const params = this.getParams(currentPage, pageSize, '',search_client_unit)
         this.getCurrentPage(params);
     }
 
     //改变pageSize获取内容
     getSize = (current, size) => {
-        const { search_client_unit } = this.state;
+        let [search_client_unit] = [null];
+        if(this.state.search === true){
+            search_client_unit = this.state.search_client_unit;
+        }
         const params = this.getParams(1, size, search_client_unit)
         this.getCurrentPage(params);
         document.scrollingElement.scrollTop = 0
@@ -150,31 +161,45 @@ class MessageIndex extends Component{
         })
     }
 
-    //搜索按钮
-    searchInfo = () => {
-        const { client_unit } = this.state;
-        let params = this.getParams( 1, 10, client_unit);
-        this.getCurrentPage(params);
+    //删除数据
+    deleteInfo = (record) => {
+        let params = this.getParams()
+        let me = this; 
+        model.fetch(
+            params,
+            `${messageCUrl}${record}/`,
+            'delete',
+            function(response) {
+                me.getCurrentPage(params)
+            },
+            function() {
+                message.warning('加载失败，请重试')
+            },
+            this.state.whetherTest
+        )
     }
-   
+    
+
 
     render(){
         const {data , whetherTest} = this.state;
         const tableDate = [];
-        data.map((item) => {
-        tableDate.push({
-            key: item.aid,
-            client_code:item.client_code,
-            client_unit:item.client_unit,
-            client_address:item.client_address,
-            client_zip_code:item.client_zip_code,
-            client_industry:item.client_industry,
-            unit_phone:item.unit_phone,
-            unit_fax:item.unit_fax,
-            note: item.note
+        if(data !== undefined){
+            data.map((item) => {
+            tableDate.push({
+                key: item.aid,
+                client_code:item.client_code,
+                client_unit:item.client_unit,
+                client_address:item.client_address,
+                client_zip_code:item.client_zip_code,
+                client_industry:item.client_industry,
+                unit_phone:item.unit_phone,
+                unit_fax:item.unit_fax,
+                note: item.note
+            })
+            return null;
         })
-        return null;
-        })
+    }
 
 
         return(
@@ -187,21 +212,23 @@ class MessageIndex extends Component{
                                 <div className="left">
                                     <Input  
                                         style={{width: "200px"}} 
-                                        name="client_unit" 
+                                        name="search_client_unit" 
                                         onChange={this.handleChange}
-                                        value={this.state.client_unit}
+                                        value={this.state.search_client_unit}
                                     />
                                 </div>
                                 <div>
                                     <div className="right">
-                                        <Button type="primary" className="span" onClick={ this.searchInfo }>搜索</Button>
-                                        <Button type="primary" className="span" onClick={this.handleReset}>重置</Button>
+                                        <Button  type="primary" className="span" onClick={ this.searchInfo }>搜索</Button>
+                                        <Button  type="primary" className="span" onClick={this.handleReset}>重置</Button>
                                         <Button type="primary" className="span" onClick={this.showAddModal}>创建客户信息</Button>
                                     </div>
                                         <AddMesCustomer
                                             whetherTest={whetherTest}
                                             Visible={this.state.Visible}  //这里把state里面的Visible传递到子组件
                                             cancel={this.closeAddModal}
+                                            getParams = {this.getParams.bind(this)}
+                                            getCurrentPage = {this.getCurrentPage.bind(this)}
                                         />
                                 </div>
                             </div>
@@ -217,6 +244,7 @@ class MessageIndex extends Component{
                                 changeSize={ this.getSize }
                                 currentPage={ this.state.currentPage }
                                 showEditModal={ this.showEditModal }
+                                deleteInfo = { this.deleteInfo  }
                             />
                             <EditMesModal
                                 whetherTest={ whetherTest }
@@ -224,6 +252,8 @@ class MessageIndex extends Component{
                                 cancel={ this.closeAddModal }
                                 showEditModal={ this.showEditModal }
                                 editInfo={ this.state.editInfo }
+                                getParams = {this.getParams.bind(this)}
+                                getCurrentPage = {this.getCurrentPage.bind(this)}
                             />
                         </div> 
                 </div> 
