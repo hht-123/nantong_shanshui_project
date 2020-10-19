@@ -85,7 +85,8 @@ class EditMesModal extends Component{
             confirmLoading: true,
         });
         this.editEngineInfo(params);
-        window.location.reload()
+        let item = this.props.getParams();
+        this.props.getCurrentPage(item);
     };
     
     //取消按钮事件
