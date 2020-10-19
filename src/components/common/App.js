@@ -75,7 +75,7 @@ class App extends Component {
               <Sider width={200} style={{ background: '#fff' }}>
                 <SideMenu />
               </Sider>
-              <Content style={{ padding: '0 24px', minHeight: 'calc(100vh - 111px)', overflowX: 'auto'}}>
+              <Content style={{ padding: '0 24px', minHeight: 'calc(100vh - 111px)' }}>
                 <Switch>
                   <Route exact path='/app' component={(props) =><Index {...props}/>} />
                   <Route path='/app/engine' component={EngineInfo} />
