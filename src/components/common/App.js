@@ -12,13 +12,14 @@ import Index from '../index/index';
 // import noMatch from './404';
 import EngineInfo from '../../views/basicInfo/engineInfo';
 import SensorInfo from '../../views/basicInfo/sensorInfo';
-import EpuipmentInfo from '../../views/fixedAssets/equipmentInfo';
+import Equipment from '../../views/fixedAssets/equipmentInfo/route';
 import MaintenanceIndex from '../../views/maintenance/index';
 import MessageIndex from '../../views/Message/MesCustomer/MessageIndex';
 import ContactIndex from '../../views/Message/BaseMesCustomer/ContactIndex';
 import '../../style/index.less';
 import Monitor from '../../views/maintenance/monitor';
 import EquipmentMaintenance from '../../views/maintenance/equipmentMaintenance/equipmentMaintenance';
+
 
 
 import { actionCreators as indexActionCreators } from '../index/store';
@@ -75,7 +76,7 @@ class App extends Component {
                   <Route path='/app/sensor' component={(props) =><SensorInfo {...props}/>} />
                   <Route path='/app/equipmentMaintenance/:equipment_id' component={EquipmentMaintenance} />
                   <Route path='/app/contact' component={ContactIndex} />
-                  <Route path='/app/equipment' component={EpuipmentInfo} />
+                  <Route path='/app/equipment' component={(props) => <Equipment {...props}/>} />
                 </Switch>
               </Content>
             </Layout>

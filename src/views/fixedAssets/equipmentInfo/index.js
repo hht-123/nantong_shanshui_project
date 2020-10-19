@@ -7,6 +7,7 @@ import { Model } from "../../../dataModule/testBone";
 import { epuipmentInfoUrl, sensorOfequipmentUrl } from '../../../dataModule/UrlList';
 import EngineSensorModal from './modal/engineSensorModal';
 
+
 const model = new Model();
 
 class EpuipmentInfo extends Component {
@@ -154,6 +155,8 @@ class EpuipmentInfo extends Component {
         this.getSensorInfo({equipment_id: record.key});
         this.setState({sensorTitle: record.equipment_code});
         break;
+      default:
+        return 0;
     }
   }
   
@@ -185,8 +188,6 @@ class EpuipmentInfo extends Component {
     const { searchEngineCode, searchEquipmentCode, isLoading, showPagination, size, 
       total, sensorModalVisiable, currentPage, sensorModalData, sensorTitle} = this.state;
     const tableDate = this.handleData();
-
-
     return(
       <div>
         <div className='name'>设备信息：</div>

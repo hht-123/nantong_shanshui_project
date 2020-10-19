@@ -96,8 +96,6 @@ class ModelModal extends Component {
             sensor_type_id: typeAid,
             sensor_model,
         }
-
-        console.log(params);
         this.createNewModel(params);
     };
     

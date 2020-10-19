@@ -29,6 +29,7 @@ class AddModal extends Component {
             me.setState({
                 confirmLoading: false,
             })
+            message.success("添加成功");
           },
           function() {
             message.warning('发送数据失败，请重试')
@@ -56,9 +57,8 @@ class AddModal extends Component {
         this.setState({
           confirmLoading: true,
         });
-        console.log(params);
         this.createNewEngine(params);
-        window.location.reload();
+        this.props.getCurrentPage({currentPage: 1, size: 10});
       };
     
     //取消按钮事件
@@ -96,7 +96,7 @@ class AddModal extends Component {
               span: 16,
             },
           };
-        
+          
         return (
         <div>
             <Modal

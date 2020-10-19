@@ -40,7 +40,7 @@ class EngineInfo extends Component{
   }
 
   //数据请求
-  getCurrentPage(params) {
+  getCurrentPage = (params) => {
     for (let i in params) {
       if (params[i] === undefined || params[i] === null) {
         params[i] = ''
@@ -273,10 +273,11 @@ class EngineInfo extends Component{
                   whetherTest={ whetherTest }
                   visible={ addModalVisible }
                   cancel={ this.closeModal }
-                  
+                  getCurrentPage = { this.getCurrentPage }
+                  getparams = { this.getparams }
                 />
               </div>
-            <div className='tableWrapper'>
+            <div className='engineTableWrapper'>
               <EngineTable
                 data={ tableDate }
                 isLoading={ isLoading }
