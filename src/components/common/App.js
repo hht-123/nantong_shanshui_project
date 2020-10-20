@@ -81,8 +81,6 @@ class App extends Component {
                   <Route path='/app/equipmentMaintenance/:equipment_id' component={EquipmentMaintenance} />
                   <Route path='/app/sensor' component={SensorInfo} />
                   <Route path='/app/contact/:client_id' component={ContactIndex} />
-                 
-                  <Route path='/app/contact' component={ContactIndex} />
                   <Route path='/app/equipment' component={EpuipmentInfo} />
                 </Switch>
               </Content>

@@ -234,6 +234,8 @@ class MessageIndex extends Component{
                                 cancel={ this.closeAddModal }
                                 showEditModal={ this.showEditModal }
                                 editInfo={ this.state.editInfo }
+                                getParams = {this.getParams.bind(this)}
+                                getCurrentPage = {this.getCurrentPage.bind(this)}
                             />
                         </div> 
                 </div> 

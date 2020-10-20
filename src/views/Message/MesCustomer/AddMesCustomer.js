@@ -84,15 +84,7 @@ class AddMesCustomer extends Component{
         
     render(){
         const { getFieldDecorator } = this.props.form;
-        const { confirmLoading, 
-                client_unit,
-                client_address,
-                client_zip_code,
-                client_industry,
-                region,
-                unit_phone,
-                unit_fax,
-                note} = this.state;
+        const { confirmLoading } = this.state;
         console.log(this.state);
         
         const formItemLayout = {
@@ -124,7 +116,7 @@ class AddMesCustomer extends Component{
                             {getFieldDecorator('client_unit', {
                             rules: [{ required: true, message: '请输入客户单位' }],            //getFieldDecorator()  自定义校验方法,设置此项为必填项
                         })(
-                            <Input  name="client_unit" onChange={this.handleChange} value={client_unit}/> //onChange	输入框内容变化时的回调 value	输入框内容
+                            <Input  name="client_unit" onChange={this.handleChange} /> //onChange	输入框内容变化时的回调 value	输入框内容
                         )}
                         </Form.Item>
 
@@ -135,7 +127,7 @@ class AddMesCustomer extends Component{
                             {getFieldDecorator('client_address', {
                                 rules: [{ required: true, message: '请输入客户地址' }],            //getFieldDecorator()  自定义校验方法,设置此项为必填项
                             })(
-                                <Input  name="client_address" onChange={this.handleChange} value={client_address}/>
+                                <Input  name="client_address" onChange={this.handleChange} />
                             )}      
                         </Form.Item>
 
@@ -143,7 +135,7 @@ class AddMesCustomer extends Component{
                             label="客户邮编"
                             colon
                         >
-                        <Input  name="client_zip_code" onChange={this.handleChange} value={client_zip_code}/>
+                        <Input  name="client_zip_code" onChange={this.handleChange} />
                         </Form.Item>
 
                         <Form.Item
@@ -153,7 +145,7 @@ class AddMesCustomer extends Component{
                             {getFieldDecorator('client_industry', {
                                 rules: [{ required: true, message: '请输入客户行业' }],            //getFieldDecorator()  自定义校验方法,设置此项为必填项
                             })(
-                                <Input  name="client_industry" onChange={this.handleChange} value={client_industry}/>
+                                <Input  name="client_industry" onChange={this.handleChange} />
                             )}
                         </Form.Item>
 
@@ -164,7 +156,7 @@ class AddMesCustomer extends Component{
                             {getFieldDecorator('unit_phone', {
                                 rules: [{ required: true, message: '请输入客户电话' }],            //getFieldDecorator()  自定义校验方法,设置此项为必填项
                             })(
-                                <Input  name="unit_phone" onChange={this.handleChange} value={unit_phone}/>
+                                <Input  name="unit_phone" onChange={this.handleChange} />
                             )}
                         </Form.Item>
 
@@ -172,7 +164,7 @@ class AddMesCustomer extends Component{
                         label="单位传真"
                         colon
                         >
-                        <Input  name="unit_fax" onChange={this.handleChange} value={unit_fax}/>
+                        <Input  name="unit_fax" onChange={this.handleChange} />
                         </Form.Item>
 
                         <Form.Item
@@ -182,7 +174,7 @@ class AddMesCustomer extends Component{
                         {getFieldDecorator('region', {
                             rules: [{ required: true, message: '请输入客户省份' }],            //getFieldDecorator()  设置此项为必填项
                         })(
-                        <Input  name="region" onChange={this.handleChange} value={region}/>
+                        <Input  name="region" onChange={this.handleChange} />
                         )}
                         </Form.Item>
 
@@ -190,7 +182,7 @@ class AddMesCustomer extends Component{
                             label="备注"
                             colon
                         >
-                        <Input  name="note" onChange={this.handleChange} value={note} />
+                        <Input  name="note" onChange={this.handleChange}  />
                         </Form.Item>
                     </Form>
                 </div>

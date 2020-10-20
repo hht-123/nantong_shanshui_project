@@ -78,12 +78,7 @@ class Addcontact extends Component{
         
     render(){
         const { getFieldDecorator } = this.props.form;
-        const { 
-          confirmLoading, 
-          contact_person,
-          contact_position,
-          contact_tel,
-          note} = this.state;
+        const { confirmLoading } = this.state;
         // console.log(this.state);
         
         const formItemLayout = {
@@ -115,7 +110,7 @@ class Addcontact extends Component{
                             {getFieldDecorator('contact_person', {
                             rules: [{ required: true, message: '请输入联系人' }],            //getFieldDecorator()  自定义校验方法,设置此项为必填项
                         })(
-                            <Input  name="contact_person" onChange={this.handleChange} value={contact_person}/> //onChange	输入框内容变化时的回调 value	输入框内容
+                            <Input  name="contact_person" onChange={this.handleChange} /> //onChange	输入框内容变化时的回调 value	输入框内容
                         )}
                         </Form.Item>
 
@@ -126,7 +121,7 @@ class Addcontact extends Component{
                             {getFieldDecorator('contact_position', {
                                 rules: [{ required: true, message: '请输入联系人职位' }],
                             })(
-                                <Input  name="contact_position" onChange={this.handleChange} value={contact_position}/>
+                                <Input  name="contact_position" onChange={this.handleChange} />
                             )}
                         </Form.Item>
                         
@@ -138,7 +133,7 @@ class Addcontact extends Component{
                             {getFieldDecorator('contact_tel', {
                                 rules: [{ required: true, message: '请输入联系人电话' }],
                             })(
-                                <Input  name="contact_tel" onChange={this.handleChange} value={contact_tel}/>
+                                <Input  name="contact_tel" onChange={this.handleChange} />
                             )}
                         </Form.Item>
 
@@ -146,7 +141,7 @@ class Addcontact extends Component{
                             label="备注"
                             colon
                         >
-                        <Input  name="note" onChange={this.handleChange} value={note}/>
+                        <Input  name="note" onChange={this.handleChange} />
                         </Form.Item>
                     </Form>
                 </div>
