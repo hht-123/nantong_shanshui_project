@@ -6,7 +6,7 @@
  * @LastEditors: 唐帆
  * @LastEditTime: 2020-04-30 10:46:26
  */
-export const originalUrl = 'http://10.21.1.58:8000/';
+export const originalUrl = 'http://10.21.1.106:8000/';
 export const enginInfoUrl = 'main_engine/';
 export const messageCUrl = 'client/';
 export const contactUrl = 'contact_people/';
@@ -15,12 +15,14 @@ export const sensorInfoUrl = 'app/typemodel/';
 export const sensorTypeUrl = 'app/sensor_type/';
 export const sensorModelUrl = 'app/sensor_type_to_model/';
 export const sensorCodeUrl = 'app/sensor_model_to_code/';
-export const addSensorTypeUrl = 'sensor_type/';
-export const addSensorModelUrl = 'sensor_model/';
-export const addSensorUrl = 'sensor/';
+export const addSensorTypeUrl = 'sensor_type/';                 //增加传感器类型
+export const addSensorModelUrl = 'sensor_model/';               //增加传感器模型
+export const addSensorUrl = 'sensor/';                          //增加传感器
+export const allEngineName = 'app/main_engine_code_and_name/'   //获取所有主机的名称和编号
 
-export const epuipmentInfoUrl = 'app/equipment_to_engine_name/';
-export const sensorOfequipmentUrl = 'app/equipment_to_sensor3/';
+export const epuipmentInfoUrl = 'app/equipment_to_engine_name/';  //设备的所有信息
+export const sensorOfequipmentUrl = 'app/equipment_to_sensor3/';  //设备对应的传感器的路由
+export const addEquipment = 'equipment/';                         //新增设备
 
 export const maintenanceUrl = 'app/operation/';
 export const equipmentUrl = 'app/real_time_monitoring_high/'

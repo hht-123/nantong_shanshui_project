@@ -6,6 +6,7 @@ import EquipmentTable from './equipmentTable';
 import { Model } from "../../../dataModule/testBone";
 import { epuipmentInfoUrl, sensorOfequipmentUrl } from '../../../dataModule/UrlList';
 import EngineSensorModal from './modal/engineSensorModal';
+import { Link } from 'react-router-dom';
 
 
 const model = new Model();
@@ -217,7 +218,9 @@ class EpuipmentInfo extends Component {
             <div style={{marginTop: "15px"}}>
                   <Button className="button" onClick={this.searchInfo}>搜索</Button>
                   <Button className="button" onClick={this.handleReset}>重置</Button>
-                  <Button type="primary" className="button">新增设备</Button>
+                  <Link to="/app/equipment/create/">
+                    <Button type="primary" className="button">新增设备</Button>
+                  </Link>
             </div>
           </div>
             <EquipmentTable 

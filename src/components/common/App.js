@@ -25,9 +25,6 @@ import Monitor from '../../views/maintenance/monitor';
 import EquipmentMaintenance from '../../views/maintenance/equipmentMaintenance/equipmentMaintenance';
 import WaterRemind from '../../views/maintenance/waterRemind/waterRemind';
 import SensorCalibration from '../../views/maintenance/sensorCalibration/sensorCalibration';
-import { connect } from 'react-redux';
-import { Model } from '../../dataModule/testBone';
-import { actionCreators } from '../index/store';
 
 
 
@@ -85,15 +82,10 @@ class App extends Component {
                   <Route path='/app/monitor/:equipment_aid' component={Monitor} />
                   <Route path='/app/sensor' component={(props) =><SensorInfo {...props}/>} />
                   <Route path='/app/equipmentMaintenance/:equipment_id' component={EquipmentMaintenance} />
-                  <Route path='/app/sensor' component={SensorInfo} />
                   <Route path='/app/contact/:client_id' component={ContactIndex} />
-                 
                   <Route path='/app/equipment' component={(props) => <Equipment {...props}/>} />
-
                   <Route path='/app/waterRemind/:equipment_id' component={WaterRemind} />
                   <Route path='/app/sensorCalibratin/:equipment_id' component={SensorCalibration} />
-                  <Route path='/app/sensor' component={SensorInfo} />
-                  <Route path='/app/contact/:client_id' component={ContactIndex} />
 
                 </Switch>
               </Content>
