@@ -25,6 +25,7 @@ import Monitor from '../../views/maintenance/monitor';
 import EquipmentMaintenance from '../../views/maintenance/equipmentMaintenance/equipmentMaintenance';
 import WaterRemind from '../../views/maintenance/waterRemind/waterRemind';
 import SensorCalibration from '../../views/maintenance/sensorCalibration/sensorCalibration';
+import RolePower from '../../views/accountAndRole/rolePower'
 
 //客户端页面
 import  ClientIndex  from '../../views/ClientViews/index/index.js';
@@ -97,6 +98,8 @@ class App extends Component {
                   <Route path='/app/clientWaterRemind/:equipment_id' component={ClientWaterRemind} />
 
                   <Route path='/app/accountManagement' component={AccountManagement}/>
+                  <Route path='/app/rolePower' component={RolePower}/>
+
                 </Switch>
               </Content>
             </Layout>

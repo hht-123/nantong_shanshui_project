@@ -70,7 +70,7 @@ export default class SideMenu extends Component {
             </span>
           }>
           <Menu.Item key="account"><Link to='/app/accountManagement'>账户管理</Link></Menu.Item>
-          <Menu.Item key="role">角色展示</Menu.Item>
+          <Menu.Item key="role"><Link to='/app/rolePower'>角色权限</Link></Menu.Item>
         </SubMenu>
       </Menu>
     );

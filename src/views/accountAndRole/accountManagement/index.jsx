@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import {Button, Input, Select} from "antd";
 
-import { originalUrl, role, user, power } from '../../../dataModule/UrlList'
+import { originalUrl, role, user, power, rolePower, accountPower } from '../../../dataModule/UrlList'
 import { Model } from '../../../dataModule/testBone'
 import AccountTable from './accountTable'
 import EditPower from './editPower'
@@ -33,7 +33,10 @@ export default class AccountManagement extends Component{
       basicInfoVisible: false,
       delAccountVisible: false,
 
-      record: {}
+      record: {},
+      powers: [],
+      rolePowersOfSelectedAccount: [],
+      accountPowersOfSelectedAccount: []
     }
   }
 
@@ -72,16 +75,45 @@ export default class AccountManagement extends Component{
   }
 
   queryOfPower = (params={}, methods='get') => {
+    const me = this
     model.fetch(
       {
-        currentPage: 1,
-        size: 10,
         ...params
       },
       originalUrl + power,
       methods,
       function (res) {
-        console.log('queryOfPower', res)
+        me.setState({
+          powers: res.data
+        })
+      }
+    )
+  }
+
+  queryRolePower = (params) => {
+    const me = this
+    model.fetch(
+      params,
+      originalUrl + rolePower,
+      'get',
+      function (res) {
+        me.setState({
+          rolePowersOfSelectedAccount: res.data.data
+        })
+      }
+    )
+  }
+
+  queryAccountPower = (params) => {
+    const me = this
+    model.fetch(
+      params,
+      originalUrl + accountPower,
+      'get',
+      function (res) {
+        me.setState({
+          accountPowersOfSelectedAccount: res.data.power_num
+        })
       }
     )
   }
@@ -142,7 +174,17 @@ export default class AccountManagement extends Component{
     const newData = {}
     newData[type] = true
     newData['record'] = record
+    if (type === 'editPowerVisible') {
+      this.queryRolePower({ role_id: record.role_id })
+      this.queryAccountPower({ role_id: record.role_id, user_id: record.aid })
+    }
     this.setState(newData)
+  }
+
+  changeAccountPowersOfSelectedAccount = (newPowers) => {
+    this.setState({
+      accountPowersOfSelectedAccount: newPowers
+    })
   }
 
   render() {
@@ -160,8 +202,12 @@ export default class AccountManagement extends Component{
       addAccountVisible,
       basicInfoVisible,
       delAccountVisible,
-      record
+      record,
+      powers,
+      rolePowersOfSelectedAccount,
+      accountPowersOfSelectedAccount
     } = this.state
+
     return(
       <div className="account-root">
         <div className='name'>账户管理：</div>
@@ -217,6 +263,10 @@ export default class AccountManagement extends Component{
             visible={editPowerVisible}
             handleOk={this.handleOk}
             handleCancel={this.handleCancel}
+            powers={powers}
+            rolePowersOfSelectedAccount={rolePowersOfSelectedAccount}
+            accountPowersOfSelectedAccount={accountPowersOfSelectedAccount}
+            changeAccountPowersOfSelectedAccount={this.changeAccountPowersOfSelectedAccount}
           />
 
           <AddAccount
@@ -224,6 +274,7 @@ export default class AccountManagement extends Component{
             handleOk={this.handleOk}
             handleCancel={this.handleCancel}
             getUsers={this.getUsers}
+            record={record}
             roles={roles}
           />
 

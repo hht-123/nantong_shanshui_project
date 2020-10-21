@@ -37,6 +37,8 @@ export const equipmentCalibration = 'equipment_calibration/' //增加补偿值
 export const CalibrationMark = 'app/sensor_calibration_retrieve/' //获得标定值记录
 
 export const role = 'role/'
+export const rolePower = 'app/role_power/'
+export const accountPower = 'app/verify/'
 
 export const user = 'user/'
 
