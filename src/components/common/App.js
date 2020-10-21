@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import { Layout } from 'antd';
 import { getCookie, setCookie } from "../../helpers/cookies";
 import store from '../../store'
@@ -63,11 +63,11 @@ class App extends Component {
     const { collapsed } = this.state;
     // const {location} = this.props;
     let name;
-    // if (!getCookie("mspa_user") || getCookie("mspa_user") === "undefined") {
-    //   return <Redirect to="/login" />
-    // } else {
-    //   name = JSON.parse(getCookie("mspa_user")).username;
-    // }
+    if (!getCookie("mspa_user") || getCookie("mspa_user") === "undefined") {
+      return <Redirect to="/login" />
+    } else {
+      name = JSON.parse(getCookie("mspa_user")).username;
+    }
     return (
       <Layout>
         <Provider store={store}>
