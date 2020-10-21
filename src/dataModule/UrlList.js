@@ -39,3 +39,5 @@ export const CalibrationMark = 'app/sensor_calibration_retrieve/' //获得标定
 export const role = 'role/'
 
 export const user = 'user/'
+
+export const power = 'power/'

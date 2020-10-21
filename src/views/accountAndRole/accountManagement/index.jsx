@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import {Button, Input, Select} from "antd";
 
-import { originalUrl, role, user } from '../../../dataModule/UrlList'
+import { originalUrl, role, user, power } from '../../../dataModule/UrlList'
 import { Model } from '../../../dataModule/testBone'
 import AccountTable from './accountTable'
 import EditPower from './editPower'
@@ -60,6 +60,7 @@ export default class AccountManagement extends Component{
       false
     )
     this.getUsers()
+    this.queryOfPower()
   }
 
   resetSearch = () => {
@@ -68,6 +69,21 @@ export default class AccountManagement extends Component{
       role_id: ''
     })
     this.getUsers(1, this.state.size, true)
+  }
+
+  queryOfPower = (params={}, methods='get') => {
+    model.fetch(
+      {
+        currentPage: 1,
+        size: 10,
+        ...params
+      },
+      originalUrl + power,
+      methods,
+      function (res) {
+        console.log('queryOfPower', res)
+      }
+    )
   }
 
   getUsers = (currentPage=1, size=this.state.size, whetherReset) => {

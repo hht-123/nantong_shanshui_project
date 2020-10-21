@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Modal} from "antd";
+import {message, Modal} from "antd";
 
 import { Model } from '../../../dataModule/testBone'
 import {originalUrl, user} from "../../../dataModule/UrlList";
@@ -14,8 +14,11 @@ export default class DeleteAccount extends Component{
       originalUrl + user + aid,
       'delete',
       function (res) {
-        console.log(res)
+        message.success('删除账户成功！')
         me.props.getUsers()
+      },
+      function (err) {
+        message.error('删除账户失败！')
       }
     )
     this.props.handleOk('delAccountVisible')
