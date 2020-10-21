@@ -1,10 +1,10 @@
 import { Table, Pagination, Icon, Popover } from 'antd';
 import React, { Component } from 'react';
 import './style.less'
+import { Link } from 'react-router-dom';
 
 
 class EquipmentTable extends Component{
-  
 
     render() {
       const { isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
@@ -54,7 +54,9 @@ class EquipmentTable extends Component{
             return (
               <div>
                 <Popover content="编辑信息" trigger="hover">
-                <Icon type="edit" theme="twoTone"  className="icon" onClick={() => this.props.showEditModal('edit',record)}/>
+                  <Link to={"/app/equipment/edit/" + record.equipment_code } >
+                    <Icon type="edit" theme="twoTone"  className="icon"/>
+                  </Link>
                 </Popover>
                 <Popover content="查看该设备传感器信息" trigger="hover">
                   <Icon type="message" theme="twoTone" className="icon" onClick={() => this.props.showSensorModal('sensor',record)}/>
@@ -63,7 +65,7 @@ class EquipmentTable extends Component{
                   <Icon type="tool" theme="twoTone"  className="icon" />
                 </Popover>
                 <Popover  content="填写设备报调拨单" title="设备调拨" trigger="hover">
-                <Icon type="home" theme="twoTone"  />
+                  <Icon type="home" theme="twoTone"  />
                 </Popover>
               </div>
             )

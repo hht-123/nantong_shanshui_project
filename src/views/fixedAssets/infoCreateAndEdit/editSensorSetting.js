@@ -6,17 +6,13 @@ import { sensorModelUrl, sensorCodeUrl } from '../../../dataModule/UrlList';
 
 const model = new Model();
 const { Option } = Select;
-class SensorSetting extends Component {
 
+class editSensorSetting extends Component {
     constructor(props) {
         super(props);
         this.state = {
             sensorModels: [],      //所有传感器型号
             sensorCodes: [],       //所有传感器编号
-            sensor_type: '',       //当前选择的类型
-            sensor_model: '',      //当前传感器型号
-            sensor_code: '',       //当前传感器编号
-            
         }
     }
 
@@ -87,10 +83,7 @@ class SensorSetting extends Component {
     }
 
     render() {
-        const { addInfo, delectInfo, number,  types, index, freshType, freshModel, freshCode } = this.props;
-        const { sensorModels, sensorCodes } = this.state;
-
-        return (
+        return(
             <div>
                 <div className='eCreateBlock'>
                     <div className='eCreateName'>类型：</div>
@@ -99,9 +92,8 @@ class SensorSetting extends Component {
                         onSelect={(string) => this.handleSelect(string, 'type')} 
                         placeholder='请选择传感器类型'
                         key={ freshType }
-                        
                     >
-                       {types.size !== 0? types.map((item) => <Option key={item}  value={item}>{item}</Option>) : null}
+                    {types.size !== 0? types.map((item) => <Option key={item}  value={item}>{item}</Option>) : null}
                     </Select>
                 </div>
             
@@ -161,4 +153,6 @@ class SensorSetting extends Component {
     }
 }
 
-export default SensorSetting;
+export default editSensorSetting;
+
+

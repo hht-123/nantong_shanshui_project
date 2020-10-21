@@ -25,13 +25,13 @@ import Monitor from '../../views/maintenance/monitor';
 import EquipmentMaintenance from '../../views/maintenance/equipmentMaintenance/equipmentMaintenance';
 import WaterRemind from '../../views/maintenance/waterRemind/waterRemind';
 import SensorCalibration from '../../views/maintenance/sensorCalibration/sensorCalibration';
-import { connect } from 'react-redux';
-import { Model } from '../../dataModule/testBone';
-import { actionCreators } from '../index/store';
+
 //客户端页面
 import  ClientIndex  from '../../views/ClientViews/index/index.js';
 import ClientMonitor from '../../views/ClientViews/monitor/monitor';
 import ClientWaterRemind from '../../views/ClientViews/waterRemind/waterRemind';
+
+
 
 import { actionCreators as indexActionCreators } from '../index/store';
 
@@ -95,6 +95,7 @@ class App extends Component {
                   <Route path='/app/clientIndex' component={ClientIndex} />
                   <Route path='/app/clientMonitor/:equipment_aid' component={ClientMonitor} />
                   <Route path='/app/clientWaterRemind/:equipment_id' component={ClientWaterRemind} />
+
                 </Switch>
               </Content>
             </Layout>
