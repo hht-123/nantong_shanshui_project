@@ -31,7 +31,7 @@ import  ClientIndex  from '../../views/ClientViews/index/index.js';
 import ClientMonitor from '../../views/ClientViews/monitor/monitor';
 import ClientWaterRemind from '../../views/ClientViews/waterRemind/waterRemind';
 
-
+import AccountManagement from '../../views/accountAndRole/accountManagement'
 
 import { actionCreators as indexActionCreators } from '../index/store';
 
@@ -96,6 +96,7 @@ class App extends Component {
                   <Route path='/app/clientMonitor/:equipment_aid' component={ClientMonitor} />
                   <Route path='/app/clientWaterRemind/:equipment_id' component={ClientWaterRemind} />
 
+                  <Route path='/app/accountManagement' component={AccountManagement}/>
                 </Switch>
               </Content>
             </Layout>
