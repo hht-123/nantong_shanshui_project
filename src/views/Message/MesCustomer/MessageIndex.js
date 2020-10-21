@@ -250,7 +250,6 @@ class MessageIndex extends Component{
                                 whetherTest={ whetherTest }
                                 visible={ this.state.editModalVisible }
                                 cancel={ this.closeAddModal }
-                                showEditModal={ this.showEditModal }
                                 editInfo={ this.state.editInfo }
                                 getParams = {this.getParams.bind(this)}
                                 getCurrentPage = {this.getCurrentPage.bind(this)}

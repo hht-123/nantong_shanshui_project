@@ -58,9 +58,9 @@ export default class SideMenu extends Component {
         >
           <Menu.Item key="4"><Link to="/app/equipment">设备信息</Link></Menu.Item>
           <Menu.Item key="5">设备配置记录</Menu.Item>
-          <Menu.Item key="6">设备调拨</Menu.Item>
+          <Menu.Item key="6">设备调拨信息</Menu.Item>
           <Menu.Item key="7">设备调拨记录</Menu.Item>
-          <Menu.Item key="8">设备报废</Menu.Item>
+          <Menu.Item key="8">设备报废信息</Menu.Item>
         </SubMenu>
       </Menu>
     );

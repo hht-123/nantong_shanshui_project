@@ -3,7 +3,8 @@ import { Modal, Form, Input, message } from 'antd';
 import '../style.less';
 import { Model } from '../../../../dataModule/testBone';
 import { addSensorTypeUrl } from '../../../../dataModule/UrlList';
-
+import  store from '../../../../store';
+import { actionCreators as indexActionCreators } from '../../../../components/index/store';
 
 const model = new Model();
 class TypeModal extends Component {
@@ -59,6 +60,7 @@ class TypeModal extends Component {
             type_name: this.state.sensor_type
         }
         this.createNewType(params);
+        store.dispatch(indexActionCreators.getSensorType())   //获取所有传感器的类型
     };
     
     //取消按钮事件

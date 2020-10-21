@@ -28,7 +28,7 @@ class WaterRemindInfo extends Component{
         },
         {
           title: '提示内容',
-          dataIndex: 'maintain_result',
+          dataIndex: 'notice_content',
           align: 'center',
         },
       ];

@@ -4,6 +4,7 @@ import ContactTable from './ContactTable';
 import { Model } from '../../../dataModule/testBone';
 import { contactUrl, messageCUrl } from '../../../dataModule/UrlList';
 import AddModal from './AddModal';
+import EditModal from './editModal';
 import '../style/CusTable.less'
 
 const model = new Model(); 
@@ -19,7 +20,9 @@ class contactmes extends Component{
             whetherTest: false,     //是否是测试  true为是 false为否
             isLoading: false,       //是否加载
             Visible: false,   //addMesContactr是否显示
-            client_unit:'' //客户单位
+            editModalVisible: false, //编辑弹窗的显示
+            client_unit:'', //客户单位
+            editInfo: {},             //获取到编辑行的信息
         }  
     }
 
@@ -28,7 +31,7 @@ class contactmes extends Component{
     componentDidMount() {
         let params = this.getParams();
         this.getCurrentPage(params);
-        this.getClientUnit(this.props.match.params.client_id)
+        this.getClientUnit(this.props.match.params.client_id);
     }
 
     //获取数据
@@ -106,18 +109,47 @@ class contactmes extends Component{
         });
     };
 
+    //编辑弹窗的显示
+    showEditModal = (record) => {
+        this.setState({
+            editModalVisible: true,
+        });
+        record === undefined ? null :
+        this.setState({
+            editInfo: record
+        })
+    }
+
     closeAddModal = () => {
         this.setState({
             Visible: false,
-            //editModalVisible: false,
+            editModalVisible: false
         })
     }
 
 
 
+    //删除数据
+    deleteInfo = (record) => {
+        let params = this.getParams()
+        let me = this; 
+        model.fetch(
+            params,
+            `${contactUrl}${record}/`,
+            'delete',
+            function(response) {
+                me.getCurrentPage(params)
+            },
+            function() {
+                message.warning('加载失败，请重试')
+            },
+            this.state.whetherTest
+        )
+    }
+
     render(){
         const client_id = this.props.match.params.client_id
-        const {data} = this.state;
+        const {data, Visible, whetherTest, isLoading, editModalVisible, editInfo } = this.state;
         const tableDate = [];
         if(data !== undefined){
             data.map((item) => {            
@@ -126,7 +158,7 @@ class contactmes extends Component{
                 contact_person:item.contact_person,
                 contact_position:item.contact_position,
                 contact_tel:item.contact_tel,
-                note: item.note
+                remark: item.remark
             })
             return null;
             })
@@ -143,20 +175,29 @@ class contactmes extends Component{
                     <div>
                         <Button type="primary" className="but" onClick={this.showAddModal}>添加联系人</Button>
                         <AddModal
-                            whetherTest={this.state.whetherTest}
-                            Visible={this.state.Visible}  //这里把state里面的Visible传递到子组件
-                            cancel={this.closeAddModal}
-                            client_id = {client_id}
-                            getParams = {this.getParams.bind(this)}
-                            getCurrentPage = {this.getCurrentPage.bind(this)}
+                            whetherTest={ whetherTest }
+                            Visible={ Visible }  //这里把state里面的Visible传递到子组件
+                            cancel={ this.closeAddModal }
+                            client_id = { client_id }
+                            getParams = { this.getParams.bind(this) }
+                            getCurrentPage = { this.getCurrentPage.bind(this) }
                         />
                     </div>
                     <div>
                         <ContactTable
                             data={ tableDate }
-                            isLoading={ this.state.isLoading }
+                            isLoading={ isLoading }
                             showEditModal={ this.showEditModal }
+                            deleteInfo = { this.deleteInfo  }
                         /> 
+                        <EditModal
+                            whetherTest={ whetherTest }
+                            visible={ editModalVisible }
+                            cancel={ this.closeAddModal }
+                            editInfo={ editInfo }
+                            getParams = {this.getParams.bind(this)}
+                            getCurrentPage = {this.getCurrentPage.bind(this)}
+                        />
                     </div>
                 </div>
             </div>

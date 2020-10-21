@@ -37,7 +37,7 @@ class CalibrationTable extends Component{
           dataIndex: 'action',
           align: 'center',
           render: (text, record, index) => {
-            return <Icon type="edit" theme="twoTone" onClick={() => this.props.showEditModal(record)}/>
+            return <Icon type="edit" theme="twoTone" onClick={() => this.props.showAddModal(record.sensor_id)}/>
           }
         },
       ];

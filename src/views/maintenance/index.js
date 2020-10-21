@@ -31,7 +31,7 @@ class MaintenanceIndex extends Component {
             'get',
             function(response) {
                 if (me.state.whetherTest === false) {
-                  console.log(response.data.data)
+                  // console.log(response.data.data)
                   me.setState({
                     data: response.data.data
                   })
@@ -159,7 +159,7 @@ class MaintenanceIndex extends Component {
             <div className="title" >
                 循环水智慧管家远程监控系统
             </div>
-            <div className='line-top'></div>
+            <div className='line-bottom-high'></div>
             <div className='Search'>
                 <div className='search-area'>地区筛选:</div>
                 <Input className='area' name='region' value={ this.state.region } onChange={ this.changeValue } />
@@ -180,9 +180,6 @@ class MaintenanceIndex extends Component {
                 <div className='button2'>
                     <Button onClick={ this.handleClear } >重置</Button>
                 </div>
-                <div className='button3'>
-                    <Button type="primary">新增交付属性</Button>
-                </div>
             </div >
             { Object.keys(Newdata).map((key,index) => 
                 <div key={ index } className='content' >
@@ -198,8 +195,5 @@ class MaintenanceIndex extends Component {
   }
 
 }
-
-
-
 
 export default MaintenanceIndex;

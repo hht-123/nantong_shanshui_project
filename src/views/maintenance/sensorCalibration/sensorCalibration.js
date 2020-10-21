@@ -3,8 +3,9 @@ import { Model } from '../../../dataModule/testBone';
 
 import CalibrationTable from './calibrationTable';
 import CalibrationMarkTable from './calibrationMarkTable';
+import AddCalibration from './addCalibration';
 import  './style.less';
-import { equipmentUrl, equipMaintainUrl } from '../../../dataModule/UrlList';
+import { device, equipmentUrl, CalibrationMark } from '../../../dataModule/UrlList';
 
 import { DatePicker,Button, Select, message, PageHeader } from 'antd';
 
@@ -28,9 +29,9 @@ class SensorCalibration extends Component{
       keyValue: "",             //用于重置
       search_begin_time: [],    //开始时间
       search_maintain_cause: '', //查找的维护原因
-      addModalVisible: false,   //addModal是否显示
-      editModalVisible:  false,  //editModal是否显示
+      addModalVisible:  false,  //增加弹框是否显示
       editInfo: {},             //获取到编辑行的信息
+      equipSensor:[],
     }
   }
 
@@ -54,7 +55,7 @@ class SensorCalibration extends Component{
     this.setState({isLoading: true})
     model.fetch(
       params,
-      equipMaintainUrl,
+      CalibrationMark,
       'get',
       function(response) {
         if (me.state.whetherTest === false) {
@@ -103,6 +104,9 @@ class SensorCalibration extends Component{
           me.setState({
             equipmentIdData: response.data.data[0]
           })
+          //获得设备对应的传感器
+          let sensor = me.getSensor(me.state.equipmentIdData.equipment_code);
+          me.getSensors(sensor);
           // console.log(me.state.equipmentIdData)
         } else {
           me.setState({
@@ -118,6 +122,44 @@ class SensorCalibration extends Component{
     )
   }
 
+   //  获得设备对应的传感器
+   getSensor( deviceNum=this.state.equipmentIdData.equipment_code ) {
+    let params = {};
+    params = {
+      deviceNum,
+    }
+    return params;
+  } 
+
+  getSensors(params) {
+    for (let i in params) {
+      if (params[i] === undefined || params[i] === null) {
+        params[i] = ''
+      }
+    }
+    let me = this;
+    model.fetch(
+      params,
+      device,
+      'get',
+      function(response) {
+        if (me.state.whetherTest === false) {
+          me.setState({
+            equipSensor: response.data
+          }) 
+          console.log(me.state.equipSensor)
+        } else {
+          me.setState({
+            equipSensor: response.data.data,
+          })
+        }
+      },
+      function() {
+        console.log('加载失败，请重试')
+      },
+      this.state.whetherTest
+    )
+  }
 
   //翻页获取内容
   getPage = (currentPage, pageSize) => {
@@ -131,7 +173,7 @@ class SensorCalibration extends Component{
     this.getCurrentPage(params);
   }
 
-  getparams(currentPage=1, size=10, equipment_id=this.props.match.params.equipment_id , maintain_cause=null, search_begin_time=null) {
+  getparams(currentPage=1, size=10, equipment_id=this.state.equipmentIdData.equipment_code , maintain_cause=null, search_begin_time=null) {
     let params = {};
     let begin_time = null;
     let end_time = null;
@@ -206,22 +248,33 @@ class SensorCalibration extends Component{
     this.getCurrentPage(params);
   }
 
+  //显示增加弹窗
+  showAddModal = (record) => {
+    this.setState({
+      addModalVisible: true,
+    });
+    record === undefined ? null : this.setState({editInfo:record})
+  };
+
+  //关闭弹窗
+  closeModal = (visible) => {
+    this.setState({
+      addModalVisible: visible,
+    })
+  }
+
   render() {
     // const equipment_id = this.props.match.params.equipment_id
     const allowClear = true
-    const {data, isLoading, showPagination, size, total,} = this.state;
-    const tableDate = [];
-    if(data !== undefined ) {
-      data.map((item, index) => {
-        tableDate.push({
-          key: item.aid,
-          repair_time: item.repair_time,
-          maintain_time: item.maintain_time,
-          maintain_cause: this.causeSWift(item.maintain_cause),
-          fault_description: item.fault_description,
-          maintain_result: this.resultSWift(item.maintain_result),
-          maintain_status: this.statusSWift(item.maintain_status) ,
-          responsible_person: item.responsible_person,
+    const {data, isLoading, showPagination, size, total, equipSensor, addModalVisible, editInfo, whetherTest} = this.state;
+    const SensorTableDate = [];
+    if(equipSensor !== undefined ) {
+      equipSensor.map((item, index) => {
+        SensorTableDate.push({
+          key: index,
+          type_name: item.type_name,
+          theoretical_value: item.theoretical_value,
+          sensor_id: item.aid,
         })
         return null;
       })
@@ -238,8 +291,17 @@ class SensorCalibration extends Component{
           <span className='pageName'>传感器标定：</span>
           <div className='tableWrapper'>
               <CalibrationTable
-                // data={ tableDate }
+                data={ SensorTableDate }
                 isLoading={ isLoading }
+                showAddModal={ this.showAddModal }
+              />
+              <AddCalibration 
+                visible={ addModalVisible }
+                cancel={ this.closeModal }
+                sensor_id = { editInfo }
+                whetherTest={ whetherTest }
+                // getSensor ={ this.getSensor.bind(this) }
+                // getSensors = { this.getSensors.bind(this) }
               />
           </div>
           <div className='line'></div>
@@ -268,7 +330,7 @@ class SensorCalibration extends Component{
                 <Button className="button"  onClick={ this.handleReset }>重置</Button>
               </div>
           </div>
-          <div className='tableWrapper'>
+          <div className='MarkTableWrapper'>
               <CalibrationMarkTable
                 // data={ tableDate }
                 isLoading={ isLoading }

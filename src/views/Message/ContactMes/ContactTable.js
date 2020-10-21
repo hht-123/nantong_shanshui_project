@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Table, Icon,  } from 'antd';
-
+import '../style/messtable.less';
 
 
 class EditableTable extends Component {
@@ -27,7 +27,7 @@ class EditableTable extends Component {
         },
         {
             title: '备注',
-            dataIndex: 'note',
+            dataIndex: 'remark',
             align: 'center',
             width: '100px',
           },
@@ -38,7 +38,12 @@ class EditableTable extends Component {
           width: '100px',
           render: (text, record, index) => {
             //<icon 图标
-            return (<Icon type="edit" theme="twoTone" onClick={() => this.props.showEditModal(record)}/>)
+            return (
+            <div>
+              <Icon type="edit" className="edit"  theme="twoTone" style={{fontSize:'20px' }} onClick={() => this.props.showEditModal(record)}/>
+              <Icon type="delete" theme="twoTone"  style={{fontSize:'20px' }} onClick={() => this.props.deleteInfo(record.key)} />
+            </div>
+            )
           }
         },
       ];

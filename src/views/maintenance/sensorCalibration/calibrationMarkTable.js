@@ -18,17 +18,22 @@ class CalibrationMarkTable extends Component{
           title: '传感器',
           dataIndex: 'type_name',
           align: 'center',
-          width: 200
+          width: 170
         },
         {
           title: '标定理论值',
           dataIndex: 'measurement',
           align: 'center',
-          width: 200,
+          width: 170,
         },
         {
           title: '标定实际值',
           dataIndex: 'maintain_result',
+          align: 'center',
+        },
+        {
+          title: '标定补偿值',
+          dataIndex: 'calibrate_compensation',
           align: 'center',
         },
       ];
