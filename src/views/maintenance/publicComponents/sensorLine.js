@@ -6,44 +6,72 @@ class Line extends Component{
     constructor(props){
         super(props)
         this.state = {
-            Ydata:[],
+            Ydata: this.props.Ydata,
+            Xdata: this.props.Xdata,
         }
     }
 
-    componentDidMount() {
-        this.setState({
-            Ydata:  this.props.measure_value 
-        })
+    momentValue = (item) => {
+        if( item === undefined ) {
+            return  '该时段无测量值'
+        } else {
+            return  '当前测量值' + item 
+        } 
     }
+
     /**
      * 折线图的配置对象
      */
     getOption = (Ydata) =>{
         return {
             title: {
-                text: '当前' + this.props.value_code + ":" + this.props.measure_value[this.props.measure_value.length - 1]
+                text: this.momentValue(this.props.Ydata[ this.props.Ydata.length-1 ]) 
             },
             tooltip: {},
-            legend: {
-                data:[ this.props.value_code ]
-            },
+            // legend: {
+            //     data:[ this.props.value_code ]
+            // },
             xAxis: {
-                data:  this.props.measure_time
+                data:  this.props.Xdata,
+                
             },
-            yAxis: {},
+            dataZoom: [
+                {
+                    type: 'slider', //滑动条
+                    show: true,      //开启
+                    xAxisIndex: [0],
+                }, 
+                {
+                    type: 'inside',  //内置滑动，随鼠标滚轮展示
+                    xAxisIndex: [0],
+                }],
+            yAxis: {
+                type: 'value',
+                boundaryGap : [ 0.5, 1 ]
+            },
+            // dataZoom: [
+            //     {
+            //         type: 'slider', //滑动条
+            //         show: true,      //开启
+            //         yAxisIndex: [0],
+            //         left: '93%',  //滑动条位置
+            //     }, 
+            //     {
+            //         type: 'inside',  //内置滑动，随鼠标滚轮展示
+            //         yAxisIndex: [0],
+            //     }],
             series: [{
-                name: this.props.value_code,
                 type: 'line',
                 data: Ydata
             }]
         };
     }
     render(){
-        const {Ydata} = this.state;
+
         return(
             <div>
                 <Card>
-                    <ReactEcharts option={this.getOption(Ydata)} />
+                    <ReactEcharts option={this.getOption(this.props.Ydata)} />
                 </Card>
             </div>
         )

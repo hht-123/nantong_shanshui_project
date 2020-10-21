@@ -1,5 +1,6 @@
-import { Table, Pagination, Icon } from 'antd';
+import { Table, Pagination, Icon, Popover } from 'antd';
 import React, { Component } from 'react';
+import './style.less'
 
 
 class EquipmentTable extends Component{
@@ -19,13 +20,13 @@ class EquipmentTable extends Component{
           title: '主机名称',
           dataIndex: 'engine_name',
           align: 'center',
-          width: 120
+          width: 100
         },
         {
           title: '设备编号',
           dataIndex: 'equipment_code',
           align: 'center',
-          width: 120
+          width: 100
         },
         {
           title: '仓库',
@@ -50,7 +51,22 @@ class EquipmentTable extends Component{
           align: 'center',
           width: 200,
           render: (text, record, index) => {
-            return <Icon type="edit" theme="twoTone" onClick={() => this.props.showEditModal(record)}/>
+            return (
+              <div>
+                <Popover content="编辑信息" trigger="hover">
+                <Icon type="edit" theme="twoTone"  className="icon" onClick={() => this.props.showEditModal('edit',record)}/>
+                </Popover>
+                <Popover content="查看该设备传感器信息" trigger="hover">
+                  <Icon type="message" theme="twoTone" className="icon" onClick={() => this.props.showSensorModal('sensor',record)}/>
+                </Popover>
+                <Popover content="填写设备报废单" title="设备报废" trigger="hover">
+                  <Icon type="tool" theme="twoTone"  className="icon" />
+                </Popover>
+                <Popover  content="填写设备报调拨单" title="设备调拨" trigger="hover">
+                <Icon type="home" theme="twoTone"  />
+                </Popover>
+              </div>
+            )
           }
         }
       ];

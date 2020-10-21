@@ -59,7 +59,7 @@ class MessageIndex extends Component{
                         data: response.data.results,
                         currentPage: params['currentPage']
                     })
-                    // console.log(me.state.data)
+                    // .log(me.state.data)
                 } else {
                     me.setState({
                         isLoading: false,
@@ -74,12 +74,13 @@ class MessageIndex extends Component{
         )
     }
 
-    getParams( currentPage = 1, size = 10, client_code = null ) {
+    getParams( currentPage = 1, size = 10, client_code = null, client_unit=null  ) {
         let params = {};
         params = {
             currentPage,
             size,
             client_code,
+            client_unit,
         }
         return params;
     }
@@ -90,13 +91,14 @@ class MessageIndex extends Component{
         this.setState({
         [e.target.name] : e.target.value
         })
+        // console.log(this.state.search_client_unit)
     }
 
     //搜索按钮
     searchInfo = () => {
         this.setState({search: true});
         const { search_client_unit } = this.state;
-        let params = this.getParams( 1, 10, search_client_unit );
+        let params = this.getParams( 1, 10,'', search_client_unit );
         this.getCurrentPage(params);
     }
     
@@ -118,7 +120,7 @@ class MessageIndex extends Component{
         if(this.state.search === true){
             search_client_unit = this.state.search_client_unit;
         }
-        const params = this.getParams(currentPage, pageSize, search_client_unit)
+        const params = this.getParams(currentPage, pageSize, '',search_client_unit)
         this.getCurrentPage(params);
     }
 
@@ -159,7 +161,23 @@ class MessageIndex extends Component{
         })
     }
 
-   
+    //删除数据
+    deleteInfo = (record) => {
+        let params = this.getParams()
+        let me = this; 
+        model.fetch(
+            params,
+            `${messageCUrl}${record}/`,
+            'delete',
+            function(response) {
+                me.getCurrentPage(params)
+            },
+            function() {
+                message.warning('加载失败，请重试')
+            },
+            this.state.whetherTest
+        )
+    }
     
 
 
@@ -226,7 +244,7 @@ class MessageIndex extends Component{
                                 changeSize={ this.getSize }
                                 currentPage={ this.state.currentPage }
                                 showEditModal={ this.showEditModal }
-                                //Delete={Delete}
+                                deleteInfo = { this.deleteInfo  }
                             />
                             <EditMesModal
                                 whetherTest={ whetherTest }

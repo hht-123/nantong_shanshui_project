@@ -230,6 +230,7 @@ class SensorInfo extends Component {
           sensor_model: item.sensor_model,
           sensor_code: parseInt(item.sensor_code, 0),
           sensor_threshold: item.sensor_threshold,
+          theoretical_value: item.theoretical_value,
           notice_content: item.notice_content,
           default_compensation: item.default_compensation,
           status: this.statusSWift(item.status),
@@ -252,26 +253,12 @@ class SensorInfo extends Component {
     return aftersensorTypes;
   }
 
-  //处理传感器型号数据
-  handleSensorModelData = () => {
-    const aftersensorModels = [];
-    const { sensorModels } = this.state;
-    if(sensorModels.size !== 0){
-      sensorModels.map((item,index) => {
-        aftersensorModels.push(item.sensor_model)
-        return 0;
-      })
-    }
-    return aftersensorModels;
-  }
 
   render() {
-    console.log(this.state.data);
     const { whetherTest, addTypeVisible, addModelVisible, addCodeVisible, isLoading, 
-      showPagination, pageSize, total, currentPage, key1, key2, editvisible, editInfo} =this.state;
+      showPagination, pageSize, total, currentPage, key1, key2, editvisible, editInfo, sensorModels} =this.state;
     const tableDate = this.handleData();
     const aftersensorTypes = this.handleSensorTypeData();
-    const aftersensorModels = this.handleSensorModelData();
     // const sensorModel = 
 
     return (
@@ -292,11 +279,20 @@ class SensorInfo extends Component {
               <div className="selectWrapper" >                  
                 <div className="input" >传感器型号:</div>
                   <Select 
-                    className='select' 
-                    onSelect={(string) => this.setState({searchSensorModel:string})} 
-                    key={key2}
+                     showSearch
+                      className='select' 
+                      onSelect={(string) => this.setState({searchSensorModel:string})} 
+                      key={key2}
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
                   >
-                    {aftersensorModels.size !== 0? aftersensorModels.map((item) => <Option key={item} value={item}>{item}</Option>) : null}
+                    {
+                      sensorModels.size !== 0? 
+                      sensorModels.map((item) => <Option key={item.sensor_model} value={item.sensor_model}>{item.sensor_model}</Option>) 
+                      : null
+                    }
                   </Select>
               </div>
               <div className="selectWrapper" >
@@ -335,6 +331,7 @@ class SensorInfo extends Component {
                 whetherTest={ whetherTest }
                 visible={ addCodeVisible }
                 cancel={ this.closeModal } 
+                getInfo={ this.getInfo }
               />
               <EditModal
                 whetherTest={ whetherTest }

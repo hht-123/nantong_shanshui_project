@@ -67,7 +67,7 @@ class MessageTable extends Component{
               return (
                 <div>
                   <Icon type="edit" theme="twoTone" className="edit" style={{fontSize:'20px'}} onClick={() => this.props.showEditModal(record)}/>          
-                  <Icon type="delete" theme="twoTone"  style={{fontSize:'20px' }} onClick={() => this.props.Delete(record)} />
+                  <Icon type="delete" theme="twoTone"  style={{fontSize:'20px' }} onClick={() => this.props.deleteInfo(record.key)} />
                 </div>)
             }
           }

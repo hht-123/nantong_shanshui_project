@@ -56,7 +56,8 @@ class AddModal extends Component {
         });
         console.log(params);
         this.createNewEngine(params);
-        window.location.reload();
+        let NewParams = this.props.getparams()
+        this.props.getCurrentPage(NewParams)
       };
     
     //取消按钮事件

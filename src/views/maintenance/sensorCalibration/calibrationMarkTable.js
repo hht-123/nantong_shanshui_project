@@ -1,81 +1,42 @@
-import { Table, Pagination, Icon } from 'antd';
+import { Table, Pagination, } from 'antd';
 import React, { Component } from 'react';
 
 
-class SensorTable extends Component{
+class CalibrationMarkTable extends Component{
 
     render() {
       const { isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
 
       const columns =  [
         {
-          title: '传感器编号',
-          dataIndex: 'sensor_code',
+          title: '时间',
+          dataIndex: 'notice_time',
           align: 'center',
-          width: 120,
+          width: 160
         },
         {
-          title: '传感器类型',
+          title: '传感器',
           dataIndex: 'type_name',
           align: 'center',
-          width: 150
-        },
-        {
-          title: '传感器型号',
-          dataIndex: 'sensor_model',
-          align: 'center',
-          width: 150
+          width: 200
         },
         {
           title: '标定理论值',
-          dataIndex: 'theoretical_value',
+          dataIndex: 'measurement',
           align: 'center',
-          width: 100
+          width: 200,
         },
         {
-          title: '默认补偿值',
-          dataIndex: 'default_compensation',
+          title: '标定实际值',
+          dataIndex: 'maintain_result',
           align: 'center',
-          width: 100
         },
-        {
-          title: '传感器阈值',
-          dataIndex: 'sensor_threshold',
-          align: 'center',
-          width: 100
-        },
-        {
-          title: '提示内容',
-          dataIndex: 'notice_content',
-          align: 'center',
-          width: 150
-        },
-        {
-          title: '状态',
-          dataIndex: 'status',
-          align: 'center',
-          width: 80,
-        },
-        {
-          title: '备注',
-          dataIndex: 'note',
-          align: 'center'
-        },
-        {
-          title: '操作',
-          dataIndex: 'action',
-          align: 'center',
-          width: 80,
-          render: (text, record, index) => {
-            return <Icon type="edit" theme="twoTone" onClick={() => this.props.showEditModal(record)}/>
-          }
-        }
       ];
 
         return (
           <div
             style={{
-                width: '100%',
+                width: '120%',
                 position: 'relative',
                 marginBottom: '30px'
             }}
@@ -116,4 +77,4 @@ class SensorTable extends Component{
     }
 }
 
-export default SensorTable;
+export default CalibrationMarkTable;

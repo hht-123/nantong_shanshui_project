@@ -1,8 +1,8 @@
-import { message, Button } from 'antd';
+import { message, Button, PageHeader } from 'antd';
 import React, { Component } from 'react';
 import ContactTable from './ContactTable';
-import {Model} from '../../../dataModule/testBone';
-import { contactUrl} from '../../../dataModule/UrlList';
+import { Model } from '../../../dataModule/testBone';
+import { contactUrl, messageCUrl } from '../../../dataModule/UrlList';
 import AddModal from './AddModal';
 import '../style/CusTable.less'
 
@@ -19,6 +19,7 @@ class contactmes extends Component{
             whetherTest: false,     //是否是测试  true为是 false为否
             isLoading: false,       //是否加载
             Visible: false,   //addMesContactr是否显示
+            client_unit:'' //客户单位
         }  
     }
 
@@ -27,6 +28,7 @@ class contactmes extends Component{
     componentDidMount() {
         let params = this.getParams();
         this.getCurrentPage(params);
+        this.getClientUnit(this.props.match.params.client_id)
     }
 
     //获取数据
@@ -48,7 +50,7 @@ class contactmes extends Component{
                         isLoading: false,
                         data: response.data,
                     })
-                    // console.log(me.state.data)
+                    console.log(me.state.data)
                 } else {
                     me.setState({
                         isLoading: false,
@@ -70,6 +72,31 @@ class contactmes extends Component{
             client_id,
         }
         return params;
+    }
+
+    //获得联系人对应的单位
+    getClientUnit(client_aid) {
+        let me = this;            //让this指向不会出错
+        model.fetch(
+            {'aid': client_aid},
+            messageCUrl,
+            'get',
+            function(response) {
+                if (me.state.whetherTest === false) {
+                    me.setState({
+                        client_unit: response.data.results[0].client_unit,
+                    })
+                } else {
+                    me.setState({
+                        client_unit: response.data.results.client_unit,
+                    })
+                }
+            },
+            function() {
+                message.warning('加载失败，请重试')
+            },
+            this.state.whetherTest
+        )
     }
 
      //弹窗显示
@@ -106,8 +133,12 @@ class contactmes extends Component{
         }
 
         return(
-            <div>
-                <div className="name">客户单位：</div>
+            <div className='contact' >
+                <PageHeader className='row'
+                    onBack={() => window.history.back()}
+                    title="返回"
+                />
+                <span className="name">客户单位：{ this.state.client_unit }</span>
                 <div className="wrapper">
                     <div>
                         <Button type="primary" className="but" onClick={this.showAddModal}>添加联系人</Button>

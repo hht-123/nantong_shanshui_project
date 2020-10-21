@@ -36,6 +36,7 @@ class CodeModal extends Component {
                     confirmLoading: false,
                 })
                 me.props.cancel(false)
+                message.success('添加成功')
             },
             function() {
                 message.warning('发送数据失败，请重试')
@@ -98,7 +99,7 @@ class CodeModal extends Component {
             note,
         }
         this.createNewCode(params);
-        window.location.reload();
+        this.prop.getInfo({currentPage: 1, pageSize: 10})
       };
     
     //取消按钮事件
@@ -111,6 +112,7 @@ class CodeModal extends Component {
           [e.target.name]: e.target.value
         })
     }
+    
     handleSelect = (string, name) => {
         switch (name) {
             case 'type':
@@ -124,25 +126,11 @@ class CodeModal extends Component {
                 return 0;
         }
     }
-    //处理传感器型号数据
-    handleSensorModelData = () => {
-        const aftersensorModels = [];
-        const { sensorModels } = this.state;
-        if(sensorModels.size !== 0){
-          sensorModels.map((item,index) => {
-            aftersensorModels.push(item.sensor_model)
-            return 0;
-          })
-        }
-        return aftersensorModels;
-      }
 
     render() {
-        const { confirmLoading } = this.state;
+        const { confirmLoading, sensorModels } = this.state;
         const { visible, types} = this.props
         const { getFieldDecorator } = this.props.form;
-
-        const aftersensorModels = this.handleSensorModelData();
 
         const formItemLayout = {
             labelCol: {
@@ -177,7 +165,11 @@ class CodeModal extends Component {
                                     onSelect={(string) => this.handleSelect(string,'type')} 
                                     placeholder='请选择传感器类型'
                                 >
-                                    {types.size !== 0? types.map((item) => <Option key={item} value={item}>{item}</Option>) : null}
+                                    {
+                                        types.size !== 0 ? 
+                                        types.map((item) => <Option key={item} value={item}>{item}</Option>) 
+                                        : null
+                                    }
                                 </Select>
                             )}
                         </Form.Item>
@@ -194,7 +186,11 @@ class CodeModal extends Component {
                                     onSelect={(string) => this.handleSelect(string,'model')} 
                                     placeholder='请选择传感器型号'
                                 >
-                                     {aftersensorModels.size !== 0? aftersensorModels.map((item,index) => <Option key={index} value={item}>{item}</Option>) : null}
+                                     {
+                                        sensorModels.size !== 0? 
+                                        sensorModels.map((item,index) => <Option key={index} value={item.sensor_model}>{item.sensor_model}</Option>) 
+                                        : null
+                                     }
                                 </Select>
                             )}
                         </Form.Item>

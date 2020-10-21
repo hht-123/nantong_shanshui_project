@@ -1,20 +1,19 @@
 import React, { Component } from 'react';
 import { Model } from '../../../dataModule/testBone';
 
-import EquipMaintenanceTable from './equipTable';
-import AddModal from './addModal';
-import EditModal from './editModal';
-import  './style/equipmentMaintenance.less';
+import CalibrationTable from './calibrationTable';
+import CalibrationMarkTable from './calibrationMarkTable';
+import  './style.less';
 import { equipmentUrl, equipMaintainUrl } from '../../../dataModule/UrlList';
 
-import { DatePicker,Button, Select, message } from 'antd';
+import { DatePicker,Button, Select, message, PageHeader } from 'antd';
 
 const model = new Model()
 const {RangePicker} = DatePicker;
 const { Option } = Select;
 const dataSize = 'middle';
 
-class EquipmentMaintenance extends Component{
+class SensorCalibration extends Component{
   constructor(props) {
     super (props);
     this.state = {
@@ -40,8 +39,8 @@ class EquipmentMaintenance extends Component{
     const equipment_id = this.props.match.params.equipment_id;
     let id = this.getId(equipment_id)
     this.getEquipmentID(id)
-    let params = this.getparams();
-    this.getCurrentPage(params);
+    // let params = this.getparams();
+    // this.getCurrentPage(params);
   }
 
   //数据请求
@@ -104,7 +103,7 @@ class EquipmentMaintenance extends Component{
           me.setState({
             equipmentIdData: response.data.data[0]
           })
-          console.log(me.state.equipmentIdData)
+          // console.log(me.state.equipmentIdData)
         } else {
           me.setState({
             equipmentIdData: response.data.data,
@@ -186,30 +185,6 @@ class EquipmentMaintenance extends Component{
     })
   }
 
-  //显示增加弹窗
-  showAddModal = () => {
-    this.setState({
-      addModalVisible: true,
-    });
-  };
-
-  //关闭弹窗
-  closeModal = (visible) => {
-    this.setState({
-      addModalVisible: visible,
-      editModalVisible: visible,
-    })
-  }
-
-  //显示编辑弹窗 text为改行的内容
-  showEditModal = (record) => {
-    this.setState({
-      editModalVisible: true,
-    });
-    // eslint-disable-next-line no-unused-expressions
-    record === undefined ? null : this.setState({editInfo:record})
-  }
-
   //重置按钮
   handleReset = () => {
     let params = this.getparams();
@@ -229,41 +204,12 @@ class EquipmentMaintenance extends Component{
     const { search_maintain_cause, search_begin_time } = this.state;
     let params = this.getparams(1, 10, this.props.match.params.equipment_id  ,search_maintain_cause, search_begin_time);
     this.getCurrentPage(params);
-
-  }
-
-  causeSWift(status) {
-    if(status === '0'){
-      return '例行维护'
-    }else if(status === '1'){
-      return '用户报修'
-    }else if(status === '2'){
-      return '运维报修'
-    }
-  }
-
-  resultSWift = (status) => {
-    if(status === '0'){
-      return '等待维护'
-    }else if(status === '1'){
-      return '维护完成'
-    }else if(status === '-1'){
-      return '维护未完成'
-    }
-  }
-
-  statusSWift = (status) => {
-    if(status === '0'){
-      return '维护未结束'
-    }else if(status === '1'){
-      return '维护结束'
-    }
   }
 
   render() {
-    const equipment_id = this.props.match.params.equipment_id
+    // const equipment_id = this.props.match.params.equipment_id
     const allowClear = true
-    const {data, isLoading, showPagination, size, total, whetherTest, currentPage, addModalVisible, editModalVisible, editInfo} = this.state;
+    const {data, isLoading, showPagination, size, total,} = this.state;
     const tableDate = [];
     if(data !== undefined ) {
       data.map((item, index) => {
@@ -280,65 +226,58 @@ class EquipmentMaintenance extends Component{
         return null;
       })
     }
-    console.log(data)
 
     return (
       <div className='equipmentMaintenance'>
+        <PageHeader className='row'
+          onBack={() => window.history.back()}
+          title="返回"
+        />
         <span className='name'>设备编号：{ this.state.equipmentIdData.equipment_code }</span>
         <div className='wrapper'>
-          <span className='pageName'>设备维护</span>
+          <span className='pageName'>传感器标定：</span>
+          <div className='tableWrapper'>
+              <CalibrationTable
+                // data={ tableDate }
+                isLoading={ isLoading }
+              />
+          </div>
+          <div className='line'></div>
+          <span className='pageName'>传感器标定记录：</span>
           <div className='func'>
             <div>
               <div style={{ float: 'left', marginLeft: '20px' }} >
-                <div className="input" >报修时间:</div>
+                <div className="input" >日期筛选:</div>
                   <RangePicker 
                     key={ this.state.keyValue }
                     size={ dataSize }
                     onChange={ this.handleBeginTime } 
                   />
               </div>
-
               <div className="inputWrapper" >
-                <div className="input" >维修原因:</div>
+                <div className="input" >传感器名称:</div>
                 <Select  allowClear={ allowClear }  style={{ width: 120, }} onChange={ this.handleChange } >
-                        <Option value="0">例行维护</Option>
+                        <Option value="0">pH值传感器</Option>
                         <Option value="1">用户报修</Option>
                         <Option value="2">运维报修</Option>
                 </Select>
               </div>
             </div>
-
               <div className='buttonList' >
                 <Button className="button" type="primary" onClick={ this.searchInfo } >搜索</Button>
                 <Button className="button"  onClick={ this.handleReset }>重置</Button>
-                <Button className="button" type="danger" onClick={ this.showAddModal } >设备报修</Button>
               </div>
-              <AddModal
-                  whetherTest={ whetherTest }
-                  visible={ addModalVisible }
-                  cancel={ this.closeModal }
-                  equipment_id = { equipment_id }
-                  getparams ={ this.getparams.bind(this) }
-                  getCurrentPage = { this.getCurrentPage.bind(this) }
-                />
           </div>
           <div className='tableWrapper'>
-              <EquipMaintenanceTable
-                data={ tableDate }
+              <CalibrationMarkTable
+                // data={ tableDate }
                 isLoading={ isLoading }
                 showPagination={ showPagination }
                 size={ size }
                 total={ total }
-                changePage={ this.getPage }
-                changeSize={ this.getSize }
-                currentPage={ currentPage }
-                showEditModal={ this.showEditModal }
-              />
-              <EditModal
-                whetherTest={ whetherTest }
-                visible={ editModalVisible }
-                cancel={ this.closeModal }
-                editInfo={ editInfo }
+                // changePage={ this.getPage }
+                // changeSize={ this.getSize }
+                // currentPage={ currentPage }
               />
           </div>
         </div>
@@ -347,4 +286,8 @@ class EquipmentMaintenance extends Component{
   }
 }
 
-export default EquipmentMaintenance;
+export default SensorCalibration;
+
+
+
+
