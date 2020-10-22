@@ -114,10 +114,13 @@ class contactmes extends Component{
         this.setState({
             editModalVisible: true,
         });
-        record === undefined ? null :
-        this.setState({
-            editInfo: record
-        })
+        if ( record !== undefined ) {
+            this.setState({editInfo:record})
+          }
+        // record === undefined ? null :
+        // this.setState({
+        //     editInfo: record
+        // })
     }
 
     closeAddModal = () => {

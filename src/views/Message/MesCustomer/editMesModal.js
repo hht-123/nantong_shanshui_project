@@ -86,7 +86,7 @@ class EditMesModal extends Component{
         });
         this.editEngineInfo(params);
         let item = this.props.getParams();
-        this.props.getCurrentPage(item);
+        this.props.getCurrentPage(item); 
     };
     
     //取消按钮事件
