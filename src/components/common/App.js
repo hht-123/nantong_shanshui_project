@@ -12,7 +12,7 @@ import Index from '../index/index';
 // import noMatch from './404';
 import EngineInfo from '../../views/basicInfo/engineInfo';
 import SensorInfo from '../../views/basicInfo/sensorInfo';
-import Equipment from '../../views/fixedAssets/equipmentInfo/route';
+import EpuipmentInfo from '../../views/fixedAssets/equipmentInfo';
 import MaintenanceIndex from '../../views/maintenance/index';
 import MessageIndex from '../../views/Message/MesCustomer/MessageIndex';
 import ContactIndex from '../../views/Message/ContactMes/ContactIndex';
@@ -88,7 +88,7 @@ class App extends Component {
                   <Route path='/app/sensor' component={(props) =><SensorInfo {...props}/>} />
                   <Route path='/app/equipmentMaintenance/:equipment_id' component={EquipmentMaintenance} />
                   <Route path='/app/contact/:client_id' component={ContactIndex} />
-                  <Route path='/app/equipment' component={(props) => <Equipment {...props}/>} />
+                  <Route path='/app/equipment' component={(props) => <EpuipmentInfo {...props}/>} />
                   <Route path='/app/waterRemind/:equipment_id' component={WaterRemind} />
                   <Route path='/app/sensorCalibratin/:equipment_id' component={SensorCalibration} />
                   {/* 客户端页面路由 */}
