@@ -9,8 +9,13 @@ class CalibrationMarkTable extends Component{
 
       const columns =  [
         {
-          title: '时间',
+          title: '提示时间',
           dataIndex: 'notice_time',
+          align: 'center',
+          width: 160
+        },{
+          title: '处理时间',
+          dataIndex: 'time',
           align: 'center',
           width: 160
         },
@@ -21,15 +26,15 @@ class CalibrationMarkTable extends Component{
           width: 200
         },
         {
-          title: '标定理论值',
+          title: '提示内容',
           dataIndex: 'measurement',
           align: 'center',
-          width: 200,
         },
         {
-          title: '标定实际值',
+          title: '是否已处理',
           dataIndex: 'maintain_result',
           align: 'center',
+          width: 180
         },
       ];
 

@@ -7,7 +7,7 @@ import EditModal from './editModal';
 import  './style/equipmentMaintenance.less';
 import { equipmentUrl, equipMaintainUrl } from '../../../dataModule/UrlList';
 
-import { DatePicker,Button, Select, message } from 'antd';
+import { DatePicker,Button, Select, message, PageHeader } from 'antd';
 
 const model = new Model()
 const {RangePicker} = DatePicker;
@@ -284,6 +284,10 @@ class EquipmentMaintenance extends Component{
 
     return (
       <div className='equipmentMaintenance'>
+        <PageHeader className='row'
+          onBack={() => window.history.back()}
+          title="返回"
+        />
         <span className='name'>设备编号：{ this.state.equipmentIdData.equipment_code }</span>
         <div className='wrapper'>
           <span className='pageName'>设备维护</span>

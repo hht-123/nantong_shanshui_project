@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import { Model } from '../../../dataModule/testBone';
 
-import CalibrationTable from './calibrationTable';
-import CalibrationMarkTable from './calibrationMarkTable';
-import AddCalibration from './addCalibration';
-import  './style.less';
+import CalibrationMarkTable from '../../maintenance/sensorCalibration/calibrationMarkTable';
 import { device, equipmentUrl, CalibrationMark } from '../../../dataModule/UrlList';
 
 import { DatePicker,Button, Select, message, PageHeader } from 'antd';
@@ -14,7 +11,7 @@ const {RangePicker} = DatePicker;
 const { Option } = Select;
 const dataSize = 'middle';
 
-class SensorCalibration extends Component{
+class ClientSensorCalibration extends Component{
   constructor(props) {
     super (props);
     this.state = {
@@ -29,8 +26,6 @@ class SensorCalibration extends Component{
       keyValue: "",             //用于重置
       search_begin_time: [],    //开始时间
       search_type_name: '',     //查找的传感器名称
-      addModalVisible:  false,  //增加弹框是否显示
-      editInfo: {},             //获取到编辑行的信息
       equipSensor:[],
     }
   }
@@ -246,17 +241,6 @@ class SensorCalibration extends Component{
     this.getCurrentPage(params);
   }
 
-  //显示增加弹窗
-  showAddModal = (record) => {
-    this.setState({
-      addModalVisible: true,
-    });
-    if ( record !== undefined ) {
-      this.setState({editInfo:record})
-    }
-    // record === undefined ? null : this.setState({editInfo:record})
-  };
-
   //关闭弹窗
   closeModal = (visible) => {
     this.setState({
@@ -275,7 +259,7 @@ class SensorCalibration extends Component{
 
   render() {
     const allowClear = true
-    const {data, isLoading, showPagination, size, total, equipSensor, addModalVisible, editInfo, whetherTest, currentPage} = this.state;
+    const {data, isLoading, showPagination, size, total, equipSensor,  currentPage} = this.state;
     const SensorTableDate = [];
     const calibrationMarkTable = [];
     if(equipSensor !== undefined ) {
@@ -311,23 +295,6 @@ class SensorCalibration extends Component{
         />
         <span className='name'>设备编号：{ this.state.equipmentIdData.equipment_code }</span>
         <div className='wrapper'>
-          <span className='pageName'>传感器标定：</span>
-          <div className='tableWrapper'>
-              <CalibrationTable
-                data={ SensorTableDate }
-                isLoading={ isLoading }
-                showAddModal={ this.showAddModal }
-              />
-              <AddCalibration 
-                visible={ addModalVisible }
-                cancel={ this.closeModal }
-                sensor_id = { editInfo }
-                whetherTest={ whetherTest }
-                getparams ={ this.getparams.bind(this) }
-                getCurrentPage = { this.getCurrentPage.bind(this) }
-              />
-          </div>
-          <div className='line'></div>
           <span className='pageName'>传感器标定记录：</span>
           <div className='func'>
             <div>
@@ -374,8 +341,4 @@ class SensorCalibration extends Component{
   }
 }
 
-export default SensorCalibration;
-
-
-
-
+export default ClientSensorCalibration;

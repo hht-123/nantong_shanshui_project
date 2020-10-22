@@ -31,6 +31,8 @@ import RolePower from '../../views/accountAndRole/rolePower'
 import  ClientIndex  from '../../views/ClientViews/index/index.js';
 import ClientMonitor from '../../views/ClientViews/monitor/monitor';
 import ClientWaterRemind from '../../views/ClientViews/waterRemind/waterRemind';
+import ClientEquipMaintenance from '../../views/ClientViews/equipmentMaintenance/index.js'
+import ClientSensorCalibration from '../../views/ClientViews/sensorCalibration/index';
 
 import AccountManagement from '../../views/accountAndRole/accountManagement'
 
@@ -96,6 +98,8 @@ class App extends Component {
                   <Route path='/app/clientIndex' component={ClientIndex} />
                   <Route path='/app/clientMonitor/:equipment_aid' component={ClientMonitor} />
                   <Route path='/app/clientWaterRemind/:equipment_id' component={ClientWaterRemind} />
+                  <Route path='/app/clientEquipMaintenace/:equipment_id' component={ClientEquipMaintenance} />
+                  <Route path='/app/clientSensorCalibration/:equipment_id' component={ClientSensorCalibration} />
 
                   <Route path='/app/accountManagement' component={AccountManagement}/>
                   <Route path='/app/rolePower' component={RolePower}/>

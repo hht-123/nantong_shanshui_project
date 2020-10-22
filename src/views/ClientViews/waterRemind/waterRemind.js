@@ -255,17 +255,19 @@ class ClientWaterRemind extends Component{
               <div className="inputWrapper" >
                 <div className="input" >传感器名称:</div>
                 <Select  allowClear={ allowClear }  style={{ width: 120, }} onChange={ this.handleChange } >
-                        <Option value="0">pH值传感器</Option>
-                        <Option value="1">用户报修</Option>
-                        <Option value="2">运维报修</Option>
+                  <Option value="pH值传感器">pH值传感器</Option>
+                  <Option value="电导率传感器">电导率传感器</Option>
+                  <Option value="浊度传感器">浊度传感器</Option>
+                  <Option value="COD传感器">COD传感器</Option>
+                  <Option value="ORP传感器">ORP传感器</Option>
+                  <Option value="温度传感器">温度传感器</Option>
                 </Select>
               </div>
               <div className="inputWrapper" >
                 <div className="input" >是否已处理:</div>
                 <Select  allowClear={ allowClear }  style={{ width: 120, }} onChange={ this.handleChange } >
-                        <Option value="0">pH值传感器</Option>
-                        <Option value="1">用户报修</Option>
-                        <Option value="2">运维报修</Option>
+                        <Option value="0">已处理</Option>
+                        <Option value="1">未修理</Option>
                 </Select>
               </div>
             </div>
