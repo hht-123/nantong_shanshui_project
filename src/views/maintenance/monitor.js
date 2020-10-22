@@ -128,7 +128,7 @@ class Monitor extends Component{
           me.setState({
             sensorData: response.data
           }) 
-          // console.log(me.state.sensorData)
+          console.log(me.state.sensorData)
         } else {
           me.setState({
             sensorData: response.data.data,
@@ -331,14 +331,14 @@ class Monitor extends Component{
     const time = [];
     const pH =[];
     const orp = [];
-    const conduct = [];
+    const conduct = [1400,1401,1402,1400,1400,1400,1399,1400,1400.11,1400.15,1420.12,1400,1401,1402,1400,1400,1400,1399,1400,1400.11,1400.15,1420.12,1400,1401,1402,1400,1400,1400,1399,1400,1400.11,1400.15,1420.12,1400,1401,1402,1400,1400,1400,1399,1400,1400.11,1400.15,1420.12,1400,1401,1402,1400,1400,1400,1399,1400,1400.11,1400.15,1420.12,1400,1401,1402,1400,1400,1400,1399,1400,1400.11,1400.15,1420.12,1400,1401,1402,1400,1400,1400,1399,1400,1400.11,1400.15,1420.12,1400,1401,1402,1400,1400,1400,1399,1400,1400.11,1400.15,1420.12,1400,1401,1402,1400,1400,1400,1399,1400,1400.11,1400.15,1420.12,1400,1401,1402,1400,1400,1400,1399,1400,1400.11,1400.15,1420.12,1400,1401,1402,1400,1400,1400,1399,1400,1400.11,1400.15,1420.12,1400,1401,1402,1400,1400,1400,1399,1400,1400.11,1400.15,1420.12,1400,1401,1402,1400,1400,1400,1399,1400,1400.11,1400.15,1420.12,1400,1401,1402,1400,1400,1400,1399,1400,1400.11,1400.15,1420.12,1400,1401,1402,1400,1400,1400,1399,1400,1400.11,1400.15,1420.12,1400,1401,1402,1400,1400,1400,1399,1400,1400.11,1400.15,1420.12,];
     const temper = [];
     if (this.state.sensorData !== undefined ) {
         this.state.sensorData.map((item, index) => {
           time.push(this.getTime(item.time))
           pH.push(parseFloat(item.ph).toFixed(2))
           orp.push(parseFloat(item.orp).toFixed(2))
-          conduct.push(parseFloat(item.conduct).toFixed(2))
+          // conduct.push(parseFloat(item.conduct).toFixed(2))
           temper.push(parseFloat(item.temper).toFixed(2))
           return null;
       })

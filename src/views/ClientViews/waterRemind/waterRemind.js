@@ -21,7 +21,7 @@ class ClientWaterRemind extends Component{
       equipmentIdData: [],
       search: false,          //是否搜索
       currentPage: 1,
-      whetherTest: false,     //是否是测试  true为是 false为否
+      whetherTest: true,     //是否是测试  true为是 false为否
       showPagination: true,     //是否分页
       isLoading: false,         //是否加载
       data: [],                 //表格数据 
@@ -42,6 +42,7 @@ class ClientWaterRemind extends Component{
     this.getEquipmentID(id)
     let params = this.getparams();
     this.getCurrentPage(params);
+    // this.getCurrentPage();模拟数据用
   }
 
   //数据请求
@@ -54,7 +55,9 @@ class ClientWaterRemind extends Component{
     let me = this;
     this.setState({isLoading: true})
     model.fetch(
+      // '1:1',模拟数据用
       params,
+      // 'http://localhost:3008/api/waterRemind.json',模拟数据用
       ClientWaterRemindUrl,
       'get',
       function(response) {
@@ -69,8 +72,11 @@ class ClientWaterRemind extends Component{
         } else {
           me.setState({
             isLoading: false,
+            total: response.count,
             data: response.data.data,
+            currentPage: params['currentPage'],
           })
+          console.log(me.state.data)
         }
       },
       function() {

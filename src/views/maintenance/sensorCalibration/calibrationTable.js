@@ -1,4 +1,4 @@
-import { Table, Icon  } from 'antd';
+import { Table, Icon, Tooltip } from 'antd';
 import React, { Component } from 'react';
 
 
@@ -37,7 +37,13 @@ class CalibrationTable extends Component{
           dataIndex: 'action',
           align: 'center',
           render: (text, record, index) => {
-            return <Icon type="edit" theme="twoTone" onClick={() => this.props.showAddModal(record.sensor_id)}/>
+            return <div>
+                    <Tooltip title="设置标定值">
+                      <Icon type="edit" theme="twoTone" 
+                            onClick={() => this.props.showAddModal(record.sensor_id)}
+                      />
+                    </Tooltip>
+                  </div>
           }
         },
       ];

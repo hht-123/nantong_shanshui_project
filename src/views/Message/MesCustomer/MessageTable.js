@@ -1,8 +1,6 @@
-import { Table, Pagination,  Icon, Button, Popconfirm } from 'antd';
+import { Table, Pagination,  Icon, Button, Popconfirm, Tooltip } from 'antd';
 import React, { Component } from 'react';
 import '../style/messtable.less';
-import {Link} from 'react-router-dom';
-
 
 
 class MessageTable extends Component{
@@ -55,7 +53,9 @@ class MessageTable extends Component{
             dataIndex: 'contact_person',
             align: 'center',
             render:(text, record, index) => {
-              return  <Button  type="primary"><Link to={`/app/contact/${record.key}`}>查看</Link></Button> 
+              return  <Button type="primary" onClick={() => this.props.showContactModal(record.key) } >
+                          查看
+                      </Button> 
             }
           },
 
@@ -68,18 +68,22 @@ class MessageTable extends Component{
               //<icon 图标
               return (
                 <div>
-                  <Icon type="edit" theme="twoTone" className="edit" style={{fontSize:'20px'}} 
-                    onClick={() => this.props.showEditModal(record)}
-                  />
+                  <Tooltip title="编辑信息">
+                    <Icon type="edit" theme="twoTone" className="edit" style={{fontSize:'20px'}} 
+                      onClick={() => this.props.showEditModal(record)}
+                    />
+                  </Tooltip>
                    <Popconfirm
                     title="确定删除该条记录?"
                     onConfirm={() => this.props.deleteInfo(record.key)}
                     okText="是"
                     cancelText="否"
                   >
-                    <Icon type="delete" theme="filled"  style={{ fontSize:'20px', color: 'red', }} 
-                      // onClick={() => this.props.deleteInfo(record.key)} 
-                    />
+                    <Tooltip title="删除信息">
+                      <Icon type="delete" theme="filled"  style={{ fontSize:'20px', color: 'red', }} 
+                        // onClick={() => this.props.deleteInfo(record.key)} 
+                      />
+                    </Tooltip>
                   </Popconfirm>
                 </div>)
             }
