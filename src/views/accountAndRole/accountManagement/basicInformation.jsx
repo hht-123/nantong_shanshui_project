@@ -15,7 +15,9 @@ export default class BasicInformation extends Component{
       password: '',
       role_id: undefined,
       telephone_num: '',
-      power_num_str: ''
+      power_id_str: '',
+      power_num_str: '',
+      alter_power: 'no'
     }
   }
 
@@ -30,7 +32,7 @@ export default class BasicInformation extends Component{
     const newAccount = this.state
     for (let i in newAccount) {
       if (newAccount[i] === '' || newAccount[i] === undefined) {
-        if (i !== 'power_num_str') {
+        if (i !== 'power_id_str' && i !== 'power_num_str') {
           message.error('信息未填写完整！')
           return
         }
@@ -39,7 +41,7 @@ export default class BasicInformation extends Component{
     newAccount['add_by'] = getUserId()
     model.fetch(
       newAccount,
-      originalUrl + user,
+      originalUrl + user + this.props.record.aid + '/',
       'put',
       function (res) {
         message.success('编辑账户成功！')

@@ -1,4 +1,4 @@
-import { Table, Pagination, Icon, Popover } from 'antd';
+import { Table, Pagination, Icon, Popover, Tooltip } from 'antd';
 import React, { Component } from 'react';
 
 class AccountTable extends Component{
@@ -71,15 +71,15 @@ class AccountTable extends Component{
           width: 80,
           render: (text, record, index) => {
             return [
-              <Popover title={"账户管理"} key={"edit"} content={<p>基础信息编辑</p>}>
-              <Icon type="edit" theme="twoTone" onClick={() => this.props.showEditModal(record, 'basicInfoVisible')}/>
-              </Popover>,
-              <Popover title={"账户管理"} key={"ordered-list"} content={<p>权限编辑</p>}>
+              <Tooltip placement="top" key={"edit"} title={"账户管理"}>
+                <Icon type="edit" theme="twoTone" onClick={() => this.props.showEditModal(record, 'basicInfoVisible')}/>
+              </Tooltip>,
+              <Tooltip placement="top" key={"ordered-list"} title={"权限编辑"}>
                 <Icon  style={{ marginLeft: 10}}  type="ordered-list" onClick={() => this.props.showEditModal(record, 'editPowerVisible')}/>
-              </Popover>,
-              <Popover title={"账户管理"} key={"delete"} content={<p>删除账户</p>}>
+              </Tooltip>,
+              <Tooltip placement="top" key={"delete"} title={"删除账户"}>
                 <Icon style={{ marginLeft: 10, color: 'red' }} type="delete" onClick={() => this.props.showEditModal(record, 'delAccountVisible')}/>
-              </Popover>
+              </Tooltip>
           ]
           }
         }

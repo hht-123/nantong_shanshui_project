@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout } from 'antd';
+import { Layout, Icon } from 'antd';
 import history from './history';
 import { removeCookie } from "../../helpers/cookies";
 import { withRouter } from 'react-router-dom';
@@ -67,7 +67,7 @@ class HeaderCustom extends Component{
             <span className={'header-span'}>循环水智慧管家远程监控系统</span>
           {/* </Link> */}
           {/* <span className="date-span">{this.state.date.toLocaleString()}</span> */}
-          
+          <Icon type="user" />
         </Header>
       )
     }
