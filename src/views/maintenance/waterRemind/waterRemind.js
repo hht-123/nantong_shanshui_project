@@ -202,13 +202,15 @@ class WaterRemind extends Component{
     this.getCurrentPage(params);
   }
 
-   // 截取时间
-   getTime = (time) => {
+  // 截取时间
+  getTime = (time) => {
     let year = '' 
     let second = ''
+    if (time !== null ) {
     year = time.slice(0,10)
     second = time.slice(11,19)
     return  year + ' ' + second
+    }
   }
 
   render() {

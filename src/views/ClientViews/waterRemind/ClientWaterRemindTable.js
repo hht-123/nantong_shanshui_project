@@ -2,7 +2,13 @@ import { Table, Pagination, } from 'antd';
 import React, { Component } from 'react';
 
 
-class CalibrationMarkTable extends Component{
+class ClientWaterRemindTable extends Component{
+
+  handleStatusColor = (status) => {
+    if ( status === '未处理' ) {
+      return  { color : 'red '}
+    }
+  }
 
     render() {
       const { isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
@@ -15,7 +21,7 @@ class CalibrationMarkTable extends Component{
           width: 160
         },{
           title: '处理时间',
-          dataIndex: 'time',
+          dataIndex: 'deal_time',
           align: 'center',
           width: 160
         },
@@ -27,14 +33,15 @@ class CalibrationMarkTable extends Component{
         },
         {
           title: '提示内容',
-          dataIndex: 'measurement',
+          dataIndex: 'notice_content',
           align: 'center',
         },
         {
           title: '是否已处理',
-          dataIndex: 'maintain_result',
+          dataIndex: 'deal_status',
           align: 'center',
-          width: 180
+          width: 180,
+          render: text => <div style={this.handleStatusColor(text)}>{text}</div>
         },
       ];
 
@@ -82,4 +89,4 @@ class CalibrationMarkTable extends Component{
     }
 }
 
-export default CalibrationMarkTable;
+export default ClientWaterRemindTable;

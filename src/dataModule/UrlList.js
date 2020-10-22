@@ -6,7 +6,7 @@
  * @LastEditors: 唐帆
  * @LastEditTime: 2020-04-30 10:46:26
  */
-export const originalUrl = 'http://10.21.1.58:9000/';
+export const originalUrl = 'http://10.40.190.122:8000/';
 export const enginInfoUrl = 'main_engine/';
 export const messageCUrl = 'client/';
 export const contactUrl = 'contact_people/';
@@ -35,6 +35,8 @@ export const waterRemindUrl = 'app/water_quality_notice/' //水质提醒记录
 export const equipmentInfoUrl = 'app/equipment_detail/'   // 设备详情信息
 export const equipmentCalibration = 'equipment_calibration/' //增加补偿值
 export const CalibrationMark = 'app/sensor_calibration_retrieve/' //获得标定值记录
+export const ClientWaterRemindUrl = 'app/water_notice_retrieve/' //客户端水质提醒记录数据
+export const ClientWaterPutUrl = 'water_quality_notice/'  //处理水质记录
 
 export const role = 'role/'
 export const rolePower = 'app/role_power/'

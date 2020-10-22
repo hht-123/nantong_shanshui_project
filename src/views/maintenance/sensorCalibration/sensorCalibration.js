@@ -268,9 +268,11 @@ class SensorCalibration extends Component{
   getTime = (time) => {
     let year = '' 
     let second = ''
+    if (time !== null ) {
     year = time.slice(0,10)
     second = time.slice(11,19)
     return  year + ' ' + second
+    }
   }
 
   render() {

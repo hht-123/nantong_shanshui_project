@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Model } from '../../../dataModule/testBone';
 
-import CalibrationMarkTable from './calibrationMarkTable';
+import ClientWaterRemindTable from './ClientWaterRemindTable';
 import Tip from './tip';
 import  './style.less';
-import { equipmentUrl, equipMaintainUrl } from '../../../dataModule/UrlList';
+import { equipmentUrl, ClientWaterRemindUrl } from '../../../dataModule/UrlList';
 
-import { DatePicker, Button, Select, message, PageHeader, Modal } from 'antd';
+import { DatePicker, Button, Select, message, PageHeader } from 'antd';
 
 const model = new Model()
 const {RangePicker} = DatePicker;
@@ -26,22 +26,22 @@ class ClientWaterRemind extends Component{
       isLoading: false,         //是否加载
       data: [],                 //表格数据 
       total: 0,                 //一共有多少条数据
-      keyValue: "",             //用于重置
+      keyValue: "",             //用于重置时间
+      key1: '',                 //重置sensor下拉框
+      key2: '',                 //重置status
       search_begin_time: [],    //开始时间
-      search_maintain_cause: '', //查找的维护原因
-      addModalVisible: false,   //addModal是否显示
-      editModalVisible:  false,  //editModal是否显示
-      editInfo: {},             //获取到编辑行的信息
+      search_type_name: '',     //查找的传感器
+      search_deal_status: '' ,   //是否已处理的状态
+      allData: []
     }
   }
 
   componentDidMount() {
-    // console.log(this.props.match.params.equipment_id);
     const equipment_id = this.props.match.params.equipment_id;
     let id = this.getId(equipment_id)
     this.getEquipmentID(id)
-    // let params = this.getparams();
-    // this.getCurrentPage(params);
+    let params = this.getparams();
+    this.getCurrentPage(params);
   }
 
   //数据请求
@@ -55,7 +55,7 @@ class ClientWaterRemind extends Component{
     this.setState({isLoading: true})
     model.fetch(
       params,
-      equipMaintainUrl,
+      ClientWaterRemindUrl,
       'get',
       function(response) {
         if (me.state.whetherTest === false) {
@@ -122,17 +122,18 @@ class ClientWaterRemind extends Component{
 
   //翻页获取内容
   getPage = (currentPage, pageSize) => {
-    let [ search_maintain_cause, search_begin_time ] =[null, null];
+    let [ search_type_name, search_begin_time, search_deal_status ] =[null, null,null];
     if(this.state.search === true){
-      search_maintain_cause = this.state.search_maintain_cause;
+      search_type_name = this.state.search_type_name;
       search_begin_time = this.state.search_begin_time;
+      search_deal_status = this.state.search_deal_status;
     }
     
-    const params = this.getparams(currentPage, pageSize, this.props.match.params.equipment_id, search_maintain_cause, search_begin_time, )
+    const params = this.getparams(currentPage, pageSize, this.props.match.params.equipment_id, search_type_name, search_begin_time, search_deal_status)
     this.getCurrentPage(params);
   }
 
-  getparams(currentPage=1, size=10, equipment_id=this.props.match.params.equipment_id , maintain_cause=null, search_begin_time=null) {
+  getparams(currentPage=1, size=10, equipment_id=this.props.match.params.equipment_id , type_name=null, search_begin_time=null, deal_status=null) {
     let params = {};
     let begin_time = null;
     let end_time = null;
@@ -143,9 +144,10 @@ class ClientWaterRemind extends Component{
       currentPage,
       size,
       equipment_id,
-      maintain_cause,
+      type_name,
       begin_time,
       end_time,
+      deal_status,
     }
     return params;
   }
@@ -168,21 +170,29 @@ class ClientWaterRemind extends Component{
 
   //改变pageSIze获取内容
   getSize = (current, size) => {
-    let [ search_maintain_cause, search_begin_time] =[null, null];
+    let [ search_type_name, search_begin_time, search_deal_status] =[null, null,null];
     if(this.state.search === true){
-      search_maintain_cause = this.state.search_maintain_cause;
+      search_type_name = this.state.search_type_name;
       search_begin_time = this.state.search_begin_time;
+      search_deal_status = this.state.search_deal_status;
     }
-    const params = this.getparams(1, size, this.props.match.params.equipment_id ,search_maintain_cause, search_begin_time )
+    const params = this.getparams(1, size, this.props.match.params.equipment_id ,search_type_name, search_begin_time, search_deal_status )
     this.getCurrentPage(params);
     document.scrollingElement.scrollTop = 0
   }
 
   //设备状态下拉框值改变时触发的函数
-  handleChange = (value) => {
+  handleSensorChange = (value) => {
     // console.log(value);
     this.setState({
-      search_maintain_cause: value,
+      search_type_name: value,
+    })
+  }
+
+  handleStatusChange = (value) => {
+    // console.log(value);
+    this.setState({
+      search_deal_status: value,
     })
   }
 
@@ -191,42 +201,64 @@ class ClientWaterRemind extends Component{
     let params = this.getparams();
     this.getCurrentPage(params);
     this.setState({
-      search_maintain_cause: null,
+      search_type_name: null,
       keyValue: new Date(),
+      key1: new Date(),
+      key2: new Date(),
       search_begin_time: null,
+      search_deal_status: null,
       currentPage: 1,
-      search: true,
+      search: false,
     })
   }
 
   //搜索按钮
   searchInfo = () => {
     this.setState({search: true});
-    const { search_maintain_cause, search_begin_time } = this.state;
-    let params = this.getparams(1, 10, this.props.match.params.equipment_id  ,search_maintain_cause, search_begin_time);
+    const { search_type_name, search_begin_time, search_deal_status } = this.state;
+    let params = this.getparams(1, 10, this.props.match.params.equipment_id  ,search_type_name, search_begin_time, search_deal_status);
     this.getCurrentPage(params);
   }
+
+  statusSWift = (status) => {
+    if(status === '1'){
+      return '未处理'
+    }else if(status === '0'){
+      return '已处理'
+    }
+  }
+
+    // 截取时间
+    getTime = (time) => {
+      let year = '' 
+      let second = ''
+      if (time !== null ) {
+      year = time.slice(0,10)
+      second = time.slice(11,19)
+      return  year + ' ' + second
+      }
+    }
+
 
   render() {
     // const equipment_id = this.props.match.params.equipment_id
     const allowClear = true
-    const {data, isLoading, showPagination, size, total,} = this.state;
-    const tableDate = [];
+    const {data, isLoading, showPagination, size, total, currentPage, key1, key2, whetherTest } = this.state;
+    const tableData = [];
     if(data !== undefined ) {
       data.map((item, index) => {
-        tableDate.push({
+        tableData.push({
           key: item.aid,
-          repair_time: item.repair_time,
-          maintain_time: item.maintain_time,
-          maintain_cause: this.causeSWift(item.maintain_cause),
-          fault_description: item.fault_description,
-          maintain_result: this.resultSWift(item.maintain_result),
-          maintain_status: this.statusSWift(item.maintain_status) ,
-          responsible_person: item.responsible_person,
+          notice_time: this.getTime(item.notice_time),
+          deal_time: this.getTime(item.deal_time),
+          type_name: item.type_name,
+          deal_status: this.statusSWift(item.deal_status) ,
+          notice_content: item.notice_content,
         })
         return null;
       })
     }
+    if (data.length === 0) return null
 
     return (
       <div className='waterRemind'>
@@ -238,7 +270,17 @@ class ClientWaterRemind extends Component{
         <div className='wrapper'>
           <span className='pageName'>未处理提示：</span>
           <div className='tipWrapper'>
-                <Tip />
+              { data.map((item, index) => {
+                if( item.deal_status === "1") {
+                  return <Tip key={index} 
+                              time={this.getTime(item.notice_time)} 
+                              tipData = {item}
+                              whetherTest={ whetherTest }
+                              getparams = { this.getparams.bind(this)}
+                              getCurrentPage = { this.getCurrentPage.bind(this)}
+                        />
+                }
+              }) }
           </div>
           <div className='line'></div>
           <span className='pageName'> 提示记录：</span>
@@ -254,7 +296,7 @@ class ClientWaterRemind extends Component{
               </div>
               <div className="inputWrapper" >
                 <div className="input" >传感器名称:</div>
-                <Select  allowClear={ allowClear }  style={{ width: 120, }} onChange={ this.handleChange } >
+                <Select  allowClear={ allowClear } key={key1} style={{ width: 120, }} onChange={ this.handleSensorChange } >
                   <Option value="pH值传感器">pH值传感器</Option>
                   <Option value="电导率传感器">电导率传感器</Option>
                   <Option value="浊度传感器">浊度传感器</Option>
@@ -265,9 +307,9 @@ class ClientWaterRemind extends Component{
               </div>
               <div className="inputWrapper" >
                 <div className="input" >是否已处理:</div>
-                <Select  allowClear={ allowClear }  style={{ width: 120, }} onChange={ this.handleChange } >
+                <Select  allowClear={ allowClear }  key={key2} style={{ width: 120, }} onChange={ this.handleStatusChange } >
                         <Option value="0">已处理</Option>
-                        <Option value="1">未修理</Option>
+                        <Option value="1">未处理</Option>
                 </Select>
               </div>
             </div>
@@ -277,15 +319,15 @@ class ClientWaterRemind extends Component{
               </div>
           </div>
           <div className='tableWrapper'>
-              <CalibrationMarkTable
-                // data={ tableDate }
+              <ClientWaterRemindTable
+                data={ tableData }
                 isLoading={ isLoading }
                 showPagination={ showPagination }
                 size={ size }
                 total={ total }
-                // changePage={ this.getPage }
-                // changeSize={ this.getSize }
-                // currentPage={ currentPage }
+                changePage={ this.getPage }
+                changeSize={ this.getSize }
+                currentPage={ currentPage }
               />
           </div>
         </div>

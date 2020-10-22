@@ -343,6 +343,8 @@ class EquipmentMaintenance extends Component{
                 visible={ editModalVisible }
                 cancel={ this.closeModal }
                 editInfo={ editInfo }
+                getparams ={ this.getparams.bind(this) }
+                getCurrentPage = { this.getCurrentPage.bind(this) }
               />
           </div>
         </div>
