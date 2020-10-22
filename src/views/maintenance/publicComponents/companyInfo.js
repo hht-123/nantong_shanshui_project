@@ -26,6 +26,7 @@ class CompanyInfo extends Component {
                 visible={ visible }
                 confirmLoading={ confirmLoading }
                 destroyOnClose={ true }
+                footer={null}
                 onOk={ this.handleCancel }
                 onCancel={ this.handleCancel }
                 width="800px"

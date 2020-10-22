@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Model } from '../../dataModule/testBone';
+import { Model } from '../../../dataModule/testBone';
 
-import  './style/monitor.less';
-import Line from './publicComponents/sensorLine';
-import CompanyInfo from './publicComponents/companyInfo';
-import EquipInfo from './publicComponents/equipInfo';
-import { equipmentUrl, sensorDataUrl, device, clientUrl, equipmentInfoUrl } from '../../dataModule/UrlList';
+import  './monitor.less';
+import Line from '../../maintenance/publicComponents/sensorLine';
+import CompanyInfo from '../../maintenance/publicComponents/companyInfo';
+import EquipInfo from '../../maintenance/publicComponents/equipInfo';
+import { equipmentUrl, sensorDataUrl, device, clientUrl, equipmentInfoUrl } from '../../../dataModule/UrlList';
 
 import { Icon, Tabs, DatePicker, Button, PageHeader, message } from 'antd';
 import { Link } from 'react-router-dom';
@@ -15,7 +15,7 @@ const { TabPane } = Tabs;
 const {RangePicker} = DatePicker;
 
 
-class Monitor extends Component{
+class ClientMonitor extends Component{
   constructor(props) {
     super (props);
     this.state = {
@@ -39,12 +39,12 @@ class Monitor extends Component{
     let params = this.getparams(equipment_aid);
     this.getEquipmentData(params);
     //获得传感器的数据
-    // const { search_begin_time } = this.state;
-    let params1 = this.getSensorParams("001");
+    const { search_begin_time } = this.state;
+    let params1 = this.getSensorParams("001",search_begin_time);
     this.getSensorData(params1);
     //设置定时器
     this.intervalId = setInterval(() => {
-      let params2 = this.getSensorParams("001");
+      let params2 = this.getSensorParams("001",search_begin_time);
       this.getSensorData(params2);
     }, 300000)
     this.getEquipmentInfo()
@@ -167,7 +167,7 @@ class Monitor extends Component{
           me.setState({
             equipSensor: response.data
           }) 
-          console.log(me.state.equipSensor)
+          // console.log(me.state.equipSensor)
         } else {
           me.setState({
             equipSensor: response.data.data,
@@ -334,7 +334,7 @@ class Monitor extends Component{
     function commitInfo(item)  {
       if (item === 'PH传感器' ) {
         return  pH
-      } else if (item === "ORP传感器") {
+      } else if (item === "COD传感器") {
         return  orp
       } else if (item === "电导率传感器") {
         return  conduct
@@ -352,7 +352,7 @@ class Monitor extends Component{
           title="返回"
         />
         <span className='name'>设备编号：{ this.state.equipmentData.equipment_code }</span>
-        <span className='company' onClick={ this.showCompanyModal } >用户单位：{ this.state.equipmentData.client_unit }</span>
+        {/* <span className='company' onClick={ this.showCompanyModal } >用户单位：{ this.state.equipmentData.client_unit }</span> */}
         <CompanyInfo
           whetherTest={ whetherTest }
           visible={ CompanyModalVisible }
@@ -362,7 +362,7 @@ class Monitor extends Component{
         <div className='wrapper'>
             <div className='table'>
                 <span >
-                  <Link to={`/app/waterRemind/${ equipment_id}`}>
+                  <Link to={`/app/clientWaterRemind/${ equipment_id}`}>
                     <Icon className='icon' type="warning" theme="filled" />
                     <div className='describe' >水质提醒记录</div>
                   </Link>
@@ -397,7 +397,6 @@ class Monitor extends Component{
                   data={ equipmentInfo }
                 />
             </div>
-              <div>
               <Tabs className='tab' defaultActiveKey="0" onChange={this.callback} type='card'>
                   {
                     this.state.equipSensor.map((item, index) => {
@@ -415,11 +414,10 @@ class Monitor extends Component{
                     })
                   }
               </Tabs>
-              </div>
         </div>
       </div>
     )
   }
 }
 
-export default Monitor;
+export default ClientMonitor;

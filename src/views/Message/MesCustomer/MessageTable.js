@@ -4,6 +4,7 @@ import '../style/messtable.less';
 import {Link} from 'react-router-dom';
 
 
+
 class MessageTable extends Component{
     render() {
       const { isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
@@ -53,7 +54,7 @@ class MessageTable extends Component{
             dataIndex: 'contact_person',
             align: 'center',
             render:(text, record, index) => {
-              return  <Button type="primary"><Link to={`/app/contact/${record.key}`}>查看</Link></Button> 
+              return  <Button  type="primary"><Link to={`/app/contact/${record.key}`}>查看</Link></Button> 
             }
           },
 

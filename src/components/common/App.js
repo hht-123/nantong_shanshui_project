@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import { Layout } from 'antd';
 import { getCookie, setCookie } from "../../helpers/cookies";
 import store from '../../store'
@@ -25,9 +25,11 @@ import Monitor from '../../views/maintenance/monitor';
 import EquipmentMaintenance from '../../views/maintenance/equipmentMaintenance/equipmentMaintenance';
 import WaterRemind from '../../views/maintenance/waterRemind/waterRemind';
 import SensorCalibration from '../../views/maintenance/sensorCalibration/sensorCalibration';
-import { connect } from 'react-redux';
-import { Model } from '../../dataModule/testBone';
-import { actionCreators } from '../index/store';
+
+//客户端页面
+import  ClientIndex  from '../../views/ClientViews/index/index.js';
+import ClientMonitor from '../../views/ClientViews/monitor/monitor';
+import ClientWaterRemind from '../../views/ClientViews/waterRemind/waterRemind';
 
 
 
@@ -61,11 +63,11 @@ class App extends Component {
     const { collapsed } = this.state;
     // const {location} = this.props;
     let name;
-    // if (!getCookie("mspa_user") || getCookie("mspa_user") === "undefined") {
-    //   return <Redirect to="/login" />
-    // } else {
-    //   name = JSON.parse(getCookie("mspa_user")).username;
-    // }
+    if (!getCookie("mspa_user") || getCookie("mspa_user") === "undefined") {
+      return <Redirect to="/login" />
+    } else {
+      name = JSON.parse(getCookie("mspa_user")).username;
+    }
     return (
       <Layout>
         <Provider store={store}>
@@ -76,7 +78,7 @@ class App extends Component {
               <Sider width={200} style={{ background: '#fff' }}>
                 <SideMenu />
               </Sider>
-              <Content style={{ padding: '0 24px', minHeight: 'calc(100vh - 111px)'}}>
+              <Content style={{ padding: '0 24px', minHeight: 'calc(100vh - 111px)' }}>
                 <Switch>
                   <Route exact path='/app' component={(props) =><Index {...props}/>} />
                   <Route path='/app/engine' component={EngineInfo} />
@@ -85,14 +87,15 @@ class App extends Component {
                   <Route path='/app/monitor/:equipment_aid' component={Monitor} />
                   <Route path='/app/sensor' component={(props) =><SensorInfo {...props}/>} />
                   <Route path='/app/equipmentMaintenance/:equipment_id' component={EquipmentMaintenance} />
-                  <Route path='/app/sensor' component={SensorInfo} />
                   <Route path='/app/contact/:client_id' component={ContactIndex} />
                   <Route path='/app/equipment' component={(props) => <Equipment {...props}/>} />
                   <Route path='/app/equipment' component={(props) => <Equipment {...props}/>} />
                   <Route path='/app/waterRemind/:equipment_id' component={WaterRemind} />
                   <Route path='/app/sensorCalibratin/:equipment_id' component={SensorCalibration} />
-                  <Route path='/app/sensor' component={SensorInfo} />
-                  <Route path='/app/contact/:client_id' component={ContactIndex} />
+                  {/* 客户端页面路由 */}
+                  <Route path='/app/clientIndex' component={ClientIndex} />
+                  <Route path='/app/clientMonitor/:equipment_aid' component={ClientMonitor} />
+                  <Route path='/app/clientWaterRemind/:equipment_id' component={ClientWaterRemind} />
 
                 </Switch>
               </Content>

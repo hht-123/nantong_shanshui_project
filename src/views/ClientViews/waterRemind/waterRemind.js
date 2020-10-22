@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
 import { Model } from '../../../dataModule/testBone';
 
-import WaterRemindInfo from './remindTable';
+import CalibrationMarkTable from './calibrationMarkTable';
+import Tip from './tip';
 import  './style.less';
-import { equipmentUrl, waterRemindUrl } from '../../../dataModule/UrlList';
+import { equipmentUrl, equipMaintainUrl } from '../../../dataModule/UrlList';
 
-import { DatePicker,Button, Select, message, PageHeader } from 'antd';
+import { DatePicker, Button, Select, message, PageHeader, Modal } from 'antd';
 
 const model = new Model()
 const {RangePicker} = DatePicker;
 const { Option } = Select;
 const dataSize = 'middle';
 
-class WaterRemind extends Component{
+
+class ClientWaterRemind extends Component{
   constructor(props) {
     super (props);
     this.state = {
@@ -26,7 +28,10 @@ class WaterRemind extends Component{
       total: 0,                 //一共有多少条数据
       keyValue: "",             //用于重置
       search_begin_time: [],    //开始时间
-      search_sensor_type: '',   //查找传感器类型
+      search_maintain_cause: '', //查找的维护原因
+      addModalVisible: false,   //addModal是否显示
+      editModalVisible:  false,  //editModal是否显示
+      editInfo: {},             //获取到编辑行的信息
     }
   }
 
@@ -35,8 +40,8 @@ class WaterRemind extends Component{
     const equipment_id = this.props.match.params.equipment_id;
     let id = this.getId(equipment_id)
     this.getEquipmentID(id)
-    let params = this.getparams();
-    this.getCurrentPage(params);
+    // let params = this.getparams();
+    // this.getCurrentPage(params);
   }
 
   //数据请求
@@ -50,7 +55,7 @@ class WaterRemind extends Component{
     this.setState({isLoading: true})
     model.fetch(
       params,
-      waterRemindUrl,
+      equipMaintainUrl,
       'get',
       function(response) {
         if (me.state.whetherTest === false) {
@@ -117,17 +122,17 @@ class WaterRemind extends Component{
 
   //翻页获取内容
   getPage = (currentPage, pageSize) => {
-    let [ search_sensor_type, search_begin_time ] =[null, null];
+    let [ search_maintain_cause, search_begin_time ] =[null, null];
     if(this.state.search === true){
-      search_sensor_type = this.state.search_sensor_type;
+      search_maintain_cause = this.state.search_maintain_cause;
       search_begin_time = this.state.search_begin_time;
     }
     
-    const params = this.getparams(currentPage, pageSize, this.props.match.params.equipment_id, search_sensor_type, search_begin_time, )
+    const params = this.getparams(currentPage, pageSize, this.props.match.params.equipment_id, search_maintain_cause, search_begin_time, )
     this.getCurrentPage(params);
   }
 
-  getparams(currentPage=1, size=10, equipment_id=this.props.match.params.equipment_id , type_name=null, search_begin_time=null) {
+  getparams(currentPage=1, size=10, equipment_id=this.props.match.params.equipment_id , maintain_cause=null, search_begin_time=null) {
     let params = {};
     let begin_time = null;
     let end_time = null;
@@ -138,7 +143,7 @@ class WaterRemind extends Component{
       currentPage,
       size,
       equipment_id,
-      type_name,
+      maintain_cause,
       begin_time,
       end_time,
     }
@@ -163,12 +168,12 @@ class WaterRemind extends Component{
 
   //改变pageSIze获取内容
   getSize = (current, size) => {
-    let [ search_sensor_type, search_begin_time] =[null, null];
+    let [ search_maintain_cause, search_begin_time] =[null, null];
     if(this.state.search === true){
-      search_sensor_type = this.state.search_sensor_type;
+      search_maintain_cause = this.state.search_maintain_cause;
       search_begin_time = this.state.search_begin_time;
     }
-    const params = this.getparams(1, size, this.props.match.params.equipment_id ,search_sensor_type, search_begin_time )
+    const params = this.getparams(1, size, this.props.match.params.equipment_id ,search_maintain_cause, search_begin_time )
     this.getCurrentPage(params);
     document.scrollingElement.scrollTop = 0
   }
@@ -177,7 +182,7 @@ class WaterRemind extends Component{
   handleChange = (value) => {
     // console.log(value);
     this.setState({
-      search_sensor_type: value,
+      search_maintain_cause: value,
     })
   }
 
@@ -186,7 +191,7 @@ class WaterRemind extends Component{
     let params = this.getparams();
     this.getCurrentPage(params);
     this.setState({
-      search_sensor_type: null,
+      search_maintain_cause: null,
       keyValue: new Date(),
       search_begin_time: null,
       currentPage: 1,
@@ -197,76 +202,88 @@ class WaterRemind extends Component{
   //搜索按钮
   searchInfo = () => {
     this.setState({search: true});
-    const { search_sensor_type, search_begin_time } = this.state;
-    let params = this.getparams(1, 10, this.props.match.params.equipment_id  ,search_sensor_type, search_begin_time);
+    const { search_maintain_cause, search_begin_time } = this.state;
+    let params = this.getparams(1, 10, this.props.match.params.equipment_id  ,search_maintain_cause, search_begin_time);
     this.getCurrentPage(params);
   }
 
   render() {
-    const equipment_id = this.props.match.params.equipment_id
+    // const equipment_id = this.props.match.params.equipment_id
     const allowClear = true
-    const {data, isLoading, showPagination, size, total, whetherTest, currentPage, } = this.state;
+    const {data, isLoading, showPagination, size, total,} = this.state;
     const tableDate = [];
     if(data !== undefined ) {
       data.map((item, index) => {
         tableDate.push({
-          measurement: item.measurement,
-          notice_content: item.notice_content,
-          notice_time: item.notice_time,
-          type_name: item.type_name,
-          key: index
+          key: item.aid,
+          repair_time: item.repair_time,
+          maintain_time: item.maintain_time,
+          maintain_cause: this.causeSWift(item.maintain_cause),
+          fault_description: item.fault_description,
+          maintain_result: this.resultSWift(item.maintain_result),
+          maintain_status: this.statusSWift(item.maintain_status) ,
+          responsible_person: item.responsible_person,
         })
         return null;
       })
     }
 
     return (
-      <div className='equipmentMaintenance'>
+      <div className='waterRemind'>
         <PageHeader className='row'
           onBack={() => window.history.back()}
           title="返回"
         />
         <span className='name'>设备编号：{ this.state.equipmentIdData.equipment_code }</span>
         <div className='wrapper'>
-          <span className='pageName'>水质提醒记录</span>
+          <span className='pageName'>未处理提示：</span>
+          <div className='tipWrapper'>
+                <Tip />
+          </div>
+          <div className='line'></div>
+          <span className='pageName'> 提示记录：</span>
           <div className='func'>
             <div>
               <div style={{ float: 'left', marginLeft: '20px' }} >
-                <div className="input" >日期筛选:</div>
+                <div className="input" >提示时间:</div>
                   <RangePicker 
                     key={ this.state.keyValue }
                     size={ dataSize }
                     onChange={ this.handleBeginTime } 
                   />
               </div>
-
               <div className="inputWrapper" >
                 <div className="input" >传感器名称:</div>
                 <Select  allowClear={ allowClear }  style={{ width: 120, }} onChange={ this.handleChange } >
-                        <Option value="pH值传感器">pH值传感器</Option>
-                        <Option value="ORP传感器">ORP传感器</Option>
-                        <Option value="温度传感器">温度传感器</Option>
-                        <Option value="电导率传感器">电导率传感器</Option>
-                        <Option value="COD传感器">COD传感器</Option>
+                        <Option value="0">pH值传感器</Option>
+                        <Option value="1">用户报修</Option>
+                        <Option value="2">运维报修</Option>
+                </Select>
+              </div>
+              <div className="inputWrapper" >
+                <div className="input" >是否已处理:</div>
+                <Select  allowClear={ allowClear }  style={{ width: 120, }} onChange={ this.handleChange } >
+                        <Option value="0">pH值传感器</Option>
+                        <Option value="1">用户报修</Option>
+                        <Option value="2">运维报修</Option>
                 </Select>
               </div>
             </div>
-
               <div className='buttonList' >
                 <Button className="button" type="primary" onClick={ this.searchInfo } >搜索</Button>
                 <Button className="button"  onClick={ this.handleReset }>重置</Button>
               </div>
           </div>
           <div className='tableWrapper'>
-              <WaterRemindInfo
-                data={ tableDate }
+              <CalibrationMarkTable
+                // data={ tableDate }
                 isLoading={ isLoading }
                 showPagination={ showPagination }
                 size={ size }
                 total={ total }
-                changePage={ this.getPage }
-                changeSize={ this.getSize }
-                currentPage={ currentPage }
+                // changePage={ this.getPage }
+                // changeSize={ this.getSize }
+                // currentPage={ currentPage }
               />
           </div>
         </div>
@@ -275,4 +292,4 @@ class WaterRemind extends Component{
   }
 }
 
-export default WaterRemind;
+export default ClientWaterRemind;

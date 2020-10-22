@@ -2,7 +2,7 @@ import { Table, Pagination, } from 'antd';
 import React, { Component } from 'react';
 
 
-class WaterRemindInfo extends Component{
+class CalibrationMarkTable extends Component{
 
     render() {
       const { isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
@@ -15,20 +15,20 @@ class WaterRemindInfo extends Component{
           width: 160
         },
         {
-          title: '传感器名称',
+          title: '传感器',
           dataIndex: 'type_name',
           align: 'center',
           width: 200
         },
         {
-          title: '测量值',
+          title: '标定理论值',
           dataIndex: 'measurement',
           align: 'center',
-          width: 150,
+          width: 200,
         },
         {
-          title: '提示内容',
-          dataIndex: 'notice_content',
+          title: '标定实际值',
+          dataIndex: 'maintain_result',
           align: 'center',
         },
       ];
@@ -77,4 +77,4 @@ class WaterRemindInfo extends Component{
     }
 }
 
-export default WaterRemindInfo;
+export default CalibrationMarkTable;
