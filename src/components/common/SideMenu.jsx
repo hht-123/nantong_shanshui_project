@@ -25,7 +25,7 @@ export default class SideMenu extends Component {
         mode="inline"
         style={{ height: 'calc(100% - 3rem)', marginTop: '3rem' }}
       >
-        
+
         <Menu.Item key="0">
             <Link to="/app/maintenance">
               <Icon type="pie-chart" />
@@ -43,9 +43,9 @@ export default class SideMenu extends Component {
           }
         >
           <Menu.Item key="1"><Link to='/app/engine'>主机信息</Link></Menu.Item>
-          <Menu.Item key="2"><Link to='/app/sensor'>传感器信息</Link></Menu.Item> 
+          <Menu.Item key="2"><Link to='/app/sensor'>传感器信息</Link></Menu.Item>
           <Menu.Item key="3"><Link to="/app/message">客户信息</Link></Menu.Item>
-          
+
         </SubMenu>
         <SubMenu
           key="sub3"
@@ -60,6 +60,17 @@ export default class SideMenu extends Component {
           <Menu.Item key="5">设备配置记录</Menu.Item>
           <Menu.Item key="7">设备调拨记录</Menu.Item>
           <Menu.Item key="8">设备报废信息</Menu.Item>
+        </SubMenu>
+        <SubMenu
+          key="accountAndRole"
+          title={
+            <span>
+              <Icon type="ordered-list" />
+              账户与权限
+            </span>
+          }>
+          <Menu.Item key="account"><Link to='/app/accountManagement'>账户管理</Link></Menu.Item>
+          <Menu.Item key="role"><Link to='/app/rolePower'>角色权限</Link></Menu.Item>
         </SubMenu>
       </Menu>
     );
