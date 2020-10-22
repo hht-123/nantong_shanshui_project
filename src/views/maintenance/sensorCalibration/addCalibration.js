@@ -55,8 +55,8 @@ class AddCalibration extends Component {
         });
         console.log(params);
         this.addCalibration(params);
-        // let NewParams = this.props.getparams()
-        // this.props.getCurrentPage(NewParams)
+        let NewParams = this.props.getparams()
+        this.props.getCurrentPage(NewParams)
       };
     
     //取消按钮事件

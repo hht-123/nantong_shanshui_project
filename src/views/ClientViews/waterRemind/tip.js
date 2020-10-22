@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 
-import { Link } from 'react-router-dom'
 import {  Button,  Modal } from 'antd';
 import './style.less';
-
+import { Model } from "../../../dataModule/testBone";
+import { ClientWaterPutUrl } from '../../../dataModule/UrlList';
 
 const { confirm } = Modal;
+const model = new Model()
 class Tip extends Component {
 
   constructor(props) {
@@ -15,10 +16,13 @@ class Tip extends Component {
   }
 
   showConfirm = () => {
+    const me = this;
     confirm({
       title: '已处理该提示?',
       onOk() {
-        console.log('OK');
+        me.dealStatus(me.props.tipData.aid)
+        let Newdata = me.props.getparams();
+        me.props.getCurrentPage(Newdata)
       },
       onCancel() {
         console.log('Cancel');
@@ -26,12 +30,29 @@ class Tip extends Component {
     });
   }
 
+  dealStatus = (aid)  => {
+      model.fetch(
+        '1:1',
+        `${ClientWaterPutUrl}${aid}/`,
+        'put',
+        function() {
+          console.log('success')
+        },
+        function() {
+          console.log('加载失败，请重试')
+        },
+        this.props.whetherTest
+      )
+      // let Newdata = this.props.getparams();
+      //   this.props.getCurrentPage(Newdata)
+  }
+
   render() {
     
     return (
         <div className='tip' >
-            <div className='time' >2019-05-12 10：33</div>
-            <Button className='button' onClick={ this.showConfirm }>Confirm</Button>
+            <div className='time' >{this.props.time}</div>
+            <Button className='button' onClick={ this.showConfirm }>{this.props.tipData.notice_content}</Button>
         </div>
     )
   }

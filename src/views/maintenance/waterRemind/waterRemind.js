@@ -202,17 +202,27 @@ class WaterRemind extends Component{
     this.getCurrentPage(params);
   }
 
+  // 截取时间
+  getTime = (time) => {
+    let year = '' 
+    let second = ''
+    if (time !== null ) {
+    year = time.slice(0,10)
+    second = time.slice(11,19)
+    return  year + ' ' + second
+    }
+  }
+
   render() {
-    const equipment_id = this.props.match.params.equipment_id
     const allowClear = true
-    const {data, isLoading, showPagination, size, total, whetherTest, currentPage, } = this.state;
+    const {data, isLoading, showPagination, size, total, currentPage, } = this.state;
     const tableDate = [];
     if(data !== undefined ) {
       data.map((item, index) => {
         tableDate.push({
-          measurement: item.measurement,
+          measurement: parseFloat(item.measurement).toFixed(2),
           notice_content: item.notice_content,
-          notice_time: item.notice_time,
+          notice_time: this.getTime(item.notice_time),
           type_name: item.type_name,
           key: index
         })

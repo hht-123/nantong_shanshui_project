@@ -17,12 +17,7 @@ function fetch(me, params = null, methods = 'post', thenFun = null, catchFun = n
    *  thenFun 为正确获取 response 后的回调函数
    *  catchFun 是异步请求错误后的回调函数
    */
-  if (whetherTest) {
-    // 设置基础 url，而后设置 url 时会自动拼接
-    axios.defaults.baseURL = 'http://localhost:3008/'
-  } else {
-    axios.defaults.baseURL = originalUrl
-  }
+  axios.defaults.baseURL = originalUrl
   try {
     // 没有输入参数，直接退出
     if (params === null) throw new Error( 'fetch 报错：没有输入参数')
@@ -169,7 +164,7 @@ export class Model extends ModelMap{
   save(params = null, url='', thenFun = null, catchFun = null) {
     this.fetch(params, url, 'post', thenFun, catchFun)
 	}
-  
+
   validate(params) {
     // let filterResult = true
     // for (let i in params) {
@@ -270,7 +265,7 @@ export class Collection extends ModelArray{
 // // let testObject3 = { test1: 'a', test2: [] }
 // // console.log(bone.validate(testObject3))
 // // console.log(bone.get('cloneMap1'))
-// // console.log(bone.clone()) 
+// // console.log(bone.clone())
 
 // // const bone2 = new Model()
 // // bone2.set('123', '123')

@@ -1,41 +1,72 @@
-import { Table, Pagination, } from 'antd';
+import { Table, Pagination } from 'antd';
 import React, { Component } from 'react';
 
 
-class CalibrationMarkTable extends Component{
+class EquipMaintenanceTable extends Component{
+    handleStatusColor = (numb) => {
+      if ( numb === '等待维护' ) {
+        return  { color : 'red '}
+      }else if ( numb === '维护未结束' ) {
+        return  { color : 'red '}
+      }
+    }
 
     render() {
       const { isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
 
       const columns =  [
         {
-          title: '时间',
-          dataIndex: 'calibrate_time',
+          title: '报修时间',
+          dataIndex: 'repair_time',
           align: 'center',
-          width: 160
+          width: 120
         },
         {
-          title: '传感器',
-          dataIndex: 'type_name',
+          title: '维护时间',
+          dataIndex: 'maintain_time',
           align: 'center',
-          width: 170
+          width: 120
         },
         {
-          title: '标定理论值',
-          dataIndex: 'theoretical_value',
+          title: '维护原因',
+          dataIndex: 'maintain_cause',
           align: 'center',
-          width: 170,
+          width: 120
         },
         {
-          title: '标定实际值',
-          dataIndex: 'actual_value',
+          title: '设备状况描述',
+          dataIndex: 'fault_description',
           align: 'center',
         },
         {
-          title: '标定补偿值',
-          dataIndex: 'calibrate_compensation',
+          title: '维护结果',
+          dataIndex: 'maintain_result',
           align: 'center',
+          width: 120,
+          render: text => <div style={this.handleStatusColor(text)}>{text}</div>
         },
+        {
+          title: '维护状态',
+          dataIndex: 'maintain_status',
+          align: 'center',
+          width: 120,
+          render: text => <div style={this.handleStatusColor(text)}>{text}</div>
+        },
+        {
+            title: '负责人',
+            dataIndex: 'responsible_person',
+            align: 'center',
+            width: 120
+        },
+        // {
+        //   title: '操作',
+        //   dataIndex: 'action',
+        //   align: 'center',
+        //   width: 80,
+        //   render: (text, record, index) => {
+        //     return <Icon type="edit" theme="twoTone" onClick={() => this.props.showEditModal(record)}/>
+        //   }
+        // }
       ];
 
         return (
@@ -82,4 +113,4 @@ class CalibrationMarkTable extends Component{
     }
 }
 
-export default CalibrationMarkTable;
+export default EquipMaintenanceTable;

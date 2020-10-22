@@ -16,7 +16,7 @@ class EquipMaintenanceTable extends Component{
 
       const columns =  [
         {
-          title: '报修时间',
+          title: '登记时间',
           dataIndex: 'repair_time',
           align: 'center',
           width: 120

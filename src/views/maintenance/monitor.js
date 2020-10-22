@@ -27,6 +27,7 @@ class Monitor extends Component{
       equipSensor:[],
       CompanyModalVisible: false,  //客户信息是否显示
       equipModalVisible:false,    //设备详情是否显示
+      keyValue: "",             //用于时间重置
       companyInfo: [],
       equipmentInfo:[],
     }
@@ -238,7 +239,8 @@ class Monitor extends Component{
     let params = this.getSensorParams("001");
     this.getSensorData(params);
     this.setState({
-      search_begin_time: null
+      search_begin_time: null,
+      keyValue: new Date(),
     })
   }
 
@@ -312,6 +314,17 @@ class Monitor extends Component{
     })
   }
 
+  // 截取时间
+  getTime = (time) => {
+    let year = '' 
+    let second = ''
+    if (time !== null ) {
+    year = time.slice(0,10)
+    second = time.slice(11,19)
+    return  year + ' ' + second
+    }
+  }
+
   render() {
     const equipment_id = this.props.match.params.equipment_aid;
     const { whetherTest, CompanyModalVisible, equipModalVisible, equipmentInfo, companyInfo } = this.state
@@ -322,11 +335,11 @@ class Monitor extends Component{
     const temper = [];
     if (this.state.sensorData !== undefined ) {
         this.state.sensorData.map((item, index) => {
-          time.push(item.time)
-          pH.push(item.ph)
-          orp.push(item.orp)
-          conduct.push(item.conduct)
-          temper.push(item.temper)
+          time.push(this.getTime(item.time))
+          pH.push(parseFloat(item.ph).toFixed(2))
+          orp.push(parseFloat(item.orp).toFixed(2))
+          conduct.push(parseFloat(item.conduct).toFixed(2))
+          temper.push(parseFloat(item.temper).toFixed(2))
           return null;
       })
     }
@@ -387,7 +400,7 @@ class Monitor extends Component{
                   <div className='status' >设备状态</div>
                 </span>
                 <span className='main' onClick={ this.showEquipmentModal } >
-                  <Icon className='icon' type="profile" theme="filled" style={{ color: '#00A0E9'}} />
+                  <Icon className='icon' type="profile" theme="filled" style={{ color: '#00A0E9' }} />
                   <div className='describe' style={{ color: '#00A0E9' }} >设备详情</div>
                 </span>
                 <EquipInfo
@@ -403,6 +416,7 @@ class Monitor extends Component{
                     this.state.equipSensor.map((item, index) => {
                     return  <TabPane tab={ item.type_name } key={ index }>
                                 <RangePicker className='time' 
+                                  key={ this.state.keyValue }
                                   onChange={ this.handleBeginTime } 
                                 />
                                 <Button type="primary" className='search' onClick={ this.searchInfo } >搜索</Button>
