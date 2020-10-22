@@ -1,9 +1,9 @@
  import React,{ Component } from 'react';
 import { Input, Button, message } from 'antd';
-import '../../style/wrapper.less';
-import './style/seneor.less';
+import '../../../style/wrapper.less';
+import './style.less';
 import  EquipmentScrapTable  from '../equipmentScrap/EquipmentScrapTable';
-import { Model} from '../../dataModule/testBone';
+import { Model} from '../../../dataModule/testBone';
 
 const model = new Model();
 

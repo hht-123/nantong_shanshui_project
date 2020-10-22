@@ -26,7 +26,7 @@ import EquipmentMaintenance from '../../views/maintenance/equipmentMaintenance/e
 import WaterRemind from '../../views/maintenance/waterRemind/waterRemind';
 import SensorCalibration from '../../views/maintenance/sensorCalibration/sensorCalibration';
 import RolePower from '../../views/accountAndRole/rolePower'
-import index from '../../views/equipmentScrap/index';
+import equipmentScrap from '../../views/fixedAssets/equipmentScrap';
 
 //客户端页面
 import  ClientIndex  from '../../views/ClientViews/index/index.js';
@@ -95,7 +95,7 @@ class App extends Component {
                   <Route path='/app/equipment' component={(props) => <EpuipmentInfo {...props}/>} />
                   <Route path='/app/waterRemind/:equipment_id' component={WaterRemind} />
                   <Route path='/app/sensorCalibratin/:equipment_id' component={SensorCalibration} />
-                  <Route path='/app/equipmentScrap' component={index} />
+                  <Route path='/app/equipmentScrap' component={equipmentScrap} />
                   {/* 客户端页面路由 */}
                   <Route path='/app/clientIndex' component={ClientIndex} />
                   <Route path='/app/clientMonitor/:equipment_aid' component={ClientMonitor} />
