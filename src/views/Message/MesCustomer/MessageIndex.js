@@ -7,10 +7,9 @@ import AddMesCustomer from './AddMesCustomer';
 import {Model} from '../../../dataModule/testBone';
 import {messageCUrl} from '../../../dataModule/UrlList';
 import EditMesModal from './editMesModal';
-
+import ContactModal from './ContactModal';
 
 const model = new Model();
-
 
 class MessageIndex extends Component{
     constructor(props){
@@ -29,6 +28,8 @@ class MessageIndex extends Component{
             Visible: false,   //addMesCustomer是否显示
             editModelVisible: false , //editModal是否显示
             editInfo: {},             //获取到编辑行的信息
+            contactVisble: false,       //显示联系人弹窗
+            client_id:{}              //获取客户的id并给联系人组件
         }  
     }
 
@@ -141,11 +142,22 @@ class MessageIndex extends Component{
             Visible: true,
         });
     };
+
+    showContactModal = (record) => {
+        this.setState({
+            contactVisble: true,
+        })
+        record === undefined ? null :
+        this.setState({
+            client_id: record
+        })
+    }
     
     closeAddModal = () => {
         this.setState({
             Visible: false,
             editModalVisible: false,
+            contactVisble: false,
         })
     }
     
@@ -178,8 +190,6 @@ class MessageIndex extends Component{
             this.state.whetherTest
         )
     }
-    
-
 
     render(){
         const {data , whetherTest} = this.state;
@@ -200,7 +210,6 @@ class MessageIndex extends Component{
             return null;
         })
     }
-
 
         return(
             <div>
@@ -244,7 +253,14 @@ class MessageIndex extends Component{
                                 changeSize={ this.getSize }
                                 currentPage={ this.state.currentPage }
                                 showEditModal={ this.showEditModal }
+                                showContactModal = { this.showContactModal }
                                 deleteInfo = { this.deleteInfo  }
+                            />
+                            <ContactModal
+                                whetherTest={whetherTest}
+                                cancel={ this.closeAddModal }
+                                visible={ this.state.contactVisble }
+                                client_id = { this.state.client_id }
                             />
                             <EditMesModal
                                 whetherTest={ whetherTest }
@@ -259,8 +275,5 @@ class MessageIndex extends Component{
            </div>  
         )
     }
-
-
-   
 }
 export default MessageIndex;

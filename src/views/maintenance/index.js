@@ -20,6 +20,7 @@ class MaintenanceIndex extends Component {
             status: '0',
             region: '',
             whetherTest: false, 
+            keyStatus: '',
         }
       }
     
@@ -80,7 +81,8 @@ class MaintenanceIndex extends Component {
       this.setState({
        client_unit: '',
        status: '0',
-       region:''
+       region:'',
+       keyStatus: new Date()
       })
       const me = this
       model.fetch(
@@ -167,7 +169,7 @@ class MaintenanceIndex extends Component {
                 <Input className='user' name='client_unit' value={ this.state.client_unit } onChange={ this.changeValue } />
                 <div className='search-status'>设备状态:</div>
                 <div className='status'>
-                    <Select size='small' allowClear={ allowClear }  style={{ width: 120, }} onChange={ this.handleChange }>
+                    <Select size='small' key={this.state.keyStatus} allowClear={ allowClear }  style={{ width: 120, }} onChange={ this.handleChange }>
                         <Option value="0">在线</Option>
                         <Option value="1">报修</Option>
                         <Option value="2">停运</Option>

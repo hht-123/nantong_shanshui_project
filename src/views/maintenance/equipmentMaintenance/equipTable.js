@@ -1,4 +1,4 @@
-import { Table, Pagination, Icon } from 'antd';
+import { Table, Pagination, Icon, Tooltip } from 'antd';
 import React, { Component } from 'react';
 
 
@@ -64,7 +64,13 @@ class EquipMaintenanceTable extends Component{
           align: 'center',
           width: 80,
           render: (text, record, index) => {
-            return <Icon type="edit" theme="twoTone" onClick={() => this.props.showEditModal(record)}/>
+            return <div>
+                      <Tooltip title="编辑信息">
+                        <Icon type="edit" theme="twoTone" 
+                            onClick={() => this.props.showEditModal(record)}
+                        />
+                      </Tooltip>
+                    </div>
           }
         }
       ];

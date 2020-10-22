@@ -96,7 +96,7 @@ class ClientSensorCalibration extends Component{
           me.setState({
             equipmentIdData: response.data.data[0]
           })
-          //获得设备对应的传感器
+          // //获得设备对应的传感器
           let sensor = me.getSensor(me.state.equipmentIdData.equipment_code);
           me.getSensors(sensor);
           //获得标定记录数据
@@ -134,6 +134,7 @@ class ClientSensorCalibration extends Component{
     let me = this;
     model.fetch(
       params,
+      // 'api/waterRemind.json',
       device,
       'get',
       function(response) {

@@ -31,7 +31,7 @@ class contactmes extends Component{
     componentDidMount() {
         let params = this.getParams();
         this.getCurrentPage(params);
-        this.getClientUnit(this.props.match.params.client_id);
+        this.getClientUnit(this.props.client_id);
     }
 
     //获取数据
@@ -68,7 +68,7 @@ class contactmes extends Component{
         )
     }
 
-    getParams( contact_person = null, client_id = this.props.match.params.client_id ) {
+    getParams( contact_person = null, client_id = this.props.client_id ) {
         let params = {};
         params = {
             contact_person,
@@ -151,7 +151,7 @@ class contactmes extends Component{
     }
 
     render(){
-        const client_id = this.props.match.params.client_id
+        const client_id = this.props.client_id
         const {data, Visible, whetherTest, isLoading, editModalVisible, editInfo } = this.state;
         const tableDate = [];
         if(data !== undefined){
@@ -169,19 +169,13 @@ class contactmes extends Component{
 
         return(
             <div className='contact' >
-                <PageHeader className='row'
-                    onBack={() => window.history.back()}
-                    title="返回"
-                />
-                <span className="name">客户单位：{ this.state.client_unit }</span>
-                <div className="wrapper">
                     <div>
                         <Button type="primary" className="but" onClick={this.showAddModal}>添加联系人</Button>
                         <AddModal
                             whetherTest={ whetherTest }
                             Visible={ Visible }  //这里把state里面的Visible传递到子组件
                             cancel={ this.closeAddModal }
-                            client_id = { client_id }
+                            // client_id = { client_id }
                             getParams = { this.getParams.bind(this) }
                             getCurrentPage = { this.getCurrentPage.bind(this) }
                         />
@@ -202,7 +196,6 @@ class contactmes extends Component{
                             getCurrentPage = {this.getCurrentPage.bind(this)}
                         />
                     </div>
-                </div>
             </div>
         )
     }
