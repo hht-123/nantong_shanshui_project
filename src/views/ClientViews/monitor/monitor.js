@@ -312,6 +312,15 @@ class ClientMonitor extends Component{
     })
   }
 
+  // 截取时间
+  getTime = (time) => {
+    let year = '' 
+    let second = ''
+    year = time.slice(0,10)
+    second = time.slice(11,19)
+    return  year + ' ' + second
+  }
+
   render() {
     const equipment_id = this.props.match.params.equipment_aid;
     const { whetherTest, CompanyModalVisible, equipModalVisible, equipmentInfo, companyInfo } = this.state
@@ -322,11 +331,11 @@ class ClientMonitor extends Component{
     const temper = [];
     if (this.state.sensorData !== undefined ) {
         this.state.sensorData.map((item, index) => {
-          time.push(item.time)
-          pH.push(item.ph)
-          orp.push(item.orp)
-          conduct.push(item.conduct)
-          temper.push(item.temper)
+          time.push(this.getTime(item.time))
+          pH.push(parseFloat(item.ph).toFixed(2))
+          orp.push(parseFloat(item.orp).toFixed(2))
+          conduct.push(parseFloat(item.conduct).toFixed(2))
+          temper.push(parseFloat(item.temper).toFixed(2))
           return null;
       })
     }
@@ -368,13 +377,13 @@ class ClientMonitor extends Component{
                   </Link>
                 </span>
                 <span className='main'>
-                  <Link to={`/app/equipmentMaintenance/${ equipment_id}`}>
+                  <Link to={`/app/clientEquipMaintenace/${ equipment_id}`}>
                     <Icon className='icon' type="tool" theme="filled" />
                     <div className='describe' >设备维护</div>
                   </Link>
                 </span>
                 <span className='main'>
-                <Link to={`/app/sensorCalibratin/${ equipment_id}`}>
+                <Link to={`/app/clientSensorCalibration/${ equipment_id}`}>
                     <Icon className='icon' type="dashboard" theme="filled" style={{ color: '#00A0E9' }} />
                     <div className='describe' style={{ color: '#00A0E9' }} >传感器标定</div>
                   </Link>

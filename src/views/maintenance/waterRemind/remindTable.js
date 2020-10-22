@@ -12,7 +12,7 @@ class WaterRemindInfo extends Component{
           title: '时间',
           dataIndex: 'notice_time',
           align: 'center',
-          width: 160
+          width: 200
         },
         {
           title: '传感器名称',
@@ -30,6 +30,7 @@ class WaterRemindInfo extends Component{
           title: '提示内容',
           dataIndex: 'notice_content',
           align: 'center',
+          width: 250,
         },
       ];
 

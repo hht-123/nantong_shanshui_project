@@ -30,8 +30,8 @@ import SensorCalibration from '../../views/maintenance/sensorCalibration/sensorC
 import  ClientIndex  from '../../views/ClientViews/index/index.js';
 import ClientMonitor from '../../views/ClientViews/monitor/monitor';
 import ClientWaterRemind from '../../views/ClientViews/waterRemind/waterRemind';
-
-
+import ClientEquipMaintenance from '../../views/ClientViews/equipmentMaintenance/index.js'
+import ClientSensorCalibration from '../../views/ClientViews/sensorCalibration/index';
 
 import { actionCreators as indexActionCreators } from '../index/store';
 
@@ -95,7 +95,8 @@ class App extends Component {
                   <Route path='/app/clientIndex' component={ClientIndex} />
                   <Route path='/app/clientMonitor/:equipment_aid' component={ClientMonitor} />
                   <Route path='/app/clientWaterRemind/:equipment_id' component={ClientWaterRemind} />
-
+                  <Route path='/app/clientEquipMaintenace/:equipment_id' component={ClientEquipMaintenance} />
+                  <Route path='/app/clientSensorCalibration/:equipment_id' component={ClientSensorCalibration} />
                 </Switch>
               </Content>
             </Layout>

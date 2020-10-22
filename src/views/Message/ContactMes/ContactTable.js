@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Icon,  } from 'antd';
+import { Table, Icon, Popconfirm  } from 'antd';
 import '../style/messtable.less';
 
 
@@ -40,8 +40,19 @@ class EditableTable extends Component {
             //<icon 图标
             return (
             <div>
-              <Icon type="edit" className="edit"  theme="twoTone" style={{fontSize:'20px' }} onClick={() => this.props.showEditModal(record)}/>
-              <Icon type="delete" theme="twoTone"  style={{fontSize:'20px' }} onClick={() => this.props.deleteInfo(record.key)} />
+              <Icon type="edit" className="edit"  theme="twoTone" style={{fontSize:'20px' }} 
+                onClick={() => this.props.showEditModal(record)}
+              />
+              <Popconfirm
+                    title="确定删除该条记录?"
+                    onConfirm={() => this.props.deleteInfo(record.key)}
+                    okText="是"
+                    cancelText="否"
+              >
+                <Icon type="delete" theme="filled"  style={{ fontSize:'20px', color:'red', }} 
+                  // onClick={() => this.props.deleteInfo(record.key)} 
+                />
+              </Popconfirm>
             </div>
             )
           }
