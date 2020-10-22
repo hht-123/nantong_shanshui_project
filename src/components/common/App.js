@@ -12,7 +12,7 @@ import Index from '../index/index';
 // import noMatch from './404';
 import EngineInfo from '../../views/basicInfo/engineInfo';
 import SensorInfo from '../../views/basicInfo/sensorInfo';
-import Equipment from '../../views/fixedAssets/equipmentInfo/route';
+import EpuipmentInfo from '../../views/fixedAssets/equipmentInfo';
 import MaintenanceIndex from '../../views/maintenance/index';
 import MessageIndex from '../../views/Message/MesCustomer/MessageIndex';
 import ContactIndex from '../../views/Message/ContactMes/ContactIndex';
@@ -26,6 +26,7 @@ import EquipmentMaintenance from '../../views/maintenance/equipmentMaintenance/e
 import WaterRemind from '../../views/maintenance/waterRemind/waterRemind';
 import SensorCalibration from '../../views/maintenance/sensorCalibration/sensorCalibration';
 import RolePower from '../../views/accountAndRole/rolePower'
+import index from '../../views/equipmentScrap/index';
 
 //客户端页面
 import  ClientIndex  from '../../views/ClientViews/index/index.js';
@@ -91,16 +92,17 @@ class App extends Component {
                   <Route path='/app/sensor' component={(props) =><SensorInfo {...props}/>} />
                   <Route path='/app/equipmentMaintenance/:equipment_id' component={EquipmentMaintenance} />
                   <Route path='/app/contact/:client_id' component={ContactIndex} />
-                  <Route path='/app/equipment' component={(props) => <Equipment {...props}/>} />
+                  <Route path='/app/equipment' component={(props) => <EpuipmentInfo {...props}/>} />
                   <Route path='/app/waterRemind/:equipment_id' component={WaterRemind} />
                   <Route path='/app/sensorCalibratin/:equipment_id' component={SensorCalibration} />
+                  <Route path='/app/equipmentScrap' component={index} />
                   {/* 客户端页面路由 */}
                   <Route path='/app/clientIndex' component={ClientIndex} />
                   <Route path='/app/clientMonitor/:equipment_aid' component={ClientMonitor} />
                   <Route path='/app/clientWaterRemind/:equipment_id' component={ClientWaterRemind} />
                   <Route path='/app/clientEquipMaintenace/:equipment_id' component={ClientEquipMaintenance} />
                   <Route path='/app/clientSensorCalibration/:equipment_id' component={ClientSensorCalibration} />
-
+                 
                   <Route path='/app/accountManagement' component={AccountManagement}/>
                   <Route path='/app/rolePower' component={RolePower}/>
 

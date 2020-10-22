@@ -2,6 +2,7 @@ import { Table, Pagination,  Icon, Button, Popconfirm, Tooltip } from 'antd';
 import React, { Component } from 'react';
 import '../style/messtable.less';
 
+
 class MessageTable extends Component{
 
     render() {

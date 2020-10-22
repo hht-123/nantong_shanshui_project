@@ -84,8 +84,8 @@ class AddMesCustomer extends Component{
         
     render(){
         const { getFieldDecorator } = this.props.form;
-        const { confirmLoading, } = this.state;
-
+        const { confirmLoading } = this.state;
+        console.log(this.state);
         
         const formItemLayout = {
             labelCol: {

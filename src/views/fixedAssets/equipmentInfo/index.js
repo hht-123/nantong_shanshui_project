@@ -6,8 +6,8 @@ import EquipmentTable from './equipmentTable';
 import { Model } from "../../../dataModule/testBone";
 import { epuipmentInfoUrl, sensorOfequipmentUrl } from '../../../dataModule/UrlList';
 import EngineSensorModal from './modal/engineSensorModal';
-import { Link } from 'react-router-dom';
-
+import CreateModal from './modal/createModal';
+import EditModal from './modal/editModal';
 
 const model = new Model();
 
@@ -24,9 +24,12 @@ class EpuipmentInfo extends Component {
         isLoading: false,             //是否加载
         data: [],                     //表格数据
         sensorModalData: [],          //传感器数据
-        sensorTitle: '',              //当前传感器的设备的名称
+        sensorTitle: '',              //当前传感器的设备的名称  编辑
         currentPage: 1,               //当前页面
         total: 0,                     //一共有多少条数据
+        createVisible: false,         //显示创建弹窗
+        editVisible: false,           //显示编辑弹窗
+        currentEnquimentInfo: {},     //需要编辑的当前设备信息
       }
   }
 
@@ -156,6 +159,16 @@ class EpuipmentInfo extends Component {
         this.getSensorInfo({equipment_id: record.key});
         this.setState({sensorTitle: record.equipment_code});
         break;
+      case 'create':
+        this.setState({createVisible: true});
+        break;
+      case 'edit':
+        this.getSensorInfo({equipment_id: record.key});
+        this.setState({
+          editVisible: true,
+          currentEnquimentInfo: record,
+        });
+        break;
       default:
         return 0;
     }
@@ -165,6 +178,8 @@ class EpuipmentInfo extends Component {
   closeModal = () => {
     this.setState({
       sensorModalVisiable: false,
+      createVisible: false,
+      editVisible: false
     })
   }
 
@@ -183,11 +198,12 @@ class EpuipmentInfo extends Component {
             }))
             return tableDate;
           }
-    }
+  }
+
   
   render() {
     const { searchEngineCode, searchEquipmentCode, isLoading, showPagination, size, 
-      total, sensorModalVisiable, currentPage, sensorModalData, sensorTitle} = this.state;
+      total, sensorModalVisiable, currentPage, sensorModalData, sensorTitle, createVisible, editVisible, currentEnquimentInfo} = this.state;
     const tableDate = this.handleData();
     return(
       <div>
@@ -218,10 +234,20 @@ class EpuipmentInfo extends Component {
             <div style={{marginTop: "15px"}}>
                   <Button className="button" onClick={this.searchInfo}>搜索</Button>
                   <Button className="button" onClick={this.handleReset}>重置</Button>
-                  <Link to="/app/equipment/create/">
-                    <Button type="primary" className="button">新增设备</Button>
-                  </Link>
+                  <Button type="primary" className="button" onClick={() => this.showModal('create')}>新增设备</Button>
             </div>
+            <CreateModal 
+              visible={ createVisible }
+              closeModal={ this.closeModal }
+              getCurrentPage={ this.getCurrentPage}
+            />
+            <EditModal 
+              visible={ editVisible }
+              closeModal={ this.closeModal }
+              data={ currentEnquimentInfo }
+              sensorModalData={ sensorModalData }
+              getCurrentPage={ this.getCurrentPage}
+            />
           </div>
             <EquipmentTable 
               className='tableWrapper'
@@ -232,7 +258,7 @@ class EpuipmentInfo extends Component {
               total={ total }
               changePage={ this.getPage }
               changeSize={ this.getSize }
-              showSensorModal = {this.showModal}
+              showModal = {this.showModal}
               currentPage={ currentPage }
             />
             <div>

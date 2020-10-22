@@ -410,6 +410,7 @@ class Monitor extends Component{
                   data={ equipmentInfo }
                 />
             </div>
+              <div>
               <Tabs className='tab' defaultActiveKey="0" onChange={this.callback} type='card'>
                   {
                     this.state.equipSensor.map((item, index) => {
@@ -428,6 +429,7 @@ class Monitor extends Component{
                     })
                   }
               </Tabs>
+              </div>
         </div>
       </div>
     )

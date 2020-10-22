@@ -1,18 +1,25 @@
 import React, { Component } from 'react';
-import './style.less'
-import {  Select, Icon, message} from 'antd';
-import { Model } from '../../../dataModule/testBone';
-import { sensorModelUrl, sensorCodeUrl } from '../../../dataModule/UrlList';
+import '../style.less'
+import { Select, Icon, message } from 'antd';
+import { Model } from '../../../../dataModule/testBone';
+import { sensorModelUrl, sensorCodeUrl } from '../../../../dataModule/UrlList';
 
 const model = new Model();
 const { Option } = Select;
 
-class editSensorSetting extends Component {
+class EditSensorSetting extends Component {
     constructor(props) {
         super(props);
         this.state = {
             sensorModels: [],      //所有传感器型号
             sensorCodes: [],       //所有传感器编号
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        if(this.props.item !== prevProps.item){
+            
+            this.getSensorModel({type_name: this.props.item.type_name});
         }
     }
 
@@ -54,28 +61,35 @@ class editSensorSetting extends Component {
         )
     }
 
+    getCodes = () =>{
+        if(this.state.sensorModels.length > 0){
+            const { sensorModels } = this.state;
+            const string = this.props.item.sensor_model;
+            const index = sensorModels.findIndex(item => string === item.sensor_model);
+            const modalAid = sensorModels[index].aid;
+            this.getSensorCode({sensor_model_id: modalAid})
+        }
+    }
+
     //处理选择
     handleSelect = (string, name) => {
+        const { selectChange, getSensorTypes, getSensorAid } = this.props;
         switch (name) {
             case 'type':
-                this.props.freshCodeAndModel(this.props.index);
-                this.setState({sensor_type:string});
-                this.getSensorModel({type_name:string});
-                this.props.getSensorTypes(string, this.props.index);     
+                this.getSensorModel({type_name: string});
+                selectChange('type', this.props.index, string);
+                getSensorTypes(string, this.props.index);     
                 break;
             case 'model':
-                const { sensorModels } = this.state;
-                this.setState({sensor_model:string});
-                const index = sensorModels.findIndex(item => string === item.sensor_model);
-                const modalAid = sensorModels[index].aid;
-                this.getSensorCode({sensor_model_id: modalAid})
+                selectChange('model', this.props.index, string);
                 break;
             case 'code':
+                selectChange('code', this.props.index, string);
                 const { sensorCodes } = this.state;
                 this.setState({sensor_code: string});
                 const find = sensorCodes.findIndex(item => string === item.sensor_code);
                 const codeAid = sensorCodes[find].aid;
-                this.props.getSensorAid(codeAid);
+                getSensorAid(codeAid, this.props.index);
                 break;
             default:
                 return 0;
@@ -83,6 +97,8 @@ class editSensorSetting extends Component {
     }
 
     render() {
+        const { addInfo, delectInfo, number,  types, index, item } = this.props;
+        const { sensorModels, sensorCodes } = this.state;
         return(
             <div>
                 <div className='eCreateBlock'>
@@ -90,8 +106,7 @@ class editSensorSetting extends Component {
                     <Select
                         className='choice'
                         onSelect={(string) => this.handleSelect(string, 'type')} 
-                        placeholder='请选择传感器类型'
-                        key={ freshType }
+                        value={ item.type_name }
                     >
                     {types.size !== 0? types.map((item) => <Option key={item}  value={item}>{item}</Option>) : null}
                     </Select>
@@ -102,8 +117,8 @@ class editSensorSetting extends Component {
                     <Select 
                         className='choice' 
                         onSelect={(string) => this.handleSelect(string,'model')} 
-                        placeholder='请选择传感器型号'
-                        key={ freshModel[index] }
+                        value={ item.sensor_model  }
+                        onMouseEnter={this.getModels}
                     >
                         {
                             sensorModels.size !== 0? 
@@ -118,12 +133,12 @@ class editSensorSetting extends Component {
                     <Select 
                         className='choice'
                         showSearch
-                        key={ freshCode[index] }
-                        placeholder="请选择传感器编号"
+                        value={ item.sensor_code }
                         optionFilterProp="children"
                         filterOption={(input, option) =>
                             option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                         }
+                        onFocus={this.getCodes}
                         onSelect={(string) => this.handleSelect(string, 'code')} 
                     >
                         {
@@ -153,6 +168,6 @@ class editSensorSetting extends Component {
     }
 }
 
-export default editSensorSetting;
+export default EditSensorSetting;
 
 

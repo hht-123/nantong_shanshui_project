@@ -23,6 +23,8 @@ export const allEngineName = 'app/main_engine_code_and_name/'   //获取所有�
 export const epuipmentInfoUrl = 'app/equipment_to_engine_name/';  //设备的所有信息
 export const sensorOfequipmentUrl = 'app/equipment_to_sensor3/';  //设备对应的传感器的路由
 export const addEquipment = 'equipment/';                         //新增设备
+export const editEquipment = 'equipment/';                        //新增设备
+export const sensorequipmentUrl = 'app/deviceNum_to_typename/'    //通过设备编号获取传感器信息
 
 export const maintenanceUrl = 'app/operation/';
 export const equipmentUrl = 'app/real_time_monitoring_high/'
