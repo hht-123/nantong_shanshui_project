@@ -35,6 +35,7 @@ export default class AccountManagement extends Component{
 
       record: {},
       powers: [],
+      powersObject: {},
       rolePowersOfSelectedAccount: [],
       accountPowersOfSelectedAccount: []
     }
@@ -83,6 +84,13 @@ export default class AccountManagement extends Component{
       originalUrl + power,
       methods,
       function (res) {
+        const powersObject = {}
+        for (let i = 0; i < res.data.length; i++) {
+          powersObject[res.data[i]['power_num']] = res.data[i]
+        }
+        me.setState({
+          powersObject: powersObject
+        })
         me.setState({
           powers: res.data
         })
@@ -205,7 +213,8 @@ export default class AccountManagement extends Component{
       record,
       powers,
       rolePowersOfSelectedAccount,
-      accountPowersOfSelectedAccount
+      accountPowersOfSelectedAccount,
+      powersObject
     } = this.state
 
     return(
@@ -266,6 +275,8 @@ export default class AccountManagement extends Component{
             powers={powers}
             rolePowersOfSelectedAccount={rolePowersOfSelectedAccount}
             accountPowersOfSelectedAccount={accountPowersOfSelectedAccount}
+            powersObject={powersObject}
+            record={record}
             changeAccountPowersOfSelectedAccount={this.changeAccountPowersOfSelectedAccount}
           />
 

@@ -1,6 +1,9 @@
 import React, { Component } from "react";
-import { Modal, Tree  } from "antd";
+import {message, Modal, Tree} from "antd";
+import {Model} from '../../../dataModule/testBone'
+import {originalUrl, user} from "../../../dataModule/UrlList";
 
+const model = new Model();
 const { TreeNode } = Tree;
 
 export default class EditPower extends Component {
@@ -26,11 +29,35 @@ export default class EditPower extends Component {
       return <TreeNode key={item.power_num} title={item.power} />;
     });
 
+  changePower = () => {
+    const powerIdList = []
+    const {powersObject, record} = this.props
+    for (let i = 0; i < this.props.accountPowersOfSelectedAccount.length; i++) {
+      powerIdList.push(powersObject[this.props.accountPowersOfSelectedAccount[i]]['aid'])
+    }
+    const powersString = powerIdList.join(',')
+    const params = {}
+    params['alter_power'] = 'yes'
+    params['power_id_str'] = powersString
+    console.log(params, record)
+    model.fetch(
+      params,
+      originalUrl + user + record.aid + '/',
+      'put',
+      function (res) {
+        message.success('修改权限成功！')
+      },
+      function (err) {
+        message.error('修改权限失败！')
+      }
+    )
+    this.props.handleOk('editPowerVisible')
+  }
+
 
   render() {
     const {
       visible,
-      handleOk,
       handleCancel,
       powers,
       accountPowersOfSelectedAccount
@@ -40,7 +67,7 @@ export default class EditPower extends Component {
       <Modal
         title="权限编辑"
         visible={visible}
-        onOk={() => handleOk('editPowerVisible')}
+        onOk={() => this.changePower()}
         onCancel={() => handleCancel('editPowerVisible')}
       >
         <Tree
