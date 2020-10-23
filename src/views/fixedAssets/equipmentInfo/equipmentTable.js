@@ -59,7 +59,7 @@ class EquipmentTable extends Component{
                   <Icon type="message" theme="twoTone" className="icon" onClick={() => this.props.showModal('sensor', record)}/>
                 </Popover>
                 <Popover content="填写设备报废单" title="设备报废" trigger="hover">
-                  <Icon type="tool" theme="twoTone"  className="icon" />
+                  <Icon type="tool" theme="twoTone"  className="icon"  onClick={() => this.props.showModal('scrap', record)} />
                 </Popover>
                 <Popover  content="填写设备报调拨单" title="设备调拨" trigger="hover">
                   <Icon type="home" theme="twoTone"  />

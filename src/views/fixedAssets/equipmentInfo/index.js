@@ -8,6 +8,7 @@ import { epuipmentInfoUrl, sensorOfequipmentUrl } from '../../../dataModule/UrlL
 import EngineSensorModal from './modal/engineSensorModal';
 import CreateModal from './modal/createModal';
 import EditModal from './modal/editModal';
+import ScrapModal from './modal/scrapModal';
 
 const model = new Model();
 
@@ -30,6 +31,8 @@ class EpuipmentInfo extends Component {
         createVisible: false,         //显示创建弹窗
         editVisible: false,           //显示编辑弹窗
         currentEnquimentInfo: {},     //需要编辑的当前设备信息
+        scrapListVisible: false,      //显示需填写的报废单
+        scrapEquipmentInfo:{}
       }
   }
 
@@ -169,6 +172,11 @@ class EpuipmentInfo extends Component {
           currentEnquimentInfo: record,
         });
         break;
+      case 'scrap':
+        this.setState({
+          scrapListVisible: true,
+          scrapEquipmentInfo: record,
+        })
       default:
         return 0;
     }
@@ -179,7 +187,8 @@ class EpuipmentInfo extends Component {
     this.setState({
       sensorModalVisiable: false,
       createVisible: false,
-      editVisible: false
+      editVisible: false,
+      scrapListVisible: false,
     })
   }
 
@@ -203,7 +212,8 @@ class EpuipmentInfo extends Component {
   
   render() {
     const { searchEngineCode, searchEquipmentCode, isLoading, showPagination, size, 
-      total, sensorModalVisiable, currentPage, sensorModalData, sensorTitle, createVisible, editVisible, currentEnquimentInfo} = this.state;
+      total, sensorModalVisiable, currentPage, sensorModalData, sensorTitle, createVisible, 
+      editVisible, currentEnquimentInfo, scrapListVisible, scrapEquipmentInfo} = this.state;
     const tableDate = this.handleData();
     return(
       <div>
@@ -267,6 +277,12 @@ class EpuipmentInfo extends Component {
                 title={ sensorTitle }
                 closeModal={ this.closeModal }
                 data={ sensorModalData }
+              />
+              {/* 加这里 */}
+              <ScrapModal 
+                visible={ scrapListVisible }
+                closeModal={ this.closeModal }
+                data = {scrapEquipmentInfo}
               />
             </div>
           </div>
