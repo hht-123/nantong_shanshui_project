@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import '../../../style/wrapper.less'
 import './style.less'
 import EngineTable from './engineTable';
-import { DatePicker,Button, Input, message } from 'antd';
+import { DatePicker, Button, Input, message } from 'antd';
 import { Model } from "../../../dataModule/testBone";
 import AddModal from './addModal';
 import EditModal from './editModal';
 import { enginInfoUrl } from '../../../dataModule/UrlList'
 
 const model = new Model();
-const {RangePicker} = DatePicker;
+const { RangePicker } = DatePicker;
 const dataSize = 'middle';
 
 class EngineInfo extends Component{
@@ -20,7 +20,7 @@ class EngineInfo extends Component{
       currentPage: 1,
       whetherTest: false,       //是否是测试  true为是 false为否
       showPagination: true,     //是否分页
-      isLoading: false,         //是否加载
+      isLoading: false,         //表格是否加载
       data: [],                 //表格数据 
       total: 0,                 //一共有多少条数据
       keyValue: "",             //用于重置
@@ -202,7 +202,7 @@ class EngineInfo extends Component{
       search_begin_time: null,
       search_end_time: null,
       currentPage: 1,
-      search: true,
+      search: false,
     })
   }
 

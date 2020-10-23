@@ -5,62 +5,56 @@ import { Table, Pagination } from 'antd';
 class EquipmentTable extends Component {
   render() {
     const { isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
+
     const columns =  [
-        {
-          title: '申请时间',
-          dataIndex: 'applicant_time',
-          align: 'center',
-          width: 150
-        },
-        {
-          title: '主机名',
-          dataIndex: 'host_name',
-          align: 'center',
-          width: 150
-        },
-        {
-          title: '主机编号',
-          dataIndex: 'host_number',
-          align: 'center',
-          width: 150
-        },
-        {
-          title: '设备编号',
-          dataIndex: 'equipment_code',
-          align: 'center',
-          width: 150
-        },
-        {
-          title: '仓库',
-          dataIndex: 'storehouse',
-          align: 'center',
-          width: 150,
-        },
-        {
-          title: '库位',
-          dataIndex: 'storage_location',
-          align: 'center'
-        },
-        
-        {
-          title: '备注',
-          dataIndex: 'node',
-          align: 'center',
-          width: 150
-        },
-        {
-          title: '操作',
-          dataIndex: 'action',
-          align: 'center',
-          width: 200,
-        } 
-         
-      ];
+      {
+        title: '申请时间',
+        dataIndex: 'applicant_time',
+        align: 'center',
+        width: 150
+      },
+      {
+        title: '主机编号',
+        dataIndex: 'host_number',
+        align: 'center',
+        width: 120
+      },
+      {
+        title: '主机名称',
+        dataIndex: 'host_name',
+        align: 'center',
+        width: 80
+      },
+      {
+        title: '设备编号',
+        dataIndex: 'equipment_code',
+        align: 'center',
+        width: 120
+      },
+      {
+        title: '报废原因',
+        dataIndex: 'scrapping_reasons',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '仓库',
+        dataIndex: 'transfer_unit_ads',
+        align: 'center',
+        width: 100,
+      },
+      {
+        title: '库位',
+        dataIndex: 'storage_location',
+        align: 'center',
+        width: 80,
+      },
+    ];
 
       return (
         <div 
           style={{
-              width: '100%',
+              width: '90%',
               position: 'relative',
               marginBottom: '30px',
           }}

@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
-import { DatePicker, Button, Input, message } from 'antd';
+import { DatePicker, Button, Input, message, Select} from 'antd';
 import '../../../style/wrapper.less';
-import './style.less';
-import ConfigureTalbe from './configureTable';
+import AllocationTable from './allocationTable';
 import { Model } from "../../../dataModule/testBone";
 import { equipmentConfiureUrl } from '../../../dataModule/UrlList';
 
 const model = new Model();
+const { Option } = Select;
 const { RangePicker } = DatePicker;
 
-class EpuipmentConfigure extends Component {
+class EpuipmentAllocation extends Component {
     constructor(props) {
         super(props);
         this.state = {
             keyValue: '' ,          //刷新搜索日期
+            key1: '',               //刷新下拉框
             search: false,          //是否搜索
             currentPage: 1,         //当前页面
             whetherTest: false,     //是否是测试  true为是 false为否
@@ -21,51 +22,51 @@ class EpuipmentConfigure extends Component {
             isLoading: false,       //表格是否加载
             data: [],               //表格数据 
             total: 0,               //一共有多少条数据
-            search_engine_code:'',         //搜索主机编号
-            search_equipment_code: '',     //搜索设备编号
-            search_time: []                //搜索时间
+            search_client_unit: '',  //客户单位
+            search_status: '',       //设备状态
+            search_time: [],         //搜索时间
         }
     }
 
     componentDidMount() {
-      let params = this.getparams();
-      this.getCurrentPage(params);
-    }
-  
-    //数据请求
-    getCurrentPage = (params) => {
-      for (let i in params) {
-        if (params[i] === undefined || params[i] === null) {
-          params[i] = ''
-        }
+        // let params = this.getparams();
+        // this.getCurrentPage(params);
       }
-      let me = this;
-      this.setState({isLoading: true})
-      model.fetch(
-        params,
-        equipmentConfiureUrl,
-        'get',
-        function(response) {
-          if (me.state.whetherTest === false) {
-            me.setState({
-              isLoading: false,
-              total: response.data.count,
-              data: response.data.data,
-              currentPage: params['currentPage'],
-            })
-          } else {
-            me.setState({
-              isLoading: false,
-              data: response.data.data,
-            })
+    
+      //数据请求
+      getCurrentPage = (params) => {
+        for (let i in params) {
+          if (params[i] === undefined || params[i] === null) {
+            params[i] = ''
           }
-        },
-        function() {
-          message.warning('加载失败，请重试')
-        },
-        this.state.whetherTest
-      )
-    }
+        }
+        let me = this;
+        this.setState({isLoading: true})
+        model.fetch(
+          params,
+          equipmentConfiureUrl,
+          'get',
+          function(response) {
+            if (me.state.whetherTest === false) {
+              me.setState({
+                isLoading: false,
+                total: response.data.count,
+                data: response.data.data,
+                currentPage: params['currentPage'],
+              })
+            } else {
+              me.setState({
+                isLoading: false,
+                data: response.data.data,
+              })
+            }
+          },
+          function() {
+            message.warning('加载失败，请重试')
+          },
+          this.state.whetherTest
+        )
+      }
 
     //处理日期函数
     handleDate(preDate) {
@@ -77,8 +78,7 @@ class EpuipmentConfigure extends Component {
       }
 
     //处理参数
-    getparams(currentPage=1, size=10, engine_code=null, equipment_code=null, search_time=null) {
-      console.log(search_time);
+    getparams(currentPage=1, size=10, client_unit=null, status=null, search_time=null) {
         let params = {};
         let begin_time = null;
         let end_time = null;
@@ -88,8 +88,8 @@ class EpuipmentConfigure extends Component {
         params = {
           currentPage,
           size,
-          equipment_code,
-          engine_code,
+          client_unit,
+          status,
           begin_time,
           end_time
         }
@@ -103,6 +103,11 @@ class EpuipmentConfigure extends Component {
         })
     }
 
+    //拉去框获取
+    handleSelect = (string) => {
+        this.setState({search_status: string});
+    }
+
     //搜索的时间
     handleTime = (value, dateString) => {
         this.setState({
@@ -113,8 +118,8 @@ class EpuipmentConfigure extends Component {
     //搜索按钮
     searchInfo = () => {
         this.setState({search: true});
-        const { search_engine_code, search_equipment_code, search_time } = this.state;
-        let params = this.getparams( 1, 10, search_engine_code, search_equipment_code, search_time);
+        const { search_client_unit, search_status, search_time } = this.state;
+        let params = this.getparams( 1, 10, search_client_unit, search_status, search_time);
         this.getCurrentPage(params);
     }
 
@@ -123,9 +128,10 @@ class EpuipmentConfigure extends Component {
         const params = this.getparams();
         this.getCurrentPage(params);
         this.setState({
-            search_engine_code: null,
             keyValue: new Date(),
-            search_equipment_code: null,
+            key1: new Date(),
+            search_status: null,
+            search_client_unit: null,
             search_time: null,
             currentPage: 1,
             search: false,
@@ -134,27 +140,25 @@ class EpuipmentConfigure extends Component {
 
     //翻页获取内容
   getPage = (currentPage, pageSize) => {
-    let [ search_engine_code, search_equipment_code, search_time ] =[null, null, null];
+    let [ search_client_unit, search_status, search_time ] =[null, null, null];
     if(this.state.search === true){
-      search_engine_code = this.state.search_engine_code;
-      search_equipment_code = this.state.search_equipment_code;
-      search_time = this.state.search_time;
+        search_client_unit = this.state.search_client_unit;
+        search_status = this.state.search_status;
+        search_time = this.state.search_time;
     }
-    
-    const params = this.getparams(currentPage, pageSize, search_engine_code, search_equipment_code, search_time)
+    const params = this.getparams(currentPage, pageSize, search_client_unit, search_status, search_time);
     this.getCurrentPage(params);
   }
 
   //改变pageSIze获取内容
   getSize = (current, size) => {
-    let [ search_engine_code, search_equipment_code, search_time ] =[null, null, null];
+    let [ search_client_unit, search_status, search_time ] =[null, null, null];
     if(this.state.search === true){
-      search_engine_code = this.state.search_engine_code;
-      search_equipment_code = this.state.search_equipment_code;
-      search_time = this.state.search_time;
+        search_client_unit = this.state.search_client_unit;
+        search_status = this.state.search_status;
+        search_time = this.state.search_time;
     }
-    
-    const params = this.getparams(1, size, search_engine_code, search_equipment_code, search_time)
+    const params = this.getparams(1, size, search_client_unit, search_status, search_time)
     this.getCurrentPage(params);
     document.scrollingElement.scrollTop = 0;
   }
@@ -163,28 +167,28 @@ class EpuipmentConfigure extends Component {
   handleData = () => {
     const { data } = this.state;
     if(data !== undefined) {
-      console.log(data);
       const tableDate = data.map((item) =>({
-          key: item.engine_code,
-          alert_time: item.alert_time,
-          equip_person: item.equip_person,
-          engine_code: item.engine_code,
-          engine_name: item.engine_name,
-          equipment_code: item.storehouse,
-          equipment_code: item.storage_location,
+          key: item.aid,
+          applicant_time: item.applicant_time,
+          equipment_code: item.equipment_code,
+          status: item.status,
+          applicant: item.applicant,
+          transfer_unit: item.transfer_unit,
+          transfer_unit_tel: item.transfer_unit_tel,
+          transfer_unit_ads: item.transfer_unit_ads,
+          allocation_reason: item.allocation_reason,
         }))
       return tableDate;
     }
   }
 
     render() {
-        const {isLoading, showPagination, size, total, currentPage} = this.state;
+        const {isLoading, showPagination, size, total, currentPage, key1} = this.state;
         const tableDate = this.handleData();
-        console.log(this.state.data);
 
         return(
             <div>
-                <div className='name'>固定资产</div>
+                <div className='name'>设备配置信息</div>
                 <div className='wrapper'>
                     <div className='func'>
                         <div style={{ float: 'left' }} >
@@ -195,22 +199,24 @@ class EpuipmentConfigure extends Component {
                         />
                         </div>
                         <div className="inputWrapper" >
-                            <div className="input" >主机编号:</div>
+                            <div className="input" >客户单位:</div>
                             <Input  
                                 style={{ width: "300px" }} 
-                                name="search_engine_code" 
+                                name="client_unit" 
                                 onChange={ this.handleChange }
-                                value={ this.state.search_engine_code }
+                                value={ this.state.client_unit }
                             />
                         </div>
                         <div className="inputWrapper" >
-                            <div className="input" >设备编号:</div>
-                            <Input  
-                            style={{ width: "300px" }} 
-                            name="search_equipment_code" 
-                            onChange={ this.handleChange }
-                            value={ this.state.search_equipment_code }
-                            />
+                            <div className="input" >设备状态:</div>
+                            <Select 
+                                style={{ width: 200}}
+                                onSelect={(string) => this.handleSelect(string)} 
+                                key={key1}
+                            >
+                                <Option key={1} value={1}>1</Option>
+                                {/* {aftersensorTypes.size !== 0? aftersensorTypes.map((item) => <Option key={item} value={item}>{item}</Option>) : null} */}
+                            </Select>
                         </div>
                         <div className="line"></div>
                         <div style={{marginTop: "15px"}}>
@@ -218,7 +224,7 @@ class EpuipmentConfigure extends Component {
                             <Button className="button" onClick={ this.handleReset }>重置</Button>
                         </div>
                     </div>
-                    <ConfigureTalbe 
+                    <AllocationTable 
                         data={ tableDate }
                         isLoading={ isLoading }
                         showPagination={ showPagination }
@@ -234,4 +240,4 @@ class EpuipmentConfigure extends Component {
     }
 }
 
-export default EpuipmentConfigure;
+export default EpuipmentAllocation;
