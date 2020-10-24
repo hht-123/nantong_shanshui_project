@@ -2,36 +2,40 @@ import React, { Component } from 'react';
 import {setCookie} from "../../helpers/cookies";
 import '../../style/login.less';
 import { Form, Icon, Input, Button, Checkbox, message, Spin } from 'antd';
+import { loginUrl } from '../../dataModule/UrlList';
+import { Model } from '../../dataModule/testBone';
 
+
+const model = new Model()
 const FormItem = Form.Item;
 
-const users = [{
-    username:'admin',
-    password:'admin'
-}, {
-  username:'reviewer1',
-  password:'reviewer1'
-}, {
-  username:'reviewer2',
-  password:'reviewer2'
-}, {
-  username:'reviewer3',
-  password:'reviewer3'
-}, {
-  username:'rectifier1',
-  password:'rectifier1'
-}, {
-  username:'rectifier2',
-  password:'rectifier2'
-}, {
-  username:'rectifier3',
-  password:'rectifier3'
-}];
+// const users = [{
+//     username:'admin',
+//     password:'admin'
+// }, {
+//   username:'reviewer1',
+//   password:'reviewer1'
+// }, {
+//   username:'reviewer2',
+//   password:'reviewer2'
+// }, {
+//   username:'reviewer3',
+//   password:'reviewer3'
+// }, {
+//   username:'rectifier1',
+//   password:'rectifier1'
+// }, {
+//   username:'rectifier2',
+//   password:'rectifier2'
+// }, {
+//   username:'rectifier3',
+//   password:'rectifier3'
+// }];
 
-function PatchUser(values) {  //匹配用户
-    const {username, password} = values;
-    return users.find(user => user.username === username && user.password === password);
-}
+// function PatchUser(values) {  //匹配用户
+//     const {username, password} = values;
+//     return users.find(user => user.username === username && user.password === password);
+// }
 
 class NormalLoginForm extends Component {
     state = {
@@ -39,27 +43,44 @@ class NormalLoginForm extends Component {
     };
     handleSubmit = (e) => {
         e.preventDefault();
+        const me = this
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 // console.log('Received values of operation: ', values);
-                if(PatchUser(values)){
-                    this.setState({
-                        isLoding: true,
-                    });
-                    values['_id'] = values.username
+                model.fetch(
+                    {account: values.username, password: values.password},
+                    loginUrl,
+                    'post',
+                    function(response) {
+                        values['username'] = response.data.username;
+                        values['_id'] = response.data.user_id;
+                        values['role_id'] = response.data.role_id;
+                        setCookie('mspa_user',JSON.stringify(values));
+                        message.success(response.msg); //成功信息
+                        me.props.history.push({pathname:'/app',state:values});
+                    },
+                    function() {
+                        message.error('login failed!'); //失败信息
+                    },
+                )
+                // if(PatchUser(values)){
+                //     this.setState({
+                //         isLoding: true,
+                //     });
+                //     values['_id'] = values.username
 
-                    // console.log(values);
-                    setCookie('mspa_user',JSON.stringify(values));
+                //     // console.log(values);
+                //     setCookie('mspa_user',JSON.stringify(values));
 
-                    message.success('login successed!'); //成功信息
-                    let that = this;
-                    setTimeout(function() { //延迟进入
-                        that.props.history.push({pathname:'/app',state:values});
-                    }, 2000);
+                //     message.success('login successed!'); //成功信息
+                //     let that = this;
+                //     setTimeout(function() { //延迟进入
+                //         that.props.history.push({pathname:'/app',state:values});
+                //     }, 2000);
 
-                }else{
-                    message.error('login failed!'); //失败信息
-                }
+                // }else{
+                //     message.error('login failed!'); //失败信息
+                // }
             }
         });
     };

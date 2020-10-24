@@ -5,6 +5,7 @@ import { getCookie, setCookie } from "../../helpers/cookies";
 import store from '../../store'
 import { Provider } from 'react-redux';
 import '../../style/index.less';
+import { Model } from '../../dataModule/testBone';
 
 import SideMenu from './SideMenu';
 import HeaderCustom from './HeaderCustom';
@@ -38,14 +39,16 @@ import ClientSensorCalibration from '../../views/ClientViews/sensorCalibration/i
 import AccountManagement from '../../views/accountAndRole/accountManagement'
 
 import { actionCreators as indexActionCreators } from '../index/store';
+import {verifyUrl} from '../../dataModule/UrlList';
+import {getUserId}  from '../../publicFunction/index';
 
-//const model = new Model();
-
+const model = new Model();
 const { Content, Footer, Sider } = Layout;
 
-class App extends Component {
+class App extends Component {verifyUrl
   state = {
     collapsed: getCookie("mspa_SiderCollapsed") === "true",
+    roleDate: '',
   };
 
   toggle = () => {
@@ -61,6 +64,24 @@ class App extends Component {
       setCookie("mspa_SiderCollapsed", false);
     }
     store.dispatch(indexActionCreators.getSensorType())   //获取所有传感器的类型
+    this.getRoleData()
+  }
+
+  getRoleData() {
+    const me = this
+    model.fetch(
+      {'_id': getUserId(), 'role_id': JSON.parse(getCookie("mspa_user")).role_id},
+      verifyUrl,
+      'get',
+      function(response) {
+        me.setState({
+          data: response.data.power_num
+        })
+    },
+    function() {
+      console.log('失败'); //失败信息
+    },
+    )
   }
 
   render() {
@@ -72,6 +93,9 @@ class App extends Component {
     } else {
       name = JSON.parse(getCookie("mspa_user")).username;
     }
+    if (this.state.data === undefined) return null
+    console.log(this.state.data)
+
     return (
       <Layout>
         <Provider store={store}>

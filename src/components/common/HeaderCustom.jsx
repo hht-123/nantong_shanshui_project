@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Layout, Icon } from 'antd';
+import { Layout, Icon, Dropdown, Menu } from 'antd';
 import history from './history';
 import { removeCookie } from "../../helpers/cookies";
 import { withRouter } from 'react-router-dom';
-// import { Link } from "react-router-dom";
 
 import '../../style/header.less';
 import logo from '../../statistics/logo.png';
@@ -59,6 +58,11 @@ class HeaderCustom extends Component{
     }
 
     render(){
+        const menu = (
+            <Menu>
+              <Menu.Item onClick={this.logout}>退出登陆</Menu.Item>
+            </Menu>
+          );
 
       return(
         <Header className="header-style header">
@@ -67,7 +71,17 @@ class HeaderCustom extends Component{
             <span className={'header-span'}>循环水智慧管家远程监控系统</span>
           {/* </Link> */}
           {/* <span className="date-span">{this.state.date.toLocaleString()}</span> */}
-          <Icon type="user" />
+          <div className={"user-icon-div"}>
+            <Dropdown overlay={menu}>
+              <a className="ant-dropdown-link" onClick={e => e.preventDefault()} style={{color: 'white'}}>
+                <span style={{marginRight: 5}}>
+                  <Icon type="user" style={{marginRight: 10}}/>
+                  {this.props.username}
+                </span>
+                <Icon type="down" />
+              </a>
+            </Dropdown>
+          </div>
         </Header>
       )
     }

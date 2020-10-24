@@ -57,9 +57,12 @@ class MessageTable extends Component{
                           查看
                       </Button> 
             }
-          },
+          }
+          
+        ];
 
-          {
+        if (true) {
+          columns.push({
             title: '操作',
             dataIndex: 'action',
             align: 'center',
@@ -87,8 +90,8 @@ class MessageTable extends Component{
                   </Popconfirm>
                 </div>)
             }
-          }
-        ];
+          })
+        }
 
         return (
           <div 

@@ -17,7 +17,7 @@ class MaintenanceIndex extends Component {
             aid: '',
             equipment_code: '',
             client_unit: '',
-            status: '0',
+            status: '',
             region: '',
             whetherTest: false, 
             keyStatus: '',
