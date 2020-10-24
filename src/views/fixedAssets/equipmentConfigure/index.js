@@ -165,12 +165,11 @@ class EpuipmentConfigure extends Component {
     if(data !== undefined) {
       console.log(data);
       const tableDate = data.map((item) =>({
-          key: item.engine_code,
+          key: item.aid,
           alert_time: item.alert_time,
           equip_person: item.equip_person,
           engine_code: item.engine_code,
           engine_name: item.engine_name,
-          equipment_code: item.storehouse,
           equipment_code: item.storage_location,
         }))
       return tableDate;
@@ -184,7 +183,7 @@ class EpuipmentConfigure extends Component {
 
         return(
             <div>
-                <div className='name'>固定资产</div>
+                <div className='name'>设备配置记录：</div>
                 <div className='wrapper'>
                     <div className='func'>
                         <div style={{ float: 'left' }} >

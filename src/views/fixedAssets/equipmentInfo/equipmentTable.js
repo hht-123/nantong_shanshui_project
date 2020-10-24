@@ -1,7 +1,7 @@
-import { Table, Pagination, Icon, Popover } from 'antd';
+import { Table, Pagination, Icon, Tooltip } from 'antd';
 import React, { Component } from 'react';
 import './style.less'
-import { Link } from 'react-router-dom';
+
 
 class EquipmentTable extends Component{
 
@@ -52,18 +52,18 @@ class EquipmentTable extends Component{
           render: (text, record, index) => {
             return (
               <div>
-                <Popover content="编辑信息" trigger="hover">
+                <Tooltip title="编辑信息" trigger="hover">
                     <Icon type="edit" theme="twoTone"  className="icon" onClick={() => this.props.showModal('edit', record)}/>
-                </Popover>
-                <Popover content="查看该设备传感器信息" trigger="hover">
+                </Tooltip>
+                <Tooltip title="查看该设备传感器信息" trigger="hover">
                   <Icon type="message" theme="twoTone" className="icon" onClick={() => this.props.showModal('sensor', record)}/>
-                </Popover>
-                <Popover content="填写设备报废单" title="设备报废" trigger="hover">
+                </Tooltip>
+                <Tooltip title="设备报废(填写设备报废单)"  trigger="hover">
                   <Icon type="tool" theme="twoTone"  className="icon"  onClick={() => this.props.showModal('scrap', record)} />
-                </Popover>
-                <Popover  content="填写设备报调拨单" title="设备调拨" trigger="hover">
-                  <Icon type="home" theme="twoTone"  />
-                </Popover>
+                </Tooltip>
+                <Tooltip  title="设备调拨(填写设备报调拨单)" trigger="hover" >
+                  <Icon type="home" theme="twoTone" onClick={() => this.props.showModal('allocation', record)} />
+                </Tooltip>
               </div>
             )
           }

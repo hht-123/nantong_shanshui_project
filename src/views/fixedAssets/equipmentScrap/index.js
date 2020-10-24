@@ -4,6 +4,7 @@ import '../../../style/wrapper.less';
 import './style.less';
 import  EquipmentScrapTable  from '../equipmentScrap/EquipmentScrapTable';
 import { Model} from '../../../dataModule/testBone';
+import { equipmentScrap } from '../../../dataModule/UrlList';
 
 
 const model = new Model();
@@ -19,7 +20,7 @@ class Equipment extends Component{
           search: false,                //是否搜索
           whetherTest: false,           //是否是测试  true为是 false为否
           showPagination: true,         //是否分页
-          data: [],                     //表格数据 
+          data: [],                     //表格数据
           total: 0,                     //一共有多少条数据
           search_equipment_code: ''     //设备编号的搜索
       }  
@@ -49,14 +50,14 @@ class Equipment extends Component{
         this.setState({isLoading: true})
         model.fetch(
             params,
-            '',
+            equipmentScrap,
             'get',
             function(response) {
                 if (me.state.whetherTest === false) {
                     me.setState({
                         isLoading: false,
                         total: response.data.count,
-                        data: response.data.results,
+                        data: response.data.data,
                         currentPage: params['currentPage']
                     })
                     // .log(me.state.data)
@@ -86,7 +87,7 @@ class Equipment extends Component{
 
     //搜索按钮
     searchInfo = () => {
-        this.setState({search: true});
+        this.setState({ search: true });
         const { search_equipment_code } = this.state;
         let params = this.getparams( 1, 10, search_equipment_code);
         this.getCurrentPage(params);
@@ -150,19 +151,19 @@ class Equipment extends Component{
 
     return(
         <div>
-            <div className='name'>固定资产</div>
+            <div className='name'>设备报废记录：</div>
             <div className='wrapper'>
                 <div className='func' style={{height: 160}}>
-                    <div className="inputWrapper">
+                    <div className="inputWrapper" style={{ marginLeft: 0}}>
                         <div className="input">设备编号:</div>
                         <Input  
-                            style={{ width: "300px"}} 
-                            name="equipment_code" 
+                            style={{ width: "200px"}} 
+                            name="search_equipment_code" 
                             onChange={ this.handleChange }
-                            value={ this.state.equipment_code }
+                            value={ this.state.search_equipment_code }
                         />
                     </div>
-                    <div style={{marginTop: "40px",marginLeft: "360px"}}>
+                    <div style={{marginTop: "40px",marginLeft: "260px"}}>
                             <Button className="button" onClick={ this.searchInfo }>搜索</Button>
                             <Button className="button" onClick={ this.handleReset }>重置</Button>
                     </div>

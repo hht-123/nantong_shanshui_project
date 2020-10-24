@@ -3,7 +3,8 @@ import { DatePicker, Button, Input, message, Select} from 'antd';
 import '../../../style/wrapper.less';
 import AllocationTable from './allocationTable';
 import { Model } from "../../../dataModule/testBone";
-import { equipmentConfiureUrl } from '../../../dataModule/UrlList';
+import { equipmentAllocation } from '../../../dataModule/UrlList';
+
 
 const model = new Model();
 const { Option } = Select;
@@ -22,15 +23,15 @@ class EpuipmentAllocation extends Component {
             isLoading: false,       //表格是否加载
             data: [],               //表格数据 
             total: 0,               //一共有多少条数据
-            search_client_unit: '',  //客户单位
+            search_transfer_unit: '',  //客户单位
             search_status: '',       //设备状态
             search_time: [],         //搜索时间
         }
     }
 
     componentDidMount() {
-        // let params = this.getparams();
-        // this.getCurrentPage(params);
+        let params = this.getparams();
+        this.getCurrentPage(params);
       }
     
       //数据请求
@@ -44,7 +45,7 @@ class EpuipmentAllocation extends Component {
         this.setState({isLoading: true})
         model.fetch(
           params,
-          equipmentConfiureUrl,
+          equipmentAllocation,
           'get',
           function(response) {
             if (me.state.whetherTest === false) {
@@ -78,7 +79,7 @@ class EpuipmentAllocation extends Component {
       }
 
     //处理参数
-    getparams(currentPage=1, size=10, client_unit=null, status=null, search_time=null) {
+    getparams(currentPage=1, size=10, transfer_unit=null, status=null, search_time=null) {
         let params = {};
         let begin_time = null;
         let end_time = null;
@@ -88,7 +89,7 @@ class EpuipmentAllocation extends Component {
         params = {
           currentPage,
           size,
-          client_unit,
+          transfer_unit,
           status,
           begin_time,
           end_time
@@ -118,9 +119,11 @@ class EpuipmentAllocation extends Component {
     //搜索按钮
     searchInfo = () => {
         this.setState({search: true});
-        const { search_client_unit, search_status, search_time } = this.state;
-        let params = this.getparams( 1, 10, search_client_unit, search_status, search_time);
+        const { search_transfer_unit, search_status, search_time } = this.state;
+        let params = this.getparams( 1, 10, search_transfer_unit, search_status, search_time);
+        console.log(search_status);
         this.getCurrentPage(params);
+        
     }
 
     //重置按钮
@@ -131,7 +134,7 @@ class EpuipmentAllocation extends Component {
             keyValue: new Date(),
             key1: new Date(),
             search_status: null,
-            search_client_unit: null,
+            search_transfer_unit: null,
             search_time: null,
             currentPage: 1,
             search: false,
@@ -140,38 +143,49 @@ class EpuipmentAllocation extends Component {
 
     //翻页获取内容
   getPage = (currentPage, pageSize) => {
-    let [ search_client_unit, search_status, search_time ] =[null, null, null];
+    let [ search_transfer_unit, search_status, search_time ] =[null, null, null];
     if(this.state.search === true){
-        search_client_unit = this.state.search_client_unit;
+        search_transfer_unit = this.state.search_transfer_unit;
         search_status = this.state.search_status;
         search_time = this.state.search_time;
     }
-    const params = this.getparams(currentPage, pageSize, search_client_unit, search_status, search_time);
+    const params = this.getparams(currentPage, pageSize, search_transfer_unit, search_status, search_time);
     this.getCurrentPage(params);
   }
 
   //改变pageSIze获取内容
   getSize = (current, size) => {
-    let [ search_client_unit, search_status, search_time ] =[null, null, null];
+    let [ search_transfer_unit, search_status, search_time ] =[null, null, null];
     if(this.state.search === true){
-        search_client_unit = this.state.search_client_unit;
+        search_transfer_unit = this.state.search_transfer_unit;
         search_status = this.state.search_status;
         search_time = this.state.search_time;
     }
-    const params = this.getparams(1, size, search_client_unit, search_status, search_time)
+    const params = this.getparams(1, size, search_transfer_unit, search_status, search_time)
     this.getCurrentPage(params);
     document.scrollingElement.scrollTop = 0;
+  }
+
+  statusSWift(status) {
+    if(status === '1'){
+      return '停运'
+    }else if(status === '0'){
+      return '在线'
+    }else if(status  === '2'){
+      return '报废'
+    }
   }
 
   //处理获取后的数据
   handleData = () => {
     const { data } = this.state;
+    console.log(data, 'data')
     if(data !== undefined) {
       const tableDate = data.map((item) =>({
-          key: item.aid,
+          key: item.equipment_code,
           applicant_time: item.applicant_time,
           equipment_code: item.equipment_code,
-          status: item.status,
+          status: this.statusSWift(item.status),
           applicant: item.applicant,
           transfer_unit: item.transfer_unit,
           transfer_unit_tel: item.transfer_unit_tel,
@@ -186,9 +200,10 @@ class EpuipmentAllocation extends Component {
         const {isLoading, showPagination, size, total, currentPage, key1} = this.state;
         const tableDate = this.handleData();
 
+        console.log(tableDate, 'tableDate')
         return(
             <div>
-                <div className='name'>设备配置信息</div>
+                <div className='name'>设备调拨记录：</div>
                 <div className='wrapper'>
                     <div className='func'>
                         <div style={{ float: 'left' }} >
@@ -199,12 +214,12 @@ class EpuipmentAllocation extends Component {
                         />
                         </div>
                         <div className="inputWrapper" >
-                            <div className="input" >客户单位:</div>
+                            <div className="input" >调入单位:</div>
                             <Input  
                                 style={{ width: "300px" }} 
-                                name="client_unit" 
+                                name="search_transfer_unit" 
                                 onChange={ this.handleChange }
-                                value={ this.state.client_unit }
+                                value={ this.state.search_transfer_unit }
                             />
                         </div>
                         <div className="inputWrapper" >
@@ -214,8 +229,9 @@ class EpuipmentAllocation extends Component {
                                 onSelect={(string) => this.handleSelect(string)} 
                                 key={key1}
                             >
-                                <Option key={1} value={1}>1</Option>
-                                {/* {aftersensorTypes.size !== 0? aftersensorTypes.map((item) => <Option key={item} value={item}>{item}</Option>) : null} */}
+                                <Option key={0} value={0}>在线</Option>
+                                <Option key={1} value={1}>停运</Option>
+                                <Option key={2} value={2}>报废</Option>
                             </Select>
                         </div>
                         <div className="line"></div>

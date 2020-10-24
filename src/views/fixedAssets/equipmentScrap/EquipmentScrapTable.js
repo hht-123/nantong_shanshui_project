@@ -39,13 +39,13 @@ class EquipmentTable extends Component {
       },
       {
         title: '仓库',
-        dataIndex: 'transfer_unit_ads',
+        dataIndex: 'store',
         align: 'center',
         width: 100,
       },
       {
         title: '库位',
-        dataIndex: 'storage_location',
+        dataIndex: 'location',
         align: 'center',
         width: 80,
       },
