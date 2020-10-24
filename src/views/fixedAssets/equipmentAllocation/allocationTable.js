@@ -1,61 +1,67 @@
-import { Table, Pagination, Icon } from 'antd';
+import { Table, Pagination } from 'antd';
 import React, { Component } from 'react';
 
 
-class ConfigureTalbe extends Component{
+class AllocationTable extends Component{
   
     render() {
       const { isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
 
       const columns =  [
         {
-          title: '更改时间',
-          dataIndex: 'alert_time',
+          title: '调拨时间',
+          dataIndex: 'applicant_time',
           align: 'center',
           width: 150
-        },
-        {
-          title: '配置人',
-          dataIndex: 'equip_person',
-          align: 'center',
-          width: 120
-        },
-        {
-          title: '主机编号',
-          dataIndex: 'engine_code',
-          align: 'center',
-          width: 120
-        },
-        {
-          title: '主机名称',
-          dataIndex: 'engine_name',
-          align: 'center',
-          width: 120
         },
         {
           title: '设备编号',
           dataIndex: 'equipment_code',
           align: 'center',
-          width: 150,
+          width: 120
         },
         {
-          title: '仓库',
-          dataIndex: 'storehouse',
+          title: '设备状态',
+          dataIndex: 'status',
+          align: 'center',
+          width: 80
+        },
+        {
+          title: '调拨人',
+          dataIndex: 'applicant',
+          align: 'center',
+          width: 120
+        },
+        {
+          title: '调入单位',
+          dataIndex: 'transfer_unit',
+          align: 'center',
+          width: 100,
+        },
+        {
+          title: '调入单位电话',
+          dataIndex: 'transfer_unit_tel',
+          align: 'center',
+          width: 100,
+        },
+        {
+          title: '调入单位地址',
+          dataIndex: 'transfer_unit_ads',
           align: 'center',
           width: 80,
         },
         {
-          title: '库位',
-          dataIndex: 'storage_location',
+          title: '调入原因',
+          dataIndex: 'allocation_reason',
           align: 'center',
-          width: 80,
+          width: 200,
         }
       ];
 
         return (
           <div
             style={{
-                width: '70%',
+                width: '100%',
                 position: 'relative',
                 marginBottom: '30px'
             }}
@@ -96,4 +102,4 @@ class ConfigureTalbe extends Component{
     }
 }
 
-export default ConfigureTalbe;
+export default AllocationTable;

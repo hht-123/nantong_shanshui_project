@@ -1,23 +1,29 @@
 import React,{ Component } from 'react';
-import { Modal, Form,  message,  DatePicker  } from 'antd';
+import { Modal, message,  DatePicker  } from 'antd';
 import { Model } from "../../../../dataModule/testBone";
 import '../style.less'
-import {ScrapEquipmentUrl} from '../../../../dataModule/UrlList'
+import { allcationEquipmentUrl } from '../../../../dataModule/UrlList'
 const model = new Model();
 
-class ScrapModal extends Component {
+class AllocationModal extends Component {
     constructor(props) {
         super (props);
         this.state = {
             confirmLoading: false,
-            applicant_time:'',
-            approval_time: '',
-            applicant: '',
-            applicant_tel: '',
-            applicant_departmen: '',
-            scrapping_reasons: '',
-            opinion: '',
-            sign: '',
+            applicant_time:'',          //申请时间
+            approval_time: '',          //审批时间
+            applicant: '',              //申请人
+            applicant_tel: '',          //申请电话
+            transfer_unit: '',          //调入单位
+            transfer_unit_ads: '',      //调入单位地址
+            transfer_unit_tel: '',      //调入单位电话
+            client_id: '',              //客户编号
+            allocation_reason: '',      //调拨原因
+            transport_unit: '',         //运输单位
+            agent: '',                  //经办人
+            agent_tel: '',              //经办人电话
+            opinion: '',                //主管意见
+            sign: '',                   //主管签字
             remark: '',
         }
     }
@@ -26,14 +32,14 @@ class ScrapModal extends Component {
         let me = this;
         model.fetch(
           params,
-          ScrapEquipmentUrl,
+          allcationEquipmentUrl,
           'post',
           function() {
             me.props.closeModal(false)
             me.setState({
                 confirmLoading: false,
             })
-            message.success('提交成功')
+            message.warning('提交成功')
           },
           function() {
             message.warning('提交失败，请重试')
@@ -43,21 +49,26 @@ class ScrapModal extends Component {
                 });
               }, 2000)
           },
-          this.props.whetherTest 
+          false 
         )
       }
 
     handleOk = () => {
-        const {validateFields} = this.props.form;
-        validateFields();
         // if(this.state.maintain_cause === '') return;
+        
         let params = {
             applicant_time:this.state.applicant_time,
             approval_time: this.state.approval_time,
             applicant: this.state.applicant,
-            applicant_tel:this.state.applicant_tel ,
-            applicant_department:this.state.applicant_department ,
-            scrapping_reasons:this.state.scrapping_reasons ,
+            applicant_tel:this.state.applicant_tel,
+            transfer_unit:this.state.transfer_unit,
+            transfer_unit_ads:this.state.transfer_unit_ads,
+            transfer_unit_tel:this.state.transfer_unit_tel,
+            client_id:this.state.client_id,
+            allocation_reason:this.state.allocation_reason,
+            transport_unit:this.state.transport_unit,
+            agent_tel:this.state.agent_tel,
+            agent: this.state.agent,
             opinion: this.state.opinion,
             sign:this.state.sign ,
             remark: this.state.remark,
@@ -65,8 +76,6 @@ class ScrapModal extends Component {
             equipment_remark: this.props.data.note,
             host_name: this.props.data.engine_name,
             host_number: this.props.data.engine_code,
-            store: this.props.data.store,
-            location: this.props.data.location
         }
         this.setState({
           confirmLoading: true,
@@ -106,7 +115,7 @@ class ScrapModal extends Component {
         return (
         <div>
             <Modal
-                title="设备报废单填写"
+                title="设备调拨单填写"
                 visible={ visible }
                 confirmLoading={ confirmLoading }
                 destroyOnClose={ true }
@@ -115,16 +124,16 @@ class ScrapModal extends Component {
                 width='600px'
                 >
                 <div >
-                        <table className='scrapTable' border="1" width='550px' height='800px' >
+                        <table className='scrapTable' border="1" width='550px'  >
                         <thead>
                             <tr>
-                                <th colSpan='4'>设备报废单</th>
+                                <th colSpan='4'>设备调拨单</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>申请时间:</td>
-                                <td colSpan='3'><DatePicker onChange={this.onChange1} style={{width:300}}/></td>
+                                <td colSpan='3'><DatePicker  onChange={this.onChange1} style={{width:300}}/></td>
                             </tr>
                             <tr>
                                 <td>主机编号：</td>
@@ -151,49 +160,110 @@ class ScrapModal extends Component {
                                 <td>
                                     <input 
                                         name='applicant'  
-                                        onChange={this.changeValue}
+                                        onChange={this.changeValue} 
+                                        type='text'
                                         className='inputNOborder'
-                                        style={{height:30}}
                                     />
                                 </td>
                                 <td>申请人电话：</td>
+                                <td><input name='applicant_tel'  onChange={this.changeValue} type='text' className='inputNOborder'/></td>
+                            </tr>
+                            <tr>
+                                <td rowSpan='2'>调入单位：</td>
+                                <td rowSpan='2'>
+                                    <input 
+                                        className='inputNOborder'
+                                        name='transfer_unit'  
+                                        onChange={this.changeValue} 
+                                    />
+                                </td>
+                                <td >调入单位地址：</td>
                                 <td>
                                     <input 
-                                        name='applicant_tel'  
-                                        onChange={this.changeValue} 
                                         className='inputNOborder'
-                                        style={{border:0, height:30}}
+                                        name='transfer_unit'  
+                                        onChange={this.changeValue} 
                                     />
                                 </td>
                             </tr>
                             <tr>
-                                <td>申请人部门：</td>
+                                <td >调入单位电话：</td>
+                                <td>
+                                    <input 
+                                        className='inputNOborder'
+                                        name='transfer_unit_tel'  
+                                        onChange={this.changeValue} 
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>客户编号：</td>
                                 <td colSpan='3'>
                                     <input 
-                                        name='applicant_departmen'  
+                                        name='client_id'  
                                         onChange={this.changeValue} 
+                                        type='text' 
                                         className='inputNOborder'
+                                        style={{border:0, height:44, width:'100%'}}
                                     />
                                 </td>
                             </tr>
                             <tr >
-                                <td rowSpan='2'>报废原因：</td>
+                                <td rowSpan='2'>调拨原因：</td>
                                 <td colSpan='3' rowSpan='2'>
-                                    <textarea 
-                                        name='scrapping_reasons'  
-                                        onChange={this.changeValue} 
+                                    <textarea
                                         className='textareaNOborder'
+                                        name='allocation_reason'  
+                                        onChange={this.changeValue} 
+                                        style={{border:0, height:60}}
                                      />
                                 </td>
                             </tr>
                             <tr></tr>
                             <tr>
+                                <td >运输单位：</td>
+                                <td>
+                                    <input 
+                                        name='transport_unit'  
+                                        onChange={this.changeValue} 
+                                        type='text' 
+                                        className='inputNOborder'
+                                        style={{border:0, height:44, width:'100%'}}
+                                    />
+                                </td>
+                                <td >经办人：</td>
+                                <td>
+                                    <input 
+                                        name='agent'  
+                                        onChange={this.changeValue} 
+                                        type='text' 
+                                        className='inputNOborder'
+                                        style={{border:0, height:44, width:'100%'}}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td ></td>
+                                <td></td>
+                                <td >经办人电话：</td>
+                                <td>
+                                    <input 
+                                        name='agent_tel'  
+                                        onChange={this.changeValue} 
+                                        type='text' 
+                                        className='inputNOborder'
+                                        style={{border:0, height:44, width:'100%'}}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
                                 <td rowSpan='2'>主管意见：</td>
                                 <td colSpan='3' rowSpan='2'>
-                                    <textarea  
-                                        name='opinion' 
-                                        className='textareaNOborder' 
-                                        onChange={this.changeValue}  
+                                    <textarea
+                                        className='textareaNOborder'
+                                        name='opinion'  
+                                        onChange={this.changeValue} 
+                                        style={{border:0, height:60}}
                                     />
                                 </td>
                             </tr>
@@ -203,9 +273,10 @@ class ScrapModal extends Component {
                                 <td>主管签字:</td>
                                 <td>
                                     <input 
-                                        className='inputNOborder'
                                         name='sign'  
                                         onChange={this.changeValue}  
+                                        className='inputNOborder'
+                                        style={{border:0, height:30}}
                                     />
                                 </td>
                             </tr>
@@ -216,10 +287,11 @@ class ScrapModal extends Component {
                             <tr>
                                 <td>备注:</td>
                                 <td colSpan='3'>
-                                    <input 
-                                        name='remark'
-                                        className='inputNOborder'  
-                                        onChange={this.changeValue}  
+                                    <textarea
+                                        className='textareaNOborder'
+                                        name='remark'  
+                                        onChange={this.changeValue} 
+                                        style={{height:44}}
                                     />
                                 </td>
                             </tr>
@@ -232,4 +304,4 @@ class ScrapModal extends Component {
     }
 }
 
-export default Form.create()(ScrapModal);
+export default AllocationModal;

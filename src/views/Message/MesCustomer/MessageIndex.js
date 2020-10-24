@@ -213,65 +213,61 @@ class MessageIndex extends Component{
 
         return(
             <div>
-                <div className="name">客户信息</div>
-                <div  className="wrapper">
-                        <div className="style">
-                            <div className="text">客户单位：</div>
-                            <div className="div">
-                                <div className="left">
-                                    <Input  
-                                        style={{width: "200px"}} 
-                                        name="search_client_unit" 
-                                        onChange={this.handleChange}
-                                        value={this.state.search_client_unit}
-                                    />
-                                </div>
-                                <div>
-                                    <div className="right">
-                                        <Button  type="primary" className="span" onClick={ this.searchInfo }>搜索</Button>
-                                        <Button  type="primary" className="span" onClick={this.handleReset}>重置</Button>
-                                        <Button type="primary" className="span" onClick={this.showAddModal}>创建客户信息</Button>
-                                    </div>
-                                        <AddMesCustomer
-                                            whetherTest={whetherTest}
-                                            Visible={this.state.Visible}  //这里把state里面的Visible传递到子组件
-                                            cancel={this.closeAddModal}
-                                            getParams = {this.getParams.bind(this)}
-                                            getCurrentPage = {this.getCurrentPage.bind(this)}
-                                        />
-                                </div>
-                            </div>
-                        </div>  
-                        <div className="table">
-                            <MessageTable
-                                data={ tableDate }
-                                isLoading={ this.state.isLoading }
-                                showPagination={ this.state.showPagination }
-                                size={ this.state.size }
-                                total={ this.state.total }
-                                changePage={ this.getPage }
-                                changeSize={ this.getSize }
-                                currentPage={ this.state.currentPage }
-                                showEditModal={ this.showEditModal }
-                                showContactModal = { this.showContactModal }
-                                deleteInfo = { this.deleteInfo  }
+                <div className='name'>客户信息：</div>
+                <div className='wrapper'>
+                    <div className='func' style={{height: 160}}>
+                        <div className="inputWrapper" style={{ marginLeft: 0}}>
+                            <div className="input">客户单位:</div>
+                            <Input  
+                                style={{width: "200px"}} 
+                                name="search_client_unit" 
+                                onChange={this.handleChange}
+                                value={this.state.search_client_unit}
                             />
-                            <ContactModal
-                                whetherTest={whetherTest}
-                                cancel={ this.closeAddModal }
-                                visible={ this.state.contactVisble }
-                                client_id = { this.state.client_id }
-                            />
-                            <EditMesModal
-                                whetherTest={ whetherTest }
-                                visible={ this.state.editModalVisible }
-                                cancel={ this.closeAddModal }
-                                editInfo={ this.state.editInfo }
-                                getParams = {this.getParams.bind(this)}
-                                getCurrentPage = {this.getCurrentPage.bind(this)}
-                            />
-                        </div> 
-                </div> 
+                        </div>
+                        <div style={{marginTop: "40px",marginLeft: "260px"}}>
+                            <Button className="button" onClick={ this.searchInfo }>搜索</Button>
+                            <Button className="button" onClick={this.handleReset}>重置</Button>
+                            <Button type="primary" className="button" onClick={this.showAddModal}>创建客户信息</Button>
+                        </div>
+                        <AddMesCustomer
+                            whetherTest={whetherTest}
+                            Visible={this.state.Visible}  //这里把state里面的Visible传递到子组件
+                            cancel={this.closeAddModal}
+                            getParams = {this.getParams.bind(this)}
+                            getCurrentPage = {this.getCurrentPage.bind(this)}
+                        />
+                    </div>
+                    <MessageTable
+                        data={ tableDate }
+                        isLoading={ this.state.isLoading }
+                        showPagination={ this.state.showPagination }
+                        size={ this.state.size }
+                        total={ this.state.total }
+                        changePage={ this.getPage }
+                        changeSize={ this.getSize }
+                        currentPage={ this.state.currentPage }
+                        showEditModal={ this.showEditModal }
+                        showContactModal = { this.showContactModal }
+                        deleteInfo = { this.deleteInfo  }
+                    />
+                    <ContactModal
+                        whetherTest={whetherTest}
+                        cancel={ this.closeAddModal }
+                        visible={ this.state.contactVisble }
+                        client_id = { this.state.client_id }
+                    />
+                    <EditMesModal
+                        whetherTest={ whetherTest }
+                        visible={ this.state.editModalVisible }
+                        cancel={ this.closeAddModal }
+                        editInfo={ this.state.editInfo }
+                        getParams = {this.getParams.bind(this)}
+                        getCurrentPage = {this.getCurrentPage.bind(this)}
+                    />
+
+                </div>
+                
            </div>  
         )
     }

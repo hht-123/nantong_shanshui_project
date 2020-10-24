@@ -28,6 +28,8 @@ import WaterRemind from '../../views/maintenance/waterRemind/waterRemind';
 import SensorCalibration from '../../views/maintenance/sensorCalibration/sensorCalibration';
 import RolePower from '../../views/accountAndRole/rolePower'
 import equipmentScrap from '../../views/fixedAssets/equipmentScrap';
+import EpuipmentConfigure from '../../views/fixedAssets/equipmentConfigure';
+import EpuipmentAllocation from '../../views/fixedAssets/equipmentAllocation';
 
 //客户端页面
 import  ClientIndex  from '../../views/ClientViews/index/index.js';
@@ -120,6 +122,8 @@ class App extends Component {verifyUrl
                   <Route path='/app/waterRemind/:equipment_id' component={WaterRemind} />
                   <Route path='/app/sensorCalibratin/:equipment_id' component={SensorCalibration} />
                   <Route path='/app/equipmentScrap' component={equipmentScrap} />
+                  <Route path='/app/EpuipmentConfigure' component={EpuipmentConfigure} />
+                  <Route path='/app/EpuipmentAllocation' component={EpuipmentAllocation} />
                   {/* 客户端页面路由 */}
                   <Route path='/app/clientIndex' component={ClientIndex} />
                   <Route path='/app/clientMonitor/:equipment_aid' component={ClientMonitor} />

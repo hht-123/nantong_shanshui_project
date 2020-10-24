@@ -9,6 +9,7 @@ import EngineSensorModal from './modal/engineSensorModal';
 import CreateModal from './modal/createModal';
 import EditModal from './modal/editModal';
 import ScrapModal from './modal/scrapModal';
+import AllocationModal from './modal/allocationModal'
 
 const model = new Model();
 
@@ -32,7 +33,9 @@ class EpuipmentInfo extends Component {
         editVisible: false,           //显示编辑弹窗
         currentEnquimentInfo: {},     //需要编辑的当前设备信息
         scrapListVisible: false,      //显示需填写的报废单
-        scrapEquipmentInfo:{}
+        scrapEquipmentInfo:{},        
+        allocationListVisible: false, //显示需填写的调拨单
+        allocationEqiipmentInfo:{}
       }
   }
 
@@ -177,6 +180,13 @@ class EpuipmentInfo extends Component {
           scrapListVisible: true,
           scrapEquipmentInfo: record,
         })
+        break;
+      case 'allocation':
+        this.setState({
+          allocationListVisible: true,
+          allocationEqiipmentInfo: record,
+        })
+        break;
       default:
         return 0;
     }
@@ -189,6 +199,7 @@ class EpuipmentInfo extends Component {
       createVisible: false,
       editVisible: false,
       scrapListVisible: false,
+      allocationListVisible: false,
     })
   }
 
@@ -213,7 +224,8 @@ class EpuipmentInfo extends Component {
   render() {
     const { searchEngineCode, searchEquipmentCode, isLoading, showPagination, size, 
       total, sensorModalVisiable, currentPage, sensorModalData, sensorTitle, createVisible, 
-      editVisible, currentEnquimentInfo, scrapListVisible, scrapEquipmentInfo} = this.state;
+      editVisible, currentEnquimentInfo, scrapListVisible, scrapEquipmentInfo, allocationListVisible, 
+      allocationEqiipmentInfo} = this.state;
     const tableDate = this.handleData();
     return(
       <div>
@@ -282,7 +294,12 @@ class EpuipmentInfo extends Component {
               <ScrapModal 
                 visible={ scrapListVisible }
                 closeModal={ this.closeModal }
-                data = {scrapEquipmentInfo}
+                data = { scrapEquipmentInfo }
+              />
+              <AllocationModal
+                visible={ allocationListVisible }
+                closeModal={ this.closeModal }
+                data = { allocationEqiipmentInfo }
               />
             </div>
           </div>

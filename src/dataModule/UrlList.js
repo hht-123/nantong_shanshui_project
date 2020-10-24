@@ -25,6 +25,9 @@ export const sensorOfequipmentUrl = 'app/equipment_to_sensor3/';  //设备对应
 export const addEquipment = 'equipment/';                         //新增设备
 export const editEquipment = 'equipment/';                        //新增设备
 export const sensorequipmentUrl = 'app/deviceNum_to_typename/'    //通过设备编号获取传感器信息
+export const equipmentConfiureUrl = 'app/equipment_configuration_retrieve/'      //获取设备配置记录
+export const equipmentAllocation = 'app/equipment_allocation_retrieve/'          //设备调配配置记录
+export const equipmentScrap = 'app/equipment_scrap_retrieve/'     //设备报废记录
 
 export const maintenanceUrl = 'app/operation/';
 export const equipmentUrl = 'app/real_time_monitoring_high/'
@@ -42,6 +45,7 @@ export const ClientWaterPutUrl = 'water_quality_notice/'  //处理水质记录
 export const ScrapEquipmentUrl = 'equipment_scrap/'    //发送报废数据
 export const loginUrl = 'app/login_in/'                 //登录账号
 export const verifyUrl = 'app/verify/'                 //获得角色各种数据
+export const allcationEquipmentUrl = '/equipment_allocation/'   //发送调拨单数据
 
 export const role = 'role/'
 export const rolePower = 'app/role_power/'
