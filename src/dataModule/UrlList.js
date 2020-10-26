@@ -43,6 +43,8 @@ export const CalibrationMark = 'app/sensor_calibration_retrieve/' //获得标定
 export const ClientWaterRemindUrl = 'app/water_notice_retrieve/' //客户端水质提醒记录数据
 export const ClientWaterPutUrl = 'water_quality_notice/'  //处理水质记录
 export const ScrapEquipmentUrl = 'equipment_scrap/'    //发送报废数据
+export const loginUrl = 'app/login_in/'                 //登录账号
+export const verifyUrl = 'app/verify/'                 //获得角色各种数据
 export const allcationEquipmentUrl = '/equipment_allocation/'   //发送调拨单数据
 
 export const role = 'role/'

@@ -32,6 +32,7 @@ class SensorCalibration extends Component{
       addModalVisible:  false,  //增加弹框是否显示
       editInfo: {},             //获取到编辑行的信息
       equipSensor:[],
+      key2:'',                  //重置下拉框
     }
   }
 
@@ -232,6 +233,7 @@ class SensorCalibration extends Component{
     this.setState({
       search_type_name: null,
       keyValue: new Date(),
+      key2: new Date(),
       search_begin_time: null,
       currentPage: 1,
       search: true,
@@ -343,8 +345,8 @@ class SensorCalibration extends Component{
               </div>
               <div className="inputWrapper" >
                 <div className="input" >传感器名称:</div>
-                <Select  allowClear={ allowClear }  style={{ width: 120, }} onChange={ this.handleChange } >
-                        <Option value="pH值传感器">pH值传感器</Option>
+                <Select key={ this.state.key2 }  allowClear={ allowClear }  style={{ width: 120, }} onChange={ this.handleChange } >
+                        <Option value="pH传感器">pH传感器</Option>
                         <Option value="电导率传感器">电导率传感器</Option>
                         <Option value="浊度传感器">浊度传感器</Option>
                         <Option value="COD传感器">COD传感器</Option>

@@ -118,7 +118,7 @@ class ScrapModal extends Component {
                         <table className='scrapTable' border="1" width='550px' height='800px' >
                         <thead>
                             <tr>
-                                <th colSpan='4'>设备调拨单</th>
+                                <th colSpan='4'>设备报废单</th>
                             </tr>
                         </thead>
                         <tbody>

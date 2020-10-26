@@ -21,7 +21,7 @@ class ClientWaterRemind extends Component{
       equipmentIdData: [],
       search: false,          //是否搜索
       currentPage: 1,
-      whetherTest: true,     //是否是测试  true为是 false为否
+      whetherTest: false,     //是否是测试  true为是 false为否
       showPagination: true,     //是否分页
       isLoading: false,         //是否加载
       data: [],                 //表格数据 
@@ -249,7 +249,7 @@ class ClientWaterRemind extends Component{
   render() {
     // const equipment_id = this.props.match.params.equipment_id
     const allowClear = true
-    const {data, isLoading, showPagination, size, total, currentPage, key1, key2, whetherTest } = this.state;
+    const {data, isLoading, showPagination, size, total, currentPage, key1, key2, whetherTest, } = this.state;
     const tableData = [];
     if(data !== undefined ) {
       data.map((item, index) => {
@@ -264,7 +264,7 @@ class ClientWaterRemind extends Component{
         return null;
       })
     }
-    if (data.length === 0) return null
+    // if (data.length === 0) return null
 
     return (
       <div className='waterRemind'>

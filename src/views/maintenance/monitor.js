@@ -420,7 +420,7 @@ class Monitor extends Component{
                                   onChange={ this.handleBeginTime } 
                                 />
                                 <Button type="primary" className='search' onClick={ this.searchInfo } >搜索</Button>
-                                <Button type="primary" className='search' onClick={ this.reset } >重置</Button>
+                                <Button type="primary" className='reset' onClick={ this.reset } >重置</Button>
                                 <Line  
                                   Xdata = { time } 
                                   Ydata = { commitInfo(item.type_name)}

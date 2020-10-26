@@ -27,6 +27,7 @@ class EquipmentMaintenance extends Component{
       data: [],                 //表格数据 
       total: 0,                 //一共有多少条数据
       keyValue: "",             //用于重置
+      key:'',
       search_begin_time: [],    //开始时间
       search_maintain_cause: '', //查找的维护原因
       addModalVisible: false,   //addModal是否显示
@@ -217,6 +218,7 @@ class EquipmentMaintenance extends Component{
     this.setState({
       search_maintain_cause: null,
       keyValue: new Date(),
+      key: new Date(),
       search_begin_time: null,
       currentPage: 1,
       search: true,
@@ -304,7 +306,7 @@ class EquipmentMaintenance extends Component{
 
               <div className="inputWrapper" >
                 <div className="input" >维修原因:</div>
-                <Select  allowClear={ allowClear }  style={{ width: 120, }} onChange={ this.handleChange } >
+                <Select key={this.state.key} allowClear={ allowClear }  style={{ width: 120, }} onChange={ this.handleChange } >
                         <Option value="0">例行维护</Option>
                         <Option value="1">用户报修</Option>
                         <Option value="2">运维报修</Option>
