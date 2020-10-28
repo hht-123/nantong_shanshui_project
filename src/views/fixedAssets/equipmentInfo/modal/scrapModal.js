@@ -115,17 +115,13 @@ class ScrapModal extends Component {
                 width='600px'
                 >
                 <div >
-                        <table className='scrapTable' border="1" width='550px' height='800px' >
+                        <table className='scrapTable' border="1" width='550px' height='400px' >
                         <thead>
                             <tr>
                                 <th colSpan='4'>设备报废单</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>申请时间:</td>
-                                <td colSpan='3'><DatePicker onChange={this.onChange1} style={{width:300}}/></td>
-                            </tr>
                             <tr>
                                 <td>主机编号：</td>
                                 <td >{this.props.data.engine_code}</td>
@@ -166,16 +162,6 @@ class ScrapModal extends Component {
                                     />
                                 </td>
                             </tr>
-                            <tr>
-                                <td>申请人部门：</td>
-                                <td colSpan='3'>
-                                    <input 
-                                        name='applicant_departmen'  
-                                        onChange={this.changeValue} 
-                                        className='inputNOborder'
-                                    />
-                                </td>
-                            </tr>
                             <tr >
                                 <td rowSpan='2'>报废原因：</td>
                                 <td colSpan='3' rowSpan='2'>
@@ -187,32 +173,6 @@ class ScrapModal extends Component {
                                 </td>
                             </tr>
                             <tr></tr>
-                            <tr>
-                                <td rowSpan='2'>主管意见：</td>
-                                <td colSpan='3' rowSpan='2'>
-                                    <textarea  
-                                        name='opinion' 
-                                        className='textareaNOborder' 
-                                        onChange={this.changeValue}  
-                                    />
-                                </td>
-                            </tr>
-                            <tr></tr> 
-                            <tr>
-                                <td colSpan='2' rowSpan='2'></td>
-                                <td>主管签字:</td>
-                                <td>
-                                    <input 
-                                        className='inputNOborder'
-                                        name='sign'  
-                                        onChange={this.changeValue}  
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>审批时间:</td>
-                                <td><DatePicker onChange={this.onChange2} /></td>
-                            </tr>
                             <tr>
                                 <td>备注:</td>
                                 <td colSpan='3'>

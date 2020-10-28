@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import '../../../../style/wrapper.less'
 import '../style.less'
-import { Form, Input, message, Select, Modal} from 'antd';
+import { Form, Input, message, Select, Modal, Spin} from 'antd';
 import { Model } from "../../../../dataModule/testBone";
 import {  sensorequipmentUrl, allEngineName, editEquipment} from '../../../../dataModule/UrlList';
 import { connect } from 'react-redux';
 import SensorSetting from './SensorSetting';
+
 
 const model = new Model();
 const { Option } = Select;
@@ -27,12 +28,18 @@ class EditModal extends Component {
             sensorCodeAids: [],   //存放新增传感器的aid
             size: 0,              //存放传感器类型的数量
             sensorTypes: [],      //获取传入的类型
-            confirmLoading: false 
+            confirmLoading: false, 
+            spinning: true,
         }
     }
 
+    
+
     componentDidMount() {
         this.getEngineName({engineNmae: 'all'});
+        this.setState({
+            size: this.props.sensorTypes.size
+        })
     }
 
     componentDidUpdate(prevProps) {
@@ -51,18 +58,19 @@ class EditModal extends Component {
                 storage_location: data.storage_location,
                 note: data.note,
                 equip_person: data.equip_person,
-                equipment_aid: data.aid,
+                equipment_aid: data.key,
               })
         }
         //获取当前设备的传感器设备 并存储当前aid
         if(this.props.sensorModalData !== prevProps.sensorModalData){
             const { sensorModalData } = this.props;
-            
             const aids = sensorModalData.map((item) => item.equipment_id);
-           
             this.setState({
+                number: sensorModalData.length,
                 sensors: sensorModalData,
-                sensorCodeAids: aids
+                sensorCodeAids: aids,
+                spinning: false,
+                display: 'block',
             })
         }
     }
@@ -79,11 +87,13 @@ class EditModal extends Component {
         this.setState({confirmLoading: true}); 
         model.fetch(
           params,
-          editEquipment + '/' + this.state.equipment_aid + '/',
+          editEquipment + this.state.equipment_aid + '/',
           'put',
           function() {
               message.success("编辑成功");
+              me.props.afterCreateOrEdit();
               me.setState({confirmLoading: false})
+              me.props.closeModal();
           },
           function() {
             message.warning('编辑失败，请重试')
@@ -139,15 +149,14 @@ class EditModal extends Component {
 
     //处理要发送的数据
     hanleData = () => {
-        const {equipment_code, engine_code, storehouse, storage_location, note, sensorCodeAids, equip_person} = this.state;
-        let allAid = [];
+        const {equipment_code, engine_code, storehouse, storage_location, note, sensorCodeAids, equip_person } = this.state;
         let equipment_sensor = '';
+        if(storehouse === '' || storage_location==='' || equip_person === '') return 0;
+        
         if(sensorCodeAids.length > 1){
-            allAid = sensorCodeAids.map((item) => item.equipment_sensor);
-            equipment_sensor = allAid.join(',');
+            equipment_sensor = sensorCodeAids.join(',');
         }else {
-            allAid = sensorCodeAids;
-            equipment_sensor = allAid[0];
+            equipment_sensor = sensorCodeAids[0];
         }
 
         const params = {
@@ -158,8 +167,9 @@ class EditModal extends Component {
             note,
             equipment_sensor,
             equip_person,
-            status : -1,
+            status : 1,
         }
+        console.log(params);
         return params;
     }
 
@@ -180,8 +190,9 @@ class EditModal extends Component {
             message.warning("请不要选择重复的传感器类型");
             return 0;
         }
+
         const params = this.hanleData();
-        this.editEquipment(params)
+        this.editEquipment(params);
     }
 
     //处理数据获取主机编号
@@ -211,8 +222,8 @@ class EditModal extends Component {
 
     //删除条数
     delectInfo = (newNumber, index) => {
-        const { sensors, sensorTypes } = this.state;
-        const [ delectSensors, delectsensorType] = [sensors, sensorTypes];
+        const { sensors, sensorTypes, sensorCodeAids } = this.state;
+        const [ delectSensors, delectsensorType, deleteAids] = [sensors, sensorTypes, sensorCodeAids];
         if(newNumber <= 0){
             message.warning("请添加传感器")
             return 0;
@@ -220,11 +231,15 @@ class EditModal extends Component {
         if(delectsensorType[index] !== undefined ){
             delectsensorType.splice(index, 1);
         }
+        if(deleteAids[index] !== undefined ){
+            deleteAids.splice(index, 1);
+        }
         delectSensors.splice(index, 1);   
         this.setState({
             number: newNumber,
             sensors: delectSensors,
             sensorTypes: delectsensorType,
+            sensorCodeAids: deleteAids,
         });
     }
 
@@ -232,11 +247,11 @@ class EditModal extends Component {
     getSensorAid = (string, index) => {
         const sensorCodeAids = this.state.sensorCodeAids; 
         if(sensorCodeAids[index] === undefined ){
-            sensorCodeAids.push({equipment_sensor: string,} )
+            sensorCodeAids.push(string);
         }else{
             sensorCodeAids[index] = string;
         }
-        
+
         this.setState({
             sensorCodeAids,
         })
@@ -286,15 +301,15 @@ class EditModal extends Component {
                 data[index].sensor_model = '';
                 data[index].sensor_code = '';
                 data[index].type_name = string;
-                this.setState({sensor: data});
+                this.setState({sensors: data});
                 break;
             case 'model':
                 data[index].sensor_model = string;
-                this.setState({sensor: data});
+                this.setState({sensors: data});
                 break;
             case 'code':
                 data[index].sensor_code = string;
-                this.setState({sensor: data});
+                this.setState({sensors: data});
                 break;
             default:
                 return 0;
@@ -334,16 +349,18 @@ class EditModal extends Component {
         this.props.closeModal();
     }
 
-    clearSelectFnc = () => {
+    afterClose = () => {
         this.setState({
             number: 1,
-            sensors: [{}]
+            sensors: [{}],
+            spinning: true,
+            display: 'none',
         });
     }
 
     render() {
 
-        const { equipment_code, storehouse , storage_location, equip_person, note, number, sensors, confirmLoading } = this.state;
+        const { equipment_code, storehouse , storage_location, equip_person, note, number, sensors, confirmLoading, spinning} = this.state;
         const { visible } = this.props;
         const equipmentData = this.handleEngineDefault();
         const handleEngineNmaeDate = this.handleAllEngineName();
@@ -369,7 +386,7 @@ class EditModal extends Component {
             onOk={ this.submitNewEquipment }
             width={'1300px'}
             // onOk={ }
-            afterClose= { this.clearSelectFnc }
+            afterClose= { this.afterClose }
             >
                  <div className='createWrapper'>
                      <div className='middlewrapper'>
@@ -383,7 +400,7 @@ class EditModal extends Component {
                                         rules: [{ required: true, message: '请输入设备编号' }],
                                         initialValue: equipment_code
                                     })(
-                                        <Input  name="equipment_code" onChange={this.handleChange} />
+                                        <Input disabled name="equipment_code" onChange={this.handleChange} />
                                     )}
                                 </Form.Item>
                                 
@@ -395,9 +412,11 @@ class EditModal extends Component {
                                         rules: [{ required: true, message: '请选择主机编号' }],
                                         initialValue: equipmentData
                                     })(
+                                        
                                         <Select 
                                             onSelect={(string) => this.handleSelect(string)}
                                             showSearch
+                                            disabled
                                             filterOption={(input, option) =>
                                                 option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                             }
@@ -462,23 +481,27 @@ class EditModal extends Component {
                          </div>
 
                          <div className='createright'>
-                         <div className='hardtitle'>传感器配置：</div>
-                            {
-                                sensors.map((item, index) => (
-                                    <SensorSetting
-                                        selectChange={ this.selectChange }
-                                        item={ item }
-                                        key={ index }
-                                        index={ index }
-                                        number={ number }
-                                        addInfo={ this.addInfo }
-                                        delectInfo={ this.delectInfo }
-                                        types={ aftersensorTypes }
-                                        getSensorAid = { this.getSensorAid }
-                                        getSensorTypes = { this.getSensorTypes }
-                                    />
-                                ))
-                            }
+                         <Spin spinning={ spinning }  className='spin'/>
+                        {spinning ? null 
+                             : <div className='hardtitle'>传感器配置：</div>}
+                        {spinning ? null 
+                             :
+                             sensors.map((item, index) => (
+                                <SensorSetting
+                                    selectChange={ this.selectChange }
+                                    item={ item }
+                                    key={ index }
+                                    index={ index }
+                                    number={ number }
+                                    addInfo={ this.addInfo }
+                                    delectInfo={ this.delectInfo }
+                                    types={ aftersensorTypes }
+                                    getSensorAid = { this.getSensorAid }
+                                    getSensorTypes = { this.getSensorTypes }
+                                />
+                            ))
+                        }
+                            
                          </div>
                          <div style={{clear: 'both'}}></div>
                      </div>

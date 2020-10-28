@@ -2,11 +2,16 @@ import { Table, Pagination, Icon, Tooltip } from 'antd';
 import React, { Component } from 'react';
 import './style.less'
 
-
 class EquipmentTable extends Component{
 
+  handleStatusColor = (string) => {
+    if ( string === '报废' ) {
+      return  { color : 'red '}
+    }
+  }
+
     render() {
-      const { isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
+      const { isLoading, data, total, showPagination, changePage, changeSize, currentPage, size} = this.props;
 
       const columns =  [
         {
@@ -38,6 +43,13 @@ class EquipmentTable extends Component{
           dataIndex: 'storage_location',
           align: 'center',
           width: 80
+        },
+        {
+          title: '状态',
+          dataIndex: 'status',
+          align: 'center',
+          width: 80,
+          render: text => <div style={this.handleStatusColor(text)}>{text}</div>
         },
         {
           title: '备注',
@@ -73,7 +85,7 @@ class EquipmentTable extends Component{
         return (
           <div
             style={{
-                width: '70%',
+                width: '100%',
                 position: 'relative',
                 marginBottom: '30px'
             }}
@@ -102,6 +114,7 @@ class EquipmentTable extends Component{
                   total={ total }  
                   showQuickJumper
                   style={{ marginRight: 0 }}
+                  pageSize={ size }
                   showSizeChanger
                   pageSizeOptions={['10','20','30','40',]}
                   onChange={(page, pageSize) => changePage(page, pageSize)}

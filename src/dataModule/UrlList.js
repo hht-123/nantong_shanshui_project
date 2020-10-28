@@ -18,7 +18,7 @@ export const sensorCodeUrl = 'app/sensor_model_to_code/';
 export const addSensorTypeUrl = 'sensor_type/';                 //增加传感器类型
 export const addSensorModelUrl = 'sensor_model/';               //增加传感器模型
 export const addSensorUrl = 'sensor/';                          //增加传感器
-export const allEngineName = 'app/main_engine_code_and_name/'   //获取所有主机的名称和编号
+export const allEngineName = 'app/main_engine_code_and_name/'   //获取所有主机的名称和编号(状态)
 
 export const epuipmentInfoUrl = 'app/equipment_to_engine_name/';  //设备的所有信息
 export const sensorOfequipmentUrl = 'app/equipment_to_sensor3/';  //设备对应的传感器的路由
@@ -42,9 +42,9 @@ export const equipmentCalibration = 'equipment_calibration/' //增加补偿值
 export const CalibrationMark = 'app/sensor_calibration_retrieve/' //获得标定值记录
 export const ClientWaterRemindUrl = 'app/water_notice_retrieve/' //客户端水质提醒记录数据
 export const ClientWaterPutUrl = 'water_quality_notice/'  //处理水质记录
-export const ScrapEquipmentUrl = 'equipment_scrap/'    //发送报废数据
+export const ScrapEquipmentUrl = 'equipment_scrap/'     //发送报废数据
 export const loginUrl = 'app/login_in/'                 //登录账号
-export const verifyUrl = 'app/verify/'                 //获得角色各种数据
+export const verifyUrl = 'app/verify/'                  //获得角色各种数据
 export const allcationEquipmentUrl = '/equipment_allocation/'   //发送调拨单数据
 
 export const role = 'role/'

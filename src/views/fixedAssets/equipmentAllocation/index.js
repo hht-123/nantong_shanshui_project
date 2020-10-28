@@ -18,6 +18,7 @@ class EpuipmentAllocation extends Component {
             key: '',               //刷新下拉框
             search: false,          //是否搜索
             currentPage: 1,         //当前页面
+            size: 10,
             whetherTest: false,     //是否是测试  true为是 false为否
             showPagination: true,   //是否分页
             isLoading: false,       //表格是否加载
@@ -54,6 +55,7 @@ class EpuipmentAllocation extends Component {
                 total: response.data.count,
                 data: response.data.data,
                 currentPage: params['currentPage'],
+                size: params['size'],
               })
             } else {
               me.setState({

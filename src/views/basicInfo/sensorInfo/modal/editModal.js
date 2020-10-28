@@ -30,7 +30,6 @@ class EditModal extends Component {
                 notice_content: editInfo.notice_content,
                 default_compensation: editInfo.default_compensation,
                 note: editInfo.note === undefined? '':editInfo.note,
-                // url: `${enginInfoUrl}${editInfo.key}/`
             })
         }
     }
@@ -52,7 +51,7 @@ class EditModal extends Component {
             me.setState({
                 confirmLoading: false,
             })
-            window.location.reload()
+            me.props.afterCreateOrEdit();
           },
           function() {
             message.warning('修改失败，请重试')

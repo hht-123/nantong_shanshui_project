@@ -25,11 +25,13 @@ class EpuipmentInfo extends Component {
         showPagination: true,         //是否分页
         searchEngineCode: '',         //搜索主机编号
         searchEquipmentCode: '',      //搜索设备编号
+        status: '',                   //搜索的状态
         isLoading: false,             //是否加载
         data: [],                     //表格数据
         sensorModalData: [],          //传感器数据
         sensorTitle: '',              //当前传感器的设备的名称  编辑
         currentPage: 1,               //当前页面
+        size: 10,
         total: 0,                     //一共有多少条数据
         createVisible: false,         //显示创建弹窗
         editVisible: false,           //显示编辑弹窗
@@ -41,14 +43,14 @@ class EpuipmentInfo extends Component {
       }
   }
 
-  getparams(currentPage=1, size=10, searchEngineCode=null, searchEquipmentCode=null) {
+  getparams(currentPage=1, size=10, status=1, searchEngineCode=null, searchEquipmentCode=null) {
     const params = {
       currentPage,
       size,
+      status,
       engine_code: searchEngineCode,
       equipment_code: searchEquipmentCode,
     }
-
     return params;
   }
 
@@ -77,6 +79,7 @@ class EpuipmentInfo extends Component {
             total: response.data.count,
             data: response.data.data,
             currentPage: params['currentPage'],
+            size: params['size'],
           })
         } else {
           me.setState({
@@ -114,24 +117,42 @@ class EpuipmentInfo extends Component {
   //获取翻页内容
   getPage = (currentPage, pageSize) => {
     let [searchEngineCode, searchEquipmentCode] = [null, null];
+    let status = 1;
     if(this.state.search === true){
       searchEngineCode = this.state.searchEngineCode;
       searchEquipmentCode = this.state.searchEquipmentCode;
+      status = this.state.status;
     }
-    const params = this.getparams(currentPage, pageSize, searchEngineCode, searchEquipmentCode);
+    const params = this.getparams(currentPage, pageSize, status, searchEngineCode, searchEquipmentCode);
     this.getCurrentPage(params);
   }
 
   //改变pageSize获取内容
   getSize = (current, size) => {
     let [searchEngineCode, searchEquipmentCode] = [null, null];
+    let status = 1;
     if(this.state.search === true){
       searchEngineCode = this.state.searchEngineCode;
       searchEquipmentCode = this.state.searchEquipmentCode;
+      status = this.state.status;
     }
-    const params = this.getparams(1, size, searchEngineCode, searchEquipmentCode);
+    const params = this.getparams(1, size, status, searchEngineCode, searchEquipmentCode);
     this.getCurrentPage(params);
     document.scrollingElement.scrollTop = 0;
+  }
+
+  //
+  afterCreateOrEdit = () => {
+    let [searchEngineCode, searchEquipmentCode] = [null, null];
+    let status = 1;
+    const { size, currentPage } = this.state; 
+    if(this.state.search === true){
+      searchEngineCode = this.state.searchEngineCode;
+      searchEquipmentCode = this.state.searchEquipmentCode;
+      status = this.state.status;
+    }
+    const params = this.getparams(currentPage, size, status, searchEngineCode, searchEquipmentCode);
+    this.getCurrentPage(params);
   }
 
   //获取输入框内容
@@ -148,14 +169,16 @@ class EpuipmentInfo extends Component {
     this.setState({
       searchEngineCode: '',
       searchEquipmentCode: '',
+      status: '1',
+      key: new Date(),
     })
   }
 
   //搜索
   searchInfo = () => {
     this.setState({search: true});
-    const {searchEngineCode, searchEquipmentCode} = this.state;
-    let params = this.getparams( 1, 10, searchEngineCode, searchEquipmentCode);
+    const {searchEngineCode, searchEquipmentCode, status} = this.state;
+    let params = this.getparams( 1, 10, status, searchEngineCode, searchEquipmentCode);
     this.getCurrentPage(params);
   }
 
@@ -211,12 +234,15 @@ class EpuipmentInfo extends Component {
     if(data !== undefined) {
       const tableDate = data.map((item) => ({
               key: item.aid,
+              engine_id: item.engine_id,
               equipment_code: item.equipment_code,
               engine_name: item.engine_name,
               engine_code: item.engine_code,
               storehouse: item.storehouse,
               storage_location: item.storage_location,
               note: item.note,
+              status: item.status,
+              equip_person: item.equip_person,
             }))
             return tableDate;
           }
@@ -256,15 +282,16 @@ class EpuipmentInfo extends Component {
               </div>
 
               <div className="inputWrapper" >
-                <div className="input" >设备编号:</div>
+                <div className="input" >状态:</div>
                 <Select 
                     style={{ width: 200}}
                     // onSelect={(string) => this.handleSelect(string)} 
                     key={key}
+                    defaultValue="1" 
                 >
-                    <Option key={0} value={0}>在线</Option>
-                    <Option key={1} value={1}>调拨</Option>
-                    <Option key={2} value={2}>报废</Option>
+                    <Option key="1" value="1">在线</Option>
+                    <Option key="2" value="2">调拨</Option>
+                    <Option key="0" value="0">报废</Option>
                 </Select>
               </div>
 
@@ -277,18 +304,17 @@ class EpuipmentInfo extends Component {
             <CreateModal 
               visible={ createVisible }
               closeModal={ this.closeModal }
-              getCurrentPage={ this.getCurrentPage}
+              afterCreateOrEdit={ this.afterCreateOrEdit }
             />
             <EditModal 
               visible={ editVisible }
               closeModal={ this.closeModal }
               data={ currentEnquimentInfo }
               sensorModalData={ sensorModalData }
-              getCurrentPage={ this.getCurrentPage}
+              afterCreateOrEdit={ this.afterCreateOrEdit }
             />
           </div>
             <EquipmentTable 
-              className='tableWrapper'
               data={ tableDate }
               isLoading={ isLoading }
               showPagination={ showPagination }

@@ -16,6 +16,7 @@ class EpuipmentConfigure extends Component {
             keyValue: '' ,          //刷新搜索日期
             search: false,          //是否搜索
             currentPage: 1,         //当前页面
+            size: 10,
             whetherTest: false,     //是否是测试  true为是 false为否
             showPagination: true,   //是否分页
             isLoading: false,       //表格是否加载
@@ -52,6 +53,7 @@ class EpuipmentConfigure extends Component {
               total: response.data.count,
               data: response.data.data,
               currentPage: params['currentPage'],
+              size: params['size'],
             })
           } else {
             me.setState({
@@ -170,7 +172,9 @@ class EpuipmentConfigure extends Component {
           equip_person: item.equip_person,
           engine_code: item.engine_code,
           engine_name: item.engine_name,
-          equipment_code: item.storage_location,
+          equipment_code: item.equipment_code,
+          storage_location: item.storage_location,   //库位
+          storehouse: item.storehouse, 
         }))
       return tableDate;
     }

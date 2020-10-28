@@ -1,4 +1,4 @@
-import { Table, Pagination, Icon } from 'antd';
+import { Table, Pagination, Icon, Tooltip } from 'antd';
 import React, { Component } from 'react';
 
 
@@ -60,7 +60,7 @@ class SensorTable extends Component{
           title: '状态',
           dataIndex: 'status',
           align: 'center',
-          width: 80,
+          width: 100,
           render: text => <div style={this.handleStatusColor(text)}>{text}</div>
         },
         {
@@ -73,9 +73,11 @@ class SensorTable extends Component{
           dataIndex: 'action',
           align: 'center',
           width: 80,
-          render: (text, record, index) => {
-            return <Icon type="edit" theme="twoTone" onClick={() => this.props.showEditModal(record)}/>
-          }
+          render: (text, record, index) => (
+            <Tooltip  title="编辑信息" trigger="hover" >
+              <Icon type="edit" theme="twoTone" onClick={() => this.props.showEditModal(record)}/>
+            </Tooltip>
+          )
         }
       ];
 
@@ -110,6 +112,7 @@ class SensorTable extends Component{
                   current={ currentPage } 
                   total={ total }  
                   showQuickJumper
+                  pageSize={ this.props.size }
                   style={{ marginRight: 0 }}
                   showSizeChanger
                   pageSizeOptions={['10','20','30','40',]}

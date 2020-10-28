@@ -16,13 +16,6 @@ class EditSensorSetting extends Component {
         }
     }
 
-    componentDidUpdate(prevProps) {
-        if(this.props.item !== prevProps.item){
-            
-            this.getSensorModel({type_name: this.props.item.type_name});
-        }
-    }
-
     //获取型号
     getSensorModel(params) {
         let me = this;
@@ -61,16 +54,6 @@ class EditSensorSetting extends Component {
         )
     }
 
-    getCodes = () =>{
-        if(this.state.sensorModels.length > 0){
-            const { sensorModels } = this.state;
-            const string = this.props.item.sensor_model;
-            const index = sensorModels.findIndex(item => string === item.sensor_model);
-            const modalAid = sensorModels[index].aid;
-            this.getSensorCode({sensor_model_id: modalAid})
-        }
-    }
-
     //处理选择
     handleSelect = (string, name) => {
         const { selectChange, getSensorTypes, getSensorAid } = this.props;
@@ -82,6 +65,13 @@ class EditSensorSetting extends Component {
                 break;
             case 'model':
                 selectChange('model', this.props.index, string);
+                if(this.state.sensorModels.length > 0){
+                    const { sensorModels } = this.state;
+                    const string = this.props.item.sensor_model;
+                    const index = sensorModels.findIndex(item => string === item.sensor_model);
+                    const modalAid = sensorModels[index].aid;
+                    this.getSensorCode({sensor_model_id: modalAid})
+                }
                 break;
             case 'code':
                 selectChange('code', this.props.index, string);
@@ -96,11 +86,21 @@ class EditSensorSetting extends Component {
         }
     }
 
+    alert = ()  => {
+        if(this.state.sensorModels.length === 0) {
+            message.warning("如需修改，请重新选择传感器类型");
+        }
+        if(this.state.sensorCodes === 0){
+            message.warning("如需修改，请重新选择传感器类型");
+        }
+    }
+      
+
     render() {
         const { addInfo, delectInfo, number,  types, index, item } = this.props;
         const { sensorModels, sensorCodes } = this.state;
         return(
-            <div>
+            <div style={{display: this.props.display}}>
                 <div className='eCreateBlock'>
                     <div className='eCreateName'>类型：</div>
                     <Select
@@ -117,8 +117,8 @@ class EditSensorSetting extends Component {
                     <Select 
                         className='choice' 
                         onSelect={(string) => this.handleSelect(string,'model')} 
+                        onFocus={ this.alert }
                         value={ item.sensor_model  }
-                        onMouseEnter={this.getModels}
                     >
                         {
                             sensorModels.size !== 0? 
@@ -138,7 +138,7 @@ class EditSensorSetting extends Component {
                         filterOption={(input, option) =>
                             option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                         }
-                        onFocus={this.getCodes}
+                        onFocus={ this.alert }
                         onSelect={(string) => this.handleSelect(string, 'code')} 
                     >
                         {

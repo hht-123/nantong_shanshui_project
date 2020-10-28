@@ -1,4 +1,4 @@
-import { Table, Pagination, Icon } from 'antd';
+import { Table, Pagination, Icon, Tooltip } from 'antd';
 import React, { Component } from 'react';
 
 
@@ -56,7 +56,11 @@ class EngineTable extends Component{
           align: 'center',
           width: 80,
           render: (text, record, index) => {
-            return <Icon type="edit" theme="twoTone" onClick={() => this.props.showEditModal(record)}/>
+            return(
+              <Tooltip  title="编辑信息" trigger="hover" >
+                <Icon type="edit" theme="twoTone" onClick={() => this.props.showEditModal(record)}/>
+              </Tooltip>
+            ) 
           }
         }
       ];
@@ -94,6 +98,7 @@ class EngineTable extends Component{
                   showQuickJumper
                   style={{ marginRight: 0 }}
                   showSizeChanger
+                  pageSize={this.props.size}
                   pageSizeOptions={['10','20','30','40',]}
                   onChange={(page, pageSize) => changePage(page, pageSize)}
                   onShowSizeChange={(current, size) => changeSize(current, size)}

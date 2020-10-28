@@ -19,6 +19,7 @@ class EngineInfo extends Component{
     this.state = {
       search: false,            //是否搜索
       currentPage: 1,
+      size: 10,                  
       whetherTest: false,       //是否是测试  true为是 false为否
       showPagination: true,     //是否分页
       isLoading: false,         //表格是否加载
@@ -61,6 +62,7 @@ class EngineInfo extends Component{
             total: response.data.count,
             data: response.data.results,
             currentPage: params['currentPage'],
+            size: params['size'],
           })
         } else {
           me.setState({
@@ -123,7 +125,7 @@ class EngineInfo extends Component{
   }
 
   //翻页获取内容
-  getPage = (currentPage, pageSize) => {
+  getPage = (currentPage, size) => {
     let [ search_engine_code, search_begin_time, search_end_time ] =[null, null, null];
     let status = 1;
     if(this.state.search === true){
@@ -133,7 +135,7 @@ class EngineInfo extends Component{
       status = this.state.status;
     }
     
-    const params = this.getparams(currentPage, pageSize, status, search_engine_code, search_begin_time, search_end_time)
+    const params = this.getparams(currentPage, size, status, search_engine_code, search_begin_time, search_end_time)
     this.getCurrentPage(params);
   }
 
@@ -150,6 +152,21 @@ class EngineInfo extends Component{
     const params = this.getparams(1, size, status, search_engine_code, search_begin_time, search_end_time)
     this.getCurrentPage(params);
     document.scrollingElement.scrollTop = 0;
+  }
+
+  //编辑之后保持搜索条件不变
+  afterCreateOrCreate = () => {
+    let [ search_engine_code, search_begin_time, search_end_time ] =[null, null, null];
+    let status = 1;
+    const { size, currentPage } = this.state;
+    if(this.state.search === true){
+      search_engine_code = this.state.search_engine_code;
+      search_begin_time = this.state.search_begin_time;
+      search_end_time = this.state.search_end_time;
+      status = this.state.status;
+    }
+    const params = this.getparams(currentPage, size, status, search_engine_code, search_begin_time, search_end_time);
+    this.getCurrentPage(params);
   }
 
   //显示增加弹窗
@@ -303,6 +320,7 @@ class EngineInfo extends Component{
                 cancel={ this.closeModal }
                 getCurrentPage = { this.getCurrentPage }
                 getparams = { this.getparams }
+                afterCreateOrCreate={ this.afterCreateOrCreate }
               />
               </div>
             <div className='engineTableWrapper'>
@@ -322,6 +340,7 @@ class EngineInfo extends Component{
                 visible={ editModalVisible }
                 cancel={ this.closeModal }
                 editInfo={ editInfo }
+                afterCreateOrCreate={ this.afterCreateOrCreate }
               />
             </div>
         </div>

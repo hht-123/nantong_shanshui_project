@@ -14,6 +14,8 @@ class ModelModal extends Component {
             sensor_type: '',            //传感器类型
             allmodel: '',
             sensor_model: '',           //传感器型号
+            notice_content: '',
+            create_time: '',
         }
     }
 
@@ -31,6 +33,8 @@ class ModelModal extends Component {
                     confirmLoading: false,
                 })
                 me.props.cancel(false)
+                message.success("添加传感器型号成功");
+                me.afterClose();
             },
             function() {
                 message.warning('发送数据失败，请重试')
@@ -67,7 +71,7 @@ class ModelModal extends Component {
     handleOk = () => {
         const { validateFields } = this.props.form;
         const { typesAndAid } = this.props;
-        const { sensor_model, sensor_type, allmodel } = this.state;
+        const { sensor_model, sensor_type, allmodel, notice_content, sensor_threshold } = this.state;
         let typeAid = '';
         validateFields();
         if(sensor_model === '') return;
@@ -82,6 +86,8 @@ class ModelModal extends Component {
         
         if(repeat === true) return;
 
+        //获取对应的
+        // typesAndAid所有传感器类型及其aid
         if(typesAndAid.size !== 0){
              typesAndAid.map((item) => {
                     if(item.get('type_name') === sensor_type){
@@ -95,7 +101,10 @@ class ModelModal extends Component {
         let params = {
             sensor_type_id: typeAid,
             sensor_model,
+            notice_content,
+            sensor_threshold
         }
+        console.log(params);
         this.createNewModel(params);
     };
     
@@ -118,18 +127,27 @@ class ModelModal extends Component {
         this.getSensorModel({type_name: string});
     }
 
+    afterClose = () => {
+        this.setState({
+            sensor_type: '',            //传感器类型
+            sensor_model: '',
+            sensor_threshold: '',
+            notice_content: ''
+        })
+    }
+
     render() {
         const { confirmLoading } = this.state;
         const { visible, types } = this.props
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
-              span: 5
+              span: 6
             },
             wrapperCol: {
               span: 16,
             },
-          };
+        };
 
         return (
             <div>
@@ -140,6 +158,7 @@ class ModelModal extends Component {
                 destroyOnClose={ true }
                 onOk={ this.handleOk }
                 onCancel={ this.handleCancel }
+                afterClose={ this.afterClose }
                 >
                 <div>
                     <Form { ...formItemLayout }>
@@ -166,6 +185,20 @@ class ModelModal extends Component {
                             })(
                                 <Input  name="sensor_model" onChange={this.handleChange} />
                             )}
+                        </Form.Item>
+
+                        <Form.Item
+                            label="传感器默认阈值"
+                            colon
+                        >
+                                <Input  name="sensor_threshold" onChange={this.handleChange} />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="默认提示内容"
+                            colon
+                        >
+                                <Input  name="notice_content" onChange={this.handleChange} />
                         </Form.Item>
                     </Form>
                 </div>

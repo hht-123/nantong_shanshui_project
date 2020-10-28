@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 class ConfigureTalbe extends Component{
   
     render() {
-      const { isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
+      const { isLoading, data, total, showPagination, changePage, changeSize, currentPage, size } = this.props;
 
       const columns =  [
         {
@@ -86,6 +86,7 @@ class ConfigureTalbe extends Component{
                   style={{ marginRight: 0 }}
                   showSizeChanger
                   pageSizeOptions={['10','20','30','40',]}
+                  pageSize={ size }
                   onChange={(page, pageSize) => changePage(page, pageSize)}
                   onShowSizeChange={(current, size) => changeSize(current, size)}
                 /> : null
