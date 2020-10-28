@@ -4,6 +4,12 @@ import React, { Component } from 'react';
 
 class EngineTable extends Component{
   
+  handleStatusColor = (string) => {
+    if ( string === '停产' ) {
+      return  { color : 'red '}
+    }
+  }
+  
     render() {
       const { isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
 
@@ -37,6 +43,7 @@ class EngineTable extends Component{
           dataIndex: 'status',
           align: 'center',
           width: 80,
+          render: text => <div style={this.handleStatusColor(text)}>{text}</div>
         },
         {
           title: '备注',

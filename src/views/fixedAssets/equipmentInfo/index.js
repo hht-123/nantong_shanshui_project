@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Button, message } from 'antd';
+import { Input, Button, message, Select } from 'antd';
 import '../../../style/wrapper.less'
 import './style.less'
 import EquipmentTable from './equipmentTable';
@@ -11,12 +11,14 @@ import EditModal from './modal/editModal';
 import ScrapModal from './modal/scrapModal';
 import AllocationModal from './modal/allocationModal'
 
+const { Option } = Select;
 const model = new Model();
 
 class EpuipmentInfo extends Component {
   constructor(props) {
       super(props);
       this.state = {
+        key: '',
         search: false,                //是否搜索
         whetherTest: false,           //是否是测试  true为是 false为否
         sensorModalVisiable: false,   //是否显示传感器弹窗
@@ -225,7 +227,7 @@ class EpuipmentInfo extends Component {
     const { searchEngineCode, searchEquipmentCode, isLoading, showPagination, size, 
       total, sensorModalVisiable, currentPage, sensorModalData, sensorTitle, createVisible, 
       editVisible, currentEnquimentInfo, scrapListVisible, scrapEquipmentInfo, allocationListVisible, 
-      allocationEqiipmentInfo} = this.state;
+      allocationEqiipmentInfo, key} = this.state;
     const tableDate = this.handleData();
     return(
       <div>
@@ -252,6 +254,20 @@ class EpuipmentInfo extends Component {
                   // value={ this.state.search_engine_code }
                 />
               </div>
+
+              <div className="inputWrapper" >
+                <div className="input" >设备编号:</div>
+                <Select 
+                    style={{ width: 200}}
+                    // onSelect={(string) => this.handleSelect(string)} 
+                    key={key}
+                >
+                    <Option key={0} value={0}>在线</Option>
+                    <Option key={1} value={1}>调拨</Option>
+                    <Option key={2} value={2}>报废</Option>
+                </Select>
+              </div>
+
             <div className="line"></div>
             <div style={{marginTop: "15px"}}>
                   <Button className="button" onClick={this.searchInfo}>搜索</Button>

@@ -15,7 +15,7 @@ class EpuipmentAllocation extends Component {
         super(props);
         this.state = {
             keyValue: '' ,          //刷新搜索日期
-            key1: '',               //刷新下拉框
+            key: '',               //刷新下拉框
             search: false,          //是否搜索
             currentPage: 1,         //当前页面
             whetherTest: false,     //是否是测试  true为是 false为否
@@ -132,7 +132,7 @@ class EpuipmentAllocation extends Component {
         this.getCurrentPage(params);
         this.setState({
             keyValue: new Date(),
-            key1: new Date(),
+            key: new Date(),
             search_status: null,
             search_transfer_unit: null,
             search_time: null,
@@ -197,7 +197,7 @@ class EpuipmentAllocation extends Component {
   }
 
     render() {
-        const {isLoading, showPagination, size, total, currentPage, key1} = this.state;
+        const {isLoading, showPagination, size, total, currentPage, key} = this.state;
         const tableDate = this.handleData();
 
         console.log(tableDate, 'tableDate')
@@ -227,7 +227,7 @@ class EpuipmentAllocation extends Component {
                             <Select 
                                 style={{ width: 200}}
                                 onSelect={(string) => this.handleSelect(string)} 
-                                key={key1}
+                                key={key}
                             >
                                 <Option key={0} value={0}>在线</Option>
                                 <Option key={1} value={1}>停运</Option>

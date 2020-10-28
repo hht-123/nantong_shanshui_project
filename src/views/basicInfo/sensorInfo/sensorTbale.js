@@ -4,6 +4,12 @@ import React, { Component } from 'react';
 
 class SensorTable extends Component{
 
+  handleStatusColor = (string) => {
+    if ( string === '停止使用' ) {
+      return  { color : 'red '}
+    }
+  }
+
     render() {
       const { isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
 
@@ -55,6 +61,7 @@ class SensorTable extends Component{
           dataIndex: 'status',
           align: 'center',
           width: 80,
+          render: text => <div style={this.handleStatusColor(text)}>{text}</div>
         },
         {
           title: '备注',
