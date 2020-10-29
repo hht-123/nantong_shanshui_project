@@ -29,8 +29,9 @@ class TypeModal extends Component {
                 me.setState({
                     confirmLoading: false,
                 })
-                me.props.cancel(false)
-                window.location.reload();
+                me.props.cancel(false);
+                message.success("添加传感器类型成功");
+                me.afterClose();
             },
             function() {
                 message.warning('发送数据失败，请重试')
@@ -74,6 +75,13 @@ class TypeModal extends Component {
         })
     }
 
+    //关闭窗口清除数据
+    afterClose = () => {
+        this.setState({
+            sensor_type: '',
+        })
+    }
+
     render() {
         const { confirmLoading } = this.state;
         const { visible } = this.props
@@ -96,6 +104,7 @@ class TypeModal extends Component {
                 destroyOnClose={ true }
                 onOk={ this.handleOk }
                 onCancel={ this.handleCancel }
+                afterClose={ this.afterClose }
                 >
                 <div>
                     <Form { ...formItemLayout }>

@@ -12,8 +12,8 @@ class AddModal extends Component {
         this.state = {
             confirmLoading: false,
             engine_name: '',
-            begin_time:'',
-            end_time:'',
+            begin_time: null,
+            end_time: null,
             note:'',
         }
     }
@@ -30,6 +30,8 @@ class AddModal extends Component {
                 confirmLoading: false,
             })
             message.success("添加成功");
+            me.afterClose();
+            me.props.afterCreateOrCreate();   //创建完成后保持搜索条件
           },
           function() {
             message.warning('发送数据失败，请重试')
@@ -46,19 +48,18 @@ class AddModal extends Component {
     handleOk = () => {
         const {validateFields} = this.props.form;
         validateFields();
-        if(this.state.engine_name === '') return;
+        if(this.state.engine_name === '' || this.state.begin_time === '') return;
         let params = {
             engine_name: this.state.engine_name,
             begin_time: this.state.begin_time,
             end_time: this.state.end_time,
-            status: '123123',
+            status: '1',
             note: this.state.note
         }
         this.setState({
           confirmLoading: true,
         });
         this.createNewEngine(params);
-        window.location.reload();
     };
     
     //取消按钮事件
@@ -84,25 +85,37 @@ class AddModal extends Component {
         })
     }
 
+    //弹窗关闭后的清空
+    afterClose = () => {
+        this.setState({
+            engine_name: '',
+            begin_time: null,
+            end_time: null,
+            note:'',
+        })
+    }
+
     render() {
         const { visible } = this.props;
         const { getFieldDecorator } = this.props.form;
         const { confirmLoading, note } = this.state;
         const formItemLayout = {
             labelCol: {
-              span: 5
+              span: 6
             },
             wrapperCol: {
               span: 16,
             },
           };
-          
+        console.log(this.state)
+
         return (
         <div>
             <Modal
                 title="新增主机"
                 visible={ visible }
                 confirmLoading={ confirmLoading }
+                afterClose={ this.afterClose }
                 destroyOnClose={ true }
                 onOk={ this.handleOk }
                 onCancel={ this.handleCancel }
@@ -125,21 +138,25 @@ class AddModal extends Component {
                             label="开始生产日期"
                             colon
                         >
-                        <DatePicker className='date' onChange={this.getStartDate}/>
+                            {getFieldDecorator('begin_time', {
+                                rules: [{ required: true, message: '请选择开始生产日期' }],
+                            })(
+                                <DatePicker className='date' onChange={this.getStartDate}/>
+                            )}
                         </Form.Item>
 
                         <Form.Item
                             label="结束生产日期"
                             colon
                         >
-                        <DatePicker className='date' onChange={this.getEndDate}/>
+                            <DatePicker className='date' onChange={this.getEndDate}/>
                         </Form.Item>
 
                         <Form.Item
                             label="备注"
                             colon
                         >
-                        <Input  name="note" onChange={this.handleChange} value={note} />
+                            <Input  name="note" onChange={this.handleChange} value={note} />
                         </Form.Item>
                     </Form>
                 </div>

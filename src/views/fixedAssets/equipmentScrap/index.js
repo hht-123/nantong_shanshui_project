@@ -16,6 +16,7 @@ class Equipment extends Component{
       this.state={
           confirmLoading: false,
           currentPage: 1,
+          size: 10,
           isLoading: false,             //是否加载
           search: false,                //是否搜索
           whetherTest: false,           //是否是测试  true为是 false为否
@@ -58,7 +59,8 @@ class Equipment extends Component{
                         isLoading: false,
                         total: response.data.count,
                         data: response.data.data,
-                        currentPage: params['currentPage']
+                        currentPage: params['currentPage'],
+                        size: params['size'],
                     })
                     // .log(me.state.data)
                 } else {
@@ -75,7 +77,7 @@ class Equipment extends Component{
         )
     }
 
-    getParams( currentPage = 1, size = 10, equipment_code = null  ) {
+    getParams(currentPage = 1, size = 10, equipment_code = null) {
         let params = {};
         params = {
             equipment_code,
@@ -89,14 +91,14 @@ class Equipment extends Component{
     searchInfo = () => {
         this.setState({ search: true });
         const { search_equipment_code } = this.state;
-        let params = this.getparams( 1, 10, search_equipment_code);
+        let params = this.getParams( 1, 10, search_equipment_code);
         this.getCurrentPage(params);
     }
 
 
     //重置按钮
     handleReset = () => {
-        const params = this.getparams();
+        const params = this.getParams();
         this.getCurrentPage(params);
         this.setState({
             search_equipment_code: null,
@@ -112,7 +114,7 @@ class Equipment extends Component{
         search_equipment_code = this.state.search_equipment_code;
     }
     
-    const params = this.getparams(currentPage, pageSize, search_equipment_code)
+    const params = this.getParams(currentPage, pageSize, search_equipment_code)
     this.getCurrentPage(params);
   }
 
@@ -122,7 +124,7 @@ class Equipment extends Component{
     if(this.state.search === true){
         search_equipment_code = this.state.search_equipment_code;
     }
-    const params = this.getparams(1, size, search_equipment_code)
+    const params = this.getParams(1, size, search_equipment_code)
     this.getCurrentPage(params);
     document.scrollingElement.scrollTop = 0;
   }
@@ -133,12 +135,15 @@ class Equipment extends Component{
           const tableDate = data.map((item) =>({
               key: item.aid,
               applicant_time: item.applicant_time,
-              host_number: item.host_number,
-              host_name: item.host_name,
+              engine_code: item.engine_code,
+              engine_name: item.engine_name,
               equipment_code: item.equipment_code,
               scrapping_reasons: item.scrapping_reasons,
-              transfer_unit_ads: item.transfer_unit_ads,
-              storage_location: item.storage_location,
+              storage_location: item.storage_location,   //库位
+              storehouse: item.storehouse,              //仓库
+              remark: item.remark,
+              applicant: item.applicant,
+              applicant_tel: item.applicant_tel,
             }))
           return tableDate;
         }
@@ -147,7 +152,6 @@ class Equipment extends Component{
   render(){
     const { isLoading, showPagination, size, total, currentPage } = this.state;
     const tableDate = this.handleData();
-        
 
     return(
         <div>
@@ -168,7 +172,7 @@ class Equipment extends Component{
                             <Button className="button" onClick={ this.handleReset }>重置</Button>
                     </div>
                 </div>
-                <EquipmentScrapTable 
+                <EquipmentScrapTable
                     data={ tableDate }
                     isLoading={ isLoading }
                     showPagination={ showPagination }
@@ -177,7 +181,7 @@ class Equipment extends Component{
                     changePage={ this.getPage }
                     changeSize={ this.getSize }
                     currentPage={ currentPage }  
-                /> 
+                />
             </div>
         </div>
     )

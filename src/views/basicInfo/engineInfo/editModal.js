@@ -3,6 +3,7 @@ import { Modal, Form, Input, DatePicker, message, Select  } from 'antd';
 import { Model } from "../../../dataModule/testBone";
 import './style.less'
 import { enginInfoUrl } from '../../../dataModule/UrlList'
+import moment from 'moment';
 
 const model = new Model();
 
@@ -13,11 +14,12 @@ class EditModal extends Component {
             confirmLoading: false,
             engine_name: '',
             // begin_time:'',
-            end_time:'',
-            note:'',
-            status: '',
+            end_time: null,
+            note: '',
+            status:  '',
             url: '',
-            aid: '',  
+            aid: '', 
+            isStopProduction: false,
         }
     }
 
@@ -28,10 +30,20 @@ class EditModal extends Component {
                 aid: editInfo.key,
                 engine_name: editInfo.engine_name,
                 status: editInfo.status,
-                note: editInfo.note === undefined? '':editInfo.note,
-                end_time: editInfo.end_time,
+                note: editInfo.note === null ? '': editInfo.note,
+                end_time: editInfo.end_time ===null ? null : editInfo.end_time,
                 url: `${enginInfoUrl}${editInfo.key}/`
             })
+            console.log(this.props.editInfo);
+            if(editInfo.status === '停产'){
+                this.setState({
+                    isStopProduction: true,
+                })
+            }else{
+                this.setState({
+                    isStopProduction: false,
+                })
+            }
         }
     }
 
@@ -46,14 +58,16 @@ class EditModal extends Component {
             me.setState({
                 confirmLoading: false,
             })
+            message.success('编辑成功');
+            me.props.afterCreateOrCreate();
           },
           function() {
             message.warning('修改失败，请重试')
             setTimeout(() => {
                 me.setState({
-                  confirmLoading: false,
+                    confirmLoading: false,
                 });
-              }, 2000)
+            }, 2000)
           },
           this.props.whetherTest 
         )
@@ -62,10 +76,13 @@ class EditModal extends Component {
     handleOk = () => {
         const {validateFields} = this.props.form;
         validateFields();
-        if(this.state.engine_name === '') return
+        if(this.state.engine_name === '') return;
+        if(this.state.isStopProduction === true){
+            if(this.state.end_time === null) return;
+        }
+
         let params = {
             engine_name: this.state.engine_name,
-            // begin_time: this.state.begin_time,
             end_time: this.state.end_time,
             status: this.state.status,
             note: this.state.note
@@ -74,7 +91,6 @@ class EditModal extends Component {
           confirmLoading: true,
         });
         this.editEngineInfo(params);
-        window.location.reload()
     };
     
     //取消按钮事件
@@ -104,17 +120,26 @@ class EditModal extends Component {
         this.setState({
             status: string
         })
+        if(string === '停产'){
+            this.setState({
+                isStopProduction: true,
+            })
+        }else{
+            this.setState({
+                isStopProduction: false,
+            })
+        }
     }
 
     render() {
 
         const { visible } = this.props;
         const { getFieldDecorator } = this.props.form;
-        const { confirmLoading,engine_name, note } = this.state;
+        const { confirmLoading, engine_name, note, end_time, status, isStopProduction } = this.state;
         const { Option } = Select;
         const formItemLayout = {
             labelCol: {
-              span: 5
+              span: 6
             },
             wrapperCol: {
               span: 16,
@@ -141,34 +166,33 @@ class EditModal extends Component {
                                 rules: [{ required: true, message: '请输入主机名称' }],
                                 initialValue: engine_name
                             })(
-                                <Input name="engine_name" onChange={this.handleChange} />
+                                <Input name="engine_name" disabled onChange={this.handleChange} />
                             )}
-                        
                         </Form.Item>
 
-                        {/* <Form.Item
-                            label="开始生产日期"
-                            colon
-                        >
-                        <DatePicker name="begin_time" style={{width: '315px'}} onChange={this.getStartDate}/>
-                        </Form.Item> */}
-
-                        <Form.Item
-                            label="结束生产日期"
-                            colon
-                        >
-                                <DatePicker className="date" onChange={this.getEndDate} />
-                        </Form.Item>
 
                         <Form.Item
                             label="状态"
                             colon
                         >
-                        <Select name='' defaultValue="在产" style={{ width: 120 }} onSelect={(string) => this.handleSelect(string)}>
+                        <Select name='' defaultValue={status} style={{ width: 120 }} onSelect={(string) => this.handleSelect(string)}>
                             <Option value="在产">在产</Option>
                             <Option value="停产">停产</Option>
                         </Select>
                         </Form.Item>
+
+                        {isStopProduction ? 
+                        <Form.Item
+                            label="结束生产日期"
+                            colon
+                        >
+                            {getFieldDecorator('end_time', {
+                                initialValue: end_time === null ? null : moment(end_time,  'YYYY-MM-DD'),
+                                rules: [{ required: true, message: '请选择停产日期' }],
+                            })(
+                                <DatePicker className="date" onChange={this.getEndDate} />
+                            )}
+                        </Form.Item> : null}
 
                         <Form.Item
                             label="备注"

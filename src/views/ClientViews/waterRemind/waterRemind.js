@@ -286,6 +286,7 @@ class ClientWaterRemind extends Component{
                               getCurrentPage = { this.getCurrentPage.bind(this)}
                         />
                 }
+                return null;
               }) }
           </div>
           <div className='line'></div>

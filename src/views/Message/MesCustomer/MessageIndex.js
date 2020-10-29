@@ -238,6 +238,7 @@ class MessageIndex extends Component{
                                 if ( item === 'user_manage') {
                                     return <Button type="primary" className="button" onClick={this.showAddModal} key={index}>创建客户信息</Button>
                                 }
+                                return null;
                             })}
                         </div>
                         <AddMesCustomer

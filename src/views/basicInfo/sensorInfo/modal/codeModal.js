@@ -35,8 +35,10 @@ class CodeModal extends Component {
                 me.setState({
                     confirmLoading: false,
                 })
-                me.props.cancel(false)
-                message.success('添加成功')
+                me.props.cancel(false);
+                message.success('添加成功');
+                me.props.afterCreateOrEdit();
+                me.afterClose();
             },
             function() {
                 message.warning('发送数据失败，请重试')
@@ -99,7 +101,6 @@ class CodeModal extends Component {
             note,
         }
         this.createNewCode(params);
-        this.prop.getInfo({currentPage: 1, pageSize: 10})
       };
     
     //取消按钮事件
@@ -127,6 +128,23 @@ class CodeModal extends Component {
         }
     }
 
+    afterClose = () => {
+        this.setState({
+            sensor_type: '',            //传感器类型
+            sensor_model: '',           //传感器型号
+            sensor_threshold: '',       //传感器阈值
+            notice_content: '',         //提示内容
+            default_compensation: '',   //默认补偿值
+            note:'',
+        })
+    }
+
+    onFocus = () => {
+        if(this.state.sensorModels.length === 0){
+          message.warning("请检查是否选择传感器类型");
+        }
+      }
+
     render() {
         const { confirmLoading, sensorModels } = this.state;
         const { visible, types} = this.props
@@ -149,6 +167,7 @@ class CodeModal extends Component {
                 destroyOnClose={ true }
                 onOk={ this.handleOk }
                 onCancel={ this.handleCancel }
+                afterClose={ this.afterClose }
                 >
                 <div>
                     <Form { ...formItemLayout }>
@@ -184,6 +203,7 @@ class CodeModal extends Component {
                                 <Select 
                                     className='select' 
                                     onSelect={(string) => this.handleSelect(string,'model')} 
+                                    onFocus={ this.onFocus }
                                     placeholder='请选择传感器型号'
                                 >
                                      {

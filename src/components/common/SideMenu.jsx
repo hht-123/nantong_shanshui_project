@@ -108,6 +108,7 @@ export default class SideMenu extends Component {
           } else if (item === 'account_management') {
             return  <Menu.Item key="account"><Link to='/app/accountManagement'>账户管理</Link></Menu.Item>
           }
+          return true
         })}
         </SubMenu> 
         {/* <SubMenu

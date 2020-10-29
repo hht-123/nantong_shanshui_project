@@ -32,6 +32,9 @@ class CreateModal extends Component {
     }
     componentDidMount() {
         this.getEngineName({engineNmae: 'all'});
+        this.setState({
+            size: this.props.sensorTypes.size
+        })
     }
 
     componentDidUpdate(prevProps) {
@@ -98,7 +101,9 @@ class CreateModal extends Component {
           function() {
               message.success("新建设备成功");
               me.setState({confirmLoading: false})
-              this.props.getCurrentPage()
+              me.props.afterCreateOrEdit();
+              me.continueOrBack();
+              me.afterClose();
           },
           function() {
             message.warning('新建失败，请重试')
@@ -131,9 +136,7 @@ class CreateModal extends Component {
             return 0;
         }
         const params = this.hanleData();
-        const comfirme = this.addNewEquipment(params);
-        if(comfirme === false) return 0;
-        this.continueOrBack();
+        this.addNewEquipment(params);    
     }
 
     //确认是否继续添加或者返回
@@ -295,16 +298,22 @@ class CreateModal extends Component {
         this.props.closeModal();
     }
 
-    //情空下拉框
-    clearSelectFnc = () => {
+    //重置
+    afterClose = () => {
         this.setState({
             sensors: [{}],
-            number: 1
+            number: 1,
+            equipment_code: '',   //设备编号
+            engine_code:  '',     //主机编号
+            storehouse: '',       //设备仓库
+            storage_location: '', //设备库位
+            equip_person: '',     //配置人
+            note:'',              //备注
         });
     }
 
     render() {
-        const { number, sensors, confirmLoading, clearSelect } = this.state;
+        const { number, sensors, confirmLoading } = this.state;
         const { visible } = this.props;
         const { getFieldDecorator } = this.props.form;
         const handleEngineNmaeDate = this.handleAllEngineName();
@@ -327,7 +336,7 @@ class CreateModal extends Component {
                 onCancel={ this.handleCancel }
                 width={'1300px'}
                 onOk={ this.submitNewEquipment }
-                afterClose= { this.clearSelectFnc }
+                afterClose= { this.afterClose }
             >
                 <div>
                     <div className='createWrapper'>

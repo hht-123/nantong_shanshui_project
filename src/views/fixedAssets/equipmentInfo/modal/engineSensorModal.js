@@ -45,6 +45,12 @@ class EngineSensorModal extends Component {
         }
     }
 
+    afterClose = () => {
+        this.setState({
+            spinning: true
+        })
+    }
+
     render() {
         const { visible, data, title } = this.props;
         const { confirmLoading, spinning } = this.state;
@@ -56,6 +62,7 @@ class EngineSensorModal extends Component {
                 footer={<Button type="primary" onClick={this.handleCancel}>关闭</Button>}
                 destroyOnClose={ true }
                 onCancel={ this.handleCancel }
+                afterClose={ this.afterClose }
             >
             <div className='sidePosition'>
                 <table className='sideTable' border='1px'>

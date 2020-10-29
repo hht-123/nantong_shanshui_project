@@ -4,24 +4,24 @@ import { Table, Pagination } from 'antd';
 
 class EquipmentTable extends Component {
   render() {
-    const { isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
+    const { isLoading, data, total, showPagination, changePage, changeSize, currentPage, size } = this.props;
 
     const columns =  [
       {
         title: '申请时间',
         dataIndex: 'applicant_time',
         align: 'center',
-        width: 150
+        width: 100
       },
       {
         title: '主机编号',
-        dataIndex: 'host_number',
+        dataIndex: 'engine_code',
         align: 'center',
         width: 120
       },
       {
         title: '主机名称',
-        dataIndex: 'host_name',
+        dataIndex: 'engine_name',
         align: 'center',
         width: 80
       },
@@ -31,21 +31,29 @@ class EquipmentTable extends Component {
         align: 'center',
         width: 120
       },
+      
       {
-        title: '报废原因',
-        dataIndex: 'scrapping_reasons',
+        title: '申请人',
+        dataIndex: 'applicant',
         align: 'center',
         width: 100,
       },
       {
+        title: '申请人电话',
+        dataIndex: 'applicant_tel',
+        align: 'center',
+        width: 100,
+      },
+      
+      {
         title: '仓库',
-        dataIndex: 'store',
+        dataIndex: 'storehouse',
         align: 'center',
         width: 100,
       },
       {
         title: '库位',
-        dataIndex: 'location',
+        dataIndex: 'storage_location',
         align: 'center',
         width: 80,
       },
@@ -54,7 +62,7 @@ class EquipmentTable extends Component {
       return (
         <div 
           style={{
-              width: '90%',
+              width: '100%',
               position: 'relative',
               marginBottom: '30px',
           }}
@@ -84,6 +92,7 @@ class EquipmentTable extends Component {
                 style={{ marginRight: 0 }}
                 showSizeChanger
                 pageSizeOptions={['10','20','30','40',]}
+                pageSize={ size }
                 onChange={(page, pageSize) => changePage(page, pageSize)}
                 onShowSizeChange={(current, size) => changeSize(current, size)}
               /> : null

@@ -21,8 +21,7 @@ class SensorInfo extends Component {
       super (props);
       this.state = {
         search: false,            //是否搜索
-        key1:'',                   //重置select
-        key2:'',
+        key:'',                   //重置select
         whetherTest: false,       //是否是测试  true为是 false为否
         sensorTypes: [],          //储存所有传感器类型
         sensorModels: [],         //储存所有传感器型号
@@ -32,8 +31,9 @@ class SensorInfo extends Component {
         searchSensorCode: '',     //搜索传感器编号
         showPagination: true,     //是否分页 true为分页
         currentPage:1,            //当前页面
-        pageSize: '',             //页面展示数量
+        size: 10,
         total:0,                  //页面的总量
+        status: 1,                //传感器状态
         isLoading: false,         //表格是否显示加载中
         addTypeVisible: false,    //是否显示增加传感器类型弹窗
         addModelVisible: false,   //是否显示增加传感器型号弹窗
@@ -49,9 +49,10 @@ class SensorInfo extends Component {
     this.getInfo(params);
   }
 
-  getParams(currentPage=1, pageSize=10, searchSensorType=null, searchSensorModel=null, searchSensorCode=null) {
+  getParams(currentPage=1, pageSize=10, status = 1, searchSensorType=null, searchSensorModel=null, searchSensorCode=null) {
     const params = {
       currentPage,
+      status,
       size: pageSize,
       type_name: searchSensorType,
       sensor_model: searchSensorModel,
@@ -80,6 +81,7 @@ class SensorInfo extends Component {
               total: response.data.count,
               data: response.data.data,
               currentPage: params['currentPage'],
+              size: params['size']
             })
         } else {
           me.setState({
@@ -160,28 +162,47 @@ class SensorInfo extends Component {
   }
 
   //翻页获取内容
-  getPage = (currentPage, pageSize) => {
+  getPage = (currentPage, size) => {
     let [searchSensorType, searchSensorModel, searchSensorCode] = [null, null, null];
+    let status = 1;
     if(this.state.search === true){
       searchSensorType = this.state.searchSensorType;
       searchSensorModel = this.state.searchSensorModel;
       searchSensorCode = this.state.searchSensorCode;
+      status = this.state.status;
     }
-    const params = this.getParams(currentPage, pageSize, searchSensorType, searchSensorModel, searchSensorCode)
+    const params = this.getParams(currentPage, size, status, searchSensorType, searchSensorModel, searchSensorCode)
     this.getInfo(params);
   }
 
   //改变pageSIze获取内容
   getSize = (current, size) => {
     let [searchSensorType, searchSensorModel, searchSensorCode] = [null, null, null];
+    let status = 1;
     if(this.state.search === true){
       searchSensorType = this.state.searchSensorType;
       searchSensorModel = this.state.searchSensorModel;
       searchSensorCode = this.state.searchSensorCode;
+      status = this.state.status;
     }
-    const params = this.getParams(1, size, searchSensorType, searchSensorModel, searchSensorCode)
+    const params = this.getParams(1, size, status, searchSensorType, searchSensorModel, searchSensorCode)
     this.getInfo(params);
     document.scrollingElement.scrollTop = 0
+  }
+
+  afterCreateOrEdit = () => {
+    let [searchSensorType, searchSensorModel, searchSensorCode] = [null, null, null];
+    console.log(123);
+    let status = 1;
+    const { size, currentPage } = this.state;
+    if(this.state.search === true){
+      searchSensorType = this.state.searchSensorType;
+      searchSensorModel = this.state.searchSensorModel;
+      searchSensorCode = this.state.searchSensorCode;
+      status = this.state.status;
+    }
+    const params = this.getParams(currentPage, size, status, searchSensorType, searchSensorModel, searchSensorCode)
+    this.getInfo(params);
   }
 
   //重置按钮
@@ -192,17 +213,17 @@ class SensorInfo extends Component {
       searchSensorType: null,
       searchSensorModel: null,
       searchSensorCode: null,
-      key1:new Date(),
-      key2:new Date(),
+      key:new Date(),
       search: false,
+      status: 1,
     })
   }
 
   //搜索按钮
   searchInfo = () => {
     this.setState({search: true});
-    const { searchSensorType, searchSensorModel, searchSensorCode } = this.state;
-    let params = this.getParams(1, 10, searchSensorType, searchSensorModel, searchSensorCode);
+    const { searchSensorType, searchSensorModel, searchSensorCode, status } = this.state;
+    let params = this.getParams(1, 10, status, searchSensorType, searchSensorModel, searchSensorCode);
     this.getInfo(params);
   }
 
@@ -253,15 +274,23 @@ class SensorInfo extends Component {
     return aftersensorTypes;
   }
 
+  //在选择传感器型号的时候，若没有选择传感器型号则会提示
+  onFocus = () => {
+    if(this.state.sensorModels.length === 0){
+      message.warning("请检查是否选择传感器类型");
+    }
+  }
+
 
   render() {
     const { whetherTest, addTypeVisible, addModelVisible, addCodeVisible, isLoading, 
-      showPagination, pageSize, total, currentPage, key1, key2, editvisible, editInfo, sensorModels} =this.state;
+      showPagination, total, currentPage, key, editvisible, editInfo, sensorModels, size} =this.state;
     const tableDate = this.handleData();
     const aftersensorTypes = this.handleSensorTypeData();
     // const sensorModel = 
     const { roleData } = this.props
     if (roleData.size === 0 ) return null
+    console.log(this.state);
 
     return (
       <div>
@@ -273,7 +302,7 @@ class SensorInfo extends Component {
                   <Select 
                     className='select' 
                     onSelect={(string) => this.handleSensorModel(string)} 
-                    key={key1}
+                    key={ key }
                   >
                     {aftersensorTypes.size !== 0? aftersensorTypes.map((item) => <Option key={item} value={item}>{item}</Option>) : null}
                   </Select>
@@ -284,8 +313,9 @@ class SensorInfo extends Component {
                      showSearch
                       className='select' 
                       onSelect={(string) => this.setState({searchSensorModel:string})} 
-                      key={key2}
+                      key={ key }
                       optionFilterProp="children"
+                      onFocus={ this.onFocus }
                       filterOption={(input, option) =>
                       option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                     }
@@ -304,7 +334,19 @@ class SensorInfo extends Component {
                   name='searchSensorCode'
                   value={ this.state.searchSensorCode } 
                   onChange={ this.handleChange }
-                />
+              />
+              </div>
+              <div className="selectWrapper" >
+                <div className="input" >状态:</div>
+                <Select 
+                  defaultValue="1" 
+                  style={{ width: "200px" }} 
+                  onSelect={ (string) => this.setState({status: string}) }
+                  key={ key }
+                >
+                  <Option value="1">可以使用</Option>
+                  <Option value="0">停止使用</Option>
+                </Select>
               </div>
               <div className="line"></div>
               <div style={{marginTop: "15px"}}>
@@ -318,6 +360,7 @@ class SensorInfo extends Component {
                               <Button type="primary" className="button" onClick={() => this.showModal('code')}>新增传感器</Button>
                               </span>
                     }
+                    return null;
                   })}
               </div>
               <div>
@@ -331,7 +374,7 @@ class SensorInfo extends Component {
                 types = { aftersensorTypes }
                 typesAndAid = {this.props.sensorTypes}
                 whetherTest={ whetherTest }
-                visible={ addModelVisible }
+                visible={ addModelVisible } 
                 cancel={ this.closeModal }
               />
               <CodeModal
@@ -340,12 +383,14 @@ class SensorInfo extends Component {
                 visible={ addCodeVisible }
                 cancel={ this.closeModal } 
                 getInfo={ this.getInfo }
+                afterCreateOrEdit={ this.afterCreateOrEdit }
               />
               <EditModal
                 whetherTest={ whetherTest }
                 visible={ editvisible }
                 cancel={ this.closeModal }
                 editInfo={ editInfo }
+                afterCreateOrEdit={ this.afterCreateOrEdit }
               />
               </div>
             </div>
@@ -353,13 +398,13 @@ class SensorInfo extends Component {
               data={ tableDate }
               showPagination={ showPagination }
               isLoading={ isLoading }
-              size={ pageSize }
               total={ total }
               changePage={ this.getPage }
               changeSize={ this.getSize }
               showEditModal={ this.showEditModal }
               currentPage={ currentPage }
               roleData = { roleData }
+              size={ size }
             />
           </div>
       </div>

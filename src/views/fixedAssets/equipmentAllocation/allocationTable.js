@@ -5,14 +5,14 @@ import React, { Component } from 'react';
 class AllocationTable extends Component{
   
     render() {
-      const { isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
+      const { isLoading, data, total, showPagination, changePage, changeSize, currentPage, size } = this.props;
 
       const columns =  [
         {
           title: '调拨时间',
           dataIndex: 'applicant_time',
           align: 'center',
-          width: 150
+          width: 100
         },
         {
           title: '设备编号',
@@ -33,11 +33,18 @@ class AllocationTable extends Component{
           width: 120
         },
         {
+          title: '调拨人电话',
+          dataIndex: 'applicant_tel',
+          align: 'center',
+          width: 100,
+        },
+        {
           title: '调入单位',
           dataIndex: 'transfer_unit',
           align: 'center',
           width: 100,
         },
+        
         {
           title: '调入单位电话',
           dataIndex: 'transfer_unit_tel',
@@ -91,6 +98,7 @@ class AllocationTable extends Component{
                   showQuickJumper
                   style={{ marginRight: 0 }}
                   showSizeChanger
+                  pageSize={ size }
                   pageSizeOptions={['10','20','30','40',]}
                   onChange={(page, pageSize) => changePage(page, pageSize)}
                   onShowSizeChange={(current, size) => changeSize(current, size)}

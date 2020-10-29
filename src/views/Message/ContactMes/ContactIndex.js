@@ -1,4 +1,4 @@
-import { message, Button, PageHeader } from 'antd';
+import { message, Button } from 'antd';
 import React, { Component } from 'react';
 import ContactTable from './ContactTable';
 import { Model } from '../../../dataModule/testBone';
@@ -151,7 +151,7 @@ class contactmes extends Component{
     }
 
     render(){
-        const client_id = this.props.client_id
+        // const client_id = this.props.client_id
         const {data, Visible, whetherTest, isLoading, editModalVisible, editInfo } = this.state;
         const tableDate = [];
         if(data !== undefined){
@@ -174,6 +174,7 @@ class contactmes extends Component{
                             if ( item === 'user_manage') {
                                 return <Button type="primary" className="but" onClick={this.showAddModal} key={index}>添加联系人</Button>
                             }
+                            return null;
                         })}
                         <AddModal
                             whetherTest={ whetherTest }

@@ -142,6 +142,7 @@ class App extends Component {verifyUrl
                     }else if( item === 'account_management') {
                       return [<Route path='/app/accountManagement' component={AccountManagement}/>]
                     }
+                    return null;
                   })}
                   <Route exact path='/app' component={ this.state.roleData.includes('client_manage') ? ClientIndex : (props)=><Index {...props}    />} />
                   {/* <Route path='/app/engine' component={EngineInfo} /> */}
