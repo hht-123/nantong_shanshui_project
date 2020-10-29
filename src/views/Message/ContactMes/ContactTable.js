@@ -31,7 +31,10 @@ class EditableTable extends Component {
             align: 'center',
             width: '100px',
           },
-        {
+      ];
+
+      if(this.props.roleData.includes("user_manage")) {
+        columns.push({
           title: '操作',
           dataIndex: 'operation',
           align: 'center',
@@ -61,7 +64,9 @@ class EditableTable extends Component {
             )
           }
         },
-      ];
+
+        )
+      }
 
       return (
         <div 

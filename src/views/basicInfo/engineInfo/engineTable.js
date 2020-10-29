@@ -6,6 +6,7 @@ class EngineTable extends Component{
   
     render() {
       const { isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
+      if (this.props.roleData === undefined || null ) return null
 
       const columns =  [
         {
@@ -43,7 +44,10 @@ class EngineTable extends Component{
           dataIndex: 'note',
           align: 'center'
         },
-        {
+      ];
+
+      if (this.props.roleData.includes("engine_manage")) {
+        columns.push({
           title: '操作',
           dataIndex: 'action',
           align: 'center',
@@ -51,8 +55,10 @@ class EngineTable extends Component{
           render: (text, record, index) => {
             return <Icon type="edit" theme="twoTone" onClick={() => this.props.showEditModal(record)}/>
           }
-        }
-      ];
+        })
+      }
+
+      
 
         return (
           <div

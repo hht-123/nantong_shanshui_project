@@ -10,6 +10,7 @@ import CreateModal from './modal/createModal';
 import EditModal from './modal/editModal';
 import ScrapModal from './modal/scrapModal';
 import AllocationModal from './modal/allocationModal'
+import { connect } from 'react-redux';
 
 const model = new Model();
 
@@ -227,6 +228,9 @@ class EpuipmentInfo extends Component {
       editVisible, currentEnquimentInfo, scrapListVisible, scrapEquipmentInfo, allocationListVisible, 
       allocationEqiipmentInfo} = this.state;
     const tableDate = this.handleData();
+    const { roleData } = this.props
+    if (roleData.size === 0 ) return null
+
     return(
       <div>
         <div className='name'>设备信息：</div>
@@ -256,7 +260,11 @@ class EpuipmentInfo extends Component {
             <div style={{marginTop: "15px"}}>
                   <Button className="button" onClick={this.searchInfo}>搜索</Button>
                   <Button className="button" onClick={this.handleReset}>重置</Button>
-                  <Button type="primary" className="button" onClick={() => this.showModal('create')}>新增设备</Button>
+                  {  roleData.map((item,index) => {
+                    if ( item === 'equipment_manage') {
+                      return <Button type="primary" className="button" onClick={() => this.showModal('create')} key={index}>新增设备</Button>
+                    }
+                  })}
             </div>
             <CreateModal 
               visible={ createVisible }
@@ -282,6 +290,7 @@ class EpuipmentInfo extends Component {
               changeSize={ this.getSize }
               showModal = {this.showModal}
               currentPage={ currentPage }
+              roleData = { roleData }
             />
             <div>
               <EngineSensorModal 
@@ -308,4 +317,8 @@ class EpuipmentInfo extends Component {
   }
 }
 
-export default EpuipmentInfo;
+const mapStateToProps = (state) => ({
+  roleData: state.getIn(['index', 'roleData']),
+})
+
+export default connect(mapStateToProps, null)(EpuipmentInfo);

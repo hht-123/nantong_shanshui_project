@@ -42,7 +42,7 @@ import AccountManagement from '../../views/accountAndRole/accountManagement'
 
 import { actionCreators as indexActionCreators } from '../index/store';
 import {verifyUrl} from '../../dataModule/UrlList';
-import {getUserId}  from '../../publicFunction/index';
+import {getUserId, getRoleId}  from '../../publicFunction/index';
 
 const model = new Model();
 const { Content, Footer, Sider } = Layout;
@@ -50,7 +50,7 @@ const { Content, Footer, Sider } = Layout;
 class App extends Component {verifyUrl
   state = {
     collapsed: getCookie("mspa_SiderCollapsed") === "true",
-    roleDate: '',
+    roleData: '',
   };
 
   toggle = () => {
@@ -67,17 +67,18 @@ class App extends Component {verifyUrl
     }
     store.dispatch(indexActionCreators.getSensorType())   //获取所有传感器的类型
     this.getRoleData()
+    store.dispatch(indexActionCreators.getRoleData())
   }
 
   getRoleData() {
     const me = this
     model.fetch(
-      {'_id': getUserId(), 'role_id': JSON.parse(getCookie("mspa_user")).role_id},
+      {'user_id': getUserId(), 'role_id': getRoleId()},
       verifyUrl,
       'get',
       function(response) {
         me.setState({
-          data: response.data.power_num
+          roleData: response.data.power_num
         })
     },
     function() {
@@ -95,9 +96,10 @@ class App extends Component {verifyUrl
     } else {
       name = JSON.parse(getCookie("mspa_user")).username;
     }
-    if (this.state.data === undefined) return null
-    console.log(this.state.data)
-
+    if (this.state.roleData === undefined) return null
+    // console.log(this.state.roleData)
+    
+    
     return (
       <Layout>
         <Provider store={store}>
@@ -105,35 +107,65 @@ class App extends Component {verifyUrl
           <Content>
             {/*<HeaderMenu />*/}
             <Layout style={{ padding: '0 0', background: '#F8FAFF' }}>
-              <Sider width={200} style={{ background: '#fff' }}>
-                <SideMenu />
+              <Sider width={200} style={{ background: '#fff' }} hidden={this.state.roleData.includes('client_manage')}>
+                <SideMenu roleData={this.state.roleData} />
               </Sider>
               <Content style={{ padding: '0 24px', minHeight: 'calc(100vh - 111px)' }}>
                 <Switch>
-                  <Route exact path='/app' component={(props) =><Index {...props}/>} />
-                  <Route path='/app/engine' component={EngineInfo} />
+                  { Array.from(this.state.roleData).map((item,index) => {
+                    if(item === 'equipment_maintenance_retrieve') {
+                      return [<Route path='/app/equipment' component={(props) => <EpuipmentInfo {...props}/>} />,
+                            <Route path='/app/equipmentScrap' component={equipmentScrap} />,
+                            <Route path='/app/EpuipmentConfigure' component={EpuipmentConfigure} />,
+                            <Route path='/app/EpuipmentAllocation' component={EpuipmentAllocation} />,
+                    ]
+                    }else if( item === 'client_message_retrieve') {
+                      return [<Route path='/app/message' component={(props) => <MessageIndex {...props}/>} />,
+                              <Route path='/app/contact/:client_id' component={ContactIndex} />,
+                      ]
+                    }else if( item === 'engine_message_retrieve') {
+                      return [<Route path='/app/engine' component={EngineInfo} />,
+                            ]
+                    }else if( item === 'sensor_message_retrieve') {
+                      return [<Route path='/app/sensor' component={(props) =><SensorInfo {...props}/>} />,
+                    ]
+                    }else if( item === 'client_manage') {
+                      return [
+                        // <Route path='/app/clientIndex' component={ClientIndex} />,
+                        <Route path='/app/clientMonitor/:equipment_aid' component={ClientMonitor} />,
+                        <Route path='/app/clientWaterRemind/:equipment_id' component={ClientWaterRemind} />,
+                        <Route path='/app/clientEquipMaintenace/:equipment_id' component={ClientEquipMaintenance} />,
+                        <Route path='/app/clientSensorCalibration/:equipment_id' component={ClientSensorCalibration} />,
+                      ]
+                    }else if( item === 'role_permissions_retrieve') {
+                      return [<Route path='/app/rolePower' component={RolePower}/>]
+                    }else if( item === 'account_management') {
+                      return [<Route path='/app/accountManagement' component={AccountManagement}/>]
+                    }
+                  })}
+                  <Route exact path='/app' component={ this.state.roleData.includes('client_manage') ? ClientIndex : (props)=><Index {...props}    />} />
+                  {/* <Route path='/app/engine' component={EngineInfo} /> */}
                   <Route path='/app/maintenance' component={MaintenanceIndex} />
-                  <Route path='/app/message' component={MessageIndex} />
+                  {/* <Route path='/app/message' component={(props) => <MessageIndex {...props}/>} /> */}
                   <Route path='/app/monitor/:equipment_aid' component={Monitor} />
-                  <Route path='/app/sensor' component={(props) =><SensorInfo {...props}/>} />
+                  {/* <Route path='/app/sensor' component={(props) =><SensorInfo {...props}/>} /> */}
                   <Route path='/app/equipmentMaintenance/:equipment_id' component={EquipmentMaintenance} />
-                  <Route path='/app/contact/:client_id' component={ContactIndex} />
-                  <Route path='/app/equipment' component={(props) => <EpuipmentInfo {...props}/>} />
+                  {/* <Route path='/app/contact/:client_id' component={ContactIndex} /> */}
+                  {/* <Route path='/app/equipment' component={(props) => <EpuipmentInfo {...props}/>} /> */}
                   <Route path='/app/waterRemind/:equipment_id' component={WaterRemind} />
                   <Route path='/app/sensorCalibratin/:equipment_id' component={SensorCalibration} />
-                  <Route path='/app/equipmentScrap' component={equipmentScrap} />
+                  {/* <Route path='/app/equipmentScrap' component={equipmentScrap} />
                   <Route path='/app/EpuipmentConfigure' component={EpuipmentConfigure} />
-                  <Route path='/app/EpuipmentAllocation' component={EpuipmentAllocation} />
+                  <Route path='/app/EpuipmentAllocation' component={EpuipmentAllocation} /> */}
                   {/* 客户端页面路由 */}
-                  <Route path='/app/clientIndex' component={ClientIndex} />
+                  {/* <Route path='/app/clientIndex' component={ClientIndex} />
                   <Route path='/app/clientMonitor/:equipment_aid' component={ClientMonitor} />
                   <Route path='/app/clientWaterRemind/:equipment_id' component={ClientWaterRemind} />
                   <Route path='/app/clientEquipMaintenace/:equipment_id' component={ClientEquipMaintenance} />
-                  <Route path='/app/clientSensorCalibration/:equipment_id' component={ClientSensorCalibration} />
+                  <Route path='/app/clientSensorCalibration/:equipment_id' component={ClientSensorCalibration} /> */}
                  
-                  <Route path='/app/accountManagement' component={AccountManagement}/>
-                  <Route path='/app/rolePower' component={RolePower}/>
-
+                  {/* <Route path='/app/accountManagement' component={AccountManagement}/> */}
+                  {/* <Route path='/app/rolePower' component={RolePower}/> */}
                 </Switch>
               </Content>
             </Layout>

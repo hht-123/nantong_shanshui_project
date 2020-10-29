@@ -10,7 +10,6 @@ import EditModal from './modal/editModal';
 import { Model } from '../../../dataModule/testBone';
 import { sensorInfoUrl, sensorModelUrl } from '../../../dataModule/UrlList';
 import { connect } from 'react-redux';
-
 //类型 type
 //型号 model
 //编号
@@ -41,6 +40,7 @@ class SensorInfo extends Component {
         addCodeVisible: false,    //是否显示增加传感器信息弹窗
         editvisible: false,       //是否显示编辑弹窗
         editInfo: {},             //获取当前行的信息
+        roleData: [],             //获取角色的权限
       } 
   }
 
@@ -260,6 +260,8 @@ class SensorInfo extends Component {
     const tableDate = this.handleData();
     const aftersensorTypes = this.handleSensorTypeData();
     // const sensorModel = 
+    const { roleData } = this.props
+    if (roleData.size === 0 ) return null
 
     return (
       <div>
@@ -308,9 +310,15 @@ class SensorInfo extends Component {
               <div style={{marginTop: "15px"}}>
                   <Button onClick={this.searchInfo}>搜索</Button>
                   <Button className="button" onClick={this.handleReset} >重置</Button>
-                  <Button type="primary" className="button" onClick={() => this.showModal('type')}>新增传感器类型</Button>
-                  <Button type="primary" className="button" onClick={() => this.showModal('model')}>新增传感器型号</Button>
-                  <Button type="primary" className="button" onClick={() => this.showModal('code')}>新增传感器</Button>
+                  { roleData.map((item,index) => {
+                    if ( item === 'sensor_manage') {
+                      return  <span key={index} className='script'>
+                              <Button type="primary" className="button" onClick={() => this.showModal('type')} >新增传感器类型</Button>
+                              <Button type="primary" className="button" onClick={() => this.showModal('model')}>新增传感器型号</Button>
+                              <Button type="primary" className="button" onClick={() => this.showModal('code')}>新增传感器</Button>
+                              </span>
+                    }
+                  })}
               </div>
               <div>
               <TypeModal
@@ -351,6 +359,7 @@ class SensorInfo extends Component {
               changeSize={ this.getSize }
               showEditModal={ this.showEditModal }
               currentPage={ currentPage }
+              roleData = { roleData }
             />
           </div>
       </div>
@@ -360,6 +369,7 @@ class SensorInfo extends Component {
 
 const mapStateToProps = (state) => ({
     sensorTypes: state.getIn(['index', 'sensorTypes']),
+    roleData: state.getIn(['index', 'roleData']),
 })
 
 export default connect(mapStateToProps, null)(SensorInfo);

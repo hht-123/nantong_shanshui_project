@@ -61,7 +61,10 @@ class SensorTable extends Component{
           dataIndex: 'note',
           align: 'center'
         },
-        {
+      ];
+
+      if(this.props.roleData.includes("sensor_manage")) {
+        columns.push({
           title: '操作',
           dataIndex: 'action',
           align: 'center',
@@ -70,7 +73,8 @@ class SensorTable extends Component{
             return <Icon type="edit" theme="twoTone" onClick={() => this.props.showEditModal(record)}/>
           }
         }
-      ];
+        )
+      }
 
         return (
           <div

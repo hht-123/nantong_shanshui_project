@@ -170,7 +170,11 @@ class contactmes extends Component{
         return(
             <div className='contact' >
                     <div>
-                        <Button type="primary" className="but" onClick={this.showAddModal}>添加联系人</Button>
+                        { this.props.roleData.map((item,index) => {
+                            if ( item === 'user_manage') {
+                                return <Button type="primary" className="but" onClick={this.showAddModal} key={index}>添加联系人</Button>
+                            }
+                        })}
                         <AddModal
                             whetherTest={ whetherTest }
                             Visible={ Visible }  //这里把state里面的Visible传递到子组件
@@ -186,6 +190,7 @@ class contactmes extends Component{
                             isLoading={ isLoading }
                             showEditModal={ this.showEditModal }
                             deleteInfo = { this.deleteInfo  }
+                            roleData = {this.props.roleData }
                         /> 
                         <EditModal
                             whetherTest={ whetherTest }

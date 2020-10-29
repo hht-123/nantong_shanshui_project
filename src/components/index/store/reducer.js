@@ -3,6 +3,7 @@ import { fromJS } from 'immutable';
 
 const defaultState = fromJS({
     sensorTypes: [],  
+    roleData: [],
 });
 
 
@@ -12,7 +13,11 @@ export default (state = defaultState, action) => {
     switch(action.type) {
         case constants.STORE_SENSOR_TYPE:
             return state.set('sensorTypes', fromJS(action.sensorTypes));
+        
+        case constants.STORE_ROLE_DATA:
+            return state.set('roleData', fromJS(action.roleData));
         default:
             return state;
-    }   
+    }
+    
 }

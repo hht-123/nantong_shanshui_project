@@ -6,7 +6,8 @@ import { DatePicker, Button, Input, message } from 'antd';
 import { Model } from "../../../dataModule/testBone";
 import AddModal from './addModal';
 import EditModal from './editModal';
-import { enginInfoUrl } from '../../../dataModule/UrlList'
+import { enginInfoUrl, verifyUrl } from '../../../dataModule/UrlList'
+import {getUserId, getRoleId}  from '../../../publicFunction/index';
 
 const model = new Model();
 const { RangePicker } = DatePicker;
@@ -30,6 +31,7 @@ class EngineInfo extends Component{
       addModalVisible: false,   //addModal是否显示
       editModalVisible:  false,  //editModal是否显示
       editInfo: {},             //获取到编辑行的信息
+      roleData: '',             //角色权限信息
     }
   }
 
@@ -37,6 +39,7 @@ class EngineInfo extends Component{
   componentDidMount() {
     let params = this.getparams();
     this.getCurrentPage(params);
+    this.getRoleData()
   }
 
   //数据请求
@@ -222,12 +225,28 @@ class EngineInfo extends Component{
     }
   }
 
+  getRoleData() {
+    const me = this
+    model.fetch(
+      {'user_id': getUserId(), 'role_id': getRoleId()},
+      verifyUrl,
+      'get',
+      function(response) {
+        me.setState({
+          roleData: response.data.power_num
+        })
+    },
+    function() {
+      console.log('失败'); //失败信息
+    },
+    )
+  }
 
   
   render() {
     const {isLoading, showPagination, size, total, addModalVisible, editModalVisible, whetherTest, editInfo, currentPage} = this.state;
     const tableDate = this.handleData();
-    
+    if (this.state.roleData === undefined) return null
     
     return (
       <div>
@@ -267,7 +286,11 @@ class EngineInfo extends Component{
                 <div style={{marginTop: "15px"}}>
                   <Button className="button" onClick={ this.searchInfo }>搜索</Button>
                   <Button className="button" onClick={ this.handleReset }>重置</Button>
-                  <Button type="primary" className="button" onClick={ this.showAddModal }>新增主机</Button>
+                  { Array.from(this.state.roleData).map((item,index) => {
+                    if ( item === 'engine_manage') {
+                      return  <Button type="primary" className="button" onClick={ this.showAddModal } key={index} >新增主机</Button>                  
+                    } 
+                  })}
                 </div>
                 <AddModal
                   whetherTest={ whetherTest }
@@ -288,6 +311,7 @@ class EngineInfo extends Component{
                 changeSize={ this.getSize }
                 showEditModal={ this.showEditModal }
                 currentPage={ currentPage }
+                roleData={this.state.roleData}
               />
               <EditModal
                 whetherTest={ whetherTest }

@@ -128,12 +128,12 @@ class Monitor extends Component{
           me.setState({
             sensorData: response.data
           }) 
-          console.log(me.state.sensorData)
+          // console.log(me.state.sensorData)
         } else {
           me.setState({
             sensorData: response.data.data,
           })
-          console.log(me.state.sensorData)
+          // console.log(me.state.sensorData)
         }
       },
       function() {
@@ -168,7 +168,7 @@ class Monitor extends Component{
           me.setState({
             equipSensor: response.data
           }) 
-          console.log(me.state.equipSensor)
+          // console.log(me.state.equipSensor)
         } else {
           me.setState({
             equipSensor: response.data.data,
@@ -292,7 +292,7 @@ class Monitor extends Component{
               me.setState({
                 equipmentInfo: response.data
               }) 
-              console.log(me.state.equipmentInfo)
+              // console.log(me.state.equipmentInfo)
             } else {
               me.setState({
                 equipmentInfo: response.data.data,

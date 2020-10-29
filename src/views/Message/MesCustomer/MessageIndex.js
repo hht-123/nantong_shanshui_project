@@ -8,6 +8,8 @@ import {Model} from '../../../dataModule/testBone';
 import {messageCUrl} from '../../../dataModule/UrlList';
 import EditMesModal from './editMesModal';
 import ContactModal from './ContactModal';
+import { connect } from 'react-redux';
+
 
 const model = new Model();
 
@@ -29,7 +31,8 @@ class MessageIndex extends Component{
             editModelVisible: false , //editModal是否显示
             editInfo: {},             //获取到编辑行的信息
             contactVisble: false,       //显示联系人弹窗
-            client_id:{}              //获取客户的id并给联系人组件
+            client_id:{},              //获取客户的id并给联系人组件
+            roleData: []                //获取角色权限
         }  
     }
 
@@ -209,7 +212,10 @@ class MessageIndex extends Component{
             })
             return null;
         })
-    }
+        }
+        const { roleData } = this.props
+        if (roleData.size === 0 ) return null
+
 
         return(
             <div>
@@ -228,7 +234,11 @@ class MessageIndex extends Component{
                         <div style={{marginTop: "40px",marginLeft: "260px"}}>
                             <Button className="button" onClick={ this.searchInfo }>搜索</Button>
                             <Button className="button" onClick={this.handleReset}>重置</Button>
-                            <Button type="primary" className="button" onClick={this.showAddModal}>创建客户信息</Button>
+                            { roleData.map((item,index) => {
+                                if ( item === 'user_manage') {
+                                    return <Button type="primary" className="button" onClick={this.showAddModal} key={index}>创建客户信息</Button>
+                                }
+                            })}
                         </div>
                         <AddMesCustomer
                             whetherTest={whetherTest}
@@ -250,12 +260,14 @@ class MessageIndex extends Component{
                         showEditModal={ this.showEditModal }
                         showContactModal = { this.showContactModal }
                         deleteInfo = { this.deleteInfo  }
+                        roleData = { roleData }
                     />
                     <ContactModal
                         whetherTest={whetherTest}
                         cancel={ this.closeAddModal }
                         visible={ this.state.contactVisble }
                         client_id = { this.state.client_id }
+                        roleData = { roleData }
                     />
                     <EditMesModal
                         whetherTest={ whetherTest }
@@ -265,11 +277,15 @@ class MessageIndex extends Component{
                         getParams = {this.getParams.bind(this)}
                         getCurrentPage = {this.getCurrentPage.bind(this)}
                     />
-
                 </div>
                 
            </div>  
         )
     }
 }
-export default MessageIndex;
+
+const mapStateToProps = (state) => ({
+    roleData: state.getIn(['index', 'roleData']),
+})
+
+export default connect(mapStateToProps, null)(MessageIndex);

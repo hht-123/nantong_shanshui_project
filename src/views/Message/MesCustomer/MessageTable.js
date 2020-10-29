@@ -58,10 +58,9 @@ class MessageTable extends Component{
                       </Button> 
             }
           }
-          
         ];
 
-        if (true) {
+        if (this.props.roleData.includes("user_manage")) {
           columns.push({
             title: '操作',
             dataIndex: 'action',

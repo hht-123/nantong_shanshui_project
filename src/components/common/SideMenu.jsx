@@ -19,7 +19,16 @@ export default class SideMenu extends Component {
     });
   };
 
+
+
   render() {
+    if (this.props.roleData === undefined ) return null
+    // let list = []
+    // for (let i=0; i<this.props.roleData.length; i++) {
+    //   if(this.props.roleData[i] === 'role_permissions_retrieve' || this.props.roleData[i] === 'account_management') {
+        
+    //   }
+    // }
     return (
       <Menu
         mode="inline"
@@ -48,6 +57,7 @@ export default class SideMenu extends Component {
 
         </SubMenu>
         <SubMenu
+          
           key="sub3"
           title={
             <span>
@@ -61,7 +71,46 @@ export default class SideMenu extends Component {
           <Menu.Item key="7"><Link to="/app/EpuipmentAllocation">设备调拨记录</Link></Menu.Item>
           <Menu.Item key="8"><Link to="/app/equipmentScrap">设备报废记录</Link></Menu.Item>
         </SubMenu>
+        {/* { Array.from(this.props.roleData).map((item,index) => {
+          if (item === 'role_permissions_retrieve' || item === 'account_management' ) {
+                  return   <SubMenu
+                      key="accountAndRole"
+                      title={
+                        <span>
+                          <Icon type="ordered-list" />
+                          账户与权限
+                        </span>
+                      }>
+                    { Array.from(this.props.roleData).map((item,index) => {
+                      if ( item === 'role_permissions_retrieve') {
+                        return  <Menu.Item key="role"><Link to='/app/rolePower'>角色权限</Link></Menu.Item>                  
+                      } else if (item === 'account_management') {
+                        return  <Menu.Item key="account"><Link to='/app/accountManagement'>账户管理</Link></Menu.Item>
+                      }
+                    })}
+                    </SubMenu>
+                    }
+        })} */}
+
         <SubMenu
+          key="accountAndRole"
+          title={
+            <span>
+              <Icon type="ordered-list" />
+              账户与权限
+            </span>
+          }
+          hidden = { this.props.roleData.includes('role_permissions_retrieve')||this.props.roleData.includes('account_management') ? false : true}
+          >
+        { Array.from(this.props.roleData).map((item,index) => {
+          if ( item === 'role_permissions_retrieve') {
+            return  <Menu.Item key="role"><Link to='/app/rolePower'>角色权限</Link></Menu.Item>                  
+          } else if (item === 'account_management') {
+            return  <Menu.Item key="account"><Link to='/app/accountManagement'>账户管理</Link></Menu.Item>
+          }
+        })}
+        </SubMenu> 
+        {/* <SubMenu
           key="accountAndRole"
           title={
             <span>
@@ -71,7 +120,7 @@ export default class SideMenu extends Component {
           }>
           <Menu.Item key="account"><Link to='/app/accountManagement'>账户管理</Link></Menu.Item>
           <Menu.Item key="role"><Link to='/app/rolePower'>角色权限</Link></Menu.Item>
-        </SubMenu>
+        </SubMenu> */}
       </Menu>
     );
   }

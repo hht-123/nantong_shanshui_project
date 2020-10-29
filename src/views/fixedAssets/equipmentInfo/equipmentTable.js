@@ -44,7 +44,11 @@ class EquipmentTable extends Component{
           dataIndex: 'note',
           align: 'center'
         },
-        {
+        
+      ];
+
+      if (this.props.roleData.includes("equipment_manage")) {
+        columns.push({
           title: '操作',
           dataIndex: 'action',
           align: 'center',
@@ -68,7 +72,9 @@ class EquipmentTable extends Component{
             )
           }
         }
-      ];
+
+        )
+      }
 
         return (
           <div

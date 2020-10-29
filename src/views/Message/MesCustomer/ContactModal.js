@@ -46,7 +46,7 @@ class ContactModal extends Component{
             >
                 <div>      {/* formItemLayout标签布局 */}                                 
                     <Form {...formItemLayout}  ref='customerForm' onSubmit={this.onSubmit}>
-                           <ContactIndex client_id={this.props.client_id} />
+                           <ContactIndex client_id={this.props.client_id} roleData={this.props.roleData} />
                     </Form>
                 </div>
             </Modal>

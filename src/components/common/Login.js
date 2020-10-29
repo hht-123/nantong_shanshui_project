@@ -56,11 +56,11 @@ class NormalLoginForm extends Component {
                         values['_id'] = response.data.user_id;
                         values['role_id'] = response.data.role_id;
                         setCookie('mspa_user',JSON.stringify(values));
-                        message.success(response.msg); //成功信息
+                        message.success("登录成功"); //成功信息
                         me.props.history.push({pathname:'/app',state:values});
                     },
                     function() {
-                        message.error('login failed!'); //失败信息
+                        message.error('登录失败'); //失败信息
                     },
                 )
                 // if(PatchUser(values)){
