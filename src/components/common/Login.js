@@ -52,12 +52,18 @@ class NormalLoginForm extends Component {
                     loginUrl,
                     'post',
                     function(response) {
-                        values['username'] = response.data.username;
-                        values['_id'] = response.data.user_id;
-                        values['role_id'] = response.data.role_id;
-                        setCookie('mspa_user',JSON.stringify(values));
-                        message.success("登录成功"); //成功信息
-                        me.props.history.push({pathname:'/app',state:values});
+                        if( response.data.msg === "账户名不存在") {
+                            message.success("账户名不存在"); //无账号信息
+                        } else if(response.data.msg === "密码不正确") {
+                            message.success("密码不正确");
+                        }else {
+                            values['username'] = response.data.username;
+                            values['_id'] = response.data.user_id;
+                            values['role_id'] = response.data.role_id;
+                            setCookie('mspa_user',JSON.stringify(values));
+                            message.success("登录成功"); //成功信息
+                            me.props.history.push({pathname:'/app',state:values});
+                        }
                     },
                     function() {
                         message.error('登录失败'); //失败信息
