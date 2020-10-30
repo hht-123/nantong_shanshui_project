@@ -228,13 +228,22 @@ class EpuipmentInfo extends Component {
       allocationListVisible: false,
     })
   }
+  statusSWift(status) {
+    if(status === '0'){
+      return '在线'
+    }else if(status === '1'){
+      return '停运'
+    }else if(status === '2'){
+      return '报废'
+    }
+  }
 
   //处理data数据
   handleData = () => {
     const { data } = this.state;
     if(data !== undefined) {
       const tableDate = data.map((item) => ({
-              key: item.aid,
+              key: item.equipment_id,
               engine_id: item.engine_id,
               equipment_code: item.equipment_code,
               engine_name: item.engine_name,
@@ -242,7 +251,7 @@ class EpuipmentInfo extends Component {
               storehouse: item.storehouse,
               storage_location: item.storage_location,
               note: item.note,
-              status: item.status,
+              status: this.statusSWift(item.status),
               equip_person: item.equip_person,
             }))
             return tableDate;
@@ -291,11 +300,11 @@ class EpuipmentInfo extends Component {
                     style={{ width: 200}}
                     // onSelect={(string) => this.handleSelect(string)} 
                     key={key}
-                    defaultValue="1" 
+                    defaultValue="0" 
                 >
-                    <Option key="1" value="1">在线</Option>
-                    <Option key="2" value="2">调拨</Option>
-                    <Option key="0" value="0">报废</Option>
+                    <Option key="0" value="0">在线</Option>
+                    <Option key="1" value="1">停运</Option>
+                    <Option key="2" value="2">报废</Option>
                 </Select>
               </div>
 

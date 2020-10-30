@@ -10,14 +10,9 @@ class ScrapModal extends Component {
         super (props);
         this.state = {
             confirmLoading: false,
-            applicant_time:'',
-            approval_time: '',
             applicant: '',
             applicant_tel: '',
-            applicant_departmen: '',
             scrapping_reasons: '',
-            opinion: '',
-            sign: '',
             remark: '',
         }
     }
@@ -46,27 +41,19 @@ class ScrapModal extends Component {
           this.props.whetherTest 
         )
       }
-
+a
     handleOk = () => {
         const {validateFields} = this.props.form;
         validateFields();
         // if(this.state.maintain_cause === '') return;
+        console.log(this.props.data);
         let params = {
-            applicant_time:this.state.applicant_time,
-            approval_time: this.state.approval_time,
+            engine_id: this.props.data.engine_id,
+            equipment_id: this.props.data.key,
             applicant: this.state.applicant,
             applicant_tel:this.state.applicant_tel ,
-            applicant_department:this.state.applicant_department ,
-            scrapping_reasons:this.state.scrapping_reasons ,
-            opinion: this.state.opinion,
-            sign:this.state.sign ,
             remark: this.state.remark,
-            equipment_id: this.props.data.key,
-            equipment_remark: this.props.data.note,
-            host_name: this.props.data.engine_name,
-            host_number: this.props.data.engine_code,
-            store: this.props.data.store,
-            location: this.props.data.location
+            scrapping_reasons:this.state.scrapping_reasons ,
         }
         this.setState({
           confirmLoading: true,
@@ -87,15 +74,14 @@ class ScrapModal extends Component {
         })
     }
 
-    onChange1 = (date, dateString) => {
+   
+
+    afterClose = () => {
         this.setState({
-            applicant_time: dateString
-        })
-    }
-    
-    onChange2 = (date, dateString) => {
-        this.setState({
-            approval_time: dateString
+            applicant: '',
+            applicant_tel: '',
+            scrapping_reasons: '',
+            remark: '',
         })
     }
 
@@ -113,6 +99,7 @@ class ScrapModal extends Component {
                 onOk={ this.handleOk }
                 onCancel={ this.handleCancel }
                 width='600px'
+                afterClose={ this.afterClose }
                 >
                 <div >
                         <table className='scrapTable' border="1" width='550px' height='400px' >
@@ -143,6 +130,7 @@ class ScrapModal extends Component {
                                 <td colSpan='3'>{this.props.data.note}</td>
                             </tr>
                             <tr>
+                            {/* <span style={{color: 'red'}}>* </span> */}
                                 <td>申请人：</td>
                                 <td>
                                     <input 

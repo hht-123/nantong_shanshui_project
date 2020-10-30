@@ -54,6 +54,8 @@ class EngineSensorModal extends Component {
     render() {
         const { visible, data, title } = this.props;
         const { confirmLoading, spinning } = this.state;
+        console.log(data);
+
         return(
             <Modal
                 title={ '设备编号：' + title}
@@ -80,7 +82,7 @@ class EngineSensorModal extends Component {
                             </tr> : data.size === 0 ? null :
                             data.map((item) => {
                                 return(
-                                    <tr key="item.sensor_code" align="center" className='sideBodyTr'>
+                                    <tr key={item.aid} align="center" className='sideBodyTr'>
                                     <td className='sideBodyTh'>{ item.type_name }</td>
                                     <td className='sideBodyTh'>{ item.sensor_model }</td>
                                     <td className='sideBodyTh'>{ item.sensor_code }</td>

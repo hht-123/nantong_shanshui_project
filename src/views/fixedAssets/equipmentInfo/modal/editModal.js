@@ -24,12 +24,13 @@ class EditModal extends Component {
             note:'',              //备注
             allEngineName: [],    //所有主机编号
             number: 1,            //传感器的数量
-            sensors: [{}],        //获取当前设备的所有传感器
+            sensors: [],        //获取当前设备的所有传感器
             sensorCodeAids: [],   //存放新增传感器的aid
             size: 0,              //存放传感器类型的数量
             sensorTypes: [],      //获取传入的类型
             confirmLoading: false, 
             spinning: true,
+            display: 'none',       
         }
     }
 
@@ -40,14 +41,16 @@ class EditModal extends Component {
         this.setState({
             size: this.props.sensorTypes.size
         })
+        for(let i = 0; i< this.props.sensorTypes.size; i++){
+            const sensors = this.state.sensors;
+            sensors.push({});
+            this.setState({
+                sensors,
+            })
+        }
     }
 
     componentDidUpdate(prevProps) {
-        if(this.props.sensorTypes.size !== prevProps.sensorTypes.size){
-            this.setState({
-                size: this.props.sensorTypes.size
-            })
-        }
         if(this.props.data !== prevProps.data){
             const { data } = this.props;
             this.setState({
@@ -65,12 +68,16 @@ class EditModal extends Component {
         if(this.props.sensorModalData !== prevProps.sensorModalData){
             const { sensorModalData } = this.props;
             const aids = sensorModalData.map((item) => item.equipment_id);
+            const sensorTypes = sensorModalData.map((item) => (item.type_name));        //初始化类型
+            const sensorCodeAids = sensorModalData.map((item) => (item.aid))   //初始化aid
             this.setState({
                 number: sensorModalData.length,
                 sensors: sensorModalData,
                 sensorCodeAids: aids,
                 spinning: false,
                 display: 'block',
+                sensorTypes,
+                sensorCodeAids,
             })
         }
     }
@@ -177,20 +184,25 @@ class EditModal extends Component {
      submitNewEquipment = () => {
         const { validateFields } = this.props.form;  //验证
         validateFields();
-        const { equipment_code, engine_code, storehouse, storage_location, equip_person } = this.state;
+        const { equipment_code, engine_code, storehouse, storage_location, equip_person, sensorCodeAids, sensorTypes } = this.state;
         if(equipment_code ==='' || engine_code === '' || storehouse === '' || storage_location==='' || equip_person === '') return 0;
-        if(this.state.sensorCodeAids.size === 0) {
+        if(sensorCodeAids.length === 0) {
             message.warning("请选择传感器");
             return 0;
         }
-        const { sensorTypes } = this.state;
-        const repeat = this.isRepeat(sensorTypes);
+
+        if(sensorCodeAids.length !== sensorTypes.length){
+            message.warning("请选择传感器型号或名称");
+            return 0;
+        }
         
+        const repeat = this.isRepeat(sensorTypes);
         if(repeat === true) {
             message.warning("请不要选择重复的传感器类型");
             return 0;
         }
 
+        console.log(sensorCodeAids);
         const params = this.hanleData();
         this.editEquipment(params);
     }
@@ -301,7 +313,12 @@ class EditModal extends Component {
                 data[index].sensor_model = '';
                 data[index].sensor_code = '';
                 data[index].type_name = string;
-                this.setState({sensors: data});
+                const sensorCodeAids = this.state.sensorCodeAids
+                sensorCodeAids.splice(index, 1)
+                this.setState({
+                    sensorCodeAids,
+                    sensors: data
+                })
                 break;
             case 'model':
                 data[index].sensor_model = string;
@@ -356,11 +373,18 @@ class EditModal extends Component {
             spinning: true,
             display: 'none',
         });
+        for(let i = 0; i< this.props.sensorTypes.size; i++){
+            const sensors = this.state.sensors;
+            sensors.push({});
+            this.setState({
+                sensors,
+            })
+        }
     }
 
     render() {
 
-        const { equipment_code, storehouse , storage_location, equip_person, note, number, sensors, confirmLoading, spinning} = this.state;
+        const { equipment_code, storehouse , storage_location, equip_person, note, number, sensors, confirmLoading, spinning, display} = this.state;
         const { visible } = this.props;
         const equipmentData = this.handleEngineDefault();
         const handleEngineNmaeDate = this.handleAllEngineName();
@@ -484,10 +508,10 @@ class EditModal extends Component {
                          <Spin spinning={ spinning }  className='spin'/>
                         {spinning ? null 
                              : <div className='hardtitle'>传感器配置：</div>}
-                        {spinning ? null 
-                             :
+                        {
                              sensors.map((item, index) => (
                                 <SensorSetting
+                                    display={ display }
                                     selectChange={ this.selectChange }
                                     item={ item }
                                     key={ index }

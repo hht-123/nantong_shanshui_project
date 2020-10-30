@@ -107,7 +107,6 @@ class AddModal extends Component {
               span: 16,
             },
           };
-        console.log(this.state)
 
         return (
         <div>

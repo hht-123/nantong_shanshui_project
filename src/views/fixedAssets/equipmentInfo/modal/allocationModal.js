@@ -1,17 +1,17 @@
 import React,{ Component } from 'react';
-import { Modal, message,  DatePicker  } from 'antd';
+import { Modal, message , Form, Select } from 'antd';
 import { Model } from "../../../../dataModule/testBone";
 import '../style.less'
 import { allcationEquipmentUrl } from '../../../../dataModule/UrlList'
+
 const model = new Model();
+const { Option } = Select;
 
 class AllocationModal extends Component {
     constructor(props) {
         super (props);
         this.state = {
             confirmLoading: false,
-            applicant_time:'',          //申请时间
-            approval_time: '',          //审批时间
             applicant: '',              //申请人
             applicant_tel: '',          //申请电话
             transfer_unit: '',          //调入单位
@@ -19,12 +19,8 @@ class AllocationModal extends Component {
             transfer_unit_tel: '',      //调入单位电话
             client_id: '',              //客户编号
             allocation_reason: '',      //调拨原因
-            transport_unit: '',         //运输单位
-            agent: '',                  //经办人
-            agent_tel: '',              //经办人电话
-            opinion: '',                //主管意见
-            sign: '',                   //主管签字
             remark: '',
+
         }
     }
 
@@ -57,25 +53,16 @@ class AllocationModal extends Component {
         // if(this.state.maintain_cause === '') return;
         
         let params = {
-            applicant_time:this.state.applicant_time,
-            approval_time: this.state.approval_time,
+            engine_id: this.props.data.engine_id,
+            equipment_id: this.props.data.key,
             applicant: this.state.applicant,
             applicant_tel:this.state.applicant_tel,
+            client_id:this.state.client_id,
             transfer_unit:this.state.transfer_unit,
             transfer_unit_ads:this.state.transfer_unit_ads,
             transfer_unit_tel:this.state.transfer_unit_tel,
-            client_id:this.state.client_id,
             allocation_reason:this.state.allocation_reason,
-            transport_unit:this.state.transport_unit,
-            agent_tel:this.state.agent_tel,
-            agent: this.state.agent,
-            opinion: this.state.opinion,
-            sign:this.state.sign ,
             remark: this.state.remark,
-            equipment_id: this.props.data.key,
-            equipment_remark: this.props.data.note,
-            host_name: this.props.data.engine_name,
-            host_number: this.props.data.engine_code,
         }
         this.setState({
           confirmLoading: true,
@@ -108,6 +95,34 @@ class AllocationModal extends Component {
         })
     }
 
+    handleAllEngineName = () => {
+        const { allEngineName } = this.state;
+        const handledata = allEngineName.map((item) => (
+            item.engine_name + '/' + item.engine_code
+        ))
+        return handledata;
+    }
+
+    handleSelect = (string) => {
+        let engine_code = string;
+        const index = engine_code.indexOf('/');
+        engine_code = engine_code.substr(index+1);
+        this.setState({engine_code});
+    }
+
+    afterClose = () => {
+        this.setState({
+            applicant: '',              //申请人
+            applicant_tel: '',          //申请电话
+            transfer_unit: '',          //调入单位
+            transfer_unit_ads: '',      //调入单位地址
+            transfer_unit_tel: '',      //调入单位电话
+            client_id: '',              //客户编号
+            allocation_reason: '',      //调拨原因
+            remark: '',
+        })
+    }
+
     render() {
         const { visible } = this.props;
         const { confirmLoading } = this.state;
@@ -122,6 +137,7 @@ class AllocationModal extends Component {
                 onOk={ this.handleOk }
                 onCancel={ this.handleCancel }
                 width='600px'
+                afterClose={ this.afterClose }
                 >
                 <div >
                         <table className='scrapTable' border="1" width='550px'  >
@@ -131,10 +147,6 @@ class AllocationModal extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>申请时间:</td>
-                                <td colSpan='3'><DatePicker  onChange={this.onChange1} style={{width:300}}/></td>
-                            </tr>
                             <tr>
                                 <td>主机编号：</td>
                                 <td >{this.props.data.engine_code}</td>
@@ -181,7 +193,7 @@ class AllocationModal extends Component {
                                 <td>
                                     <input 
                                         className='inputNOborder'
-                                        name='transfer_unit'  
+                                        name='transfer_unit_ads'  
                                         onChange={this.changeValue} 
                                     />
                                 </td>
@@ -199,13 +211,20 @@ class AllocationModal extends Component {
                             <tr>
                                 <td>客户编号：</td>
                                 <td colSpan='3'>
-                                    <input 
-                                        name='client_id'  
-                                        onChange={this.changeValue} 
-                                        type='text' 
-                                        className='inputNOborder'
-                                        style={{border:0, height:44, width:'100%'}}
-                                    />
+                                    <Select 
+                                        onSelect={(string) => this.handleSelect(string)}
+                                        style={{ width: '200px'}}
+                                        showSearch
+                                        filterOption={(input, option) =>
+                                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                        }
+                                    >
+                                        {/* {
+                                            handleAllEngineName.size !== 0? 
+                                            handleAllEngineName.map((item, index) => <Option key={index} value={item}>{item}</Option>) 
+                                            : null
+                                        } */}
+                                    </Select>
                                 </td>
                             </tr>
                             <tr >
@@ -220,70 +239,7 @@ class AllocationModal extends Component {
                                 </td>
                             </tr>
                             <tr></tr>
-                            <tr>
-                                <td >运输单位：</td>
-                                <td>
-                                    <input 
-                                        name='transport_unit'  
-                                        onChange={this.changeValue} 
-                                        type='text' 
-                                        className='inputNOborder'
-                                        style={{border:0, height:44, width:'100%'}}
-                                    />
-                                </td>
-                                <td >经办人：</td>
-                                <td>
-                                    <input 
-                                        name='agent'  
-                                        onChange={this.changeValue} 
-                                        type='text' 
-                                        className='inputNOborder'
-                                        style={{border:0, height:44, width:'100%'}}
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td ></td>
-                                <td></td>
-                                <td >经办人电话：</td>
-                                <td>
-                                    <input 
-                                        name='agent_tel'  
-                                        onChange={this.changeValue} 
-                                        type='text' 
-                                        className='inputNOborder'
-                                        style={{border:0, height:44, width:'100%'}}
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td rowSpan='2'>主管意见：</td>
-                                <td colSpan='3' rowSpan='2'>
-                                    <textarea
-                                        className='textareaNOborder'
-                                        name='opinion'  
-                                        onChange={this.changeValue} 
-                                        style={{border:0, height:60}}
-                                    />
-                                </td>
-                            </tr>
-                            <tr></tr> 
-                            <tr>
-                                <td colSpan='2' rowSpan='2'></td>
-                                <td>主管签字:</td>
-                                <td>
-                                    <input 
-                                        name='sign'  
-                                        onChange={this.changeValue}  
-                                        className='inputNOborder'
-                                        style={{border:0, height:30}}
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>审批时间:</td>
-                                <td><DatePicker onChange={this.onChange2} /></td>
-                            </tr>
+                            
                             <tr>
                                 <td>备注:</td>
                                 <td colSpan='3'>
