@@ -170,11 +170,11 @@ class EpuipmentAllocation extends Component {
 
   statusSWift(status) {
     if(status === '1'){
-      return '停运'
-    }else if(status === '0'){
       return '在线'
-    }else if(status  === '2'){
-      return '报废'
+    }else if(status === '3'){
+      return '报修'
+    }else if(status === '4'){
+      return '维护'
     }
   }
 
@@ -203,6 +203,7 @@ class EpuipmentAllocation extends Component {
         const {isLoading, showPagination, size, total, currentPage, key} = this.state;
         const tableDate = this.handleData();
 
+        
         console.log(tableDate, 'tableDate')
         return(
             <div>
@@ -224,18 +225,6 @@ class EpuipmentAllocation extends Component {
                                 onChange={ this.handleChange }
                                 value={ this.state.search_transfer_unit }
                             />
-                        </div>
-                        <div className="inputWrapper" >
-                            <div className="input" >设备状态:</div>
-                            <Select 
-                                style={{ width: 200}}
-                                onSelect={(string) => this.handleSelect(string)} 
-                                key={key}
-                            >
-                                <Option key={0} value={0}>在线</Option>
-                                <Option key={1} value={1}>停运</Option>
-                                <Option key={2} value={2}>报废</Option>
-                            </Select>
                         </div>
                         <div className="line"></div>
                         <div style={{marginTop: "15px"}}>

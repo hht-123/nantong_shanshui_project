@@ -21,12 +21,6 @@ class AllocationTable extends Component{
           width: 120
         },
         {
-          title: '设备状态',
-          dataIndex: 'status',
-          align: 'center',
-          width: 80
-        },
-        {
           title: '调拨人',
           dataIndex: 'applicant',
           align: 'center',
