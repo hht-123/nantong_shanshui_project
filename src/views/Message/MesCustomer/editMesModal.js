@@ -54,6 +54,9 @@ class EditMesModal extends Component{
             me.setState({
                 confirmLoading: false,
             })
+            const item = me.props.getParams();
+            me.props.getCurrentPage(item); 
+            message.success('修改完成')
         },
         function() {
         message.warning('修改失败，请重试')
@@ -85,9 +88,6 @@ class EditMesModal extends Component{
             confirmLoading: true,
         });
         this.editEngineInfo(params);
-        let item = this.props.getParams();
-        this.props.getCurrentPage(item); 
-        this.props.getPage();
     };
     
     //取消按钮事件

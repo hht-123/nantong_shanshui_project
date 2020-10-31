@@ -247,7 +247,7 @@ class MessageIndex extends Component{
                             Visible={this.state.Visible}  //这里把state里面的Visible传递到子组件
                             cancel={this.closeAddModal}
                             getParams = {this.getParams.bind(this)}
-                            getPage = { this.getPage }
+                            getCurrentPage = { this.getCurrentPage.bind(this) }
                         />
                     </div>
                     <MessageTable
@@ -277,7 +277,7 @@ class MessageIndex extends Component{
                         cancel={ this.closeAddModal }
                         editInfo={ this.state.editInfo }
                         getParams = {this.getParams.bind(this)}
-                        getPage = { this.getPage }
+                        getCurrentPage = { this.getCurrentPage.bind(this) }
                     />
                 </div>
                 

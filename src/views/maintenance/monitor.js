@@ -291,7 +291,7 @@ class Monitor extends Component{
               me.setState({
                 equipmentInfo: response.data
               }) 
-              // console.log(me.state.equipmentInfo)
+              
             } else {
               me.setState({
                 equipmentInfo: response.data.data,
