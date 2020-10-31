@@ -107,7 +107,7 @@ class EditSensorSetting extends Component {
         const { addInfo, delectInfo, number,  types, index, item } = this.props;
         const { sensorModels, sensorCodes } = this.state;
         return(
-            <div style={{display: this.props.display}}>
+            <div style={{display: this.props.display === undefined ? 'block' : this.props.display}}>
                 <div className='eCreateBlock'>
                     <div className='eCreateName'>类型：</div>
                     <Select

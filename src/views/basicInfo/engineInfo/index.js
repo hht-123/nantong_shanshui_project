@@ -236,6 +236,16 @@ class EngineInfo extends Component{
   //更改状态
   handlestatus = (string) => {
     this.setState({status: string});
+    if(string === '1'){
+      const params = this.getparams(1, 10, string);
+      this.setState({search: false});
+      this.getCurrentPage(params);
+    }
+    if(string === '0'){
+      const params = this.getparams(1, 10, string);
+      this.setState({search: false});
+      this.getCurrentPage(params);
+    }
   }
 
   handleData = () => {

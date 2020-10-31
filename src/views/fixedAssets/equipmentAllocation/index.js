@@ -14,19 +14,19 @@ class EpuipmentAllocation extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            keyValue: '' ,          //刷新搜索日期
-            key: '',               //刷新下拉框
-            search: false,          //是否搜索
-            currentPage: 1,         //当前页面
+            keyValue: '' ,            //刷新搜索日期
+            key: '',                //刷新下拉框
+            search: false,            //是否搜索
+            currentPage: 1,           //当前页面
             size: 10,
-            whetherTest: false,     //是否是测试  true为是 false为否
-            showPagination: true,   //是否分页
-            isLoading: false,       //表格是否加载
-            data: [],               //表格数据 
-            total: 0,               //一共有多少条数据
+            whetherTest: false,       //是否是测试  true为是 false为否
+            showPagination: true,     //是否分页
+            isLoading: false,         //表格是否加载
+            data: [],                 //表格数据 
+            total: 0,                 //一共有多少条数据
             search_transfer_unit: '',  //客户单位
-            search_status: '',       //设备状态
-            search_time: [],         //搜索时间
+            search_status: '',        //设备状态
+            search_time: [],          //搜索时间
         }
     }
 
@@ -36,40 +36,40 @@ class EpuipmentAllocation extends Component {
       }
     
       //数据请求
-      getCurrentPage = (params) => {
-        for (let i in params) {
-          if (params[i] === undefined || params[i] === null) {
-            params[i] = ''
-          }
+    getCurrentPage = (params) => {
+      for (let i in params) {
+        if (params[i] === undefined || params[i] === null) {
+          params[i] = ''
         }
-        let me = this;
-        this.setState({isLoading: true})
-        model.fetch(
-          params,
-          equipmentAllocation,
-          'get',
-          function(response) {
-            if (me.state.whetherTest === false) {
-              me.setState({
-                isLoading: false,
-                total: response.data.count,
-                data: response.data.data,
-                currentPage: params['currentPage'],
-                size: params['size'],
-              })
-            } else {
-              me.setState({
-                isLoading: false,
-                data: response.data.data,
-              })
-            }
-          },
-          function() {
-            message.warning('加载失败，请重试')
-          },
-          this.state.whetherTest
-        )
       }
+      let me = this;
+      this.setState({isLoading: true})
+      model.fetch(
+        params,
+        equipmentAllocation,
+        'get',
+        function(response) {
+          if (me.state.whetherTest === false) {
+            me.setState({
+              isLoading: false,
+              total: response.data.count,
+              data: response.data.data,
+              currentPage: params['currentPage'],
+              size: params['size'],
+            })
+          } else {
+            me.setState({
+              isLoading: false,
+              data: response.data.data,
+            })
+          }
+        },
+        function() {
+          message.warning('加载失败，请重试')
+        },
+        this.state.whetherTest
+      )
+    }
 
     //处理日期函数
     handleDate(preDate) {
@@ -189,6 +189,7 @@ class EpuipmentAllocation extends Component {
           equipment_code: item.equipment_code,
           status: this.statusSWift(item.status),
           applicant: item.applicant,
+          applicant_tel: item.applicant_tel,
           transfer_unit: item.transfer_unit,
           transfer_unit_tel: item.transfer_unit_tel,
           transfer_unit_ads: item.transfer_unit_ads,

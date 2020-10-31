@@ -59,7 +59,6 @@ class EditModal extends Component {
                 confirmLoading: false,
             })
             message.success('编辑成功');
-            me.props.afterCreateOrCreate();
           },
           function() {
             message.warning('修改失败，请重试')
@@ -91,6 +90,7 @@ class EditModal extends Component {
           confirmLoading: true,
         });
         this.editEngineInfo(params);
+        this.props.afterCreateOrCreate();
     };
     
     //取消按钮事件

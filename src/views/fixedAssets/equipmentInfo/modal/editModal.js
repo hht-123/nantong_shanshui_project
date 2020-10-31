@@ -98,7 +98,6 @@ class EditModal extends Component {
           'put',
           function() {
               message.success("编辑成功");
-              me.props.afterCreateOrEdit();
               me.setState({confirmLoading: false})
               me.props.closeModal();
           },
@@ -205,6 +204,7 @@ class EditModal extends Component {
         console.log(sensorCodeAids);
         const params = this.hanleData();
         this.editEquipment(params);
+        this.props.afterCreateOrEdit();
     }
 
     //处理数据获取主机编号

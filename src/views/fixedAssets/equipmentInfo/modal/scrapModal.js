@@ -60,6 +60,7 @@ a
         });
         console.log(params);
         this.scrapEquipment(params);
+        this.props.afterCreateOrEdit();
       };
     
     //取消按钮事件

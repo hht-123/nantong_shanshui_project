@@ -101,7 +101,6 @@ class CreateModal extends Component {
           function() {
               message.success("新建设备成功");
               me.setState({confirmLoading: false})
-              me.props.afterCreateOrEdit();
               me.continueOrBack();
               me.afterClose();
           },
@@ -136,7 +135,8 @@ class CreateModal extends Component {
             return 0;
         }
         const params = this.hanleData();
-        this.addNewEquipment(params);    
+        this.addNewEquipment(params);
+        this.props.afterCreateOrEdit();    
     }
 
     //确认是否继续添加或者返回

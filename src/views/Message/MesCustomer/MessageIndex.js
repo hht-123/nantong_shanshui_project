@@ -114,7 +114,7 @@ class MessageIndex extends Component{
             search_client_unit: null,
             keyValue: new Date(),
             currentPage: 1,
-            search:true,
+            search:false,
         })
     }
 
@@ -246,7 +246,7 @@ class MessageIndex extends Component{
                             Visible={this.state.Visible}  //这里把state里面的Visible传递到子组件
                             cancel={this.closeAddModal}
                             getParams = {this.getParams.bind(this)}
-                            getCurrentPage = {this.getCurrentPage.bind(this)}
+                            getPage = { this.getPage }
                         />
                     </div>
                     <MessageTable
@@ -276,7 +276,7 @@ class MessageIndex extends Component{
                         cancel={ this.closeAddModal }
                         editInfo={ this.state.editInfo }
                         getParams = {this.getParams.bind(this)}
-                        getCurrentPage = {this.getCurrentPage.bind(this)}
+                        getPage = { this.getPage }
                     />
                 </div>
                 

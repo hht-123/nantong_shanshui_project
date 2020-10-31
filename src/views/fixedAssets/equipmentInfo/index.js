@@ -11,6 +11,7 @@ import EditModal from './modal/editModal';
 import ScrapModal from './modal/scrapModal';
 import AllocationModal from './modal/allocationModal'
 import { connect } from 'react-redux';
+import  BackModal  from './modal/backModal';
 
 const { Option } = Select;
 const model = new Model();
@@ -26,7 +27,7 @@ class EpuipmentInfo extends Component {
         showPagination: true,         //是否分页
         searchEngineCode: '',         //搜索主机编号
         searchEquipmentCode: '',      //搜索设备编号
-        status: '',                   //搜索的状态
+        status: 0,                   //搜索的状态
         isLoading: false,             //是否加载
         data: [],                     //表格数据
         sensorModalData: [],          //传感器数据
@@ -40,11 +41,13 @@ class EpuipmentInfo extends Component {
         scrapListVisible: false,      //显示需填写的报废单
         scrapEquipmentInfo:{},        
         allocationListVisible: false, //显示需填写的调拨单
-        allocationEqiipmentInfo:{}
+        allocationEqiipmentInfo:{},
+        backModalvisible: false,
+        backEquipmentInfo: {},
       }
   }
 
-  getparams(currentPage=1, size=10, status=1, searchEngineCode=null, searchEquipmentCode=null) {
+  getparams(currentPage=1, size=10, status=0, searchEngineCode=null, searchEquipmentCode=null) {
     const params = {
       currentPage,
       size,
@@ -118,7 +121,7 @@ class EpuipmentInfo extends Component {
   //获取翻页内容
   getPage = (currentPage, pageSize) => {
     let [searchEngineCode, searchEquipmentCode] = [null, null];
-    let status = 1;
+    let status = 0;
     if(this.state.search === true){
       searchEngineCode = this.state.searchEngineCode;
       searchEquipmentCode = this.state.searchEquipmentCode;
@@ -131,7 +134,7 @@ class EpuipmentInfo extends Component {
   //改变pageSize获取内容
   getSize = (current, size) => {
     let [searchEngineCode, searchEquipmentCode] = [null, null];
-    let status = 1;
+    let status = 0;
     if(this.state.search === true){
       searchEngineCode = this.state.searchEngineCode;
       searchEquipmentCode = this.state.searchEquipmentCode;
@@ -145,7 +148,7 @@ class EpuipmentInfo extends Component {
   //
   afterCreateOrEdit = () => {
     let [searchEngineCode, searchEquipmentCode] = [null, null];
-    let status = 1;
+    let status = 0;
     const { size, currentPage } = this.state; 
     if(this.state.search === true){
       searchEngineCode = this.state.searchEngineCode;
@@ -163,6 +166,20 @@ class EpuipmentInfo extends Component {
     })
   }
 
+  handleSelect = (string) => {
+    this.setState({status: string});
+    if(string === '0'){
+      const params = this.getparams(1, 10, string);
+      this.setState({search: false});
+      this.getCurrentPage(params);
+    }
+    if(string  === '1'){
+      const params = this.getparams(1, 10, string);
+      this.setState({search: false});
+      this.getCurrentPage(params);
+    }
+  }
+
   //重置
   handleReset = () => {
     const params = this.getparams();
@@ -170,8 +187,9 @@ class EpuipmentInfo extends Component {
     this.setState({
       searchEngineCode: '',
       searchEquipmentCode: '',
-      status: '1',
+      status: '0',
       key: new Date(),
+      search: false,
     })
   }
 
@@ -213,6 +231,12 @@ class EpuipmentInfo extends Component {
           allocationEqiipmentInfo: record,
         })
         break;
+      case 'back':
+        this.setState({
+          backModalvisible: true,
+          backEquipmentInfo: record,
+        })  
+        break;
       default:
         return 0;
     }
@@ -226,6 +250,7 @@ class EpuipmentInfo extends Component {
       editVisible: false,
       scrapListVisible: false,
       allocationListVisible: false,
+      backModalvisible: false,
     })
   }
   statusSWift(status) {
@@ -263,7 +288,7 @@ class EpuipmentInfo extends Component {
     const { searchEngineCode, searchEquipmentCode, isLoading, showPagination, size, 
       total, sensorModalVisiable, currentPage, sensorModalData, sensorTitle, createVisible, 
       editVisible, currentEnquimentInfo, scrapListVisible, scrapEquipmentInfo, allocationListVisible, 
-      allocationEqiipmentInfo, key} = this.state;
+      allocationEqiipmentInfo, key, search, status, backModalvisible, backEquipmentInfo} = this.state;
     const tableDate = this.handleData();
     const { roleData } = this.props
     if (roleData.size === 0 ) return null
@@ -298,13 +323,12 @@ class EpuipmentInfo extends Component {
                 <div className="input" >状态:</div>
                 <Select 
                     style={{ width: 200}}
-                    // onSelect={(string) => this.handleSelect(string)} 
+                    onSelect={(string) => this.handleSelect(string)} 
                     key={key}
                     defaultValue="0" 
                 >
                     <Option key="0" value="0">在线</Option>
                     <Option key="1" value="1">停运</Option>
-                    <Option key="2" value="2">报废</Option>
                 </Select>
               </div>
 
@@ -340,9 +364,11 @@ class EpuipmentInfo extends Component {
               total={ total }
               changePage={ this.getPage }
               changeSize={ this.getSize }
-              showModal = {this.showModal}
+              showModal={this.showModal}
               currentPage={ currentPage }
-              roleData = { roleData }
+              roleData={ roleData }
+              search={ search}
+              status={ status }
             />
             <div>
               <EngineSensorModal 
@@ -352,15 +378,23 @@ class EpuipmentInfo extends Component {
                 data={ sensorModalData }
               />
               {/* 加这里 */}
-              <ScrapModal 
+              <ScrapModal
+                afterCreateOrEdit = { this.afterCreateOrEdit }
                 visible={ scrapListVisible }
                 closeModal={ this.closeModal }
                 data = { scrapEquipmentInfo }
               />
               <AllocationModal
+                afterCreateOrEdit = { this.afterCreateOrEdit }
                 visible={ allocationListVisible }
                 closeModal={ this.closeModal }
                 data = { allocationEqiipmentInfo }
+              />
+              <BackModal 
+                afterCreateOrEdit = { this.afterCreateOrEdit }
+                visible={ backModalvisible }
+                closeModal={ this.closeModal }
+                data={ backEquipmentInfo }
               />
             </div>
           </div>

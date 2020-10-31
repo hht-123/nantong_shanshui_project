@@ -31,7 +31,6 @@ class AddModal extends Component {
             })
             message.success("添加成功");
             me.afterClose();
-            me.props.afterCreateOrCreate();   //创建完成后保持搜索条件
           },
           function() {
             message.warning('发送数据失败，请重试')
@@ -60,6 +59,7 @@ class AddModal extends Component {
           confirmLoading: true,
         });
         this.createNewEngine(params);
+        this.props.afterCreateOrCreate();   //创建完成后保持搜索条件
     };
     
     //取消按钮事件

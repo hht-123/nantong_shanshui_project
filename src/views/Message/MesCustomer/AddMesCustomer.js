@@ -64,10 +64,9 @@ class AddMesCustomer extends Component{
         this.setState({
             confirmLoading: true,
         });
-            console.log(params);
             this.createNewCustomer(params);
             let item = this.props.getParams();
-            this.props.getCurrentPage(item); 
+            this.props.getPage();
     };
 
     //取消按钮事件

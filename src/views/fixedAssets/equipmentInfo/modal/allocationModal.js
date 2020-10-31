@@ -1,8 +1,8 @@
 import React,{ Component } from 'react';
-import { Modal, message , Form, Select } from 'antd';
+import { Modal, message, Select } from 'antd';
 import { Model } from "../../../../dataModule/testBone";
 import '../style.less'
-import { allcationEquipmentUrl } from '../../../../dataModule/UrlList'
+import { allcationEquipmentUrl, clientUrl} from '../../../../dataModule/UrlList'
 
 const model = new Model();
 const { Option } = Select;
@@ -20,11 +20,35 @@ class AllocationModal extends Component {
             client_id: '',              //客户编号
             allocation_reason: '',      //调拨原因
             remark: '',
+            clientData:[],              //获取所有客户信息
 
         }
     }
 
-    scrapEquipment(params) {
+    componentDidMount() {
+        this.getClientData({client: 'all'});
+    }
+
+    //获取客户信息
+    getClientData(params) {
+        let me = this;
+        model.fetch(
+        params,
+        clientUrl,
+        'get',
+        function(response) {
+            me.setState({
+                clientData: response.data.results
+            })
+        },
+        function() {
+            message.warning('加载失败，请重试')
+        },
+        false
+        )
+    }
+
+    allocateEquipment(params) {
         let me = this;
         model.fetch(
           params,
@@ -35,7 +59,7 @@ class AllocationModal extends Component {
             me.setState({
                 confirmLoading: false,
             })
-            message.warning('提交成功')
+            message.success('提交成功')
           },
           function() {
             message.warning('提交失败，请重试')
@@ -50,7 +74,11 @@ class AllocationModal extends Component {
       }
 
     handleOk = () => {
-        // if(this.state.maintain_cause === '') return;
+        const { client_id } =this.state;
+        if(client_id === ''){
+            message.warning("请选择客户编号")
+            return;
+        }
         
         let params = {
             engine_id: this.props.data.engine_id,
@@ -64,11 +92,12 @@ class AllocationModal extends Component {
             allocation_reason:this.state.allocation_reason,
             remark: this.state.remark,
         }
+
         this.setState({
           confirmLoading: true,
         });
-        console.log(params);
-        this.scrapEquipment(params);
+        this.allocateEquipment(params);
+        this.props.afterCreateOrEdit();
       };
     
     //取消按钮事件
@@ -95,19 +124,27 @@ class AllocationModal extends Component {
         })
     }
 
-    handleAllEngineName = () => {
-        const { allEngineName } = this.state;
-        const handledata = allEngineName.map((item) => (
-            item.engine_name + '/' + item.engine_code
+    handleAllClient = () => {
+        const { clientData } = this.state;
+        const handleClientData = clientData.map((item) => (
+            {
+                data: item.client_unit + '/' + item.client_code,
+                aid: item.aid
+            }
         ))
-        return handledata;
+        return handleClientData;
     }
 
     handleSelect = (string) => {
-        let engine_code = string;
-        const index = engine_code.indexOf('/');
-        engine_code = engine_code.substr(index+1);
-        this.setState({engine_code});
+        this.setState({client_id: string})
+        const { clientData } = this.state;
+        const index =  clientData.findIndex((item) => item.aid === string);
+        const currentDate = clientData[index];
+        this.setState({
+            transfer_unit_tel: currentDate.unit_phone,
+            transfer_unit: currentDate.client_unit,
+            transfer_unit_ads: currentDate.client_address,
+        })
     }
 
     afterClose = () => {
@@ -125,7 +162,9 @@ class AllocationModal extends Component {
 
     render() {
         const { visible } = this.props;
-        const { confirmLoading } = this.state;
+        const { confirmLoading, clientData } = this.state;
+        const allClient = this.handleAllClient();
+        console.log(this.state.clientData)
         
         return (
         <div>
@@ -181,34 +220,6 @@ class AllocationModal extends Component {
                                 <td><input name='applicant_tel'  onChange={this.changeValue} type='text' className='inputNOborder'/></td>
                             </tr>
                             <tr>
-                                <td rowSpan='2'>调入单位：</td>
-                                <td rowSpan='2'>
-                                    <input 
-                                        className='inputNOborder'
-                                        name='transfer_unit'  
-                                        onChange={this.changeValue} 
-                                    />
-                                </td>
-                                <td >调入单位地址：</td>
-                                <td>
-                                    <input 
-                                        className='inputNOborder'
-                                        name='transfer_unit_ads'  
-                                        onChange={this.changeValue} 
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td >调入单位电话：</td>
-                                <td>
-                                    <input 
-                                        className='inputNOborder'
-                                        name='transfer_unit_tel'  
-                                        onChange={this.changeValue} 
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
                                 <td>客户编号：</td>
                                 <td colSpan='3'>
                                     <Select 
@@ -219,14 +230,31 @@ class AllocationModal extends Component {
                                             option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                         }
                                     >
-                                        {/* {
-                                            handleAllEngineName.size !== 0? 
-                                            handleAllEngineName.map((item, index) => <Option key={index} value={item}>{item}</Option>) 
+                                        {
+                                            allClient.size !== 0? 
+                                            allClient.map((item, index) => <Option key={item.aid} value={item.aid}>{item.data}</Option>) 
                                             : null
-                                        } */}
+                                        }
                                     </Select>
                                 </td>
                             </tr>
+                            <tr>
+                                <td rowSpan='2'>调入单位：</td>
+                                <td rowSpan='2'>
+                                    {this.state.transfer_unit}
+                                </td>
+                                <td >调入单位地址：</td>
+                                <td>
+                                    {this.state.transfer_unit_ads}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td >调入单位电话：</td>
+                                <td>
+                                 {this.state.transfer_unit_tel}
+                                </td>
+                            </tr>
+                           
                             <tr >
                                 <td rowSpan='2'>调拨原因：</td>
                                 <td colSpan='3' rowSpan='2'>

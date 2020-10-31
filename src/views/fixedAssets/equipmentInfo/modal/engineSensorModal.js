@@ -54,7 +54,6 @@ class EngineSensorModal extends Component {
     render() {
         const { visible, data, title } = this.props;
         const { confirmLoading, spinning } = this.state;
-        console.log(data);
 
         return(
             <Modal

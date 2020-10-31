@@ -233,6 +233,20 @@ class SensorInfo extends Component {
     })
   }
 
+  setStatus = (string) => {
+    this.setState({status: string})
+      if(string === '1'){
+        this.setState({search: false});
+        const params = this.getParams(1, 10, string);
+        this.getInfo(params);
+      }
+      if(string === '0'){
+        this.setState({search: false});
+        const params = this.getParams(1, 10, string);
+        this.getInfo(params);
+      }
+  }
+
   statusSWift(status) {
     if(status === '1'){
       return '可以使用'
@@ -290,7 +304,6 @@ class SensorInfo extends Component {
     // const sensorModel = 
     const { roleData } = this.props
     if (roleData.size === 0 ) return null
-    console.log(this.state);
 
     return (
       <div>
@@ -341,7 +354,7 @@ class SensorInfo extends Component {
                 <Select 
                   defaultValue="1" 
                   style={{ width: "200px" }} 
-                  onSelect={ (string) => this.setState({status: string}) }
+                  onSelect={ (string) => this.setStatus(string) }
                   key={ key }
                 >
                   <Option value="1">可以使用</Option>

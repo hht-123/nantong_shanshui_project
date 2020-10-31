@@ -37,7 +37,6 @@ class CodeModal extends Component {
                 })
                 me.props.cancel(false);
                 message.success('添加成功');
-                me.props.afterCreateOrEdit();
                 me.afterClose();
             },
             function() {
@@ -101,6 +100,7 @@ class CodeModal extends Component {
             note,
         }
         this.createNewCode(params);
+        this.props.afterCreateOrEdit();
       };
     
     //取消按钮事件

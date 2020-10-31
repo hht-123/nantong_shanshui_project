@@ -6,7 +6,7 @@
  * @LastEditors: 唐帆
  * @LastEditTime: 2020-04-30 10:46:26
  */
-export const originalUrl = 'http://10.21.1.58:8000/';
+export const originalUrl = 'http://10.21.1.106:8000/';
 export const enginInfoUrl = 'main_engine/';
 export const messageCUrl = 'client/';
 export const contactUrl = 'contact_people/';
@@ -28,6 +28,7 @@ export const sensorequipmentUrl = 'app/deviceNum_to_typename/'    //通过设备
 export const equipmentConfiureUrl = 'app/equipment_configuration_retrieve/'      //获取设备配置记录
 export const equipmentAllocation = 'app/equipment_allocation_retrieve/'          //设备调配配置记录
 export const equipmentScrap = 'app/equipment_scrap_retrieve/'     //设备报废记录
+export const backToFactory = '/app/equipment_allocate_factory/'   //调拨回厂
 
 export const maintenanceUrl = 'app/operation/';
 export const equipmentUrl = 'app/real_time_monitoring_high/'

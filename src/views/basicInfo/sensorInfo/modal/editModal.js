@@ -51,7 +51,6 @@ class EditModal extends Component {
             me.setState({
                 confirmLoading: false,
             })
-            me.props.afterCreateOrEdit();
           },
           function() {
             message.warning('修改失败，请重试')
@@ -79,6 +78,7 @@ class EditModal extends Component {
           confirmLoading: true,
         });
         this.editEngineInfo(params, sensorAid);
+        this.props.afterCreateOrEdit();
       };
 
     //取消
