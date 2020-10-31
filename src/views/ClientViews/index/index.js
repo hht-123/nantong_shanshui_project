@@ -68,7 +68,11 @@ class ClientIndex extends Component {
             <div className='line-top'></div>
                 <div  className='content' >
                     { data.map((item,index) => {
+                      if( item.status ==='1'|| item.status === '2' ) {
+                        return null
+                      } else {
                       return <Equipment key={ index } aid={ item.aid } equipment_code={ item.equipment_code }  status={ item.status } />
+                      }
                     }) }
                 </div>
             

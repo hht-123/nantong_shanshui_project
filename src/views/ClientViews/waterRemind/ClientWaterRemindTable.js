@@ -11,7 +11,7 @@ class ClientWaterRemindTable extends Component{
   }
 
     render() {
-      const { isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
+      const { isLoading, data, total, showPagination, changePage, changeSize, currentPage, size } = this.props;
 
       const columns =  [
         {
@@ -76,6 +76,7 @@ class ClientWaterRemindTable extends Component{
                   current={ currentPage } 
                   total={ total }  
                   showQuickJumper
+                  pageSize={ size }
                   style={{ marginRight: 0 }}
                   showSizeChanger
                   pageSizeOptions={['10','20','30','40',]}

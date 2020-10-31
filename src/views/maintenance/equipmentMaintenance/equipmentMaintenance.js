@@ -26,6 +26,7 @@ class EquipmentMaintenance extends Component{
       isLoading: false,         //是否加载
       data: [],                 //表格数据 
       total: 0,                 //一共有多少条数据
+      size:10,
       keyValue: "",             //用于重置
       key:'',
       search_begin_time: [],    //开始时间
@@ -65,6 +66,7 @@ class EquipmentMaintenance extends Component{
             total: response.data.count,
             data: response.data.data,
             currentPage: params['currentPage'],
+            size: params['size'],
           })
           console.log(me.state.data)
         } else {

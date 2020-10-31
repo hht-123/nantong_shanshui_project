@@ -188,23 +188,19 @@ class ClientMonitor extends Component{
   handleStatusColor = (numb) => {
     if ( numb === '0' ) {
       return  { background:'green'}
-    }else if (numb === '1') {
-      return  { background:'red'}
-    }else if (numb === '2') {
-      return  { background:'gray'}
     }else if (numb === '3') {
-      return  { background:'bule'}
+      return  { background:'red'}
+    }else if (numb === '4') {
+      return  { background:'blue'}
     }
   }
 
   handleStatus = (numb) => {
     if ( numb === '0' ) {
       return  '在线'
-    }else if (numb === '1') {
-      return  '报修'
-    }else if (numb === '2') {
-      return  '停运'
     }else if (numb === '3') {
+      return  '报修'
+    }else if (numb === '4') {
       return  '维护'
     }
   }

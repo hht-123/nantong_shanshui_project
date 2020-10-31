@@ -12,7 +12,7 @@ class EquipMaintenanceTable extends Component{
     }
 
     render() {
-      const { isLoading, data, total, showPagination, changePage, changeSize, currentPage } = this.props;
+      const { isLoading, data, total, showPagination, changePage, changeSize, currentPage, size } = this.props;
 
       const columns =  [
         {
@@ -101,6 +101,7 @@ class EquipMaintenanceTable extends Component{
                   total={ total }  
                   showQuickJumper
                   style={{ marginRight: 0 }}
+                  pageSize={ size }
                   showSizeChanger
                   pageSizeOptions={['10','20','30','40',]}
                   onChange={(page, pageSize) => changePage(page, pageSize)}
