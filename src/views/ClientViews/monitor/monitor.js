@@ -367,21 +367,22 @@ class ClientMonitor extends Component{
         <div className='wrapper'>
             <div className='table'>
                 <span >
-                  <Link to={`/app/clientWaterRemind/${ equipment_id}`}>
+                  <Link to={`/app/clientWaterRemind/${ equipment_id}`} className=' water'>
                     <Icon className='icon' type="warning" theme="filled" />
                     <div className='describe' >水质提醒记录</div>
                   </Link>
                 </span>
                 <span className='main'>
-                  <Link to={`/app/clientEquipMaintenace/${ equipment_id}`}>
+                  <Link to={`/app/clientEquipMaintenace/${ equipment_id}`} className=' water'>
                     <Icon className='icon' type="tool" theme="filled" />
                     <div className='describe' >设备维护</div>
                   </Link>
+                  <div className='dot'></div>
                 </span>
                 <span className='main'>
-                <Link to={`/app/clientSensorCalibration/${ equipment_id}`}>
-                    <Icon className='icon' type="dashboard" theme="filled" style={{ color: '#00A0E9' }} />
-                    <div className='describe' style={{ color: '#00A0E9' }} >传感器标定</div>
+                <Link to={`/app/clientSensorCalibration/${ equipment_id}`} className=' water'>
+                    <Icon className='icon' type="dashboard" theme="filled"   />
+                    <div className='describe'  >传感器标定</div>
                   </Link>
                 </span>
                 {/* <span className='main'><Icon className='icon' type="video-camera" theme="filled" /><div className='describe' >视频监控</div></span> */}
@@ -392,8 +393,10 @@ class ClientMonitor extends Component{
                   <div className='status' >设备状态</div>
                 </span>
                 <span className='main' onClick={ this.showEquipmentModal } >
-                  <Icon className='icon' type="profile" theme="filled" style={{ color: '#00A0E9'}} />
-                  <div className='describe' style={{ color: '#00A0E9' }} >设备详情</div>
+                  <div className=' water'>
+                    <Icon className='icon' type="profile" theme="filled"  />
+                    <div className='describe'  >设备详情</div>
+                  </div>
                 </span>
                 <EquipInfo
                   whetherTest={ whetherTest }
@@ -410,7 +413,7 @@ class ClientMonitor extends Component{
                                   onChange={ this.handleBeginTime } 
                                 />
                                 <Button type="primary" className='search' onClick={ this.searchInfo } >搜索</Button>
-                                <Button type="primary" className='reset' onClick={ this.reset } >重置</Button>
+                                <Button  className='reset' onClick={ this.reset } >重置</Button>
                                 <Line  
                                   Xdata = { time } 
                                   Ydata = { commitInfo(item.type_name)}

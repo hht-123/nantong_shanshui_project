@@ -2,7 +2,7 @@ import { message, Button } from 'antd';
 import React, { Component } from 'react';
 import ContactTable from './ContactTable';
 import { Model } from '../../../dataModule/testBone';
-import { contactUrl, messageCUrl } from '../../../dataModule/UrlList';
+import { contactUrl, messageCUrl, ClientContactUrl } from '../../../dataModule/UrlList';
 import AddModal from './AddModal';
 import EditModal from './editModal';
 import '../style/CusTable.less'
@@ -45,13 +45,13 @@ class contactmes extends Component{
         this.setState({isLoading: true})
         model.fetch(
             params,
-            contactUrl,
+            ClientContactUrl,
             'get',
             function(response) {
                 if (me.state.whetherTest === false) {
                     me.setState({
                         isLoading: false,
-                        data: response.data,
+                        data: response.data.data,
                     })
                     console.log(me.state.data)
                 } else {
@@ -151,10 +151,10 @@ class contactmes extends Component{
     }
 
     render(){
-        // const client_id = this.props.client_id
+        const client_id = this.props.client_id
         const {data, Visible, whetherTest, isLoading, editModalVisible, editInfo } = this.state;
         const tableDate = [];
-        if(data !== undefined){
+        if(data !== undefined && data !== [] ){
             data.map((item) => {            
             tableDate.push({
                 key: item.aid,
@@ -180,7 +180,7 @@ class contactmes extends Component{
                             whetherTest={ whetherTest }
                             Visible={ Visible }  //这里把state里面的Visible传递到子组件
                             cancel={ this.closeAddModal }
-                            // client_id = { client_id }
+                            client_id = { client_id }
                             getParams = { this.getParams.bind(this) }
                             getCurrentPage = { this.getCurrentPage.bind(this) }
                         />

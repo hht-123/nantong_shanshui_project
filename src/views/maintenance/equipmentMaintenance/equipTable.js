@@ -38,13 +38,13 @@ class EquipMaintenanceTable extends Component{
           dataIndex: 'fault_description',
           align: 'center',
         },
-        {
-          title: '维护结果',
-          dataIndex: 'maintain_result',
-          align: 'center',
-          width: 120,
-          render: text => <div style={this.handleStatusColor(text)}>{text}</div>
-        },
+        // {
+        //   title: '维护结果',
+        //   dataIndex: 'maintain_result',
+        //   align: 'center',
+        //   width: 120,
+        //   render: text => <div style={this.handleStatusColor(text)}>{text}</div>
+        // },
         {
           title: '维护状态',
           dataIndex: 'maintain_status',

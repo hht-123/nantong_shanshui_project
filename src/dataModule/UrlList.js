@@ -10,6 +10,7 @@ export const originalUrl = 'http://10.21.1.106:8000/';
 export const enginInfoUrl = 'main_engine/';
 export const messageCUrl = 'client/';
 export const contactUrl = 'contact_people/';
+export const ClientContactUrl = 'app/ClientContactPeople/';
 
 export const sensorInfoUrl = 'app/typemodel/';
 export const sensorTypeUrl = 'app/sensor_type/';

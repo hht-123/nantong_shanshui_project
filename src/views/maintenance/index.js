@@ -50,7 +50,14 @@ class MaintenanceIndex extends Component {
     }
 
     //设备状态下拉框值改变时触发的函数
-    handleChange = (value) => {
+    regionHandleChange = (value) => {
+      console.log(value);
+      this.setState({
+        region: value
+      })
+    }
+
+    StatusHandleChange = (value) => {
       console.log(value);
       this.setState({
         status: value
@@ -162,19 +169,28 @@ class MaintenanceIndex extends Component {
                 循环水智慧管家远程监控系统
             </div>
             <div className='line-bottom-high'></div>
-            <div className='Search'>
+            <div  className='Search'>
                 <div className='search-area'>地区筛选:</div>
-                <Input className='area' name='region' value={ this.state.region } onChange={ this.changeValue } />
+                      <Select  className='area' name='region'  size='small' key={this.state.keyStatus} allowClear={ allowClear } style={{ width: 120, }}  onChange={ this.regionHandleChange } >
+                      { Object.keys(Newdata).map((key,index) => {
+                        return  <Option key={index} value={key} >{key}</Option>
+                      } )}
+                      </Select>
                 <div className='search-user'>用户单位:</div>
+                      {/* <Select  className='user' name='client_unit'  size='small' key={this.state.keyStatus} allowClear={ allowClear } style={{ width: 120, }}  >
+                        { Object.keys(Newdata).map((key,index) => {
+                           Newdata[key].map((item,index) => {
+                              return <Option value={ item.client_unit }>{ item.client_unit }</Option>
+                          })
+                        } )}
+                      </Select> */}
                 <Input className='user' name='client_unit' value={ this.state.client_unit } onChange={ this.changeValue } />
                 <div className='search-status'>设备状态:</div>
                 <div className='status'>
-                    <Select size='small' key={this.state.keyStatus} allowClear={ allowClear }  style={{ width: 120, }} onChange={ this.handleChange }>
+                    <Select size='small' key={this.state.keyStatus} allowClear={ allowClear }  style={{ width: 120, }} onChange={ this.StatusHandleChange }>
                         <Option value="0">在线</Option>
                         <Option value="3">报修</Option>
                         <Option value="4">维护</Option>
-                        {/* <Option value="2">停运</Option>
-                        <Option value="3">维护</Option> */}
                     </Select>
                 </div>
                 <div className='button1'>
