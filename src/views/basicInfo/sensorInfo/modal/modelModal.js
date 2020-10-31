@@ -14,8 +14,8 @@ class ModelModal extends Component {
             sensor_type: '',            //传感器类型
             allmodel: '',
             sensor_model: '',           //传感器型号
-            notice_content: '',
-            create_time: '',
+            notice_content: '',         //提示内容
+            sensor_threshold: ''
         }
     }
 
@@ -35,6 +35,9 @@ class ModelModal extends Component {
                 me.props.cancel(false)
                 message.success("添加传感器型号成功");
                 me.afterClose();
+                if(me.state.sensor_type.length > 0){
+                    this.getSensorModel({type_name: me.state.sensor_type});
+                }
             },
             function() {
                 message.warning('发送数据失败，请重试')
@@ -76,6 +79,8 @@ class ModelModal extends Component {
         validateFields();
         if(sensor_model === '') return;
         if(sensor_type === '') return;
+        if(sensor_threshold === '') return;
+        if(notice_content === '') return;
 
         let repeat = false; 
         const index =  allmodel.findIndex((item) => sensor_model === item.sensor_model.toUpperCase())
@@ -104,7 +109,6 @@ class ModelModal extends Component {
             notice_content,
             sensor_threshold
         }
-        console.log(params);
         this.createNewModel(params);
     };
     
@@ -191,15 +195,24 @@ class ModelModal extends Component {
                             label="传感器默认阈值"
                             colon
                         >
+                            {getFieldDecorator('sensor_threshold', {
+                                rules: [{ required: true, message: '请输入传感器默认阈值' }],
+                            })(
                                 <Input  name="sensor_threshold" onChange={this.handleChange} />
+                            )}
                         </Form.Item>
 
                         <Form.Item
                             label="默认提示内容"
                             colon
                         >
+                            {getFieldDecorator('notice_content', {
+                                rules: [{ required: true, message: '请输入传感器默认提示内容' }],
+                            })(
                                 <Input  name="notice_content" onChange={this.handleChange} />
+                            )}
                         </Form.Item>
+                        
                     </Form>
                 </div>
             </Modal>

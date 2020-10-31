@@ -34,8 +34,6 @@ class EditModal extends Component {
         }
     }
 
-    
-
     componentDidMount() {
         this.getEngineName({engineNmae: 'all'});
         this.setState({
@@ -70,6 +68,10 @@ class EditModal extends Component {
             const aids = sensorModalData.map((item) => item.equipment_id);
             const sensorTypes = sensorModalData.map((item) => (item.type_name));        //初始化类型
             const sensorCodeAids = sensorModalData.map((item) => (item.aid))   //初始化aid
+            if(sensorModalData.length === 0){
+                sensorModalData.push({});
+            }
+
             this.setState({
                 number: sensorModalData.length,
                 sensors: sensorModalData,
@@ -161,7 +163,7 @@ class EditModal extends Component {
         
         if(sensorCodeAids.length > 1){
             equipment_sensor = sensorCodeAids.join(',');
-        }else {
+        }else if(sensorCodeAids.length = 1){
             equipment_sensor = sensorCodeAids[0];
         }
 
@@ -175,7 +177,6 @@ class EditModal extends Component {
             equip_person,
             status : 1,
         }
-        console.log(params);
         return params;
     }
 
@@ -185,10 +186,6 @@ class EditModal extends Component {
         validateFields();
         const { equipment_code, engine_code, storehouse, storage_location, equip_person, sensorCodeAids, sensorTypes } = this.state;
         if(equipment_code ==='' || engine_code === '' || storehouse === '' || storage_location==='' || equip_person === '') return 0;
-        if(sensorCodeAids.length === 0) {
-            message.warning("请选择传感器");
-            return 0;
-        }
 
         if(sensorCodeAids.length !== sensorTypes.length){
             message.warning("请选择传感器型号或名称");
@@ -201,7 +198,6 @@ class EditModal extends Component {
             return 0;
         }
 
-        console.log(sensorCodeAids);
         const params = this.hanleData();
         this.editEquipment(params);
         this.props.afterCreateOrEdit();
@@ -236,17 +232,28 @@ class EditModal extends Component {
     delectInfo = (newNumber, index) => {
         const { sensors, sensorTypes, sensorCodeAids } = this.state;
         const [ delectSensors, delectsensorType, deleteAids] = [sensors, sensorTypes, sensorCodeAids];
-        if(newNumber <= 0){
-            message.warning("请添加传感器")
-            return 0;
-        }
-        if(delectsensorType[index] !== undefined ){
-            delectsensorType.splice(index, 1);
-        }
         if(deleteAids[index] !== undefined ){
             deleteAids.splice(index, 1);
         }
-        delectSensors.splice(index, 1);   
+
+        if(delectsensorType[index] !== undefined ){
+            delectsensorType.splice(index, 1);
+        }
+        
+        if(newNumber === 0){
+            const { sensors } = this.state;
+            sensors[index].sensor_model = '';
+            sensors[index].sensor_code = '';
+            sensors[index].type_name = '';
+            this.setState({
+                sensors,
+                sensorCodeAids
+            })
+            message.warning('如不添加传感器，单击确定提交')
+            return 0;
+        }
+
+        delectSensors.splice(index, 1);  
         this.setState({
             number: newNumber,
             sensors: delectSensors,
@@ -321,6 +328,7 @@ class EditModal extends Component {
                 })
                 break;
             case 'model':
+                data[index].sensor_code = '';
                 data[index].sensor_model = string;
                 this.setState({sensors: data});
                 break;

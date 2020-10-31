@@ -15,13 +15,13 @@ class EditModal extends Component {
             default_compensation: '',   //默认补偿值
             note:'',
             sensorAid: '',
+            theoretical_value: '',
         }
     }
 
     componentDidUpdate(prevProps) {
         if(this.props.editInfo !== prevProps.editInfo){
             let editInfo = this.props.editInfo;
-            console.log(this.props.editInfo)
             this.setState({
                 sensorAid: editInfo.key,
                 sensor_code: editInfo.sensor_code,
@@ -29,6 +29,7 @@ class EditModal extends Component {
                 sensor_threshold: editInfo.sensor_threshold,
                 notice_content: editInfo.notice_content,
                 default_compensation: editInfo.default_compensation,
+                theoretical_value: editInfo.theoretical_value,
                 note: editInfo.note === undefined? '':editInfo.note,
             })
         }
@@ -40,7 +41,6 @@ class EditModal extends Component {
                 params[i] = ''
             }
         }
-
         let me = this;
         model.fetch(
           params,
@@ -51,6 +51,7 @@ class EditModal extends Component {
             me.setState({
                 confirmLoading: false,
             })
+            me.props.afterCreateOrEdit();
           },
           function() {
             message.warning('修改失败，请重试')
@@ -65,20 +66,22 @@ class EditModal extends Component {
       }
 
     handleOk = () => {
-        const { status, sensor_threshold, notice_content, default_compensation, note, sensorAid} = this.state;
+        const { status, sensor_threshold, notice_content, default_compensation, note, sensorAid, theoretical_value} = this.state;
+        const { validateFields } = this.props.form;
+        validateFields();
+        if(sensor_threshold === '' || notice_content === '' || default_compensation=== '' || theoretical_value === '') return 
         const params = {
             status,
+            theoretical_value,
             sensor_threshold,
             notice_content,
             default_compensation,
             note,
         }
-        console.log(params);
         this.setState({
           confirmLoading: true,
         });
         this.editEngineInfo(params, sensorAid);
-        this.props.afterCreateOrEdit();
       };
 
     //取消
@@ -101,7 +104,7 @@ class EditModal extends Component {
 
     render() {
         const { visible } = this.props;
-        const { confirmLoading, note } = this.state;
+        const { confirmLoading, note, status, sensor_threshold, notice_content, default_compensation, theoretical_value } = this.state;
         const { getFieldDecorator } = this.props.form;
         const { Option } = Select;
         const formItemLayout = {
@@ -127,33 +130,66 @@ class EditModal extends Component {
                             label="状态"
                             colon
                         >
-                        <Select name='' defaultValue="可以使用" style={{ width: 120 }} onSelect={(string) => this.handleSelect(string)}>
-                            <Option value="可以使用">可以使用</Option>
-                            <Option value="停止使用">停止使用</Option>
-                        </Select>
+                            {getFieldDecorator('status', {
+                                rules: [{ required: true}],
+                                initialValue: status
+                            })(
+                                <Select  style={{ width: 120 }} onSelect={(string) => this.handleSelect(string)}>
+                                    <Option value="可以使用">可以使用</Option>
+                                    <Option value="停止使用">停止使用</Option>
+                                </Select>
+                            )}
+                       
+                        </Form.Item>
+
+                        <Form.Item
+                            label="默认理论值"
+                            colon
+                        >
+                            {getFieldDecorator('theoretical_value', {
+                                rules: [{ required: true, message: '请添加传感器标定理论值' }],
+                                initialValue: theoretical_value,
+                            })(
+                                <Input  name="theoretical_value" onChange={this.handleChange} />
+                            )}
                         </Form.Item>
 
                         <Form.Item
                             label="补偿值"
                             colon
                         >
+                            {getFieldDecorator('default_compensation', {
+                                rules: [{ required: true, message: '请添加传感器补偿值' }],
+                                initialValue: default_compensation,
+                            })(
                                 <Input  name="default_compensation" onChange={this.handleChange} />
+                            )}
                         </Form.Item>
 
                         <Form.Item
                             label="传感器阈值"
                             colon
                         >
+                            {getFieldDecorator('sensor_threshold', {
+                                rules: [{ required: true, message: '请添加传感器阈值' }],
+                                initialValue: sensor_threshold,
+                            })(
                                 <Input  name="sensor_threshold" onChange={this.handleChange} />
+                            )}
+                                
                         </Form.Item>
 
                         <Form.Item
                             label="提示内容"
                             colon
                         >
+                            {getFieldDecorator('notice_content', {
+                                rules: [{ required: true, message: '请添加提示内容' }],
+                                initialValue: notice_content,
+                            })(
                                 <Input  name="notice_content" onChange={this.handleChange} />
+                            )}
                         </Form.Item>
-
 
                         <Form.Item
                             label="备注"
@@ -165,6 +201,7 @@ class EditModal extends Component {
                                 <Input  name="note" onChange={this.handleChange}/>
                             )}
                         </Form.Item>
+
                     </Form>
                 </Modal>
             </div>

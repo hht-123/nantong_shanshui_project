@@ -76,6 +76,9 @@ class EditSensorSetting extends Component {
                 break;
             case 'model':
                 selectChange('model', this.props.index, string);
+                this.setState({
+                    sensorCodes: [],     
+                });
                 break;
             case 'code':
                 selectChange('code', this.props.index, string);

@@ -27,7 +27,7 @@ class EpuipmentInfo extends Component {
         showPagination: true,         //是否分页
         searchEngineCode: '',         //搜索主机编号
         searchEquipmentCode: '',      //搜索设备编号
-        status: 0,                   //搜索的状态
+        status: '',                   //搜索的状态
         isLoading: false,             //是否加载
         data: [],                     //表格数据
         sensorModalData: [],          //传感器数据
@@ -47,7 +47,7 @@ class EpuipmentInfo extends Component {
       }
   }
 
-  getparams(currentPage=1, size=10, status=0, searchEngineCode=null, searchEquipmentCode=null) {
+  getparams(currentPage=1, size=10, status=null, searchEngineCode=null, searchEquipmentCode=null) {
     const params = {
       currentPage,
       size,
@@ -121,11 +121,10 @@ class EpuipmentInfo extends Component {
   //获取翻页内容
   getPage = (currentPage, pageSize) => {
     let [searchEngineCode, searchEquipmentCode] = [null, null];
-    let status = 0;
+    const { status } = this.state;
     if(this.state.search === true){
       searchEngineCode = this.state.searchEngineCode;
       searchEquipmentCode = this.state.searchEquipmentCode;
-      status = this.state.status;
     }
     const params = this.getparams(currentPage, pageSize, status, searchEngineCode, searchEquipmentCode);
     this.getCurrentPage(params);
@@ -134,11 +133,10 @@ class EpuipmentInfo extends Component {
   //改变pageSize获取内容
   getSize = (current, size) => {
     let [searchEngineCode, searchEquipmentCode] = [null, null];
-    let status = 0;
+    const { status } = this.state;
     if(this.state.search === true){
       searchEngineCode = this.state.searchEngineCode;
       searchEquipmentCode = this.state.searchEquipmentCode;
-      status = this.state.status;
     }
     const params = this.getparams(1, size, status, searchEngineCode, searchEquipmentCode);
     this.getCurrentPage(params);
@@ -148,12 +146,11 @@ class EpuipmentInfo extends Component {
   //
   afterCreateOrEdit = () => {
     let [searchEngineCode, searchEquipmentCode] = [null, null];
-    let status = 0;
+    const { status } = this.state;
     const { size, currentPage } = this.state; 
     if(this.state.search === true){
       searchEngineCode = this.state.searchEngineCode;
       searchEquipmentCode = this.state.searchEquipmentCode;
-      status = this.state.status;
     }
     const params = this.getparams(currentPage, size, status, searchEngineCode, searchEquipmentCode);
     this.getCurrentPage(params);
@@ -168,16 +165,6 @@ class EpuipmentInfo extends Component {
 
   handleSelect = (string) => {
     this.setState({status: string});
-    if(string === '0'){
-      const params = this.getparams(1, 10, string);
-      this.setState({search: false});
-      this.getCurrentPage(params);
-    }
-    if(string  === '1'){
-      const params = this.getparams(1, 10, string);
-      this.setState({search: false});
-      this.getCurrentPage(params);
-    }
   }
 
   //重置
@@ -187,7 +174,7 @@ class EpuipmentInfo extends Component {
     this.setState({
       searchEngineCode: '',
       searchEquipmentCode: '',
-      status: '0',
+      status: '',
       key: new Date(),
       search: false,
     })
@@ -260,6 +247,10 @@ class EpuipmentInfo extends Component {
       return '停运'
     }else if(status === '2'){
       return '报废'
+    }else if(status === '3'){
+      return '报修'
+    }else if(status === '4'){
+      return '维护'
     }
   }
 
@@ -288,8 +279,9 @@ class EpuipmentInfo extends Component {
     const { searchEngineCode, searchEquipmentCode, isLoading, showPagination, size, 
       total, sensorModalVisiable, currentPage, sensorModalData, sensorTitle, createVisible, 
       editVisible, currentEnquimentInfo, scrapListVisible, scrapEquipmentInfo, allocationListVisible, 
-      allocationEqiipmentInfo, key, search, status, backModalvisible, backEquipmentInfo} = this.state;
+      allocationEqiipmentInfo, key, status, backModalvisible, backEquipmentInfo} = this.state;
     const tableDate = this.handleData();
+
     const { roleData } = this.props
     if (roleData.size === 0 ) return null
 
@@ -325,10 +317,12 @@ class EpuipmentInfo extends Component {
                     style={{ width: 200}}
                     onSelect={(string) => this.handleSelect(string)} 
                     key={key}
-                    defaultValue="0" 
                 >
                     <Option key="0" value="0">在线</Option>
                     <Option key="1" value="1">停运</Option>
+                    <Option key="2" value="2">报废</Option>
+                    <Option key="3" value="3">报修</Option>
+                    <Option key="4" value="4">维护</Option>
                 </Select>
               </div>
 
@@ -367,7 +361,6 @@ class EpuipmentInfo extends Component {
               showModal={this.showModal}
               currentPage={ currentPage }
               roleData={ roleData }
-              search={ search}
               status={ status }
             />
             <div>

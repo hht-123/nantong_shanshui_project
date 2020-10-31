@@ -79,9 +79,9 @@ class EngineSensorModal extends Component {
                             <tr align="center"  className='sideheadTr' style={{height: 100}}>
                                 <td colSpan="3"><Spin /></td>
                             </tr> : data.size === 0 ? null :
-                            data.map((item) => {
+                            data.map((item, index) => {
                                 return(
-                                    <tr key={item.aid} align="center" className='sideBodyTr'>
+                                    <tr key={index} align="center" className='sideBodyTr'>
                                     <td className='sideBodyTh'>{ item.type_name }</td>
                                     <td className='sideBodyTh'>{ item.sensor_model }</td>
                                     <td className='sideBodyTh'>{ item.sensor_code }</td>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, message, Modal, Select} from 'antd';
+import { Form, Input, message, Modal, Select, Button} from 'antd';
 import SensorSetting from './SensorSetting';
 import '../../../../style/wrapper.less'
 import '../style.less'
@@ -48,14 +48,13 @@ class CreateModal extends Component {
     //处理要发送的数据
     hanleData = () => {
         const {equipment_code, engine_code, storehouse, storage_location, note, sensorCodeAids, equip_person} = this.state;
-        let allAid = [];
         let equipment_sensor = '';
         if(sensorCodeAids.length > 1){
-            allAid = sensorCodeAids.map((item) => item.equipment_sensor);
-            equipment_sensor = allAid.join(',');
-        }else {
-            allAid = sensorCodeAids;
-            equipment_sensor = allAid[0];
+            equipment_sensor = sensorCodeAids.join(',');
+        }else if(sensorCodeAids.length === 1){
+            equipment_sensor = sensorCodeAids[0];
+        }else{
+            equipment_sensor = 'false';
         }
         const params = {
             equipment_code,
@@ -67,6 +66,7 @@ class CreateModal extends Component {
             equip_person,
             status : -1,
         }
+        console.log(params);
         return params;
     }
 
@@ -100,9 +100,10 @@ class CreateModal extends Component {
           'post',
           function() {
               message.success("新建设备成功");
-              me.setState({confirmLoading: false})
-              me.continueOrBack();
+              me.setState({confirmLoading: false});
               me.afterClose();
+              me.props.closeModal();
+              me.props.afterCreateOrEdit();   
           },
           function() {
             message.warning('新建失败，请重试')
@@ -121,45 +122,23 @@ class CreateModal extends Component {
     submitNewEquipment = () => {
         const { validateFields } = this.props.form;  //验证
         validateFields();
-        const { equipment_code, engine_code, storehouse, storage_location, equip_person } = this.state;
+        const { equipment_code, engine_code, storehouse, storage_location, equip_person, sensorTypes, sensorCodeAids } = this.state;
         if(equipment_code ==='' || engine_code === '' || storehouse === '' || storage_location==='' || equip_person === '') return 0;
-        if(this.state.sensorCodeAids.size === 0) {
-            message.warning("请选择传感器");
+
+        if(sensorCodeAids.length !== sensorTypes.length){
+            message.warning("请选择传感器型号或名称");
             return 0;
         }
-        const { sensorTypes } = this.state;
-        const repeat = this.isRepeat(sensorTypes);
         
+        const repeat = this.isRepeat(sensorTypes);
         if(repeat === true) {
             message.warning("请不要选择重复的传感器类型");
             return 0;
         }
         const params = this.hanleData();
-        this.addNewEquipment(params);
-        this.props.afterCreateOrEdit();    
+        this.addNewEquipment(params); 
     }
 
-    //确认是否继续添加或者返回
-    continueOrBack = () => {
-        const me = this;
-        confirm({
-            title: '继续增加新设备?',
-            onOk() {
-                me.setState({
-                    number: 1,            
-                    sensors: [{}],        
-                    sensorCodeAids: [],            
-                    sensorTypes: [],  
-                    freshType: new Date(),        
-                    freshModel: [new Date()],       
-                    freshCode: [new Date()],        
-                });
-            },
-            onCancel() {
-                me.handleCancel();
-            },
-          });
-    }
 
     handleChange = (e) => {
         this.setState({
@@ -194,35 +173,52 @@ class CreateModal extends Component {
 
     //删除条数
     delectInfo = (newNumber, index) => {
-        const { sensors, sensorTypes } = this.state;
-        const [ delectSensors,  delectsensorType] = [sensors, sensorTypes];
-        if(newNumber <= 0){
-            message.warning("请添加传感器")
-            return 0;
+        const { sensors, sensorTypes, sensorCodeAids } = this.state;
+        const [ delectSensors, delectsensorType, deleteAids] = [sensors, sensorTypes, sensorCodeAids];
+
+        if(deleteAids[index] !== undefined ){
+            deleteAids.splice(index, 1);
         }
         if(delectsensorType[index] !== undefined ){
             delectsensorType.splice(index, 1);
         }
-        delectSensors.splice(index, 1);   
+
+        if(newNumber === 0){
+            const { sensors } = this.state;
+            sensors[index].sensor_model = '';
+            sensors[index].sensor_code = '';
+            sensors[index].type_name = '';
+             
+            
+            this.setState({
+                sensors: delectSensors,
+                sensorCodeAids: deleteAids,
+                sensorTypes: delectsensorType,
+            })
+            message.warning('如不添加传感器，单击确定提交')
+            return 0;
+        }
+        delectSensors.splice(index, 1); 
         this.setState({
             number: newNumber,
             sensors: delectSensors,
             sensorTypes: delectsensorType,
+            sensorCodeAids: deleteAids,
         });
     }
 
     getSensorAid = (string, index) => {
         const sensorCodeAids = this.state.sensorCodeAids; 
         if(sensorCodeAids[index] === undefined ){
-            sensorCodeAids.push({equipment_sensor: string,} )
+            sensorCodeAids.push(string)
         }else{
             sensorCodeAids[index] = string;
         }
-        console.log(sensorCodeAids);
         this.setState({
             sensorCodeAids,
         })
     }
+    
 
     //获取选择的传感器的型号
     getSensorTypes = (type, index) => {
@@ -235,6 +231,7 @@ class CreateModal extends Component {
         }
         this.setState({sensorTypes: newTypes});
     }
+    
 
     //判断传感器是否重复
     isRepeat(arr) {
@@ -259,6 +256,7 @@ class CreateModal extends Component {
                 this.setState({sensor: data});
                 break;
             case 'model':
+                data[index].sensor_code = '';
                 data[index].sensor_model = string;
                 this.setState({sensor: data});
                 break;
@@ -271,7 +269,6 @@ class CreateModal extends Component {
         }
     }
 
-
     //处理传感器数据
     handleSensorTypeData = () => {
         const aftersensorTypes = [];
@@ -283,6 +280,13 @@ class CreateModal extends Component {
           })
         }
         return aftersensorTypes;
+    }
+
+    addsensor = () => {
+        this.setState({
+            isAddsensor: true,
+            buttonDisplay: 'none',
+        })
     }
 
     //主机编号和姓名处理
@@ -313,7 +317,7 @@ class CreateModal extends Component {
     }
 
     render() {
-        const { number, sensors, confirmLoading } = this.state;
+        const { number, sensors, confirmLoading, buttonDisplay, isAddsensor } = this.state;
         const { visible } = this.props;
         const { getFieldDecorator } = this.props.form;
         const handleEngineNmaeDate = this.handleAllEngineName();
@@ -422,7 +426,7 @@ class CreateModal extends Component {
 
                             <div className='createright'>
                                 <div className='hardtitle'>传感器配置：</div>
-                                {
+                                {   
                                     sensors.map((item, index) => (
                                         <SensorSetting
                                             selectChange={ this.selectChange }
@@ -436,7 +440,7 @@ class CreateModal extends Component {
                                             getSensorAid = { this.getSensorAid }
                                             getSensorTypes = { this.getSensorTypes }
                                         />
-                                    ))
+                                    )) 
                                 }
                             </div>
                             <div style={{clear: 'both'}}></div>

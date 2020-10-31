@@ -164,7 +164,6 @@ class AllocationModal extends Component {
         const { visible } = this.props;
         const { confirmLoading, clientData } = this.state;
         const allClient = this.handleAllClient();
-        console.log(this.state.clientData)
         
         return (
         <div>

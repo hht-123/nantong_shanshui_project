@@ -32,6 +32,7 @@ class TypeModal extends Component {
                 me.props.cancel(false);
                 message.success("添加传感器类型成功");
                 me.afterClose();
+                store.dispatch(indexActionCreators.getSensorType());   //获取所有传感器的类型
             },
             function() {
                 message.warning('发送数据失败，请重试')
@@ -61,7 +62,6 @@ class TypeModal extends Component {
             type_name: this.state.sensor_type
         }
         this.createNewType(params);
-        store.dispatch(indexActionCreators.getSensorType())   //获取所有传感器的类型
     };
     
     //取消按钮事件

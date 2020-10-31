@@ -10,15 +10,8 @@ class EquipmentTable extends Component{
     }
   }
 
-  dealcolumns(columns) {
-    if(parseInt(this.props.status, 0) === 0){
-      columns.splice(3, 2);
-    }
-    return columns;
-  }
-
     render() {
-      const { isLoading, data, total, showPagination, changePage, changeSize, currentPage, size, status, search} = this.props;
+      const { isLoading, data, total, showPagination, changePage, changeSize, currentPage, size, status, } = this.props;
 
       let columns =  [
         {
@@ -65,8 +58,6 @@ class EquipmentTable extends Component{
         },
       ];
 
-      columns = this.dealcolumns(columns);
-
       if (this.props.roleData.includes("equipment_manage")) {
         columns.push({
           title: '操作',
@@ -74,42 +65,51 @@ class EquipmentTable extends Component{
           align: 'center',
           width: 200,
           render: (text, record, index) => {
-            return (
-              <div>
-                  {
-                    parseInt(status, 0) === 0  ? null : 
-                    <Tooltip title="编辑信息" trigger="hover">
-                    <Icon type="edit" theme="twoTone"  className="icon" onClick={() => this.props.showModal('edit', record)}/>
-                    </Tooltip>
-                  }
-
-                  <Tooltip title="查看该设备传感器信息" trigger="hover">
+            const content = [];
+            switch (record.status) {
+              case '在线':
+                content.push(
+                  <Tooltip title="查看该设备传感器信息" trigger="hover" key="查看该设备传感器信息">
                     <Icon type="message" theme="twoTone" className="icon" onClick={() => this.props.showModal('sensor', record)}/>
-                  </Tooltip>
-
-               {  parseInt(status, 0) === 0  ?  null : 
-                <Tooltip title="设备报废(填写设备报废单)"  trigger="hover">
-                  <Icon type="tool" theme="twoTone"  className="icon"  onClick={() => this.props.showModal('scrap', record)} />
-                </Tooltip>
-                }
-                { 
-                  parseInt(status, 0) === 0  ? null : 
-                  <Tooltip  title="设备调拨(填写设备报调拨单)" trigger="hover" >
-                    <Icon type="home" theme="twoTone" onClick={() => this.props.showModal('allocation', record)} />
-                  </Tooltip> 
-                }
-                { 
-                  parseInt(status, 0) === 1  ? null : 
-                  <Tooltip  title="调拨回厂" trigger="hover" >
+                  </Tooltip>,
+                  <Tooltip  title="调拨回厂" trigger="hover" key="调拨回厂" >
                     <Icon type="car" theme="twoTone" onClick={() => this.props.showModal('back', record) }/>
-                  </Tooltip> 
-                }
-              </div>
-            )
+                  </Tooltip>
+                )
+                break;
+              case '停运':
+                  content.push(
+                    <Tooltip title="编辑信息" trigger="hover" key="编辑信息">
+                      <Icon type="edit" theme="twoTone"  className="icon" onClick={() => this.props.showModal('edit', record)}/>
+                    </Tooltip>,
+                    <Tooltip title="查看该设备传感器信息" trigger="hover" key="查看该设备传感器信息">
+                      <Icon type="message" theme="twoTone" className="icon" onClick={() => this.props.showModal('sensor', record)}/>
+                    </Tooltip>,
+                    <Tooltip title="设备报废(填写设备报废单)"  trigger="hover" key="设备报废(填写设备报废单)">
+                      <Icon type="tool" theme="twoTone"  className="icon"  onClick={() => this.props.showModal('scrap', record)} />
+                    </Tooltip>,
+                    <Tooltip  title="设备调拨(填写设备报调拨单)" trigger="hover" key="设备调拨(填写设备报调拨单)">
+                      <Icon type="home" theme="twoTone" onClick={() => this.props.showModal('allocation', record)} />
+                    </Tooltip> 
+                  )
+                break;
+              case '报修':
+                content.push(
+                  <Tooltip title="查看该设备传感器信息" trigger="hover" key="查看该设备传感器信息">
+                    <Icon type="message" theme="twoTone" className="icon" onClick={() => this.props.showModal('sensor', record)}/>
+                  </Tooltip>,
+                  <Tooltip  title="调拨回厂" trigger="hover" key="调拨回厂" >
+                    <Icon type="car" theme="twoTone" onClick={() => this.props.showModal('back', record) }/>
+                  </Tooltip>
+                )
+                break;
+              default:
+                break;
+            }
+            return content;
           }
         }
-
-        )
+      )
       }
 
         return (

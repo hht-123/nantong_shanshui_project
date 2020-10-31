@@ -34,7 +34,7 @@ class EditModal extends Component {
                 end_time: editInfo.end_time ===null ? null : editInfo.end_time,
                 url: `${enginInfoUrl}${editInfo.key}/`
             })
-            console.log(this.props.editInfo);
+
             if(editInfo.status === '停产'){
                 this.setState({
                     isStopProduction: true,
@@ -59,6 +59,7 @@ class EditModal extends Component {
                 confirmLoading: false,
             })
             message.success('编辑成功');
+            me.props.afterCreateOrCreate();
           },
           function() {
             message.warning('修改失败，请重试')
@@ -90,7 +91,6 @@ class EditModal extends Component {
           confirmLoading: true,
         });
         this.editEngineInfo(params);
-        this.props.afterCreateOrCreate();
     };
     
     //取消按钮事件
@@ -127,6 +127,7 @@ class EditModal extends Component {
         }else{
             this.setState({
                 isStopProduction: false,
+                end_time: '',
             })
         }
     }
@@ -175,10 +176,14 @@ class EditModal extends Component {
                             label="状态"
                             colon
                         >
-                        <Select name='' defaultValue={status} style={{ width: 120 }} onSelect={(string) => this.handleSelect(string)}>
-                            <Option value="在产">在产</Option>
-                            <Option value="停产">停产</Option>
-                        </Select>
+                            {getFieldDecorator('status', {
+                                initialValue: status,
+                            })(
+                                <Select name='status' style={{ width: 120 }} onSelect={(string) => this.handleSelect(string)}>
+                                    <Option value="在产">在产</Option>
+                                    <Option value="停产">停产</Option>
+                                </Select>
+                            )}
                         </Form.Item>
 
                         {isStopProduction ? 

@@ -30,7 +30,7 @@ class EngineInfo extends Component{
       search_engine_code: "",   //主机编号
       search_begin_time: [],    //开始时间
       search_end_time:[],       //结束时间
-      status: 0,                //状态
+      status: '',                //状态
       addModalVisible: false,   //addModal是否显示
       editModalVisible:  false,  //editModal是否显示
       editInfo: {},             //获取到编辑行的信息
@@ -81,7 +81,7 @@ class EngineInfo extends Component{
     )
   }
 
-  getparams(currentPage=1, size=10, status=1, engine_code=null, search_begin_time=null, search_end_time=null) {
+  getparams(currentPage=1, size=10, status=null, engine_code=null, search_begin_time=null, search_end_time=null) {
     let params = {};
     let begin_time_gte = null;
     let begin_time_lte = null;
@@ -130,12 +130,11 @@ class EngineInfo extends Component{
   //翻页获取内容
   getPage = (currentPage, size) => {
     let [ search_engine_code, search_begin_time, search_end_time ] =[null, null, null];
-    let status = 1;
+    const { status } = this.state;
     if(this.state.search === true){
       search_engine_code = this.state.search_engine_code;
       search_begin_time = this.state.search_begin_time;
       search_end_time = this.state.search_end_time;
-      status = this.state.status;
     }
     
     const params = this.getparams(currentPage, size, status, search_engine_code, search_begin_time, search_end_time)
@@ -145,12 +144,11 @@ class EngineInfo extends Component{
   //改变pageSIze获取内容
   getSize = (current, size) => {
     let [ search_engine_code, search_begin_time, search_end_time ] =[null, null, null];
-    let status = 1;
+    const { status } = this.state;
     if(this.state.search === true){
       search_engine_code = this.state.search_engine_code;
       search_begin_time = this.state.search_begin_time;
       search_end_time = this.state.search_end_time;
-      status = this.state.status;
     }
     const params = this.getparams(1, size, status, search_engine_code, search_begin_time, search_end_time)
     this.getCurrentPage(params);
@@ -160,13 +158,11 @@ class EngineInfo extends Component{
   //编辑之后保持搜索条件不变
   afterCreateOrCreate = () => {
     let [ search_engine_code, search_begin_time, search_end_time ] =[null, null, null];
-    let status = 1;
+    const { status } = this.state;
     const { size, currentPage } = this.state;
     if(this.state.search === true){
       search_engine_code = this.state.search_engine_code;
       search_begin_time = this.state.search_begin_time;
-      search_end_time = this.state.search_end_time;
-      status = this.state.status;
     }
     const params = this.getparams(currentPage, size, status, search_engine_code, search_begin_time, search_end_time);
     this.getCurrentPage(params);
@@ -230,22 +226,12 @@ class EngineInfo extends Component{
       search_end_time: null,
       currentPage: 1,
       search: false,
-      status: 1,
+      status: null,
     })
   }
   //更改状态
   handlestatus = (string) => {
     this.setState({status: string});
-    if(string === '1'){
-      const params = this.getparams(1, 10, string);
-      this.setState({search: false});
-      this.getCurrentPage(params);
-    }
-    if(string === '0'){
-      const params = this.getparams(1, 10, string);
-      this.setState({search: false});
-      this.getCurrentPage(params);
-    }
   }
 
   handleData = () => {
@@ -299,7 +285,8 @@ class EngineInfo extends Component{
                     style={{width: "250px"}}
                     key={ keyValue }
                     size={ dataSize }
-                    onChange={ this.handleBeginTime } 
+                    onChange={ this.handleBeginTime }
+                    allowClear
                   />
                 </div>
               
@@ -310,6 +297,7 @@ class EngineInfo extends Component{
                   key={ keyValue }
                   size={ dataSize } 
                   onChange={ this.handleEndTime }
+                  allowClear
                 />
               </div>
 
@@ -327,10 +315,10 @@ class EngineInfo extends Component{
               <div className="inputWrapper" >
                 <div className="input" >状态:</div>
                 <Select 
-                  defaultValue="1" 
                   style={{ width: "200px" }} 
                   onSelect={ (string) => this.handlestatus(string) }
                   key={ keyValue }
+                  allowClear
                   >
                   <Option value="1">在产</Option>
                   <Option value="0">停产</Option>
