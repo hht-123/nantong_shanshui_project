@@ -97,7 +97,13 @@ class App extends Component {verifyUrl
       name = JSON.parse(getCookie("mspa_user")).username;
     }
     if (this.state.roleData === undefined) return null
-    // console.log(this.state.roleData)
+    let maintenanceUrl = [
+      <Route path='/app/maintenance' key='maintenance' component={MaintenanceIndex} />,
+      <Route path='/app/monitor/:equipment_aid' key='monitor' component={Monitor} />,
+      <Route path='/app/equipmentMaintenance/:equipment_id' key='equipmentMaintenance' component={EquipmentMaintenance} />,
+      <Route path='/app/waterRemind/:equipment_id' key='waterRemind' component={WaterRemind} />,
+      <Route path='/app/sensorCalibratin/:equipment_id' key='sensorCalibratin' component={SensorCalibration} />,
+    ]
     
     
     return (
@@ -145,16 +151,17 @@ class App extends Component {verifyUrl
                     return null;
                   })}
                   <Route exact path='/app' component={ this.state.roleData.includes('client_manage') ? ClientIndex : (props)=><Index {...props}    />} />
+                  { this.state.roleData.includes('client_manage') ? null : maintenanceUrl }
                   {/* <Route path='/app/engine' component={EngineInfo} /> */}
-                  <Route path='/app/maintenance' component={MaintenanceIndex} />
+                  {/* <Route path='/app/maintenance' component={MaintenanceIndex} /> */}
                   {/* <Route path='/app/message' component={(props) => <MessageIndex {...props}/>} /> */}
-                  <Route path='/app/monitor/:equipment_aid' component={Monitor} />
+                  {/* <Route path='/app/monitor/:equipment_aid' component={Monitor} /> */}
                   {/* <Route path='/app/sensor' component={(props) =><SensorInfo {...props}/>} /> */}
-                  <Route path='/app/equipmentMaintenance/:equipment_id' component={EquipmentMaintenance} />
+                  {/* <Route path='/app/equipmentMaintenance/:equipment_id' component={EquipmentMaintenance} /> */}
                   {/* <Route path='/app/contact/:client_id' component={ContactIndex} /> */}
                   {/* <Route path='/app/equipment' component={(props) => <EpuipmentInfo {...props}/>} /> */}
-                  <Route path='/app/waterRemind/:equipment_id' component={WaterRemind} />
-                  <Route path='/app/sensorCalibratin/:equipment_id' component={SensorCalibration} />
+                  {/* <Route path='/app/waterRemind/:equipment_id' component={WaterRemind} />
+                  <Route path='/app/sensorCalibratin/:equipment_id' component={SensorCalibration} /> */}
                   {/* <Route path='/app/equipmentScrap' component={equipmentScrap} />
                   <Route path='/app/EpuipmentConfigure' component={EpuipmentConfigure} />
                   <Route path='/app/EpuipmentAllocation' component={EpuipmentAllocation} /> */}

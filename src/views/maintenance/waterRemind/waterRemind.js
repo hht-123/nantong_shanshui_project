@@ -23,6 +23,7 @@ class WaterRemind extends Component{
       showPagination: true,     //是否分页
       isLoading: false,         //是否加载
       data: [],                 //表格数据 
+      size: 10,                  //用于重置
       total: 0,                 //一共有多少条数据
       keyValue: "",             //用于重置
       search_begin_time: [],    //开始时间
@@ -59,6 +60,7 @@ class WaterRemind extends Component{
             total: response.data.count,
             data: response.data.data,
             currentPage: params['currentPage'],
+            size: params['size'],
           })
           console.log(me.state.data)
         } else {

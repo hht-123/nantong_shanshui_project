@@ -26,6 +26,7 @@ class SensorCalibration extends Component{
       isLoading: false,         //是否加载
       data: [],                 //表格数据 
       total: 0,                 //一共有多少条数据
+      size: 10,
       keyValue: "",             //用于重置
       search_begin_time: [],    //开始时间
       search_type_name: '',     //查找的传感器名称
@@ -62,6 +63,7 @@ class SensorCalibration extends Component{
             total: response.data.count,
             data: response.data.data,
             currentPage: params['currentPage'],
+            size: params['size'],
           })
           console.log(me.state.data)
         } else {

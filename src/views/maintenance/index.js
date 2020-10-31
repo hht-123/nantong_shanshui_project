@@ -154,7 +154,7 @@ class MaintenanceIndex extends Component {
     const { Option } = Select;
     const Newdata = this.getGroup(this.state.data,'region');
     const allowClear = true;
-    // console.log(Newdata)
+    console.log(Newdata)
 
     return (
         <div>
@@ -171,9 +171,10 @@ class MaintenanceIndex extends Component {
                 <div className='status'>
                     <Select size='small' key={this.state.keyStatus} allowClear={ allowClear }  style={{ width: 120, }} onChange={ this.handleChange }>
                         <Option value="0">在线</Option>
-                        <Option value="1">报修</Option>
-                        <Option value="2">停运</Option>
-                        <Option value="3">维护</Option>
+                        <Option value="3">报修</Option>
+                        <Option value="4">维护</Option>
+                        {/* <Option value="2">停运</Option>
+                        <Option value="3">维护</Option> */}
                     </Select>
                 </div>
                 <div className='button1'>
@@ -184,13 +185,23 @@ class MaintenanceIndex extends Component {
                 </div>
             </div >
             { Object.keys(Newdata).map((key,index) => 
-                <div key={ index } className='content' >
-                    <div className="areaName" >{ key }地区</div>
-                    <div className='line-bottom'></div>
+                { if (index > 4)  {
+                   return null;
+                } else {
+                return  <div key={ index } className='content' >
+                        <div className="areaName" >{ key }地区</div>
+                        <div className='line-bottom'></div>
                     { Newdata[key].map((item,index) => {
-                      return <Equipment key={ index } aid={ item.aid } equipment_code={ item.equipment_code } client_unit={ item.client_unit } status={ item.status } />
+                      if( item.status ==='1'|| item.status === '2' ) {
+                        return null
+                      } else {
+                        return <Equipment key={ index } aid={ item.aid } equipment_code={ item.equipment_code } client_unit={ item.client_unit } status={ item.status } />
+                      }
+                      // return <Equipment key={ index } aid={ item.aid } equipment_code={ item.equipment_code } client_unit={ item.client_unit } status={ item.status } />
                     }) }
                 </div>
+                  }
+                }
             )}
         </div>
     )
