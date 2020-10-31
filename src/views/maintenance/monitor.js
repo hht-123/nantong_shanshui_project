@@ -191,7 +191,7 @@ class Monitor extends Component{
 
   handleStatusColor = (numb) => {
     if ( numb === '0' ) {
-      return  { background:'green'}
+      return  { background:'#00EE76'}
     }else if (numb === '3') {
       return  { background:'red'}
     }else if (numb === '4') {
@@ -331,20 +331,26 @@ class Monitor extends Component{
       equipMaintainUrl,
       'get',
       function(response) {
-        // let i = 0
+        let i = 0
         if (me.state.whetherTest === false) {
           me.setState({
             equipMaintenanceData: response.data.data,
           })
           if (me.state.equipMaintenanceData === undefined || me.state.equipMaintenanceData === []) return  null
-          if(me.state.equipMaintenanceData.map((item,index) => { 
-            item.maintain_status === '1'
-          })) { 
+          me.state.equipMaintenanceData.map((item,index) => {
+            if(item.maintain_status === '0') {
+              i = i +1
+            }
+          })
+          if ( i> 0) {
             me.setState({
-              equipmentDot: true
+              equipmentDot:true
             })
-           }
-          // if( i > 0 ) return {display:'none'}
+          }else {
+            me.setState({
+              equipmentDot:false
+            })
+          }
         }
       },
       function() {
@@ -355,7 +361,11 @@ class Monitor extends Component{
   }
 
   showEquipmentDot = () => {
-    if( this.state.equipmentDot === true) return {display:'none'}
+    if( this.state.equipmentDot === true) {
+      return {display:''}
+    }else {
+      return {display:'none'}
+    }
   }
 
   render() {
