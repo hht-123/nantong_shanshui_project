@@ -9,6 +9,12 @@
         margin-bottom: 80px;
         background: #fff;
         padding: 24px;
+        .water {
+            color: grey;
+        }
+        .water:hover{
+            color: #00A0E9;
+        }
         .table {
             position: relative;
             top:-20px;
@@ -22,10 +28,13 @@
                 width: 120px;
                 .describe {
                     position: relative;
-                    top: -25px;
+                    top: 10px;
                     font-size: 17px;
                     text-align: center;
                     cursor:pointer;
+                }
+                .equipMaintenance:hover{
+                    color: red;
                 }
                 .statusColor {
                     position: relative;
@@ -45,11 +54,22 @@
                     text-align: center;
                     top: 55px;
                 }
-            .icon {
-                font-size: 60px;
-                padding: 30px;
-                margin-top: -5px;
-            }
+                .icon {
+                    font-size: 60px;
+                    // padding: 30px;
+                    margin-top: 20px;
+                    margin-left: 30px;
+                    cursor:pointer;
+                }
+                .dot {
+                    position: relative;
+                    background-color: red;
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 10px;
+                    left:90px;
+                    top:-90px;
+                }
             }
             .main {
                 border-left: 0px;

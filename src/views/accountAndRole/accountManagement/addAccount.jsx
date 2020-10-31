@@ -16,7 +16,9 @@ export default class AddAccount extends Component {
       password: '',
       role_id: undefined,
       telephone_num: '',
-      power_num_str: '1'
+      power_id_str: '1',
+      alter_power: '1',
+      add_by: getUserId()
     }
   }
 
@@ -29,13 +31,13 @@ export default class AddAccount extends Component {
   createAccount = () => {
     const me = this
     const newAccount = this.state
+    console.log('newAccount',newAccount)
     for (let i in newAccount) {
       if (newAccount[i] === '' || newAccount[i] === undefined) {
         message.error('信息未填写完整！')
         return
       }
     }
-    newAccount['add_by'] = getUserId()
     model.fetch(
       newAccount,
       originalUrl + user,
@@ -43,6 +45,7 @@ export default class AddAccount extends Component {
       function (res) {
         message.success('创建账户成功！')
         me.props.getUsers()
+        me.initState()
       },
       function (error) {
         message.error('创建账户失败！')
@@ -58,6 +61,9 @@ export default class AddAccount extends Component {
       initData[i] = ''
     }
     initData['role_id'] = undefined
+    initData['power_id_str'] = '1'
+    initData['alter_power'] = '1'
+    initData['add_by'] = getUserId()
     this.setState(initData)
     this.props.handleCancel('addAccountVisible')
   }

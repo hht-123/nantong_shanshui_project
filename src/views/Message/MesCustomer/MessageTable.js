@@ -53,9 +53,11 @@ class MessageTable extends Component{
             dataIndex: 'contact_person',
             align: 'center',
             render:(text, record, index) => {
-              return  <Button type="primary" onClick={() => this.props.showContactModal(record.key) } >
-                          查看
-                      </Button> 
+              return  <div> 
+                        <Tooltip title="联系人查看及创建">
+                          <Icon type="user" style={{fontSize:'20px', color: '#00A0E9'}} onClick={() => this.props.showContactModal(record.key) } />
+                        </Tooltip>
+                      </div>
             }
           }
         ];

@@ -5,7 +5,7 @@ import  './monitor.less';
 import Line from '../../maintenance/publicComponents/sensorLine';
 import CompanyInfo from '../../maintenance/publicComponents/companyInfo';
 import EquipInfo from '../../maintenance/publicComponents/equipInfo';
-import { equipmentUrl, sensorDataUrl, device, clientUrl, equipmentInfoUrl } from '../../../dataModule/UrlList';
+import { equipmentUrl, sensorDataUrl, device, clientUrl, equipmentInfoUrl, equipMaintainUrl, ClientWaterRemindUrl } from '../../../dataModule/UrlList';
 
 import { Icon, Tabs, DatePicker, Button, PageHeader, message } from 'antd';
 import { Link } from 'react-router-dom';
@@ -29,6 +29,10 @@ class ClientMonitor extends Component{
       equipModalVisible:false,    //设备详情是否显示
       companyInfo: [],
       equipmentInfo:[],
+      equipmentDot: false,     // 设备维护的红点提示
+      equipMaintenanceData:[],   //存设备维护的数据
+      waterRemind:[],            //存储未处理的水质提醒记录
+      waterRemindDot: false
     }
   }
 
@@ -48,6 +52,8 @@ class ClientMonitor extends Component{
       this.getSensorData(params2);
     }, 300000)
     this.getEquipmentInfo()
+    this.getEquipmentMaintenace()
+    this.getWaterRemind()
   }
 
   componentWillUnmount() {
@@ -286,7 +292,7 @@ class ClientMonitor extends Component{
               me.setState({
                 equipmentInfo: response.data
               }) 
-              console.log(me.state.equipmentInfo)
+              // console.log(me.state.equipmentInfo)
             } else {
               me.setState({
                 equipmentInfo: response.data.data,
@@ -315,6 +321,89 @@ class ClientMonitor extends Component{
     year = time.slice(0,10)
     second = time.slice(11,19)
     return  year + ' ' + second
+  }
+
+  // 设备维护红点提醒
+  getEquipmentMaintenace () {
+    let me = this;
+    model.fetch(
+      {'equipment_id': me.props.match.params.equipment_aid},
+      equipMaintainUrl,
+      'get',
+      function(response) {
+        let i = 0
+        if (me.state.whetherTest === false) {
+          me.setState({
+            equipMaintenanceData: response.data.data,
+          })
+          if (me.state.equipMaintenanceData === undefined || me.state.equipMaintenanceData === []) return  null
+          me.state.equipMaintenanceData.map((item,index) => {
+            if(item.maintain_status === '0') {
+              i = i +1
+            }
+          })
+          if ( i> 0) {
+            me.setState({
+              equipmentDot:true
+            })
+          }else {
+            me.setState({
+              equipmentDot:false
+            })
+          }
+        }
+      },
+      function() {
+        message.warning('加载失败，请重试')
+      },
+      this.state.whetherTest
+    )
+  }
+
+  showEquipmentDot = () => {
+    if( this.state.equipmentDot === true) {
+      return {display:''}
+    }else {
+      return {display:'none'}
+    }
+  }
+
+  //水质记录红点提醒
+  getWaterRemind () {
+    let me = this;
+    model.fetch(
+      {'equipment_id': me.props.match.params.equipment_aid, 'deal_status':'1' },
+      ClientWaterRemindUrl,
+      'get',
+      function(response) {
+        if (me.state.whetherTest === false) {
+          me.setState({
+            data: response.data.data,
+          })
+          if(me.state.data.length > 0) {
+            me.setState({
+              waterRemindDot:true
+            })
+          }else {
+            me.setState({
+              waterRemindDot:false
+            })
+          }
+        } 
+      },
+      function() {
+        message.warning('加载失败，请重试')
+      },
+      this.state.whetherTest
+    )
+  }
+
+  showWaterDot = () => {
+    if( this.state.waterRemindDot === true) {
+      return {display:''}
+    }else {
+      return {display:'none'}
+    }
   }
 
   render() {
@@ -367,21 +456,23 @@ class ClientMonitor extends Component{
         <div className='wrapper'>
             <div className='table'>
                 <span >
-                  <Link to={`/app/clientWaterRemind/${ equipment_id}`}>
+                  <Link to={`/app/clientWaterRemind/${ equipment_id}`} className=' water'>
                     <Icon className='icon' type="warning" theme="filled" />
                     <div className='describe' >水质提醒记录</div>
                   </Link>
+                  <div className='dot' style={this.showWaterDot()} ></div>
                 </span>
                 <span className='main'>
-                  <Link to={`/app/clientEquipMaintenace/${ equipment_id}`}>
+                  <Link to={`/app/clientEquipMaintenace/${ equipment_id}`} className=' water'>
                     <Icon className='icon' type="tool" theme="filled" />
                     <div className='describe' >设备维护</div>
                   </Link>
+                  <div className='dot' style={this.showEquipmentDot() } ></div>
                 </span>
                 <span className='main'>
-                <Link to={`/app/clientSensorCalibration/${ equipment_id}`}>
-                    <Icon className='icon' type="dashboard" theme="filled" style={{ color: '#00A0E9' }} />
-                    <div className='describe' style={{ color: '#00A0E9' }} >传感器标定</div>
+                <Link to={`/app/clientSensorCalibration/${ equipment_id}`} className=' water'>
+                    <Icon className='icon' type="dashboard" theme="filled"   />
+                    <div className='describe'  >传感器标定</div>
                   </Link>
                 </span>
                 {/* <span className='main'><Icon className='icon' type="video-camera" theme="filled" /><div className='describe' >视频监控</div></span> */}
@@ -392,8 +483,10 @@ class ClientMonitor extends Component{
                   <div className='status' >设备状态</div>
                 </span>
                 <span className='main' onClick={ this.showEquipmentModal } >
-                  <Icon className='icon' type="profile" theme="filled" style={{ color: '#00A0E9'}} />
-                  <div className='describe' style={{ color: '#00A0E9' }} >设备详情</div>
+                  <div className=' water'>
+                    <Icon className='icon' type="profile" theme="filled"  />
+                    <div className='describe'  >设备详情</div>
+                  </div>
                 </span>
                 <EquipInfo
                   whetherTest={ whetherTest }
@@ -410,7 +503,7 @@ class ClientMonitor extends Component{
                                   onChange={ this.handleBeginTime } 
                                 />
                                 <Button type="primary" className='search' onClick={ this.searchInfo } >搜索</Button>
-                                <Button type="primary" className='reset' onClick={ this.reset } >重置</Button>
+                                <Button  className='reset' onClick={ this.reset } >重置</Button>
                                 <Line  
                                   Xdata = { time } 
                                   Ydata = { commitInfo(item.type_name)}

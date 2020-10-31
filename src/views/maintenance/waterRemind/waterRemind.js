@@ -25,7 +25,8 @@ class WaterRemind extends Component{
       data: [],                 //表格数据 
       size: 10,                  //用于重置
       total: 0,                 //一共有多少条数据
-      keyValue: "",             //用于重置
+      keyValue: "",             //用于时间重置
+      keyName: '',              //用于传感器重置
       search_begin_time: [],    //开始时间
       search_sensor_type: '',   //查找传感器类型
     }
@@ -193,6 +194,7 @@ class WaterRemind extends Component{
       search_begin_time: null,
       currentPage: 1,
       search: true,
+      keyName: new Date(),
     })
   }
 
@@ -254,7 +256,7 @@ class WaterRemind extends Component{
 
               <div className="inputWrapper" >
                 <div className="input" >传感器名称:</div>
-                <Select  allowClear={ allowClear }  style={{ width: 120, }} onChange={ this.handleChange } >
+                <Select  allowClear={ allowClear } key={this.state.keyName} style={{ width: 120, }} onChange={ this.handleChange } >
                         <Option value="pH值传感器">pH值传感器</Option>
                         <Option value="ORP传感器">ORP传感器</Option>
                         <Option value="温度传感器">温度传感器</Option>

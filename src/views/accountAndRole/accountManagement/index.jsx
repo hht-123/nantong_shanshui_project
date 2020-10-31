@@ -248,7 +248,7 @@ export default class AccountManagement extends Component{
             </div>
             <div className="line" />
             <div style={{marginTop: "15px"}}>
-              <Button className="button" onClick={() => this.getUsers()}>搜索</Button>
+              <Button type="primary" className="button" onClick={() => this.getUsers()}>搜索</Button>
               <Button className="button" onClick={this.resetSearch}>重置</Button>
               <Button type="primary" className="button" onClick={() => this.setState({addAccountVisible: true})}>新增账户</Button>
             </div>

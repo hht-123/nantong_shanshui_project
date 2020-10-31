@@ -39,7 +39,7 @@ class EquipInfo extends Component {
                         <Descriptions.Item label="主机型号:" >{ data[0].engine_name }</Descriptions.Item>
                         <Descriptions.Item label="联系人:">{ data[0].contact_person }</Descriptions.Item>
                         <Descriptions.Item label="联系人电话:">{ data[0].contact_tel}</Descriptions.Item>
-                        <Descriptions.Item label="设备配置" span={2} ></Descriptions.Item>
+                        {/* <Descriptions.Item label="设备配置" span={2} ></Descriptions.Item> */}
                         { data.map((item,index) => {
                         return    <Descriptions.Item key={index} label={item.type_name} >{item.sensor_model}</Descriptions.Item>
                         })}

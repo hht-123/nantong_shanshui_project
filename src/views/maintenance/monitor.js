@@ -5,7 +5,7 @@ import  './style/monitor.less';
 import Line from './publicComponents/sensorLine';
 import CompanyInfo from './publicComponents/companyInfo';
 import EquipInfo from './publicComponents/equipInfo';
-import { equipmentUrl, sensorDataUrl, device, clientUrl, equipmentInfoUrl } from '../../dataModule/UrlList';
+import { equipmentUrl, sensorDataUrl, device, clientUrl, equipmentInfoUrl, equipMaintainUrl } from '../../dataModule/UrlList';
 
 import { Icon, Tabs, DatePicker, Button, PageHeader, message } from 'antd';
 import { Link } from 'react-router-dom';
@@ -30,6 +30,8 @@ class Monitor extends Component{
       keyValue: "",             //用于时间重置
       companyInfo: [],
       equipmentInfo:[],
+      equipmentDot: false,     // 设备维护的红点提示
+      equipMaintenanceData:[]   //存设备维护的数据
     }
   }
 
@@ -49,6 +51,7 @@ class Monitor extends Component{
       this.getSensorData(params2);
     }, 300000)
     this.getEquipmentInfo()
+    this.getEquipmentMaintenace()
   }
 
   componentWillUnmount() {
@@ -188,7 +191,7 @@ class Monitor extends Component{
 
   handleStatusColor = (numb) => {
     if ( numb === '0' ) {
-      return  { background:'green'}
+      return  { background:'#00EE76'}
     }else if (numb === '3') {
       return  { background:'red'}
     }else if (numb === '4') {
@@ -321,6 +324,50 @@ class Monitor extends Component{
     }
   }
 
+  getEquipmentMaintenace () {
+    let me = this;
+    model.fetch(
+      {'equipment_id': me.props.match.params.equipment_aid},
+      equipMaintainUrl,
+      'get',
+      function(response) {
+        let i = 0
+        if (me.state.whetherTest === false) {
+          me.setState({
+            equipMaintenanceData: response.data.data,
+          })
+          if (me.state.equipMaintenanceData === undefined || me.state.equipMaintenanceData === []) return  null
+          me.state.equipMaintenanceData.map((item,index) => {
+            if(item.maintain_status === '0') {
+              i = i +1
+            }
+          })
+          if ( i> 0) {
+            me.setState({
+              equipmentDot:true
+            })
+          }else {
+            me.setState({
+              equipmentDot:false
+            })
+          }
+        }
+      },
+      function() {
+        message.warning('加载失败，请重试')
+      },
+      this.state.whetherTest
+    )
+  }
+
+  showEquipmentDot = () => {
+    if( this.state.equipmentDot === true) {
+      return {display:''}
+    }else {
+      return {display:'none'}
+    }
+  }
+
   render() {
     const equipment_id = this.props.match.params.equipment_aid;
     const { whetherTest, CompanyModalVisible, equipModalVisible, equipmentInfo, companyInfo } = this.state
@@ -370,22 +417,24 @@ class Monitor extends Component{
         />
         <div className='wrapper'>
             <div className='table'>
-                <span >
-                  <Link to={`/app/waterRemind/${ equipment_id}`}>
+                <span>
+                  <Link to={`/app/waterRemind/${ equipment_id}`} className=' water'>
                     <Icon className='icon' type="warning" theme="filled" />
                     <div className='describe' >水质提醒记录</div>
                   </Link>
                 </span>
                 <span className='main'>
-                  <Link to={`/app/equipmentMaintenance/${ equipment_id}`}>
+                  <Link to={`/app/equipmentMaintenance/${ equipment_id}`} className=' water'>
                     <Icon className='icon' type="tool" theme="filled" />
-                    <div className='describe' >设备维护</div>
+                    <div className='describe ' >设备维护</div>
                   </Link>
+                  <div className='dot' style={this.showEquipmentDot() } >
+                  </div>
                 </span>
-                <span className='main'>
-                <Link to={`/app/sensorCalibratin/${ equipment_id}`}>
-                    <Icon className='icon' type="dashboard" theme="filled" style={{ color: '#00A0E9' }} />
-                    <div className='describe' style={{ color: '#00A0E9' }} >传感器标定</div>
+                <span className='main'> 
+                  <Link to={`/app/sensorCalibratin/${ equipment_id}`} className=' water'>
+                    <Icon className='icon' type="dashboard" theme="filled" />
+                    <div className='describe  '  >传感器标定</div>
                   </Link>
                 </span>
                 {/* <span className='main'><Icon className='icon' type="video-camera" theme="filled" /><div className='describe' >视频监控</div></span> */}
@@ -393,11 +442,13 @@ class Monitor extends Component{
                   <div className='statusColor' style={ this.handleStatusColor(this.state.equipmentData.status) } >
                     { this.handleStatus(this.state.equipmentData.status) }
                   </div>
-                  <div className='status' >设备状态</div>
+                  <div className='status'  >设备状态</div>
                 </span>
-                <span className='main' onClick={ this.showEquipmentModal } >
-                  <Icon className='icon' type="profile" theme="filled" style={{ color: '#00A0E9' }} />
-                  <div className='describe' style={{ color: '#00A0E9' }} >设备详情</div>
+                <span className='main' onClick={ this.showEquipmentModal }  >
+                  <div className=' water'>
+                    <Icon className='icon' type="profile" theme="filled"  />
+                    <div className='describe '  >设备详情</div>
+                  </div>
                 </span>
                 <EquipInfo
                   whetherTest={ whetherTest }
@@ -416,7 +467,7 @@ class Monitor extends Component{
                                   onChange={ this.handleBeginTime } 
                                 />
                                 <Button type="primary" className='search' onClick={ this.searchInfo } >搜索</Button>
-                                <Button type="primary" className='reset' onClick={ this.reset } >重置</Button>
+                                <Button  className='reset' onClick={ this.reset } >重置</Button>
                                 <Line  
                                   Xdata = { time } 
                                   Ydata = { commitInfo(item.type_name)}

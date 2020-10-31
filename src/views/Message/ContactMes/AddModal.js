@@ -13,7 +13,7 @@ class Addcontact extends Component{
           contact_person:'',
           contact_position:'',
           contact_tel:'',
-          note: '',  
+          remark: '',  
           client_id: this.props.client_id,
         }
     }
@@ -52,7 +52,7 @@ class Addcontact extends Component{
             contact_person: this.state.contact_person,
             contact_position: this.state.contact_position,
             contact_tel: this.state.contact_tel,
-            note: this.state.note,
+            remark: this.state.remark,
             client_id: this.state.client_id
         }
         this.setState({
@@ -141,7 +141,7 @@ class Addcontact extends Component{
                             label="备注"
                             colon
                         >
-                        <Input  name="note" onChange={this.handleChange} />
+                        <Input  name="remark" onChange={this.handleChange} />
                         </Form.Item>
                     </Form>
                 </div>

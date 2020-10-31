@@ -214,6 +214,7 @@ class MessageIndex extends Component{
         })
         }
         const { roleData } = this.props
+        if (this.state.client_id === undefined ) return null
         if (roleData.size === 0 ) return null
 
 
@@ -232,7 +233,7 @@ class MessageIndex extends Component{
                             />
                         </div>
                         <div style={{marginTop: "40px",marginLeft: "260px"}}>
-                            <Button className="button" onClick={ this.searchInfo }>搜索</Button>
+                            <Button type='primary' className="button" onClick={ this.searchInfo }>搜索</Button>
                             <Button className="button" onClick={this.handleReset}>重置</Button>
                             { roleData.map((item,index) => {
                                 if ( item === 'user_manage') {

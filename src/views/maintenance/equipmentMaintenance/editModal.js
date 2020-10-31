@@ -153,15 +153,15 @@ class EditModal extends Component {
                             )}
                         </Form.Item>
 
-                        <Form.Item
+                        {/* <Form.Item
                             label="维护结果"
                             colon
                         >
-                        <Select name='maintain_result' defaultValue="维护完成" style={{ width: 120 }} onChange={ this.ChangeValue1 }>
+                        <Select name='maintain_result' placeholder="是否维护" style={{ width: 120 }} onChange={ this.ChangeValue1 }>
                             <Option value="1">维护完成</Option>
                             <Option value="-1">维护未完成</Option>
                         </Select>
-                        </Form.Item>
+                        </Form.Item> */}
 
                         <Form.Item
                             label="维护状态"
