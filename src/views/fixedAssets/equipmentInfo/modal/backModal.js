@@ -34,6 +34,7 @@ class BackModal extends Component {
             function() {
                 message.success("操作成功");
                 me.props.closeModal();
+                me.props.afterCreateOrEdit();
             },
             function() {
                 message.warning('操作失败，请重试');
@@ -49,7 +50,6 @@ class BackModal extends Component {
         const { storehouse, storage_location} = this.state;
         if(storehouse === '' || storage_location === '')  return;
         this.changeStatus();
-        this.props.afterCreateOrEdit();
     };
 
     afterClose = () => {
