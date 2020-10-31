@@ -76,9 +76,12 @@ class EquipmentTable extends Component{
           render: (text, record, index) => {
             return (
               <div>
-                  <Tooltip title="编辑信息" trigger="hover">
+                  {
+                    parseInt(status, 0) === 0  ? null : 
+                    <Tooltip title="编辑信息" trigger="hover">
                     <Icon type="edit" theme="twoTone"  className="icon" onClick={() => this.props.showModal('edit', record)}/>
-                  </Tooltip>
+                    </Tooltip>
+                  }
 
                   <Tooltip title="查看该设备传感器信息" trigger="hover">
                     <Icon type="message" theme="twoTone" className="icon" onClick={() => this.props.showModal('sensor', record)}/>
