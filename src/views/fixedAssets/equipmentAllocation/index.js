@@ -123,7 +123,6 @@ class EpuipmentAllocation extends Component {
         this.setState({search: true});
         const { search_transfer_unit, search_status, search_time } = this.state;
         let params = this.getparams( 1, 10, search_transfer_unit, search_status, search_time);
-        console.log(search_status);
         this.getCurrentPage(params);
         
     }
@@ -181,7 +180,6 @@ class EpuipmentAllocation extends Component {
   //处理获取后的数据
   handleData = () => {
     const { data } = this.state;
-    console.log(data, 'data')
     if(data !== undefined) {
       const tableDate = data.map((item) =>({
           key: item.equipment_code,
@@ -204,7 +202,6 @@ class EpuipmentAllocation extends Component {
         const tableDate = this.handleData();
 
         
-        console.log(tableDate, 'tableDate')
         return(
             <div>
                 <div className='name'>设备调拨记录：</div>
