@@ -68,7 +68,7 @@ class EquipmentMaintenance extends Component{
             currentPage: params['currentPage'],
             size: params['size'],
           })
-          console.log(me.state.data)
+          // console.log(me.state.data)
         } else {
           me.setState({
             isLoading: false,
@@ -107,12 +107,12 @@ class EquipmentMaintenance extends Component{
           me.setState({
             equipmentIdData: response.data.data[0]
           })
-          console.log(me.state.equipmentIdData)
+          // console.log(me.state.equipmentIdData)
         } else {
           me.setState({
             equipmentIdData: response.data.data,
           })
-          console.log(me.state.equipmentIdData)
+          // console.log(me.state.equipmentIdData)
         }
       },
       function() {
@@ -284,7 +284,7 @@ class EquipmentMaintenance extends Component{
         return null;
       })
     }
-    console.log(data)
+    // console.log(data)
 
     return (
       <div className='equipmentMaintenance'>

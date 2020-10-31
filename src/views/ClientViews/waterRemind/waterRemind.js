@@ -70,7 +70,7 @@ class ClientWaterRemind extends Component{
             currentPage: params['currentPage'],
             size: params['size'],
           })
-          console.log(me.state.data)
+          // console.log(me.state.data)
         } else {
           me.setState({
             isLoading: false,
@@ -78,7 +78,7 @@ class ClientWaterRemind extends Component{
             data: response.data.data,
             currentPage: params['currentPage'],
           })
-          console.log(me.state.data)
+          // console.log(me.state.data)
         }
       },
       function() {
@@ -117,7 +117,7 @@ class ClientWaterRemind extends Component{
           me.setState({
             equipmentIdData: response.data.data,
           })
-          console.log(me.state.equipmentIdData)
+          // console.log(me.state.equipmentIdData)
         }
       },
       function() {

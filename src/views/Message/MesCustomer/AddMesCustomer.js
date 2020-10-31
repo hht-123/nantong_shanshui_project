@@ -32,6 +32,9 @@ class AddMesCustomer extends Component{
             me.setState({
                 confirmLoading: false,
             })
+            const item = me.props.getParams();
+            me.props.getCurrentPage(item);
+            message.success('创建成功')
           },
           function() {
             message.warning('发送数据失败，请重试')
@@ -65,8 +68,6 @@ class AddMesCustomer extends Component{
             confirmLoading: true,
         });
             this.createNewCustomer(params);
-            let item = this.props.getParams();
-            this.props.getPage();
     };
 
     //取消按钮事件
@@ -84,7 +85,6 @@ class AddMesCustomer extends Component{
     render(){
         const { getFieldDecorator } = this.props.form;
         const { confirmLoading } = this.state;
-        console.log(this.state);
         
         const formItemLayout = {
             labelCol: {

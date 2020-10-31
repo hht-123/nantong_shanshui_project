@@ -28,6 +28,8 @@ class AddCalibration extends Component {
             me.setState({
                 confirmLoading: false,
             })
+            const NewParams = me.props.getparams()
+            me.props.getCurrentPage(NewParams)
           },
           function() {
             message.warning('发送数据失败，请重试')
@@ -53,10 +55,7 @@ class AddCalibration extends Component {
         this.setState({
           confirmLoading: true,
         });
-        console.log(params);
         this.addCalibration(params);
-        let NewParams = this.props.getparams()
-        this.props.getCurrentPage(NewParams)
       };
     
     //取消按钮事件

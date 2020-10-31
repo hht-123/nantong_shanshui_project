@@ -30,6 +30,9 @@ class Addcontact extends Component{
             me.setState({
                 confirmLoading: false,
             })
+            const item = me.props.getParams();
+            me.props.getCurrentPage(item);
+            message.success('创建成功')
           },
           function() {
             message.warning('发送数据失败，请重试')
@@ -59,9 +62,6 @@ class Addcontact extends Component{
             confirmLoading: true,
         });
             this.createNewContact(params);
-            console.log(params)
-            let item = this.props.getParams();
-            this.props.getCurrentPage(item);
     };
 
     //取消按钮事件

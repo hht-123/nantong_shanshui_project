@@ -45,6 +45,8 @@ class EditModal extends Component {
             me.setState({
                 confirmLoading: false,
             })
+            let NewParams = me.props.getparams()
+            me.props.getCurrentPage(NewParams)
           },
           function() {
             message.warning('修改失败，请重试')
@@ -73,8 +75,6 @@ class EditModal extends Component {
           confirmLoading: true,
         });
         this.editEngineInfo(params);
-        let NewParams = this.props.getparams()
-        this.props.getCurrentPage(NewParams)
       };
     
     //取消按钮事件
