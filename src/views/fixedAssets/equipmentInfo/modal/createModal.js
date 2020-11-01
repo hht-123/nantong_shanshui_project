@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, message, Modal, Select, Button} from 'antd';
+import { Form, Input, message, Modal, Select } from 'antd';
 import SensorSetting from './SensorSetting';
 import '../../../../style/wrapper.less'
 import '../style.less'
@@ -8,7 +8,6 @@ import { Model } from "../../../../dataModule/testBone";
 import { allEngineName, addEquipment } from '../../../../dataModule/UrlList';
 
 const model = new Model();
-const { confirm } = Modal;
 const { Option } = Select;
 
 class CreateModal extends Component {
@@ -317,7 +316,7 @@ class CreateModal extends Component {
     }
 
     render() {
-        const { number, sensors, confirmLoading, buttonDisplay, isAddsensor } = this.state;
+        const { number, sensors, confirmLoading } = this.state;
         const { visible } = this.props;
         const { getFieldDecorator } = this.props.form;
         const handleEngineNmaeDate = this.handleAllEngineName();

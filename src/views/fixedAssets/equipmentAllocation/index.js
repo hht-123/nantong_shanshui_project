@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { DatePicker, Button, Input, message, Select} from 'antd';
+import { DatePicker, Button, Input, message } from 'antd';
 import '../../../style/wrapper.less';
 import AllocationTable from './allocationTable';
 import { Model } from "../../../dataModule/testBone";
@@ -7,7 +7,6 @@ import { equipmentAllocation } from '../../../dataModule/UrlList';
 
 
 const model = new Model();
-const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 class EpuipmentAllocation extends Component {
@@ -198,7 +197,7 @@ class EpuipmentAllocation extends Component {
   }
 
     render() {
-        const {isLoading, showPagination, size, total, currentPage, key} = this.state;
+        const { isLoading, showPagination, size, total, currentPage } = this.state;
         const tableDate = this.handleData();
 
         

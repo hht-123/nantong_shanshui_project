@@ -75,7 +75,6 @@ class EditModal extends Component {
             this.setState({
                 number: sensorModalData.length,
                 sensors: sensorModalData,
-                sensorCodeAids: aids,
                 spinning: false,
                 display: 'block',
                 sensorTypes,

@@ -139,6 +139,7 @@ class SensorInfo extends Component {
         break;
       case 'sensor':
         this.setState({sensorEditVisible: true})
+        break;
       default:
         return;
     }

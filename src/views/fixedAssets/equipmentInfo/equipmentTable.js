@@ -13,7 +13,7 @@ class EquipmentTable extends Component{
   }
 
     render() {
-      const { isLoading, data, total, showPagination, changePage, changeSize, currentPage, size, status, } = this.props;
+      const { isLoading, data, total, showPagination, changePage, changeSize, currentPage, size } = this.props;
 
       let columns =  [
         {
