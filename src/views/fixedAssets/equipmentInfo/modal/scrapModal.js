@@ -2,7 +2,7 @@ import React,{ Component } from 'react';
 import { Modal, Form,  message } from 'antd';
 import { Model } from "../../../../dataModule/testBone";
 import '../style.less'
-import {ScrapEquipmentUrl} from '../../../../dataModule/UrlList'
+import { ScrapEquipmentUrl, sensorOfequipmentUrl } from '../../../../dataModule/UrlList'
 const model = new Model();
 
 class ScrapModal extends Component {
@@ -14,7 +14,41 @@ class ScrapModal extends Component {
             applicant_tel: '',
             scrapping_reasons: '',
             remark: '',
+            sensorAids: '',
         }
+    }
+
+    componentDidUpdate(prevProps) {
+        if(this.props.data !== prevProps.data){
+            this.getSensorInfo({equipment_id: this.props.data.key});
+        }
+    }
+
+    //获取当前设备传感器
+    getSensorInfo = (params) => {
+        let me = this;
+        model.fetch(
+        params,
+        sensorOfequipmentUrl,
+        'get',
+        function(response) {
+            let sensorAids = '';
+            if(response.data.data.length !== 0 ){
+                sensorAids = response.data.data.map(item => item.aid);
+                sensorAids = sensorAids.join(',');
+            }else{
+                sensorAids = 'false';
+            }
+            
+            me.setState({
+                sensorAids
+            })
+        },
+        function() {
+            message.warning('加载失败，请重试')
+        },
+        this.state.whetherTest
+        )
     }
 
     scrapEquipment(params) {
@@ -51,9 +85,10 @@ a
             engine_id: this.props.data.engine_id,
             equipment_id: this.props.data.key,
             applicant: this.state.applicant,
-            applicant_tel:this.state.applicant_tel ,
+            applicant_tel:this.state.applicant_tel,
             remark: this.state.remark,
-            scrapping_reasons:this.state.scrapping_reasons ,
+            scrapping_reasons:this.state.scrapping_reasons,
+            equipment_sensor: this.state.sensorAids,
         }
         this.setState({
           confirmLoading: true,

@@ -4,10 +4,12 @@ import { message } from 'antd';
 import { sensorTypeUrl, verifyUrl } from '../../../dataModule/UrlList';
 import {getUserId, getRoleId}  from '../../../publicFunction/index';
 
-const storeSensorType = (result) => ({
+const storeSensorType = (result, usingSensorTypes) => ({
     type: constants.STORE_SENSOR_TYPE,
     sensorTypes: result,
+    usingSensorTypes,
 })
+
 
 export const  getSensorType = () => {
     const model = new Model();
@@ -17,8 +19,10 @@ export const  getSensorType = () => {
             sensorTypeUrl,
             'get',
             function(response) {
-                const result = response.data;
-                dispatch(storeSensorType(result));
+                const result = response.data; 
+                const usingSensorTypes = result.filter((item) => item.state === '1');
+                dispatch(storeSensorType(result, usingSensorTypes));
+
             },
             function() {
                 message.warning('发送数据失败，请重试')

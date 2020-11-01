@@ -182,7 +182,7 @@ class EpuipmentAllocation extends Component {
     const { data } = this.state;
     if(data !== undefined) {
       const tableDate = data.map((item) =>({
-          key: item.equipment_code,
+          key: item.aid,
           applicant_time: item.applicant_time,
           equipment_code: item.equipment_code,
           status: this.statusSWift(item.status),

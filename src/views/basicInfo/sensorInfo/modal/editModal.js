@@ -126,7 +126,8 @@ class EditModal extends Component {
                     onCancel={ this.handleCancel }
                 >
                 <Form { ...formItemLayout } ref='engineForm' onSubmit={ this.onSubmit }>
-                        <Form.Item
+                        {/* { status !== '正在使用'  ?  */}
+                            <Form.Item
                             label="状态"
                             colon
                         >
@@ -135,12 +136,12 @@ class EditModal extends Component {
                                 initialValue: status
                             })(
                                 <Select  style={{ width: 120 }} onSelect={(string) => this.handleSelect(string)}>
-                                    <Option value="可以使用">可以使用</Option>
-                                    <Option value="停止使用">停止使用</Option>
+                                    <Option value="未使用">未使用</Option>
+                                    <Option value="报废">报废</Option>
                                 </Select>
                             )}
-                       
-                        </Form.Item>
+                        </Form.Item> : null
+                        {/* } */}
 
                         <Form.Item
                             label="默认理论值"

@@ -5,8 +5,10 @@ import React, { Component } from 'react';
 class SensorTable extends Component{
 
   handleStatusColor = (string) => {
-    if ( string === '停止使用' ) {
+    if ( string === '报废' ) {
       return  { color : 'red '}
+    }else if( string === '未使用'){
+      return  { color : '#DAA520'}
     }
   }
 

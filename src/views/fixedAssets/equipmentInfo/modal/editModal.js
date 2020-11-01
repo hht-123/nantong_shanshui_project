@@ -543,7 +543,7 @@ class EditModal extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    sensorTypes: state.getIn(['index', 'sensorTypes']),
+    sensorTypes: state.getIn(['index', 'usingSensorTypes']),
 })
 
 export default connect(mapStateToProps, null)(Form.create()(EditModal));

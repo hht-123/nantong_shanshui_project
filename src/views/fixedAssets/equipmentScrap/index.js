@@ -4,7 +4,7 @@ import '../../../style/wrapper.less';
 import './style.less';
 import  EquipmentScrapTable  from '../equipmentScrap/EquipmentScrapTable';
 import { Model} from '../../../dataModule/testBone';
-import { equipmentScrap } from '../../../dataModule/UrlList';
+import { equipmentScrap, sensorOfequipmentUrl } from '../../../dataModule/UrlList';
 
 
 const model = new Model();
@@ -23,7 +23,8 @@ class Equipment extends Component{
           showPagination: true,         //是否分页
           data: [],                     //表格数据
           total: 0,                     //一共有多少条数据
-          search_equipment_code: ''     //设备编号的搜索
+          search_equipment_code: '',    //设备编号的搜索
+          equipment_sensor: '',
       }  
   }
 
@@ -31,6 +32,7 @@ class Equipment extends Component{
     componentDidMount() {
         let params = this.getParams();
         this.getCurrentPage(params);
+        // this.getSensorInfo({equipment_id: });
     }
 
 
@@ -38,6 +40,26 @@ class Equipment extends Component{
         this.setState({
         [e.target.name] : e.target.value
         })
+    }
+
+    //获取当前设备传感器
+    getSensorInfo = (params) => {
+        let me = this;
+        model.fetch(
+        params,
+        sensorOfequipmentUrl,
+        'get',
+        function(response) {
+            console.log(response.data.data);
+            me.setState({
+                sensorModalData: response.data.data
+            })
+        },
+        function() {
+            message.warning('加载失败，请重试')
+        },
+        this.state.whetherTest
+        )
     }
 
     //获取数据

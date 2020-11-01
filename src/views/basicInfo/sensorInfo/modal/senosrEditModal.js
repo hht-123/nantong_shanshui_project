@@ -25,8 +25,9 @@ class SenosrEditModal extends Component {
         sensorModelUrl,
         'get',
         function(response) {
+            const sensorModels = response.data.filter(item => item.states === '1')
             me.setState({
-                sensorModels: response.data
+                sensorModels
             })
         },
         function() {
@@ -37,6 +38,7 @@ class SenosrEditModal extends Component {
     }
 
     callback = (key) => {
+        this.setState({sensorModels: ''});
         if(key !== undefined ){
             const type_name  = key.split(',')[1];
             this.setState({type_name});
@@ -61,7 +63,7 @@ class SenosrEditModal extends Component {
             return ;
         }
         model.fetch(
-        {model: "delete"},
+        {type: "delete"},
         addSensorTypeUrl + aid + '/',
         'delete',
         function() {
@@ -79,12 +81,12 @@ class SenosrEditModal extends Component {
         const  me = this;
         console.log(aid);
         model.fetch(
-            {code: "delete"},
+            {model: "delete"},
             addSensorModelUrl + aid + '/',
             'delete',
             function() {
                 message.success("删除成功");
-                me.getSensorModel({type_name: this.state.type_name});
+                me.getSensorModel({type_name: me.state.type_name});
             },
             function() {
                 message.warning('删除失败');
@@ -115,15 +117,15 @@ class SenosrEditModal extends Component {
                             <Panel header={item0.get("type_name")} key={item0.get("aid") + ',' + item0.get("type_name")} extra={this.genExtra(item0.get("aid"))}>
                                 { 
                                     sensorModels.length > 0 ? sensorModels.map((item => (
-                                        <div key={item.aid}>
+                                        <div key={item.aid} style={ {marginBottom:'10px'}}>
                                             {item.sensor_model}
                                             <Popconfirm
                                                 title="你确定要删除么?"
                                                 onConfirm={() => this.deleteModel(item.aid)}
-                                                okText="Yes"
-                                                cancelText="No"
+                                                okText="确定"
+                                                cancelText="取消"
                                             >
-                                                 <Icon type="delete"  style={{color: 'red', marginLeft: '30px'}} />
+                                                 <Icon type="delete"  style={{color: 'red'}} />
                                             </Popconfirm>
                                         </div>
                                     ))) : null
