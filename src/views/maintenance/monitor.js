@@ -52,7 +52,7 @@ class Monitor extends Component{
       this.getSensorData(params2);
     }, 300000)
     this.getEquipmentInfo()
-    this.getSensorModel()
+    // this.getSensorModel()
     this.getEquipmentMaintenace()
   }
 
@@ -198,7 +198,7 @@ class Monitor extends Component{
     }else if (numb === '3') {
       return  { background:'red'}
     }else if (numb === '4') {
-      return  { background:'#8B8989'}
+      return  { background:'blue'}
     }
   }
 
@@ -320,6 +320,7 @@ class Monitor extends Component{
           me.setState({
             sensorModel: response.data
           })
+          // console.log(me.state.sensorModel)
         } 
       },
       function() {
@@ -479,7 +480,7 @@ class Monitor extends Component{
                   visible={ equipModalVisible }
                   cancel={ this.closeModal }
                   data={ equipmentInfo }
-                  sensorModel = { sensorModel }
+                  // sensorModel = { sensorModel }
                 />
             </div>
               <div>
