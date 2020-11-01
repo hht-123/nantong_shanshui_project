@@ -333,7 +333,7 @@ class SensorCalibration extends Component{
                 getCurrentPage = { this.getCurrentPage.bind(this) }
               />
           </div>
-          <div className='line'></div>
+          {/* <div className='line'></div> */}
           <span className='pageName'>传感器标定记录：</span>
           <div className='func'>
             <div>

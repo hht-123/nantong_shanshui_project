@@ -33,7 +33,7 @@ class ClientMonitor extends Component{
       equipMaintenanceData:[],   //存设备维护的数据
       waterRemind:[],            //存储未处理的水质提醒记录
       waterRemindDot: false,
-      sensorModel:[]            //存储设备对应的传感器类型及型号
+      sensorModel:[],            //存储设备对应的传感器类型及型号
     }
   }
 
