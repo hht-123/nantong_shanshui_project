@@ -39,7 +39,7 @@ class ScrapModal extends Component {
             }else{
                 sensorAids = 'false';
             }
-            
+
             me.setState({
                 sensorAids
             })
@@ -62,6 +62,7 @@ class ScrapModal extends Component {
             me.setState({
                 confirmLoading: false,
             })
+            me.props.afterCreateOrEdit();
             message.success('提交成功')
           },
           function() {
@@ -80,7 +81,6 @@ a
         const {validateFields} = this.props.form;
         validateFields();
         // if(this.state.maintain_cause === '') return;
-        console.log(this.props.data);
         let params = {
             engine_id: this.props.data.engine_id,
             equipment_id: this.props.data.key,
@@ -93,9 +93,8 @@ a
         this.setState({
           confirmLoading: true,
         });
-        console.log(params);
         this.scrapEquipment(params);
-        this.props.afterCreateOrEdit();
+        
       };
     
     //取消按钮事件
@@ -109,8 +108,6 @@ a
             [e.target.name]: e.target.value
         })
     }
-
-   
 
     afterClose = () => {
         this.setState({

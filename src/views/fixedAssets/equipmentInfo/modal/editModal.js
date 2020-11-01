@@ -71,7 +71,6 @@ class EditModal extends Component {
             if(sensorModalData.length === 0){
                 sensorModalData.push({});
             }
-
             this.setState({
                 number: sensorModalData.length,
                 sensors: sensorModalData,
@@ -162,8 +161,10 @@ class EditModal extends Component {
         
         if(sensorCodeAids.length > 1){
             equipment_sensor = sensorCodeAids.join(',');
-        }else if(sensorCodeAids.length = 1){
+        }else if(sensorCodeAids.length === 1){
             equipment_sensor = sensorCodeAids[0];
+        }else{
+            equipment_sensor = 'false';
         }
 
         const params = {
@@ -184,7 +185,9 @@ class EditModal extends Component {
         const { validateFields } = this.props.form;  //验证
         validateFields();
         const { equipment_code, engine_code, storehouse, storage_location, equip_person, sensorCodeAids, sensorTypes } = this.state;
-        if(equipment_code ==='' || engine_code === '' || storehouse === '' || storage_location==='' || equip_person === '') return 0;
+        if(equipment_code ==='' || engine_code === '' || storehouse === '' || storage_location==='' || equip_person === '') return 0;   
+        console.log(sensorCodeAids.length, sensorTypes.length)
+        console.log(sensorCodeAids)
 
         if(sensorCodeAids.length !== sensorTypes.length){
             message.warning("请选择传感器型号或名称");
@@ -231,6 +234,7 @@ class EditModal extends Component {
     delectInfo = (newNumber, index) => {
         const { sensors, sensorTypes, sensorCodeAids } = this.state;
         const [ delectSensors, delectsensorType, deleteAids] = [sensors, sensorTypes, sensorCodeAids];
+        
         if(deleteAids[index] !== undefined ){
             deleteAids.splice(index, 1);
         }
@@ -244,9 +248,11 @@ class EditModal extends Component {
             sensors[index].sensor_model = '';
             sensors[index].sensor_code = '';
             sensors[index].type_name = '';
+             
             this.setState({
-                sensors,
-                sensorCodeAids
+                sensors: delectSensors,
+                sensorCodeAids: deleteAids,
+                sensorTypes: delectsensorType,
             })
             message.warning('如不添加传感器，单击确定提交')
             return 0;
