@@ -5,7 +5,7 @@ import  './monitor.less';
 import Line from '../../maintenance/publicComponents/sensorLine';
 import CompanyInfo from '../../maintenance/publicComponents/companyInfo';
 import EquipInfo from '../../maintenance/publicComponents/equipInfo';
-import { equipmentUrl, sensorDataUrl, device, clientUrl, equipmentInfoUrl, equipMaintainUrl, ClientWaterRemindUrl } from '../../../dataModule/UrlList';
+import { equipmentUrl, sensorDataUrl, device, clientUrl, equipmentInfoUrl, equipMaintainUrl, ClientWaterRemindUrl, equipmentSensorModelUrl } from '../../../dataModule/UrlList';
 
 import { Icon, Tabs, DatePicker, Button, PageHeader, message } from 'antd';
 import { Link } from 'react-router-dom';
@@ -32,7 +32,8 @@ class ClientMonitor extends Component{
       equipmentDot: false,     // 设备维护的红点提示
       equipMaintenanceData:[],   //存设备维护的数据
       waterRemind:[],            //存储未处理的水质提醒记录
-      waterRemindDot: false
+      waterRemindDot: false,
+      sensorModel:[]            //存储设备对应的传感器类型及型号
     }
   }
 
@@ -52,6 +53,7 @@ class ClientMonitor extends Component{
       this.getSensorData(params2);
     }, 300000)
     this.getEquipmentInfo()
+    this.getSensorModel()
     this.getEquipmentMaintenace()
     this.getWaterRemind()
   }
@@ -92,7 +94,7 @@ class ClientMonitor extends Component{
           me.setState({
             equipmentData: response.data.data,
           })
-          console.log(me.state.equipmentData)
+          // console.log(me.state.equipmentData)
         }
       },
       function() {
@@ -138,7 +140,7 @@ class ClientMonitor extends Component{
           me.setState({
             sensorData: response.data.data,
           })
-          console.log(me.state.sensorData)
+          // console.log(me.state.sensorData)
         }
       },
       function() {
@@ -188,16 +190,16 @@ class ClientMonitor extends Component{
   }
 
   callback = (key) => {
-    console.log(key);
+    // console.log(key);
   }
 
   handleStatusColor = (numb) => {
     if ( numb === '0' ) {
-      return  { background:'green'}
+      return  { background:'#00EE76'}
     }else if (numb === '3') {
       return  { background:'red'}
     }else if (numb === '4') {
-      return  { background:'blue'}
+      return  { background:'#8B8989'}
     }
   }
 
@@ -216,7 +218,7 @@ class ClientMonitor extends Component{
     this.setState({
       search_begin_time: dateString
     })
-    console.log(dateString)
+    // console.log(dateString)
   }
 
   handleDate(preDate) {
@@ -281,6 +283,7 @@ class ClientMonitor extends Component{
     // this.getEquipmentInfo()
   };
 
+  //获得设备详情（除了对应的传感器类型及型号）
   getEquipmentInfo() {
     let me = this;
         model.fetch(
@@ -292,7 +295,6 @@ class ClientMonitor extends Component{
               me.setState({
                 equipmentInfo: response.data
               }) 
-              // console.log(me.state.equipmentInfo)
             } else {
               me.setState({
                 equipmentInfo: response.data.data,
@@ -304,6 +306,27 @@ class ClientMonitor extends Component{
           },
           this.state.whetherTest 
         )
+  }
+
+  //获得设备配置的传感器类型及型号
+  getSensorModel() {
+    let me = this;
+    model.fetch(
+      {'equipment_id': this.props.match.params.equipment_aid},
+      equipmentSensorModelUrl,
+      'get',
+      function(response) {
+        if (me.state.whetherTest === false) {
+          me.setState({
+            sensorModel: response.data
+          })
+        } 
+      },
+      function() {
+        console.log('加载失败，请重试')
+      },
+      this.state.whetherTest
+    )
   }
 
   //关闭弹窗
@@ -408,7 +431,7 @@ class ClientMonitor extends Component{
 
   render() {
     const equipment_id = this.props.match.params.equipment_aid;
-    const { whetherTest, CompanyModalVisible, equipModalVisible, equipmentInfo, companyInfo } = this.state
+    const { whetherTest, CompanyModalVisible, equipModalVisible, equipmentInfo, companyInfo, sensorModel } = this.state
     const time = [];
     const pH =[];
     const orp = [];
@@ -493,6 +516,7 @@ class ClientMonitor extends Component{
                   visible={ equipModalVisible }
                   cancel={ this.closeModal }
                   data={ equipmentInfo }
+                  sensorModel={ sensorModel }
                 />
             </div>
               <Tabs className='tab' defaultActiveKey="0" onChange={this.callback} type='card'>

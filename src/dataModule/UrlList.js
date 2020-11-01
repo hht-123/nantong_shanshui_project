@@ -40,6 +40,7 @@ export const device = 'app/deviceNum_to_typename/'             //设备对应的
 export const clientUrl = 'client/'                          //实时监测客户信息
 export const waterRemindUrl = 'app/water_quality_notice/' //水质提醒记录
 export const equipmentInfoUrl = 'app/equipment_detail/'   // 设备详情信息
+export const equipmentSensorModelUrl = 'app/equipment_detail_two' //设备对应的传感器类型及型号
 export const equipmentCalibration = 'equipment_calibration/' //增加补偿值
 export const CalibrationMark = 'app/sensor_calibration_retrieve/' //获得标定值记录
 export const ClientWaterRemindUrl = 'app/water_notice_retrieve/' //客户端水质提醒记录数据

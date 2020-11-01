@@ -24,10 +24,11 @@ class ClientSensorCalibration extends Component{
       data: [],                 //表格数据 
       total: 0,                 //一共有多少条数据
       size:10,
-      keyValue: "",             //用于重置
+      keyValue: "",             //用于时间重置
       search_begin_time: [],    //开始时间
       search_type_name: '',     //查找的传感器名称
       equipSensor:[],
+      keySet:'',                //用于下拉框重置
     }
   }
 
@@ -230,6 +231,7 @@ class ClientSensorCalibration extends Component{
     this.setState({
       search_type_name: null,
       keyValue: new Date(),
+      keySet: new Date(),
       search_begin_time: null,
       currentPage: 1,
       search: true,
@@ -313,7 +315,7 @@ class ClientSensorCalibration extends Component{
               </div>
               <div className="inputWrapper" >
                 <div className="input" >传感器名称:</div>
-                <Select  allowClear={ allowClear }  style={{ width: 120, }} onChange={ this.handleChange } >
+                <Select key={this.state.keySet}  allowClear={ allowClear }  style={{ width: 120, }} onChange={ this.handleChange } >
                         <Option value="pH值传感器">pH值传感器</Option>
                         <Option value="电导率传感器">电导率传感器</Option>
                         <Option value="浊度传感器">浊度传感器</Option>

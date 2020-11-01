@@ -208,7 +208,8 @@ class MessageIndex extends Component{
                 client_industry:item.client_industry,
                 unit_phone:item.unit_phone,
                 unit_fax:item.unit_fax,
-                note: item.note
+                note: item.note,
+                region:item.region,
             })
             return null;
         })

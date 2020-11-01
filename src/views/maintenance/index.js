@@ -51,14 +51,14 @@ class MaintenanceIndex extends Component {
 
     //设备状态下拉框值改变时触发的函数
     regionHandleChange = (value) => {
-      console.log(value);
+      // console.log(value);
       this.setState({
         region: value
       })
     }
 
     StatusHandleChange = (value) => {
-      console.log(value);
+      // console.log(value);
       this.setState({
         status: value
       })
@@ -80,7 +80,7 @@ class MaintenanceIndex extends Component {
       const newForm = {...this.state}
       newForm[e.target.name] = e.target.value
       this.setState(newForm)
-      console.log(this.state)
+      // console.log(this.state)
     } 
 
     //重置
@@ -98,7 +98,7 @@ class MaintenanceIndex extends Component {
           'get',
           function(response) {
               if (me.state.whetherTest === false) {
-                console.log(response.data.data)
+                // console.log(response.data.data)
                 me.setState({
                   data: response.data.data
                 })
@@ -159,9 +159,18 @@ class MaintenanceIndex extends Component {
 
   render() {
     const { Option } = Select;
-    const Newdata = this.getGroup(this.state.data,'region');
+    let selectData = []
+    if (this.state.data !== [] && this.state.data !== undefined ) {
+      this.state.data.map((item,index) => {
+        if(item.status === '0' || item.status === '3' || item.status === '4' ) {
+          selectData.push(item)
+        }
+        return null
+      })
+    }
+    const Newdata = this.getGroup(selectData,'region');
     const allowClear = true;
-    console.log(Newdata)
+  
 
     return (
         <div>
@@ -213,7 +222,6 @@ class MaintenanceIndex extends Component {
                       } else {
                         return <Equipment key={ index } aid={ item.aid } equipment_code={ item.equipment_code } client_unit={ item.client_unit } status={ item.status } />
                       }
-                      // return <Equipment key={ index } aid={ item.aid } equipment_code={ item.equipment_code } client_unit={ item.client_unit } status={ item.status } />
                     }) }
                 </div>
                   }
