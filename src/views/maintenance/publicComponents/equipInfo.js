@@ -18,8 +18,8 @@ class EquipInfo extends Component {
     render() {
         const { visible, data, sensorModel } = this.props;
         const { confirmLoading } = this.state;
-        // console.log(data)
-        if (sensorModel.length === 0) return null
+        if (data.length === 0 ) return null
+    
 
         return (
         <div>
@@ -40,8 +40,12 @@ class EquipInfo extends Component {
                         <Descriptions.Item label="联系人:">{ data[0].contact_person }</Descriptions.Item>
                         <Descriptions.Item label="联系人电话:">{ data[0].contact_tel}</Descriptions.Item>
                         {/* <Descriptions.Item label="设备配置" span={2} ></Descriptions.Item> */}
-                        { sensorModel.map((item,index) => {
-                        return    <Descriptions.Item key={index} label={item.type_name} >{item.sensor_model}</Descriptions.Item>
+                        { data.map((item,index) => {
+                            if (item.type_name === undefined ) {
+                                return  null
+                            } else {
+                                return    <Descriptions.Item key={index} label={item.type_name} >{item.sensor_model}</Descriptions.Item>
+                            }                            
                         })}
                     </Descriptions>
                 </div>

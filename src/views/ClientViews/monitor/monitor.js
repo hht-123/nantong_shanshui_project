@@ -53,7 +53,7 @@ class ClientMonitor extends Component{
       this.getSensorData(params2);
     }, 300000)
     this.getEquipmentInfo()
-    this.getSensorModel()
+    // this.getSensorModel()
     this.getEquipmentMaintenace()
     this.getWaterRemind()
   }
@@ -516,7 +516,7 @@ class ClientMonitor extends Component{
                   visible={ equipModalVisible }
                   cancel={ this.closeModal }
                   data={ equipmentInfo }
-                  sensorModel={ sensorModel }
+                  // sensorModel={ sensorModel }
                 />
             </div>
               <Tabs className='tab' defaultActiveKey="0" onChange={this.callback} type='card'>
