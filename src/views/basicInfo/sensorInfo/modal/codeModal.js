@@ -63,8 +63,9 @@ class CodeModal extends Component {
         sensorModelUrl,
         'get',
         function(response) {
+            const sensorModels = response.data.filter(item => item.states === '1')
             me.setState({
-            sensorModels: response.data
+                sensorModels
             })
         },
         function() {
@@ -148,6 +149,7 @@ class CodeModal extends Component {
             notice_content: '',         //提示内容
             default_compensation: '',   //默认补偿值
             note:'',
+            sensorModels: [],
         })
     }
 

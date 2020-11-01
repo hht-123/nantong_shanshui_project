@@ -59,8 +59,9 @@ class ModelModal extends Component {
           addSensorModelUrl,
           'get',
           function(response) {
+            const allmodel = response.data.filter(item => item.state === '1')
             me.setState({
-                allmodel: response.data
+                allmodel
             })
           },
           function() {

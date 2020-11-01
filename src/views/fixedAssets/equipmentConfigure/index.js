@@ -80,7 +80,6 @@ class EpuipmentConfigure extends Component {
 
     //处理参数
     getparams(currentPage=1, size=10, engine_code=null, equipment_code=null, search_time=null) {
-      console.log(search_time);
         let params = {};
         let begin_time = null;
         let end_time = null;
@@ -165,7 +164,6 @@ class EpuipmentConfigure extends Component {
   handleData = () => {
     const { data } = this.state;
     if(data !== undefined) {
-      console.log(data);
       const tableDate = data.map((item) =>({
           key: item.aid,
           alert_time: item.alert_time,
@@ -183,7 +181,6 @@ class EpuipmentConfigure extends Component {
     render() {
         const {isLoading, showPagination, size, total, currentPage} = this.state;
         const tableDate = this.handleData();
-        console.log(this.state.data);
 
         return(
             <div>

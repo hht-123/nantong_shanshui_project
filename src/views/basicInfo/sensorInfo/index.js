@@ -212,8 +212,9 @@ class SensorInfo extends Component {
     this.getInfo(params);
     this.setState({
       searchSensorType: null,
-      searchSensorModel: '',
+      searchSensorModel: null,
       searchSensorCode: null,
+      sensorModels: [],
       key1:new Date(),
       key2:new Date(),
       key3:new Date(),
@@ -242,9 +243,11 @@ class SensorInfo extends Component {
 
   statusSWift(status) {
     if(status === '1'){
-      return '可以使用'
+      return '正在使用'
     }else if(status === '0'){
-      return '停止使用'
+      return '报废'
+    }else if(status === '2'){
+      return '未使用'
     }
   }
 
@@ -268,15 +271,14 @@ class SensorInfo extends Component {
     }
   }
 
-  //处理传感器类型数据
+  //处理传感器类型数据所有筛选条件
   handleSensorTypeData = () => {
-    const aftersensorTypes = [];
+    let aftersensorTypes = [];
     const { sensorTypes } = this.props;
     if(sensorTypes.size !== 0){
-      sensorTypes.map((item,index) => {
-        aftersensorTypes.push(item.get('type_name'))
-        return 0;
-      })
+      aftersensorTypes =  sensorTypes.map((item,index) => (
+        item.get('type_name')
+      ))
     }
     return aftersensorTypes;
   }
@@ -288,13 +290,25 @@ class SensorInfo extends Component {
     }
   }
 
+  addsensorTypes = () => {
+    let addsensorTypes = [];
+    const { usingSensorTypes } = this.props;
+    if(usingSensorTypes.size !== 0){
+      addsensorTypes = usingSensorTypes.map((item,index) => (
+          item.get('type_name')
+      ))
+    }
+    return addsensorTypes;
+  }
+
 
   render() {
     const { whetherTest, addTypeVisible, addModelVisible, addCodeVisible, isLoading, 
       showPagination, total, currentPage, key1, key2, key3, editvisible, editInfo, sensorModels, size, sensorEditVisible } =this.state;
     const tableDate = this.handleData();
     const aftersensorTypes = this.handleSensorTypeData();
-    // const sensorModel = 
+    const addsensorTypes = this.addsensorTypes();
+
     const { roleData } = this.props
     if (roleData.size === 0 ) return null
 
@@ -352,8 +366,9 @@ class SensorInfo extends Component {
                   key={ key3 }
                   allowClear
                 >
-                  <Option value="1">可以使用</Option>
-                  <Option value="0">停止使用</Option>
+                  <Option value="1">正在使用</Option>
+                  <Option value="2">未使用</Option>
+                  <Option value="0">报废</Option>
                 </Select>
               </div>
               <div className="line"></div>
@@ -366,7 +381,7 @@ class SensorInfo extends Component {
                               <Button type="primary" className="button" onClick={() => this.showModal('type')} >新增传感器类型</Button>
                               <Button type="primary" className="button" onClick={() => this.showModal('model')}>新增传感器型号</Button>
                               <Button type="primary" className="button" onClick={() => this.showModal('code')}>新增传感器</Button>
-                              {/* <Button type="danger" className="button" onClick={() => this.showModal('sensor')}>管理传感器类型和型号</Button> */}
+                              <Button type="danger" className="button" onClick={() => this.showModal('sensor')}>管理传感器类型和型号</Button>
                               </span>
                     }
                     return null;
@@ -374,20 +389,20 @@ class SensorInfo extends Component {
               </div>
               <div>
               <TypeModal
-                types = { aftersensorTypes }
+                types = { addsensorTypes }
                 whetherTest={ whetherTest }
                 visible={ addTypeVisible }
                 cancel={ this.closeModal }
               />
               <ModelModal 
-                types = { aftersensorTypes }
+                types = { addsensorTypes }
                 typesAndAid = {this.props.sensorTypes}
                 whetherTest={ whetherTest }
                 visible={ addModelVisible } 
                 cancel={ this.closeModal }
               />
               <CodeModal
-                types = { aftersensorTypes }
+                types = { addsensorTypes }
                 whetherTest={ whetherTest }
                 visible={ addCodeVisible }
                 cancel={ this.closeModal } 
@@ -405,7 +420,7 @@ class SensorInfo extends Component {
                 whetherTest={ whetherTest }
                 visible={ sensorEditVisible }
                 cancel={ this.closeModal }
-                sensorTypes={ this.props.sensorTypes }
+                sensorTypes={ this.props.usingSensorTypes }
               />  
               </div>
             </div>
@@ -430,6 +445,7 @@ class SensorInfo extends Component {
 
 const mapStateToProps = (state) => ({
     sensorTypes: state.getIn(['index', 'sensorTypes']),
+    usingSensorTypes: state.getIn(['index', 'usingSensorTypes']),
     roleData: state.getIn(['index', 'roleData']),
 })
 

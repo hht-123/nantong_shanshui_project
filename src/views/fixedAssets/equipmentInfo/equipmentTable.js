@@ -5,8 +5,10 @@ import './style.less'
 class EquipmentTable extends Component{
 
   handleStatusColor = (string) => {
-    if ( string === '报废' || string === '停运') {
+    if ( string === '报废' ) {
       return  { color : 'red '}
+    }else if(string === '停运') {
+      return  { color : '#DAA520'}
     }
   }
 
@@ -103,6 +105,16 @@ class EquipmentTable extends Component{
                   </Tooltip>
                 )
                 break;
+                case '维护':
+                  content.push(
+                    <Tooltip title="查看该设备传感器信息" trigger="hover" key="查看该设备传感器信息">
+                      <Icon type="message" theme="twoTone" className="icon" onClick={() => this.props.showModal('sensor', record)}/>
+                    </Tooltip>,
+                    <Tooltip  title="调拨回厂" trigger="hover" key="调拨回厂" >
+                      <Icon type="car" theme="twoTone" onClick={() => this.props.showModal('back', record) }/>
+                    </Tooltip>
+                  )
+                  break;
               default:
                 break;
             }

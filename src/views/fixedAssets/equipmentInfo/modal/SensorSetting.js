@@ -31,8 +31,9 @@ class EditSensorSetting extends Component {
         sensorModelUrl,
         'get',
         function(response) {
+            const sensorModels = response.data.filter(item => item.states === '1')
             me.setState({
-                sensorModels: response.data
+                sensorModels
             })
         },
         function() {
@@ -50,8 +51,9 @@ class EditSensorSetting extends Component {
         sensorCodeUrl,
         'get',
         function(response) {
+            const sensorCodes = response.data.filter(item => item.status === '2');
             me.setState({
-                sensorCodes: response.data
+                sensorCodes
             })
         },
         function() {
