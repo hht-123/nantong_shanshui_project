@@ -71,6 +71,9 @@ class EquipmentTable extends Component{
             switch (record.status) {
               case '在线':
                 content.push(
+                  <Tooltip title="编辑信息" trigger="hover" key="编辑信息">
+                      <Icon type="edit" theme="twoTone"  className="icon" onClick={() => this.props.showModal('edit', record)}/>
+                  </Tooltip>,
                   <Tooltip title="查看该设备传感器信息" trigger="hover" key="查看该设备传感器信息">
                     <Icon type="message" theme="twoTone" className="icon" onClick={() => this.props.showModal('sensor', record)}/>
                   </Tooltip>,

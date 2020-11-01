@@ -274,6 +274,16 @@ class EpuipmentInfo extends Component {
           }
   }
 
+  //获取所有的主机编号
+  handlenginecode() {
+    const { data } = this.state;
+    let allenginecode = [];
+    if(data !== undefined) {
+      allenginecode = data.map((item) => (item.equipment_code));
+    }
+    return allenginecode;
+  }
+
   
   render() {
     const { searchEngineCode, searchEquipmentCode, isLoading, showPagination, size, 
@@ -281,6 +291,7 @@ class EpuipmentInfo extends Component {
       editVisible, currentEnquimentInfo, scrapListVisible, scrapEquipmentInfo, allocationListVisible, 
       allocationEqiipmentInfo, key, status, backModalvisible, backEquipmentInfo} = this.state;
     const tableDate = this.handleData();
+    const allenginecode = this.handlenginecode();
 
     const { roleData } = this.props
     if (roleData.size === 0 ) return null
@@ -341,6 +352,7 @@ class EpuipmentInfo extends Component {
               visible={ createVisible }
               closeModal={ this.closeModal }
               afterCreateOrEdit={ this.afterCreateOrEdit }
+              allenginecode={ allenginecode }
             />
             <EditModal 
               visible={ editVisible }

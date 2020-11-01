@@ -126,7 +126,7 @@ class EditModal extends Component {
                     onCancel={ this.handleCancel }
                 >
                 <Form { ...formItemLayout } ref='engineForm' onSubmit={ this.onSubmit }>
-                        {/* { status !== '正在使用'  ?  */}
+                        { status !== '正在使用'  ? 
                             <Form.Item
                             label="状态"
                             colon
@@ -141,7 +141,7 @@ class EditModal extends Component {
                                 </Select>
                             )}
                         </Form.Item> : null
-                        {/* } */}
+                        }
 
                         <Form.Item
                             label="默认理论值"

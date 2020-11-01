@@ -63,9 +63,8 @@ class CreateModal extends Component {
             note,
             equipment_sensor,
             equip_person,
-            status : -1,
+            // status : -1,
         }
-        console.log(params);
         return params;
     }
 
@@ -124,6 +123,7 @@ class CreateModal extends Component {
         const { equipment_code, engine_code, storehouse, storage_location, equip_person, sensorTypes, sensorCodeAids } = this.state;
         if(equipment_code ==='' || engine_code === '' || storehouse === '' || storage_location==='' || equip_person === '') return 0;
 
+
         if(sensorCodeAids.length !== sensorTypes.length){
             message.warning("请选择传感器型号或名称");
             return 0;
@@ -178,6 +178,7 @@ class CreateModal extends Component {
         if(deleteAids[index] !== undefined ){
             deleteAids.splice(index, 1);
         }
+
         if(delectsensorType[index] !== undefined ){
             delectsensorType.splice(index, 1);
         }
@@ -188,7 +189,6 @@ class CreateModal extends Component {
             sensors[index].sensor_code = '';
             sensors[index].type_name = '';
              
-            
             this.setState({
                 sensors: delectSensors,
                 sensorCodeAids: deleteAids,
@@ -314,6 +314,7 @@ class CreateModal extends Component {
             note:'',              //备注
         });
     }
+
 
     render() {
         const { number, sensors, confirmLoading } = this.state;
