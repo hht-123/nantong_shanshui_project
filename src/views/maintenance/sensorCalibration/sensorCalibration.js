@@ -65,7 +65,7 @@ class SensorCalibration extends Component{
             currentPage: params['currentPage'],
             size: params['size'],
           })
-          console.log(me.state.data)
+          // console.log(me.state.data)
         } else {
           me.setState({
             isLoading: false,
@@ -114,7 +114,7 @@ class SensorCalibration extends Component{
           me.setState({
             equipmentIdData: response.data.data,
           })
-          console.log(me.state.equipmentIdData)
+          // console.log(me.state.equipmentIdData)
         }
       },
       function() {
@@ -149,7 +149,7 @@ class SensorCalibration extends Component{
           me.setState({
             equipSensor: response.data
           }) 
-          console.log(me.state.equipSensor)
+          // console.log(me.state.equipSensor)
         } else {
           me.setState({
             equipSensor: response.data.data,

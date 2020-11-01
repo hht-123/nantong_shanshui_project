@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import {  Button,  Modal } from 'antd';
+import {  Button,  Modal, message } from 'antd';
 import './style.less';
 import { Model } from "../../../dataModule/testBone";
 import { ClientWaterPutUrl } from '../../../dataModule/UrlList';
@@ -21,8 +21,6 @@ class Tip extends Component {
       title: '已处理该提示?',
       onOk() {
         me.dealStatus(me.props.tipData.aid)
-        let Newdata = me.props.getparams();
-        me.props.getCurrentPage(Newdata)
       },
       onCancel() {
         console.log('Cancel');
@@ -31,20 +29,21 @@ class Tip extends Component {
   }
 
   dealStatus = (aid)  => {
+      let me = this
       model.fetch(
         '1:1',
         `${ClientWaterPutUrl}${aid}/`,
         'put',
         function() {
-          console.log('success')
+          const Newdata = me.props.getparams();
+          me.props.getCurrentPage(Newdata)
+          message.success('处理成功')
         },
         function() {
-          console.log('加载失败，请重试')
+          message.warning('处理失败')
         },
         this.props.whetherTest
       )
-      // let Newdata = this.props.getparams();
-      //   this.props.getCurrentPage(Newdata)
   }
 
   render() {

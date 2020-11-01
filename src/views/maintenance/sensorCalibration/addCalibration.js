@@ -30,6 +30,7 @@ class AddCalibration extends Component {
             })
             const NewParams = me.props.getparams()
             me.props.getCurrentPage(NewParams)
+            message.success('标定记录增加成功')
           },
           function() {
             message.warning('发送数据失败，请重试')

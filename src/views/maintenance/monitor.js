@@ -5,7 +5,7 @@ import  './style/monitor.less';
 import Line from './publicComponents/sensorLine';
 import CompanyInfo from './publicComponents/companyInfo';
 import EquipInfo from './publicComponents/equipInfo';
-import { equipmentUrl, sensorDataUrl, device, clientUrl, equipmentInfoUrl, equipMaintainUrl } from '../../dataModule/UrlList';
+import { equipmentUrl, sensorDataUrl, device, clientUrl, equipmentInfoUrl, equipMaintainUrl, equipmentSensorModelUrl } from '../../dataModule/UrlList';
 
 import { Icon, Tabs, DatePicker, Button, PageHeader, message } from 'antd';
 import { Link } from 'react-router-dom';
@@ -31,7 +31,8 @@ class Monitor extends Component{
       companyInfo: [],
       equipmentInfo:[],
       equipmentDot: false,     // 设备维护的红点提示
-      equipMaintenanceData:[]   //存设备维护的数据
+      equipMaintenanceData:[],   //存设备维护的数据
+      sensorModel:[]            //存储设备对应的传感器类型及型号
     }
   }
 
@@ -51,6 +52,7 @@ class Monitor extends Component{
       this.getSensorData(params2);
     }, 300000)
     this.getEquipmentInfo()
+    this.getSensorModel()
     this.getEquipmentMaintenace()
   }
 
@@ -66,6 +68,7 @@ class Monitor extends Component{
     return params;
   } 
 
+  //获得设备信息
   getEquipmentData(params) {
     for (let i in params) {
       if (params[i] === undefined || params[i] === null) {
@@ -82,15 +85,15 @@ class Monitor extends Component{
           me.setState({
             equipmentData: response.data.data[0]
           })
-          //获得设备对应的传感器
-          let sensor = me.getSensor(me.state.equipmentData.equipment_code);
+          //获得设备对应的传感器类型
+          const sensor = me.getSensor(me.state.equipmentData.equipment_code);
           me.getSensors(sensor);
           // console.log(me.state.equipmentData)
         } else {
           me.setState({
             equipmentData: response.data.data,
           })
-          console.log(me.state.equipmentData)
+          // console.log(me.state.equipmentData)
         }
       },
       function() {
@@ -146,7 +149,7 @@ class Monitor extends Component{
     )
   }
 
-  //  获得设备对应的传感器
+  //  获得设备对应的传感器类型
   getSensor( deviceNum=this.state.equipmentData.equipment_code ) {
     let params = {};
     params = {
@@ -186,7 +189,7 @@ class Monitor extends Component{
   }
 
   callback = (key) => {
-    console.log(key);
+    // console.log(key);
   }
 
   handleStatusColor = (numb) => {
@@ -195,7 +198,7 @@ class Monitor extends Component{
     }else if (numb === '3') {
       return  { background:'red'}
     }else if (numb === '4') {
-      return  { background:'blue'}
+      return  { background:'#8B8989'}
     }
   }
 
@@ -214,7 +217,7 @@ class Monitor extends Component{
     this.setState({
       search_begin_time: dateString
     })
-    console.log(dateString)
+    // console.log(dateString)
   }
 
   handleDate(preDate) {
@@ -280,6 +283,7 @@ class Monitor extends Component{
     // this.getEquipmentInfo()
   };
 
+  //获得设备详情（除了对应的传感器类型及型号）
   getEquipmentInfo() {
     let me = this;
         model.fetch(
@@ -291,7 +295,6 @@ class Monitor extends Component{
               me.setState({
                 equipmentInfo: response.data
               }) 
-              
             } else {
               me.setState({
                 equipmentInfo: response.data.data,
@@ -303,6 +306,27 @@ class Monitor extends Component{
           },
           this.state.whetherTest 
         )
+  }
+
+  //获得设备配置的传感器类型及型号
+  getSensorModel() {
+    let me = this;
+    model.fetch(
+      {'equipment_id': this.props.match.params.equipment_aid},
+      equipmentSensorModelUrl,
+      'get',
+      function(response) {
+        if (me.state.whetherTest === false) {
+          me.setState({
+            sensorModel: response.data
+          })
+        } 
+      },
+      function() {
+        console.log('加载失败，请重试')
+      },
+      this.state.whetherTest
+    )
   }
 
   //关闭弹窗
@@ -370,7 +394,7 @@ class Monitor extends Component{
 
   render() {
     const equipment_id = this.props.match.params.equipment_aid;
-    const { whetherTest, CompanyModalVisible, equipModalVisible, equipmentInfo, companyInfo } = this.state
+    const { whetherTest, CompanyModalVisible, equipModalVisible, equipmentInfo, companyInfo, sensorModel } = this.state
     const time = [];
     const pH =[];
     const orp = [];
@@ -455,6 +479,7 @@ class Monitor extends Component{
                   visible={ equipModalVisible }
                   cancel={ this.closeModal }
                   data={ equipmentInfo }
+                  sensorModel = { sensorModel }
                 />
             </div>
               <div>
