@@ -267,7 +267,7 @@ class CodeModal extends Component {
                         </Form.Item>
 
                         <Form.Item
-                            label="默认理论值"
+                            label="标定理论值"
                             colon
                         >
                             {getFieldDecorator('theoretical_value', {

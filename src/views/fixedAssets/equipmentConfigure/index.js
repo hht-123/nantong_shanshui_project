@@ -166,7 +166,7 @@ class EpuipmentConfigure extends Component {
     if(data !== undefined) {
       const tableDate = data.map((item) =>({
           key: item.aid,
-          alert_time: item.alert_time,
+          alert_time: item.alert_time.split("T")[0],
           equip_person: item.equip_person,
           engine_code: item.engine_code,
           engine_name: item.engine_name,

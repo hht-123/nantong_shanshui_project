@@ -59,6 +59,7 @@ class AllocationModal extends Component {
             me.setState({
                 confirmLoading: false,
             })
+            me.props.afterCreateOrEdit();
             message.success('提交成功')
           },
           function() {
@@ -97,7 +98,6 @@ class AllocationModal extends Component {
           confirmLoading: true,
         });
         this.allocateEquipment(params);
-        this.props.afterCreateOrEdit();
       };
     
     //取消按钮事件

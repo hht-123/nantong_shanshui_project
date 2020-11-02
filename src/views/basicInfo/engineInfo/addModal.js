@@ -52,7 +52,7 @@ class AddModal extends Component {
         let params = {
             engine_name: this.state.engine_name,
             begin_time: this.state.begin_time,
-            end_time: this.state.end_time,
+            end_time: this.state.end_time === '' ? null : this.state.end_time,
             status: '1',
             note: this.state.note
         }

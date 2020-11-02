@@ -71,7 +71,7 @@ class TypeModal extends Component {
 
     handleChange = (e) => {
         this.setState({
-          [e.target.name]: (e.target.value + '传感器')
+          [e.target.name]: e.target.value
         })
     }
 
@@ -115,7 +115,7 @@ class TypeModal extends Component {
                             {getFieldDecorator('sensor_type', {
                                 rules: [{ required: true, message: '请输入传感器类型' }],
                             })(
-                                <Input  name='sensor_type' onChange={this.handleChange} addonAfter="传感器" />
+                                <Input  name='sensor_type' onChange={this.handleChange} />
                             )}     
                         </Form.Item>
                     </Form>

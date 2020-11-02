@@ -18,7 +18,7 @@ export default class AddAccount extends Component {
       telephone_num: '',
       power_id_str: '1',
       alter_power: '1',
-      add_by: getUserId()
+      add_by: getUserName()
     }
   }
 
@@ -63,7 +63,7 @@ export default class AddAccount extends Component {
     initData['role_id'] = undefined
     initData['power_id_str'] = '1'
     initData['alter_power'] = '1'
-    initData['add_by'] = getUserId()
+    initData['add_by'] = getUserName()
     this.setState(initData)
     this.props.handleCancel('addAccountVisible')
   }
