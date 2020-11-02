@@ -36,7 +36,6 @@ export function getUserId() {
   if (!getCookie("mspa_user") || getCookie("mspa_user") === "undefined") {
     return createBrowserHistory.push('/login')
   } else {
-    // return JSON.parse(getCookie("mspa_user")).username
     return JSON.parse(getCookie("mspa_user"))._id
   }
 }

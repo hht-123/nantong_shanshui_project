@@ -9,8 +9,7 @@ import { Model } from '../../dataModule/testBone';
 
 import SideMenu from './SideMenu';
 import HeaderCustom from './HeaderCustom';
-import Index from '../index/index';
-// import noMatch from './404';
+import noMatch from './404';
 import EngineInfo from '../../views/basicInfo/engineInfo';
 import SensorInfo from '../../views/basicInfo/sensorInfo';
 import EpuipmentInfo from '../../views/fixedAssets/equipmentInfo';
@@ -150,7 +149,9 @@ class App extends Component {verifyUrl
                     }
                     return null;
                   })}
-                  <Route exact path='/app' component={ this.state.roleData.includes('client_manage') ? ClientIndex : (props)=><Index {...props}    />} />
+
+                  <Route exact path='/app' component={ this.state.roleData.includes('client_manage') ? ClientIndex : MaintenanceIndex} />
+                  
                   { this.state.roleData.includes('client_manage') ? null : maintenanceUrl }
                   {/* <Route path='/app/engine' component={EngineInfo} /> */}
                   {/* <Route path='/app/maintenance' component={MaintenanceIndex} /> */}
@@ -174,6 +175,7 @@ class App extends Component {verifyUrl
                  
                   {/* <Route path='/app/accountManagement' component={AccountManagement}/> */}
                   {/* <Route path='/app/rolePower' component={RolePower}/> */}
+
                 </Switch>
               </Content>
             </Layout>

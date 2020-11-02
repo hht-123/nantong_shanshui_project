@@ -62,7 +62,7 @@ class NormalLoginForm extends Component {
                             values['role_id'] = response.data.role_id;
                             setCookie('mspa_user',JSON.stringify(values));
                             message.success("登录成功"); //成功信息
-                            me.props.history.push({pathname:'/app',state:values});
+                            me.props.history.push({pathname:'/app', state:values});
                         }
                     },
                     function() {
@@ -98,7 +98,7 @@ class NormalLoginForm extends Component {
             <div className="login">
                 <div className="login-form">
                     <div className="login-logo">
-                        <div className="login-name" style={{marginLeft:"30px"}}>325 实验室基础前端框架</div>
+                        <div className="login-name" style={{marginLeft:"30px"}}>循环水智慧管家</div>
                     </div>
                     <Form onSubmit={this.handleSubmit} style={{maxWidth: '300px'}}>
                         <FormItem>

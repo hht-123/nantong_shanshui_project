@@ -219,11 +219,11 @@ class AllocationModal extends Component {
                                 <td><input name='applicant_tel'  onChange={this.changeValue} type='text' className='inputNOborder'/></td>
                             </tr>
                             <tr>
-                                <td>客户编号：</td>
+                                <td><span style={{color: 'red'}}>* </span>客户编号：</td>
                                 <td colSpan='3'>
                                     <Select 
                                         onSelect={(string) => this.handleSelect(string)}
-                                        style={{ width: '200px'}}
+                                        style={{ width: '100%'}}
                                         showSearch
                                         filterOption={(input, option) =>
                                             option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
