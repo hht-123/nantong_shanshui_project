@@ -16,9 +16,15 @@ class EquipInfo extends Component {
     };
 
     render() {
-        const { visible, data, sensorModel } = this.props;
+        const { visible, data,  } = this.props;
         const { confirmLoading } = this.state;
+        let Newdata = []
         if (data.length === 0 ) return null
+        data.map((item) => {
+            if(item.status === '1') {
+                Newdata.push(item)
+            } 
+        })
     
 
         return (
@@ -37,8 +43,14 @@ class EquipInfo extends Component {
                     <Descriptions bordered={true} column={2} size='middle'>
                         <Descriptions.Item label="主机编号:"  >{ data[0].engine_code }</Descriptions.Item>
                         <Descriptions.Item label="主机型号:" >{ data[0].engine_name }</Descriptions.Item>
-                        <Descriptions.Item label="联系人:">{ data[0].contact_person }</Descriptions.Item>
-                        <Descriptions.Item label="联系人电话:">{ data[0].contact_tel}</Descriptions.Item>
+                        { Newdata.map((item,index) => {
+                            if(item.contact_person === undefined ) {
+                                return null
+                            } else {
+                            return   [<Descriptions.Item  key='contact_person' label="联系人:">{ item.contact_person }</Descriptions.Item>,
+                                    <Descriptions.Item key='contact_tel' label="联系人电话:">{ item.contact_tel}</Descriptions.Item>]
+                            }
+                        })}
                         {/* <Descriptions.Item label="设备配置" span={2} ></Descriptions.Item> */}
                         { data.map((item,index) => {
                             if (item.type_name === undefined ) {

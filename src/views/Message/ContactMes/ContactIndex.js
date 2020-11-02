@@ -155,14 +155,16 @@ class contactmes extends Component{
         const {data, Visible, whetherTest, isLoading, editModalVisible, editInfo } = this.state;
         const tableDate = [];
         if(data !== undefined && data !== [] ){
-            data.map((item) => {            
-            tableDate.push({
-                key: item.aid,
-                contact_person:item.contact_person,
-                contact_position:item.contact_position,
-                contact_tel:item.contact_tel,
-                remark: item.remark
-            })
+            data.map((item) => {   
+                if(item.status === '1') {
+                    tableDate.push({
+                        key: item.aid,
+                        contact_person:item.contact_person,
+                        contact_position:item.contact_position,
+                        contact_tel:item.contact_tel,
+                        remark: item.remark
+                    })
+                }         
             return null;
             })
         }

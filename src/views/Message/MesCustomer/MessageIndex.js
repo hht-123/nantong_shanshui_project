@@ -199,18 +199,20 @@ class MessageIndex extends Component{
         const tableDate = [];
         if(data !== undefined){
             data.map((item) => {
-            tableDate.push({
-                key: item.aid,
-                client_code:item.client_code,
-                client_unit:item.client_unit,
-                client_address:item.client_address,
-                client_zip_code:item.client_zip_code,
-                client_industry:item.client_industry,
-                unit_phone:item.unit_phone,
-                unit_fax:item.unit_fax,
-                note: item.note,
-                region:item.region,
-            })
+                if( item.status === '1') {
+                    tableDate.push({
+                        key: item.aid,
+                        client_code:item.client_code,
+                        client_unit:item.client_unit,
+                        client_address:item.client_address,
+                        client_zip_code:item.client_zip_code,
+                        client_industry:item.client_industry,
+                        unit_phone:item.unit_phone,
+                        unit_fax:item.unit_fax,
+                        note: item.note,
+                        region:item.region,
+                    })
+                }
             return null;
         })
         }
