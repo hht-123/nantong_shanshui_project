@@ -52,7 +52,7 @@ class EquipInfo extends Component {
                             }
                         })}
                         {/* <Descriptions.Item label="设备配置" span={2} ></Descriptions.Item> */}
-                        { data.map((item,index) => {
+                        { Newdata.map((item,index) => {
                             if (item.type_name === undefined ) {
                                 return  null
                             } else {
