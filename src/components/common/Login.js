@@ -53,9 +53,9 @@ class NormalLoginForm extends Component {
                     'post',
                     function(response) {
                         if( response.data.msg === "账户名不存在") {
-                            message.success("账户名不存在"); //无账号信息
+                            message.error("账户名不存在"); //无账号信息
                         } else if(response.data.msg === "密码不正确") {
-                            message.success("密码不正确");
+                            message.error("密码不正确");
                         }else {
                             values['username'] = response.data.username;
                             values['_id'] = response.data.user_id;

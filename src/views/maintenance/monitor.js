@@ -5,7 +5,7 @@ import  './style/monitor.less';
 import Line from './publicComponents/sensorLine';
 import CompanyInfo from './publicComponents/companyInfo';
 import EquipInfo from './publicComponents/equipInfo';
-import { equipmentUrl, sensorDataUrl, device, clientUrl, equipmentInfoUrl, equipMaintainUrl, equipmentSensorModelUrl } from '../../dataModule/UrlList';
+import { equipmentUrl, sensorDataUrl, device, clientUrl, equipmentInfoUrl, equipMaintainUrl, sensorOfequipmentUrl } from '../../dataModule/UrlList';
 
 import { Icon, Tabs, DatePicker, Button, PageHeader, message } from 'antd';
 import { Link } from 'react-router-dom';
@@ -52,7 +52,7 @@ class Monitor extends Component{
       this.getSensorData(params2);
     }, 300000)
     this.getEquipmentInfo()
-    // this.getSensorModel()
+    this.getSensorModel()
     this.getEquipmentMaintenace()
   }
 
@@ -234,6 +234,7 @@ class Monitor extends Component{
     const { search_begin_time } = this.state;
     let params = this.getSensorParams("001",search_begin_time);
     this.getSensorData(params);
+
   }
 
   //重置按钮
@@ -313,12 +314,12 @@ class Monitor extends Component{
     let me = this;
     model.fetch(
       {'equipment_id': this.props.match.params.equipment_aid},
-      equipmentSensorModelUrl,
+      sensorOfequipmentUrl,
       'get',
       function(response) {
         if (me.state.whetherTest === false) {
           me.setState({
-            sensorModel: response.data
+            sensorModel: response.data.data
           })
           // console.log(me.state.sensorModel)
         } 
@@ -393,6 +394,15 @@ class Monitor extends Component{
     }
   }
 
+  changeTab = () => {
+    this.setState({
+      search_begin_time:[],
+      keyValue: new Date()
+    })
+    let params1 = this.getSensorParams("001");
+    this.getSensorData(params1);
+  }
+
   render() {
     const equipment_id = this.props.match.params.equipment_aid;
     const { whetherTest, CompanyModalVisible, equipModalVisible, equipmentInfo, companyInfo, sensorModel } = this.state
@@ -442,6 +452,7 @@ class Monitor extends Component{
         />
         <div className='wrapper'>
             <div className='table'>
+              <div>
                 <span>
                   <Link to={`/app/waterRemind/${ equipment_id}`} className=' water'>
                     <Icon className='icon' type="warning" theme="filled" />
@@ -475,19 +486,20 @@ class Monitor extends Component{
                     <div className='describe '  >设备详情</div>
                   </div>
                 </span>
-                <EquipInfo
-                  whetherTest={ whetherTest }
-                  visible={ equipModalVisible }
-                  cancel={ this.closeModal }
-                  data={ equipmentInfo }
-                  // sensorModel = { sensorModel }
-                />
+                <span className='main'>
+                  <Link to={`/app/equipemenControl/${ equipment_id}`} className=' water'>
+                    <Icon className='icon' type="build" theme="filled"  />
+                    <div className='describe '  >设备控制</div>
+                  </Link>
+                </span>
+              </div>
             </div>
-              <div>
-              <Tabs className='tab' defaultActiveKey="0" onChange={this.callback} type='card'>
+              <div >
+              <Tabs className='tab' defaultActiveKey="0" onChange={this.callback} type='card' onChange={this.changeTab}>
                   {
                     this.state.equipSensor.map((item, index) => {
-                    return  <TabPane tab={ item.type_name } key={ index }>
+                    return  <TabPane tab={ item.type_name } key={ index } >
+
                                 <RangePicker className='time' 
                                   key={ this.state.keyValue }
                                   onChange={ this.handleBeginTime } 
@@ -503,6 +515,13 @@ class Monitor extends Component{
                   }
               </Tabs>
               </div>
+              <EquipInfo
+                  whetherTest={ whetherTest }
+                  visible={ equipModalVisible }
+                  cancel={ this.closeModal }
+                  data={ equipmentInfo }
+                  sensorModel = { sensorModel }
+                />
         </div>
       </div>
     )

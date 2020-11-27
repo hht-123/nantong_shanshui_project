@@ -5,7 +5,7 @@ import  './monitor.less';
 import Line from '../../maintenance/publicComponents/sensorLine';
 import CompanyInfo from '../../maintenance/publicComponents/companyInfo';
 import EquipInfo from '../../maintenance/publicComponents/equipInfo';
-import { equipmentUrl, sensorDataUrl, device, clientUrl, equipmentInfoUrl, equipMaintainUrl, ClientWaterRemindUrl, equipmentSensorModelUrl } from '../../../dataModule/UrlList';
+import { equipmentUrl, sensorDataUrl, device, clientUrl, equipmentInfoUrl, equipMaintainUrl, ClientWaterRemindUrl,sensorOfequipmentUrl  } from '../../../dataModule/UrlList';
 
 import { Icon, Tabs, DatePicker, Button, PageHeader, message } from 'antd';
 import { Link } from 'react-router-dom';
@@ -53,7 +53,7 @@ class ClientMonitor extends Component{
       this.getSensorData(params2);
     }, 300000)
     this.getEquipmentInfo()
-    // this.getSensorModel()
+    this.getSensorModel()
     this.getEquipmentMaintenace()
     this.getWaterRemind()
   }
@@ -313,12 +313,12 @@ class ClientMonitor extends Component{
     let me = this;
     model.fetch(
       {'equipment_id': this.props.match.params.equipment_aid},
-      equipmentSensorModelUrl,
+      sensorOfequipmentUrl,
       'get',
       function(response) {
         if (me.state.whetherTest === false) {
           me.setState({
-            sensorModel: response.data
+            sensorModel: response.data.data
           })
         } 
       },
@@ -429,6 +429,15 @@ class ClientMonitor extends Component{
     }
   }
 
+  changeTab = () => {
+    this.setState({
+      search_begin_time:[],
+      keyValue: new Date()
+    })
+    let params1 = this.getSensorParams("001");
+    this.getSensorData(params1);
+  }
+
   render() {
     const equipment_id = this.props.match.params.equipment_aid;
     const { whetherTest, CompanyModalVisible, equipModalVisible, equipmentInfo, companyInfo, sensorModel } = this.state
@@ -449,13 +458,13 @@ class ClientMonitor extends Component{
     }
 
     function commitInfo(item)  {
-      if (item === 'PH传感器' ) {
+      if (item === 'PH传感器' || item === 'Ph传感器' || item === 'ph传感器' ) {
         return  pH
-      } else if (item === "COD传感器") {
+      } else if (item === "ORP传感器" || item === 'orp传感器' ) {
         return  orp
       } else if (item === "电导率传感器") {
         return  conduct
-      } else if (item === "温度传感器") {
+      } else if (item === "温度传感器" || item === '温度传感器传感器' ) {
         return  temper
       } else {
         return  []
@@ -516,10 +525,10 @@ class ClientMonitor extends Component{
                   visible={ equipModalVisible }
                   cancel={ this.closeModal }
                   data={ equipmentInfo }
-                  // sensorModel={ sensorModel }
+                  sensorModel={ sensorModel }
                 />
             </div>
-              <Tabs className='tab' defaultActiveKey="0" onChange={this.callback} type='card'>
+              <Tabs className='ClientTab' defaultActiveKey="0" onChange={this.callback} type='card' onChange={this.changeTab}>
                   {
                     this.state.equipSensor.map((item, index) => {
                     return  <TabPane tab={ item.type_name } key={ index }>

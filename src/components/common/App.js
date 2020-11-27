@@ -25,6 +25,7 @@ import Monitor from '../../views/maintenance/monitor';
 import EquipmentMaintenance from '../../views/maintenance/equipmentMaintenance/equipmentMaintenance';
 import WaterRemind from '../../views/maintenance/waterRemind/waterRemind';
 import SensorCalibration from '../../views/maintenance/sensorCalibration/sensorCalibration';
+import EquipemenControl from '../../views/maintenance/equipmentControl'
 import RolePower from '../../views/accountAndRole/rolePower'
 import equipmentScrap from '../../views/fixedAssets/equipmentScrap';
 import EpuipmentConfigure from '../../views/fixedAssets/equipmentConfigure';
@@ -102,6 +103,7 @@ class App extends Component {verifyUrl
       <Route path='/app/equipmentMaintenance/:equipment_id' key='equipmentMaintenance' component={EquipmentMaintenance} />,
       <Route path='/app/waterRemind/:equipment_id' key='waterRemind' component={WaterRemind} />,
       <Route path='/app/sensorCalibratin/:equipment_id' key='sensorCalibratin' component={SensorCalibration} />,
+      <Route path='/app/equipemenControl/:equipment_id' key='EquipemenControl' component={EquipemenControl} />,
     ]
     
     
