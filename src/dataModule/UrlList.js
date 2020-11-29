@@ -7,7 +7,7 @@
  * @LastEditTime: 2020-04-30 10:46:26
  */
 export const originalUrl = 'http://122.51.80.50:8000/';   //服务器
-// export const originalUrl = 'http://10.21.1.48:8000/';
+// export const originalUrl = 'http://10.21.1.141:8000/';
 export const enginInfoUrl = 'main_engine/';
 export const messageCUrl = 'client/';
 export const contactUrl = 'contact_people/';
@@ -41,7 +41,6 @@ export const device = 'app/deviceNum_to_typename/'             //设备对应的
 export const clientUrl = 'client/'                          //实时监测客户信息
 export const waterRemindUrl = 'app/water_quality_notice/' //水质提醒记录
 export const equipmentInfoUrl = 'app/equipment_detail/'   // 设备详情信息
-export const equipmentSensorModelUrl = 'app/equipment_detail_two' //设备对应的传感器类型及型号
 export const equipmentCalibration = 'equipment_calibration/' //增加补偿值
 export const CalibrationMark = 'app/sensor_calibration_retrieve/' //获得标定值记录
 export const ClientWaterRemindUrl = 'app/water_notice_retrieve/' //客户端水质提醒记录数据
@@ -58,3 +57,5 @@ export const accountPower = 'app/verify/'
 export const user = 'user/'
 
 export const power = 'power/'
+
+export const websocketUrl = '/app/websocket_relation/'

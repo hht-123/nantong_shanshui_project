@@ -16,14 +16,22 @@ class EquipInfo extends Component {
     };
 
     render() {
-        const { visible, data,  } = this.props;
+        const { visible, data, sensorModel } = this.props;
         const { confirmLoading } = this.state;
         let Newdata = []
-        if (data.length === 0 ) return null
+        let NNewdata = []
+        let tel = []
+        if (data.length === 0 || sensorModel.length === 0 ) return null
         data.map((item) => {
             if(item.status === '1') {
                 Newdata.push(item)
             } 
+        })
+        Newdata.map((item) => {
+            if(tel.indexOf(item['contact_tel']) == -1) {
+                tel.push(item['contact_tel'])
+                NNewdata.push(item)
+            }
         })
     
 
@@ -43,7 +51,7 @@ class EquipInfo extends Component {
                     <Descriptions bordered={true} column={2} size='middle'>
                         <Descriptions.Item label="主机编号:"  >{ data[0].engine_code }</Descriptions.Item>
                         <Descriptions.Item label="主机型号:" >{ data[0].engine_name }</Descriptions.Item>
-                        { Newdata.map((item,index) => {
+                        { NNewdata.map((item,index) => {
                             if(item.contact_person === undefined ) {
                                 return null
                             } else {
@@ -52,7 +60,7 @@ class EquipInfo extends Component {
                             }
                         })}
                         {/* <Descriptions.Item label="设备配置" span={2} ></Descriptions.Item> */}
-                        { Newdata.map((item,index) => {
+                        { sensorModel.map((item,index) => {
                             if (item.type_name === undefined ) {
                                 return  null
                             } else {

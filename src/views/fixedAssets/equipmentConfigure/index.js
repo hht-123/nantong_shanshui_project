@@ -5,6 +5,7 @@ import './style.less';
 import ConfigureTalbe from './configureTable';
 import { Model } from "../../../dataModule/testBone";
 import { equipmentConfiureUrl } from '../../../dataModule/UrlList';
+import { throttle } from '../../../publicFunction'
 
 const model = new Model();
 const { RangePicker } = DatePicker;
@@ -112,16 +113,18 @@ class EpuipmentConfigure extends Component {
     }
 
     //搜索按钮
-    searchInfo = () => {
-        this.setState({search: true});
+    searchInfo = throttle(() => {
+      this.setState({search: true});
         const { search_engine_code, search_equipment_code, search_time } = this.state;
         let params = this.getparams( 1, 10, search_engine_code, search_equipment_code, search_time);
         this.getCurrentPage(params);
-    }
+    })
+        
+    
 
     //重置按钮
-    handleReset = () => {
-        const params = this.getparams();
+    handleReset = throttle(() => {
+      const params = this.getparams();
         this.getCurrentPage(params);
         this.setState({
             search_engine_code: null,
@@ -131,7 +134,9 @@ class EpuipmentConfigure extends Component {
             currentPage: 1,
             search: false,
         })
-    }
+    })
+        
+    
 
     //翻页获取内容
   getPage = (currentPage, pageSize) => {
@@ -189,7 +194,8 @@ class EpuipmentConfigure extends Component {
                     <div className='func'>
                         <div style={{ float: 'left' }} >
                         <div className="input" >日期筛选:</div>
-                        <RangePicker 
+                        <RangePicker
+                            style={{ width: "220px" }}
                             key={ this.state.keyValue }
                             onChange={ this.handleTime } 
                         />
@@ -197,7 +203,7 @@ class EpuipmentConfigure extends Component {
                         <div className="inputWrapper" >
                             <div className="input" >主机编号:</div>
                             <Input  
-                                style={{ width: "300px" }} 
+                                style={{ width: "220px" }} 
                                 name="search_engine_code" 
                                 onChange={ this.handleChange }
                                 value={ this.state.search_engine_code }
@@ -206,7 +212,7 @@ class EpuipmentConfigure extends Component {
                         <div className="inputWrapper" >
                             <div className="input" >设备编号:</div>
                             <Input  
-                            style={{ width: "300px" }} 
+                            style={{ width: "220px" }} 
                             name="search_equipment_code" 
                             onChange={ this.handleChange }
                             value={ this.state.search_equipment_code }

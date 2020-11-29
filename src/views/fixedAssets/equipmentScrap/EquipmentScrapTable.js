@@ -57,6 +57,12 @@ class EquipmentTable extends Component {
         align: 'center',
         width: 80,
       },
+      {
+        title: '报废原因',
+        dataIndex: 'scrapping_reasons',
+        align: 'center',
+        width: 80,
+      },
     ];
 
       return (

@@ -8,6 +8,7 @@ import AddModal from './addModal';
 import EditModal from './editModal';
 import { enginInfoUrl, verifyUrl } from '../../../dataModule/UrlList'
 import {getUserId, getRoleId}  from '../../../publicFunction/index';
+import { throttle } from '../../../publicFunction'
 
 const { Option } = Select;
 const model = new Model();
@@ -208,15 +209,15 @@ class EngineInfo extends Component{
     }
   }
   //搜索按钮
-  searchInfo = () => {
+  searchInfo = throttle(() => {
     this.setState({search: true});
     const { search_engine_code, search_begin_time, search_end_time, status } = this.state;
     let params = this.getparams( 1, 10, status, search_engine_code, search_begin_time, search_end_time);
     this.getCurrentPage(params);
-  }
+  }) 
 
   //重置按钮
-  handleReset = () => {
+  handleReset = throttle(() => {
     const params = this.getparams();
     this.getCurrentPage(params);
     this.setState({
@@ -228,7 +229,8 @@ class EngineInfo extends Component{
       search: false,
       status: null,
     })
-  }
+  })
+
   //更改状态
   handlestatus = (string) => {
     this.setState({status: string});

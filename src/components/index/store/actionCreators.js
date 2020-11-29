@@ -22,7 +22,6 @@ export const  getSensorType = () => {
                 const result = response.data; 
                 const usingSensorTypes = result.filter((item) => item.state === '1');
                 dispatch(storeSensorType(result, usingSensorTypes));
-
             },
             function() {
                 message.warning('发送数据失败，请重试')

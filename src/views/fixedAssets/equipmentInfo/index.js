@@ -12,6 +12,7 @@ import ScrapModal from './modal/scrapModal';
 import AllocationModal from './modal/allocationModal'
 import { connect } from 'react-redux';
 import  BackModal  from './modal/backModal';
+import { throttle } from '../../../publicFunction';
 
 const { Option } = Select;
 const model = new Model();
@@ -168,7 +169,7 @@ class EpuipmentInfo extends Component {
   }
 
   //重置
-  handleReset = () => {
+  handleReset = throttle(() => {
     const params = this.getparams();
     this.getCurrentPage(params);
     this.setState({
@@ -178,15 +179,18 @@ class EpuipmentInfo extends Component {
       key: new Date(),
       search: false,
     })
-  }
-
+  })
+    
+ 
   //搜索
-  searchInfo = () => {
+  searchInfo = throttle(() => {
     this.setState({search: true});
     const {searchEngineCode, searchEquipmentCode, status} = this.state;
     let params = this.getparams( 1, 10, status, searchEngineCode, searchEquipmentCode);
     this.getCurrentPage(params);
-  }
+  })
+    
+
 
   //显示弹窗
   showModal = (name, record = null) => {

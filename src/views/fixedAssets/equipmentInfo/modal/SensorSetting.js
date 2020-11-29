@@ -3,6 +3,7 @@ import '../style.less'
 import { Select, Icon, message } from 'antd';
 import { Model } from '../../../../dataModule/testBone';
 import { sensorModelUrl, sensorCodeUrl } from '../../../../dataModule/UrlList';
+import { throttle } from '../../../../publicFunction'
 
 const model = new Model();
 const { Option } = Select;
@@ -95,7 +96,7 @@ class EditSensorSetting extends Component {
         }
     }
 
-    getCode = ()  => {
+    getCode = throttle(() => {
         if(this.state.sensorModels.length > 0){
             const { sensorModels } = this.state;
             const string = this.props.item.sensor_model;
@@ -105,7 +106,8 @@ class EditSensorSetting extends Component {
                 this.getSensorCode({sensor_model_id: modalAid})
             }
         }
-    }
+    })
+
       
 
     render() {

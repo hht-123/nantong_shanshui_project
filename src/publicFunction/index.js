@@ -67,3 +67,16 @@ export function ejectMessage (text, type) {
     message.info(text)
   }
 }
+
+export function throttle(func, wait = 350) {
+  let previous = 0;
+  return function() {
+      let now = Date.now();
+      
+      let args = arguments;
+      if (now - previous > wait) {
+          func.apply(this, args);
+          previous = now;
+      }
+  }
+}

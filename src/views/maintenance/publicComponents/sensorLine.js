@@ -49,17 +49,6 @@ class Line extends Component{
                 type: 'value',
                 boundaryGap : [ 0.5, 1 ]
             },
-            // dataZoom: [
-            //     {
-            //         type: 'slider', //滑动条
-            //         show: true,      //开启
-            //         yAxisIndex: [0],
-            //         left: '93%',  //滑动条位置
-            //     }, 
-            //     {
-            //         type: 'inside',  //内置滑动，随鼠标滚轮展示
-            //         yAxisIndex: [0],
-            //     }],
             series: [{
                 type: 'line',
                 data: Ydata

@@ -5,7 +5,7 @@ import './style.less';
 import  EquipmentScrapTable  from '../equipmentScrap/EquipmentScrapTable';
 import { Model} from '../../../dataModule/testBone';
 import { equipmentScrap } from '../../../dataModule/UrlList';
-
+import { throttle } from '../../../publicFunction';
 
 const model = new Model();
 
@@ -89,16 +89,16 @@ class Equipment extends Component{
     }
 
     //搜索按钮
-    searchInfo = () => {
+    searchInfo = throttle(() => {
         this.setState({ search: true });
         const { search_equipment_code } = this.state;
         let params = this.getParams( 1, 10, search_equipment_code);
         this.getCurrentPage(params);
-    }
-
+    })
+        
 
     //重置按钮
-    handleReset = () => {
+    handleReset = throttle(() => {
         const params = this.getParams();
         this.getCurrentPage(params);
         this.setState({
@@ -106,7 +106,8 @@ class Equipment extends Component{
             currentPage: 1,
             search: false,
         })
-    }
+    })
+    
 
     //翻页获取内容
   getPage = (currentPage, pageSize) => {
@@ -162,13 +163,13 @@ class Equipment extends Component{
                     <div className="inputWrapper" style={{ marginLeft: 0}}>
                         <div className="input">设备编号:</div>
                         <Input  
-                            style={{ width: "200px"}} 
+                            style={{ width: "220px"}} 
                             name="search_equipment_code" 
                             onChange={ this.handleChange }
                             value={ this.state.search_equipment_code }
                         />
                     </div>
-                    <div style={{marginTop: "40px",marginLeft: "260px"}}>
+                    <div style={{marginTop: "40px",marginLeft: "280px"}}>
                             <Button className="button" onClick={ this.searchInfo }>搜索</Button>
                             <Button className="button" onClick={ this.handleReset }>重置</Button>
                     </div>
