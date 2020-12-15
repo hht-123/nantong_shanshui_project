@@ -18,15 +18,32 @@ export default class AddAccount extends Component {
       telephone_num: '',
       power_id_str: '1',
       alter_power: '1',
-      add_by: getUserName()
+      client_id:'',
+      add_by: getUserName(),
     }
   }
 
   handleChange = (key, value) => {
     const rawState = this.state
     rawState[key] = value
+    // console.log(rawState)
     this.setState(rawState)
+    if(rawState['role_id'] === "9ca9088b74694db5a1b4594bcb8b2912") {
+      document.getElementById('client_unit').style.display = "block"
+    } else {
+      document.getElementById('client_unit').style.display = 'none'
+    }
   }
+
+  // isShow = () => {
+  //   if(this.state.isShow) {
+  //     console.log('true')
+  //     return {display:'true'}
+  //   } else {
+  //     console.log('none')
+  //     return {display:'none'}
+  //   }
+  // }
 
   createAccount = () => {
     const me = this
@@ -66,21 +83,37 @@ export default class AddAccount extends Component {
     initData['add_by'] = getUserName()
     this.setState(initData)
     this.props.handleCancel('addAccountVisible')
+    document.getElementById('client_unit').style.display = 'none'
+  }
+
+  handleAllClient = () => {
+    const { clientData } = this.props;
+    const handleClientData = clientData.map((item) => (
+        {
+            data: item.client_unit + '/' + item.client_code,
+            aid: item.aid
+        }
+    ))
+    return handleClientData;
   }
 
   render() {
     const {
       visible,
-      roles
+      roles,
+      
     } = this.props
 
     const {
       name,
       password,
       role_id,
-      telephone_num
+      telephone_num,
+      client_id
     } = this.state
 
+    const allClient = this.handleAllClient();
+    
     return (
       <Modal
         title="新增账户"
@@ -107,6 +140,22 @@ export default class AddAccount extends Component {
                   onClick={() => {this.setState({role_id: item.aid})}}
                 >{item.role_name}</Option>
               })
+            }
+          </Select>
+        </div>
+        <div className={"inputItem"} id='client_unit' style={{display:'none'}}>
+          <span>客户单位：</span>
+          <Select value={client_id} style={{ width: 200 }} onChange={(e) => this.handleChange('client_id',e)} allowClear>
+            {
+              allClient.size !== 0?
+              allClient.map((item, index) => {
+                return <Option
+                  value={item.aid}
+                  key={item.aid}
+                  onClick={() => {this.setState({client_id: item.aid})}}
+                >{item.data}</Option>
+              })
+              : null
             }
           </Select>
         </div>

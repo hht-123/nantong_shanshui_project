@@ -6,8 +6,9 @@
  * @LastEditors: 唐帆
  * @LastEditTime: 2020-04-30 10:46:26
  */
-export const originalUrl = 'http://122.51.80.50:8000/';   //服务器
-// export const originalUrl = 'http://10.21.1.141:8000/';
+// export const originalUrl = 'http://122.51.80.50:8000/';   //服务器
+// export const originalUrl = 'http://10.41.119.14:8000/';
+export const originalUrl = 'http://10.41.7.235:8000/';
 export const enginInfoUrl = 'main_engine/';
 export const messageCUrl = 'client/';
 export const contactUrl = 'contact_people/';

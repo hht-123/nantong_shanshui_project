@@ -32,7 +32,7 @@ class EquipemenControl extends Component{
     this.setState({
         equipment_id: this.props.match.params.equipment_id
     })
-    const url = 'ws://10.21.1.141:90';
+    const url = 'ws://10.41.119.14:90';
     createWebSocket(url)
     this.getAimId();
   }

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 
 import { Model } from '../../../dataModule/testBone';
-import { maintenanceUrl } from '../../../dataModule/UrlList';
+import { maintenanceUrl, verifyUrl } from '../../../dataModule/UrlList';
 
 import './style.less'
 import  Equipment   from './equipment';
+import {getUserId, getRoleId}  from '../../../publicFunction/index';
+import { message } from 'antd';
 
 const model = new Model()
 class ClientIndex extends Component {
@@ -19,13 +21,14 @@ class ClientIndex extends Component {
             status: '0',
             region: '',
             whetherTest: false, 
+            clientID:''
         }
       }
     
     componentDidMount() {
         const me = this
         model.fetch(
-            "13:123",
+            "1:1",
             maintenanceUrl,
             'get',
             function(response) {
@@ -45,6 +48,7 @@ class ClientIndex extends Component {
               },
               this.state.whetherTest
         )
+        this.getRoleData()
     }
   
     getparams( status=null, client_unit=null, region=null) {
@@ -57,8 +61,38 @@ class ClientIndex extends Component {
       return params;
     }  
 
+    getRoleData() {
+      const me = this
+      model.fetch(
+        {'user_id': getUserId(), 'role_id': getRoleId()},
+        verifyUrl,
+        'get',
+        function(response) {
+          me.setState({
+            clientID: response.data.client_id
+          })
+          // console.log(response.data)
+      },
+      function() {
+        console.log('失败'); //失败信息
+      },
+      )
+    }
+
   render() {
     const { data } = this.state
+    const newData = []
+    if(this.state.clientID === '') return null
+    data.map(item =>{
+      if( item.client_id === this.state.clientID && item.status !=='1'&& item.status !== '2' ) {
+        newData.push(item)
+      }
+    })
+    console.log(newData)
+    if(newData.length === 0) {
+      message.warning('未分配设备')
+      return null
+    }
 
     return (
         <div className="client" >
@@ -67,12 +101,8 @@ class ClientIndex extends Component {
             </div>
             <div className='line-top'></div>
                 <div  className='content' >
-                    { data.map((item,index) => {
-                      if( item.status ==='1'|| item.status === '2' ) {
-                        return null
-                      } else {
+                    { newData.map((item,index) => {
                       return <Equipment key={ index } aid={ item.aid } equipment_code={ item.equipment_code }  status={ item.status } />
-                      }
                     }) }
                 </div>
             
