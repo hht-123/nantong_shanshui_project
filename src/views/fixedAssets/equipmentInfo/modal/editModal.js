@@ -33,19 +33,19 @@ class EditModal extends Component {
             display: 'none',       
         }
     }
-
+    //11.27update
     componentDidMount() {
         this.getEngineName({engineNmae: 'all'});
         this.setState({
             size: this.props.sensorTypes.size
         })
+        const sensors = this.state.sensors;
         for(let i = 0; i< this.props.sensorTypes.size; i++){
-            const sensors = this.state.sensors;
             sensors.push({});
-            this.setState({
-                sensors,
-            })
         }
+        this.setState({
+            sensors,
+        })
     }
 
     componentDidUpdate(prevProps) {
@@ -275,7 +275,6 @@ class EditModal extends Component {
         }else{
             sensorCodeAids[index] = string;
         }
-
         this.setState({
             sensorCodeAids,
         })

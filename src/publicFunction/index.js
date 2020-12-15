@@ -68,7 +68,7 @@ export function ejectMessage (text, type) {
   }
 }
 
-export function throttle(func, wait = 1000) {
+export function throttle(func, wait = 350) {
   let previous = 0;
   return function() {
       let now = Date.now();

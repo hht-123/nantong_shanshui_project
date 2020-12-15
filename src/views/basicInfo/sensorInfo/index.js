@@ -11,7 +11,7 @@ import { Model } from '../../../dataModule/testBone';
 import { sensorInfoUrl, sensorModelUrl } from '../../../dataModule/UrlList';
 import { connect } from 'react-redux';
 import SenosrEditModal from './modal/senosrEditModal';
-
+import { throttle } from '../../../publicFunction'
 
 const model = new Model();
 const { Option } = Select;
@@ -208,7 +208,7 @@ class SensorInfo extends Component {
   }
 
   //重置按钮
-  handleReset = () => {
+  handleReset = throttle(() => {
     let params = this.getParams();
     this.getInfo(params);
     this.setState({
@@ -222,15 +222,17 @@ class SensorInfo extends Component {
       search: false,
       status: '',
     })
-  }
-
+  })
+    
   //搜索按钮
-  searchInfo = () => {
+  searchInfo = throttle(() => {
     this.setState({search: true});
     const { searchSensorType, searchSensorModel, searchSensorCode, status } = this.state;
     let params = this.getParams(1, 10, status, searchSensorType, searchSensorModel, searchSensorCode);
     this.getInfo(params);
-  }
+  })
+    
+
 
   handleChange = (e) => {
     this.setState({

@@ -4,7 +4,7 @@ import '../../../style/wrapper.less';
 import AllocationTable from './allocationTable';
 import { Model } from "../../../dataModule/testBone";
 import { equipmentAllocation } from '../../../dataModule/UrlList';
-
+import { throttle } from '../../../publicFunction'
 
 const model = new Model();
 const { RangePicker } = DatePicker;
@@ -118,13 +118,13 @@ class EpuipmentAllocation extends Component {
     }
 
     //搜索按钮
-    searchInfo = () => {
-        this.setState({search: true});
+    searchInfo = throttle(() => {
+      this.setState({search: true});
         const { search_transfer_unit, search_status, search_time } = this.state;
         let params = this.getparams( 1, 10, search_transfer_unit, search_status, search_time);
-        this.getCurrentPage(params);
+        this.getCurrentPage(params); 
+    })
         
-    }
 
     //重置按钮
     handleReset = () => {
@@ -209,6 +209,7 @@ class EpuipmentAllocation extends Component {
                         <div style={{ float: 'left' }} >
                         <div className="input" >日期筛选:</div>
                         <RangePicker 
+                            style={{ width: "220px" }} 
                             key={ this.state.keyValue }
                             onChange={ this.handleTime } 
                         />
@@ -216,7 +217,7 @@ class EpuipmentAllocation extends Component {
                         <div className="inputWrapper" >
                             <div className="input" >调入单位:</div>
                             <Input  
-                                style={{ width: "300px" }} 
+                                style={{ width: "220px" }} 
                                 name="search_transfer_unit" 
                                 onChange={ this.handleChange }
                                 value={ this.state.search_transfer_unit }
