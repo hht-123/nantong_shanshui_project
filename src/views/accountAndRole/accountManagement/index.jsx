@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import {Button, Input, Select} from "antd";
 
-import { originalUrl, role, user, power, rolePower, accountPower } from '../../../dataModule/UrlList'
+import { originalUrl, role, user, power, rolePower, accountPower, clientUrl } from '../../../dataModule/UrlList'
 import { Model } from '../../../dataModule/testBone'
 import AccountTable from './accountTable'
 import EditPower from './editPower'
@@ -37,7 +37,9 @@ export default class AccountManagement extends Component{
       powers: [],
       powersObject: {},
       rolePowersOfSelectedAccount: [],
-      accountPowersOfSelectedAccount: []
+      accountPowersOfSelectedAccount: [],
+
+      clientData:[]
     }
   }
 
@@ -52,6 +54,7 @@ export default class AccountManagement extends Component{
         me.setState({
           roles: data
         })
+        console.log(me.state.roles)
         const rolesObject = {}
         for (let i = 0; i < data.length; i++) {
           rolesObject[data[i]['aid']] = data[i]['role_name']
@@ -65,7 +68,27 @@ export default class AccountManagement extends Component{
     )
     this.getUsers()
     this.queryOfPower()
+    this.getClientData({client: 'all'});
   }
+
+  //获取客户信息
+  getClientData(params) {
+    let me = this;
+    model.fetch(
+    params,
+    clientUrl,
+    'get',
+    function(response) {
+        me.setState({
+            clientData: response.data.results
+        })
+    },
+    function() {
+        console.log('加载失败，请重试')
+    },
+    false
+    )
+}
 
   resetSearch = () => {
     this.setState({
@@ -182,6 +205,7 @@ export default class AccountManagement extends Component{
     const newData = {}
     newData[type] = true
     newData['record'] = record
+    console.log(record)
     if (type === 'editPowerVisible') {
       this.queryRolePower({ role_id: record.role_id })
       this.queryAccountPower({ role_id: record.role_id, user_id: record.aid })
@@ -214,7 +238,8 @@ export default class AccountManagement extends Component{
       powers,
       rolePowersOfSelectedAccount,
       accountPowersOfSelectedAccount,
-      powersObject
+      powersObject,
+      clientData
     } = this.state
 
     return(
@@ -287,6 +312,7 @@ export default class AccountManagement extends Component{
             getUsers={this.getUsers}
             record={record}
             roles={roles}
+            clientData={clientData}
           />
 
           <BasicInformation
@@ -297,6 +323,7 @@ export default class AccountManagement extends Component{
             record={record}
             roles={roles}
             rolesObject={rolesObject}
+            clientData={clientData}
           />
 
           <DeleteAccount

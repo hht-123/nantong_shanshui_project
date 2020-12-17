@@ -17,7 +17,8 @@ export default class BasicInformation extends Component{
       telephone_num: '',
       power_id_str: '',
       power_num_str: '',
-      alter_power: 'no'
+      alter_power: 'no',
+      client_id:undefined,
     }
   }
 
@@ -25,6 +26,12 @@ export default class BasicInformation extends Component{
     const rawState = this.state
     rawState[key] = value
     this.setState(rawState)
+    console.log(rawState)
+    if(rawState['role_id'] === "9ca9088b74694db5a1b4594bcb8b2912") {
+      document.getElementById('client_unit2').style.display = "block"
+    } else {
+      document.getElementById('client_unit2').style.display = 'none'
+    }
   }
 
   createAccount = () => {
@@ -61,8 +68,33 @@ export default class BasicInformation extends Component{
       initData[i] = ''
     }
     initData['role_id'] = undefined
+    initData['client_id'] = undefined
     this.setState(initData)
     this.props.handleCancel('basicInfoVisible')
+    document.getElementById('client_unit2').style.display = "none"
+    console.log(document.getElementById('client_unit2').style.display)
+  }
+
+  handleAllClient = () => {
+    const { clientData } = this.props;
+    const handleClientData = clientData.map((item) => (
+        {
+            data: item.client_unit + '/' + item.client_code,
+            aid: item.aid
+        }
+    ))
+    return handleClientData;
+  }
+
+  inputClientUnit = (id) => {
+    const { clientData } = this.props;
+    if(id === undefined ) return null
+    console.log(id)
+    for (let i = 0;i < clientData.length; i++) {
+      if(clientData[i].aid === id) {
+        return clientData[i].client_unit + '/' + clientData[i].client_code
+      } 
+    }
   }
 
   render() {
@@ -70,15 +102,25 @@ export default class BasicInformation extends Component{
       visible,
       roles,
       record,
-      rolesObject
+      rolesObject,
+      clientData
     } = this.props
 
     const {
       name,
       password,
       role_id,
-      telephone_num
+      telephone_num,
+      client_id
     } = this.state
+
+    const allClient = this.handleAllClient();
+    if(rolesObject === null ) return null
+    console.log('record',record)
+    if(rolesObject[record.role_id] === '客户') {
+      // console.log(document.getElementById('client_unit2'))
+      document.getElementById('client_unit2').style.display = "block"
+    }
 
     return (
       <Modal
@@ -106,6 +148,22 @@ export default class BasicInformation extends Component{
                   onClick={() => {this.setState({role_id: item.aid})}}
                 >{item.role_name}</Option>
               })
+            }
+          </Select>
+        </div>
+        <div className={"inputItem"} id='client_unit2' style={{display:'none'}}>
+          <span>客户单位：</span>
+          <Select placeholder={clientData === null ? undefined : this.inputClientUnit(record.client_id)}  value={client_id} style={{ width: 200 }} onChange={(e) => this.handleChange('client_id',e)} allowClear>
+            {
+              allClient.size !== 0?
+              allClient.map((item, index) => {
+                return <Option
+                  value={item.aid}
+                  key={item.aid}
+                  onClick={() => {this.setState({client_id: item.aid})}}
+                >{item.data}</Option>
+              })
+              : null
             }
           </Select>
         </div>

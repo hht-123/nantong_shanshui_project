@@ -18,7 +18,6 @@ import { equipmentUrl,
 import { Icon, Tabs, DatePicker, Button, PageHeader, message } from 'antd';
 import { Link } from 'react-router-dom';
 import Control  from './equipmentControl/comtrolmodal';
-import { createWebSocket } from './equipmentControl/websocket';
 
 const model = new Model()
 const { TabPane } = Tabs;

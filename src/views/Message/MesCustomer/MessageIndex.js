@@ -194,7 +194,7 @@ class MessageIndex extends Component{
         )
     }
 
-    render(){
+    render() {
         const {data , whetherTest} = this.state;
         const tableDate = [];
         if(data !== undefined){
