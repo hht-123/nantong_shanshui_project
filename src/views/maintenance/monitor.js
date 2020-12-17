@@ -5,10 +5,20 @@ import  './style/monitor.less';
 import Line from './publicComponents/sensorLine';
 import CompanyInfo from './publicComponents/companyInfo';
 import EquipInfo from './publicComponents/equipInfo';
-import { equipmentUrl, sensorDataUrl, device, clientUrl, equipmentInfoUrl, equipMaintainUrl, sensorOfequipmentUrl } from '../../dataModule/UrlList';
+import { equipmentUrl, 
+  sensorDataUrl, 
+  device, 
+  clientUrl, 
+  equipmentInfoUrl, 
+  equipMaintainUrl, 
+  sensorOfequipmentUrl,
+  websocketUrl,
+ } from '../../dataModule/UrlList';
 
 import { Icon, Tabs, DatePicker, Button, PageHeader, message } from 'antd';
 import { Link } from 'react-router-dom';
+import Control  from './equipmentControl/comtrolmodal';
+import { createWebSocket } from './equipmentControl/websocket';
 
 const model = new Model()
 const { TabPane } = Tabs;
@@ -32,7 +42,9 @@ class Monitor extends Component{
       equipmentInfo:[],
       equipmentDot: false,     // 设备维护的红点提示
       equipMaintenanceData:[],   //存设备维护的数据
-      sensorModel:[]            //存储设备对应的传感器类型及型号
+      sensorModel:[],            //存储设备对应的传感器类型及型号
+      controlVisisible: false,   //控制界面的打开
+      aim_id: "",              
     }
   }
 
@@ -85,6 +97,7 @@ class Monitor extends Component{
           me.setState({
             equipmentData: response.data.data[0]
           })
+          me.getAimId();
           //获得设备对应的传感器类型
           const sensor = me.getSensor(me.state.equipmentData.equipment_code);
           me.getSensors(sensor);
@@ -95,6 +108,28 @@ class Monitor extends Component{
           })
           // console.log(me.state.equipmentData)
         }
+      },
+      function() {
+        console.log('加载失败，请重试')
+      },
+      this.state.whetherTest
+    )
+  }
+  //获取设备id
+  getAimId(code) {
+    let me = this;
+    model.fetch(
+      {
+        "object_code": this.state.equipmentData.equipment_code,
+        "distinguish_code":"0"
+      },
+      websocketUrl,
+      'get',
+      function(response) {
+          me.setState({
+            aim_id: response.data.websocket_id,
+          })
+          console.log(response.data.websocket_id)
       },
       function() {
         console.log('加载失败，请重试')
@@ -331,11 +366,18 @@ class Monitor extends Component{
     )
   }
 
+  showControl = () => {
+    this.setState({
+      controlVisisible: true,
+    })
+  }
+
   //关闭弹窗
   closeModal = (visible) => {
     this.setState({
       CompanyModalVisible: visible,
       equipModalVisible: visible,
+      controlVisisible: false,
     })
   }
 
@@ -405,7 +447,7 @@ class Monitor extends Component{
 
   render() {
     const equipment_id = this.props.match.params.equipment_aid;
-    const { whetherTest, CompanyModalVisible, equipModalVisible, equipmentInfo, companyInfo, sensorModel } = this.state
+    const { whetherTest, CompanyModalVisible, equipModalVisible, equipmentInfo, companyInfo, sensorModel, controlVisisible } = this.state
     const time = [];
     const pH =[];
     const orp = [];
@@ -486,11 +528,9 @@ class Monitor extends Component{
                     <div className='describe '  >设备详情</div>
                   </div>
                 </span>
-                <span className='main'>
-                  <Link to={`/app/equipemenControl/${ equipment_id}`} className=' water'>
+                <span className='main' onClick={ this.showControl }>
                     <Icon className='icon' type="build" theme="filled"  />
-                    <div className='describe '  >设备控制</div>
-                  </Link>
+                    <div className='describe'>设备控制</div>
                 </span>
               </div>
             </div>
@@ -521,6 +561,12 @@ class Monitor extends Component{
                   cancel={ this.closeModal }
                   data={ equipmentInfo }
                   sensorModel = { sensorModel }
+                />
+                <Control 
+                  visible={ controlVisisible }
+                  close={ this.closeModal }
+                  equipment_code={ this.state.equipmentData.equipment_code }
+                  aim_id={ this.state.aim_id }
                 />
         </div>
       </div>

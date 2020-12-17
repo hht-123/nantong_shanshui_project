@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Model } from '../../../dataModule/testBone';
 
 import  './style.less';
-import { websocketUrl } from '../../../dataModule/UrlList';
+import { websocketUrl, equipmentUrl } from '../../../dataModule/UrlList';
 
 import { Button, PageHeader } from 'antd';
-import { createWebSocket ,closeWebSocket , websocket, backInfo } from './websocket';
+import { createWebSocket ,closeWebSocket , websocket } from './websocket';
 import { throttle } from '../../../publicFunction';
 
 const model = new Model()
@@ -17,24 +17,20 @@ class EquipemenControl extends Component{
         equipmentIdData: [],
         whetherTest: false, 
         aim_id:"",
-        equipment_id: ""
+        equipment_code: ""
     }
   }
 
-	
-	componentDidUpdate(prevProps){
-		if(backInfo !== prevProps.backInfo){
-			console.log("backInfo",backInfo);
-		}
-	}
 
   componentDidMount() {
     this.setState({
         equipment_id: this.props.match.params.equipment_id
     })
-    const url = 'ws://10.21.1.141:90';
-    createWebSocket(url)
-    this.getAimId();
+    let id = this.getId(this.props.match.params.equipment_id)
+    this.getEquipmentID(id)
+
+    const url = 'ws://10.41.7.235:90/';
+    createWebSocket(url, this)
   }
 
   componentWillUnmount(){
@@ -48,14 +44,41 @@ class EquipemenControl extends Component{
       equipment_id,
     }
     return params;
-  } 
+  }
+
+  getEquipmentID(params) {
+    for (let i in params) {
+      if (params[i] === undefined || params[i] === null) {
+        params[i] = ''
+      }
+    }
+    let me = this;
+    model.fetch(
+      params,
+      equipmentUrl,
+      'get',
+      function(response) {
+        if (me.state.whetherTest === false) {
+          me.setState({
+            equipment_code: response.data.data[0].equipment_code
+          })
+          me.getAimId(response.data.data[0].equipment_code);
+          // console.log(me.state.equipmentIdData)
+        }
+      },
+      function() {
+        console.log('加载失败，请重试')
+      },
+      false
+    )
+  }
 
   //为了得到aim_id
-  getAimId() {
+  getAimId(code) {
     let me = this;
     model.fetch(
       {
-        "object_id": this.props.match.params.equipment_id,
+        "object_id": code,
         "distinguish_code":"0"
       },
       websocketUrl,
@@ -74,13 +97,24 @@ class EquipemenControl extends Component{
 
   contect = throttle(() => {      
     let json ={
-        send_id:"325",                         //用户id
-        equipment_id: this.state.equipment_id,   //设备id      
-        action: "打开",
+        send_id:"325",                           //用户id
+        equipment_code: this.state.equipment_code,   //设备id      
+        action: "11",
         distinguish_code: "1",
         aim_id: this.state.aim_id,
 		}
-		console.log(backInfo)
+    console.log(JSON.stringify(json));
+    websocket.send(JSON.stringify(json));
+  }, 4000);
+
+  close = throttle(() => {      
+    let json ={
+        send_id:"325",                           //用户id
+        equipment_code: this.state.equipment_code,   //设备id      
+        action: "12",
+        distinguish_code: "1",
+        aim_id: this.state.aim_id,
+		}
     console.log(JSON.stringify(json));
     websocket.send(JSON.stringify(json));
   }, 4000);
@@ -95,10 +129,11 @@ class EquipemenControl extends Component{
           onBack={() => window.history.back()}
           title="返回"
         />
-        <span className='name'>设备编号：{ this.state.equipmentIdData.equipment_code }</span>
+        <span className='name'>设备编号：{ this.state.equipment_code }</span>
         <div className='wrapper'>
           <span className='pageName'>设备控制</span>
           <Button onClick={ this.contect } >发送信息</Button>
+          <Button onClick={ this.close } >关闭</Button>
         </div>
       </div>
     )
