@@ -85,7 +85,8 @@ class WaterRemind extends Component{
       equipment_id,
     }
     return params;
-  } 
+  }
+  
   getEquipmentID(params) {
     for (let i in params) {
       if (params[i] === undefined || params[i] === null) {

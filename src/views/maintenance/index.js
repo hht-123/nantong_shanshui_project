@@ -213,7 +213,7 @@ class MaintenanceIndex extends Component {
                 { if (index > 4)  {
                    return null;
                 } else {
-                return  <div key={ index } className='content' >
+                return  <div key={ index } className='content'>
                         <div className="areaName" >{ key }地区</div>
                         <div className='line-bottom'></div>
                     { Newdata[key].map((item,index) => {

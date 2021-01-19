@@ -9,6 +9,8 @@
 export const originalUrl = 'http://122.51.80.50:8000/';   //服务器
 // export const originalUrl = 'http://10.41.119.14:8000/';
 // export const originalUrl = 'http://10.41.7.235:8000/';
+export const websocketConnect = 'ws://10.41.7.235:90/' 
+
 export const enginInfoUrl = 'main_engine/';
 export const messageCUrl = 'client/';
 export const contactUrl = 'contact_people/';
@@ -61,3 +63,4 @@ export const user = 'user/'
 export const power = 'power/'
 
 export const websocketUrl = '/app/websocket_relation/'
+
