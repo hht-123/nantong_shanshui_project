@@ -9,8 +9,12 @@ import logo from '../../statistics/logo.png';
 import { nowTime } from '../../publicFunction/index';
 // import { setCookie } from "../../helpers/cookies";
 // import {color} from "echarts/src/export";
+import {getUserId}  from '../../publicFunction';
+import {outLoginUrl } from '../../dataModule/UrlList'
+import { Model } from '../../dataModule/testBone';
 
 const { Header } = Layout;
+const model = new Model()
 
 class HeaderCustom extends Component{
     constructor(props){
@@ -34,6 +38,14 @@ class HeaderCustom extends Component{
     };
 
     logout = () => {
+        model.fetch(
+          {'user_id':getUserId()},
+          outLoginUrl,
+          'get',
+          function(response) {
+            console.log('登出状态还原')
+          }
+        )
         // 删除登陆信息，并跳转页面
         removeCookie("mspa_user");
         history.push('/login');

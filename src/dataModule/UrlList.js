@@ -6,9 +6,9 @@
  * @LastEditors: 唐帆
  * @LastEditTime: 2020-04-30 10:46:26
  */
-// export const originalUrl = 'http://122.51.80.50:8000/';   //服务器
+export const originalUrl = 'http://122.51.80.50:8000/';   //服务器
 // export const originalUrl = 'http://10.41.119.14:8000/';
-export const originalUrl = 'http://10.41.7.235:8000/';
+// export const originalUrl = 'http://10.41.7.235:8000/';
 export const enginInfoUrl = 'main_engine/';
 export const messageCUrl = 'client/';
 export const contactUrl = 'contact_people/';
@@ -54,6 +54,7 @@ export const allcationEquipmentUrl = '/equipment_allocation/'   //发送调拨�
 export const role = 'role/'
 export const rolePower = 'app/role_power/'
 export const accountPower = 'app/verify/'
+export const outLoginUrl = 'app/logout/'
 
 export const user = 'user/'
 

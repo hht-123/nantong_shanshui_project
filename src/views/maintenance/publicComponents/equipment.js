@@ -46,7 +46,7 @@ class Equipment extends Component {
     return (
                 <span className='equipment'>
                   <Link to={`/app/monitor/${ this.props.aid }`} >
-                    <img className='Pic-equipment' alt='shebei' src={ Shebei } onClick={ this.enterEquipment } />
+                    <img className='Pic-equipment' alt='设备图像' src={ Shebei } onClick={ this.enterEquipment } />
                   </Link>  
                     <div className='equipmentID'>{ this.props.equipment_code }</div>
                     <div className='company'>{ this.props.client_unit } </div>

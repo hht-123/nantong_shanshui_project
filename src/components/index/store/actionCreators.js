@@ -48,7 +48,8 @@ export const  getRoleData = () => {
                 dispatch(storeroleData(result));
             },
             function() {
-                message.warning('角色权限数据获取失败')
+                console.log('角色权限数据获取失败')
+                // message.warning('角色权限数据获取失败')
             },
             false,
         )

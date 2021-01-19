@@ -19,6 +19,7 @@ export default class BasicInformation extends Component{
       power_num_str: '',
       alter_power: 'no',
       client_id:undefined,
+      isShow:false
     }
   }
 
@@ -28,9 +29,13 @@ export default class BasicInformation extends Component{
     this.setState(rawState)
     console.log(rawState)
     if(rawState['role_id'] === "9ca9088b74694db5a1b4594bcb8b2912") {
-      document.getElementById('client_unit2').style.display = "block"
+      this.setState({
+        isShow: true
+      })
     } else {
-      document.getElementById('client_unit2').style.display = 'none'
+      this.setState({
+        isShow: false
+      })
     }
   }
 
@@ -39,7 +44,7 @@ export default class BasicInformation extends Component{
     const newAccount = this.state
     for (let i in newAccount) {
       if (newAccount[i] === '' || newAccount[i] === undefined) {
-        if (i !== 'power_id_str' && i !== 'power_num_str') {
+        if (i !== 'power_id_str' && i !== 'power_num_str' && i !== 'client_id') {
           message.error('信息未填写完整！')
           return
         }
@@ -71,8 +76,9 @@ export default class BasicInformation extends Component{
     initData['client_id'] = undefined
     this.setState(initData)
     this.props.handleCancel('basicInfoVisible')
-    document.getElementById('client_unit2').style.display = "none"
-    console.log(document.getElementById('client_unit2').style.display)
+    this.setState({
+      isShow: false
+    })
   }
 
   handleAllClient = () => {
@@ -116,11 +122,6 @@ export default class BasicInformation extends Component{
 
     const allClient = this.handleAllClient();
     if(rolesObject === null ) return null
-    console.log('record',record)
-    if(rolesObject[record.role_id] === '客户') {
-      // console.log(document.getElementById('client_unit2'))
-      document.getElementById('client_unit2').style.display = "block"
-    }
 
     return (
       <Modal
@@ -151,22 +152,26 @@ export default class BasicInformation extends Component{
             }
           </Select>
         </div>
-        <div className={"inputItem"} id='client_unit2' style={{display:'none'}}>
-          <span>客户单位：</span>
-          <Select placeholder={clientData === null ? undefined : this.inputClientUnit(record.client_id)}  value={client_id} style={{ width: 200 }} onChange={(e) => this.handleChange('client_id',e)} allowClear>
-            {
-              allClient.size !== 0?
-              allClient.map((item, index) => {
-                return <Option
-                  value={item.aid}
-                  key={item.aid}
-                  onClick={() => {this.setState({client_id: item.aid})}}
-                >{item.data}</Option>
-              })
-              : null
-            }
-          </Select>
-        </div>
+        {
+          rolesObject[record.role_id] === '客户' || this.state.isShow ?
+          <div className={"inputItem"} style={{display:'block'}} id='client_unit2'  >
+            <span>客户单位：</span>
+            <Select placeholder={clientData === null ? undefined : this.inputClientUnit(record.client_id)}  value={client_id} style={{ width: 200 }} onChange={(e) => this.handleChange('client_id',e)} allowClear>
+              {
+                allClient.size !== 0?
+                allClient.map((item, index) => {
+                  return <Option
+                    value={item.aid}
+                    key={item.aid}
+                    onClick={() => {this.setState({client_id: item.aid})}}
+                  >{item.data}</Option>
+                })
+                : null
+              }
+            </Select>
+          </div>
+          : null
+        }
         <div className={"inputItem"}>
           <span>联系方式：</span>
           <Input placeholder={record.telephone_num} allowClear style={{ width: "200px" }} value={telephone_num} onChange={e => this.handleChange('telephone_num', e.target.value)}/>
