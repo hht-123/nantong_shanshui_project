@@ -1,4 +1,4 @@
-.monitor {
+.monitor2 {
     .wrapper {
         width: 100%;
         min-width: 1200px;
@@ -8,23 +8,34 @@
         margin-bottom: 80px;
         background: #fff;
         padding: 24px;
+        .water {
+            color: grey;
+        }
+        .water:hover{
+            color: #00A0E9;
+        }
         .table {
             position: relative;
-            top:-20px;
-            left: 80px;
+            margin-top: 20px;
             width: 720px;
             height: 120px;
+            margin-bottom: 20px;
+            left: 80px;
             span {
                 float: left;
                 border: solid 1px;
                 height: 130px;
                 width: 120px;
-                // .describe {
-                //     position: relative;
-                //     top: -25px;
-                //     font-size: 17px;
-                //     text-align: center;
-                // }
+                .describe {
+                    position: relative;
+                    top: 10px;
+                    font-size: 17px;
+                    text-align: center;
+                    cursor:pointer;
+                }
+                .equipMaintenance:hover{
+                    color: red;
+                }
                 .statusColor {
                     position: relative;
                     top:40px;
@@ -43,20 +54,34 @@
                     text-align: center;
                     top: 55px;
                 }
-            // .icon {
-            //     font-size: 60px;
-            //     // padding: 30px;
-            //     margin-top: -5px;
-            // }
+            .icon {
+                font-size: 60px;
+                    // padding: 30px;
+                    margin-top: 20px;
+                    margin-left: 30px;
+                    cursor:pointer;
+            }
+            .dot {
+                position: relative;
+                background-color: red;
+                width: 20px;
+                height: 20px;
+                border-radius: 10px;
+                left:90px;
+                top:-90px;
+            }
             }
             .main {
                 border-left: 0px;
             }
         }
         .ClientTab {
+            // position: relative;
+            // left: -520px;
+            // // width: 1000px;
             position: relative;
-            left: -520px;
-            // width: 1000px;
+            left: 80px;
+            width: 700px;
             .time {
                 position: relative;
                 margin-bottom: 10px;

@@ -478,7 +478,7 @@ class Monitor extends Component{
     }
 
     return (
-      <div className='monitor'>
+      <div className='monitor1'>
         <PageHeader className='row'
           onBack={() => window.history.back()}
           title="返回"

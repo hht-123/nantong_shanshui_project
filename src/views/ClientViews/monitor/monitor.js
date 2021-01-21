@@ -472,7 +472,7 @@ class ClientMonitor extends Component{
     }
 
     return (
-      <div className='monitor'>
+      <div className='monitor2'>
         <PageHeader className='row'
           onBack={() => window.history.back()}
           title="返回"
