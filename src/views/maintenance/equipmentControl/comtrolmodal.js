@@ -50,6 +50,7 @@ class Control extends Component{
         }
         websocket.onmessage = function (event) {
             const backInfo = event.data;
+            console.log(event.data);
             if(backInfo === "11"){
                 const { hour, minitue, seconds } = me.state;
                 const deadline = Date.now() + 1000 * (parseInt(seconds, 0) + 60 * parseInt(minitue, 0) + 3600 * parseInt(hour, 0));
@@ -61,13 +62,13 @@ class Control extends Component{
                     disabledMedicine: true
                 })
             }
-            if(backInfo === "21"){
+            if(backInfo === "12"){
                 me.setState({
                     flag: false,
                     color: "#b3b3b3",
-                    disabledWater: false,
+                    disabledMedicine: false,
                 })
-                this.closeWebSocket();
+                me.closeWebSocket();
             }
     
             if(backInfo === "21"){
@@ -88,7 +89,7 @@ class Control extends Component{
                     color: "#b3b3b3",
                     disabledWater: false,
                 })
-                this.closeWebSocket();
+                me.closeWebSocket();
             } 
 
             if(backInfo === "设备正在被使用"){

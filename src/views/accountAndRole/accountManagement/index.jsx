@@ -205,7 +205,7 @@ export default class AccountManagement extends Component{
     const newData = {}
     newData[type] = true
     newData['record'] = record
-    console.log(record)
+    // console.log(record)
     if (type === 'editPowerVisible') {
       this.queryRolePower({ role_id: record.role_id })
       this.queryAccountPower({ role_id: record.role_id, user_id: record.aid })

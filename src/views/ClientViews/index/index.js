@@ -26,9 +26,13 @@ class ClientIndex extends Component {
       }
     
     componentDidMount() {
-        const me = this
+        this.getRoleData()
+    }
+
+    getClientEquipment(clientId) {
+      const me = this
         model.fetch(
-            "1:1",
+            {"client_id": clientId},
             maintenanceUrl,
             'get',
             function(response) {
@@ -48,7 +52,6 @@ class ClientIndex extends Component {
               },
               this.state.whetherTest
         )
-        this.getRoleData()
     }
   
     getparams( status=null, client_unit=null, region=null) {
@@ -72,6 +75,8 @@ class ClientIndex extends Component {
             clientID: response.data.client_id
           })
           // console.log(response.data)
+          me.getClientEquipment(me.state.clientID)
+          // console.log(me.state.clientID)
       },
       function() {
         console.log('失败'); //失败信息
@@ -90,7 +95,7 @@ class ClientIndex extends Component {
     })
     console.log(newData)
     if(newData.length === 0) {
-      message.warning('未分配设备')
+      // message.warning('未分配设备')
       return null
     }
 

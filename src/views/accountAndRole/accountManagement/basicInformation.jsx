@@ -27,7 +27,7 @@ export default class BasicInformation extends Component{
     const rawState = this.state
     rawState[key] = value
     this.setState(rawState)
-    console.log(rawState)
+    // console.log(rawState)
     if(rawState['role_id'] === "9ca9088b74694db5a1b4594bcb8b2912") {
       this.setState({
         isShow: true
@@ -42,9 +42,12 @@ export default class BasicInformation extends Component{
   createAccount = () => {
     const me = this
     const newAccount = this.state
+    // console.log(newAccount)
     for (let i in newAccount) {
+      // console.log(newAccount[i])
       if (newAccount[i] === '' || newAccount[i] === undefined) {
-        if (i !== 'power_id_str' && i !== 'power_num_str' && i !== 'client_id') {
+        // console.log(i)
+        if (i !== 'power_id_str' && i !== 'power_num_str' && i !== 'client_id' && i !== 'alter_power' && i !== 'add_by' ) {
           message.error('信息未填写完整！')
           return
         }
@@ -95,7 +98,7 @@ export default class BasicInformation extends Component{
   inputClientUnit = (id) => {
     const { clientData } = this.props;
     if(id === undefined ) return null
-    console.log(id)
+    // console.log(id)
     for (let i = 0;i < clientData.length; i++) {
       if(clientData[i].aid === id) {
         return clientData[i].client_unit + '/' + clientData[i].client_code
@@ -129,6 +132,7 @@ export default class BasicInformation extends Component{
         visible={visible}
         onOk={() => this.createAccount()}
         onCancel={() => this.initState()}
+        destroyOnClose={true}
       >
         <div className={"inputItem"}>
           <span>姓名：</span>
@@ -153,7 +157,8 @@ export default class BasicInformation extends Component{
           </Select>
         </div>
         {
-          rolesObject[record.role_id] === '客户' || this.state.isShow ?
+          // rolesObject[record.role_id] === '客户' && this.state.isShow ?
+          this.state.isShow ?
           <div className={"inputItem"} style={{display:'block'}} id='client_unit2'  >
             <span>客户单位：</span>
             <Select placeholder={clientData === null ? undefined : this.inputClientUnit(record.client_id)}  value={client_id} style={{ width: 200 }} onChange={(e) => this.handleChange('client_id',e)} allowClear>

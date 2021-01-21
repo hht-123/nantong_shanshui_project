@@ -27,7 +27,7 @@ class MaintenanceIndex extends Component {
     componentDidMount() {
         const me = this
         model.fetch(
-            "13:123",
+            {},
             maintenanceUrl,
             'get',
             function(response) {
