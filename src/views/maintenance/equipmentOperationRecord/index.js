@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { Model } from '../../../dataModule/testBone';
+import { connect } from 'react-redux'
+import store from '../../../store'
+import { actionCreators as index } from '../../../components/index/store'
 
-import WaterRemindInfo from './remindTable';
 import  './style.less';
-import { equipmentUrl, waterRemindUrl } from '../../../dataModule/UrlList';
+import OperationRecordTable from './operationRecordTable'
+import { equipmentUrl, operationRecordUrl } from '../../../dataModule/UrlList';
 
 import { DatePicker,Button, Select, message, PageHeader } from 'antd';
 
@@ -12,33 +15,35 @@ const {RangePicker} = DatePicker;
 const { Option } = Select;
 const dataSize = 'middle';
 
-class WaterRemind extends Component{
+class EquipmentOprationRecord extends Component{
   constructor(props) {
     super (props);
     this.state = {
       equipmentIdData: [],
+      equipmentCode: null,
       search: false,          //是否搜索
       currentPage: 1,
-      whetherTest: false,     //是否是测试  true为是 false为否
       showPagination: true,     //是否分页
       isLoading: false,         //是否加载
       data: [],                 //表格数据 
       size: 10,                  //用于重置
       total: 0,                 //一共有多少条数据
       keyValue: "",             //用于时间重置
-      keyName: '',              //用于传感器重置
+      keyName: '',              //用于泵重置
       search_begin_time: [],    //开始时间
-      search_sensor_type: '',   //查找传感器类型
+      search_pump_code: '',     //查找泵编号
     }
   }
 
   componentDidMount() {
-    // console.log(this.props.match.params.equipment_id);
     const equipment_id = this.props.match.params.equipment_id;
-    let id = this.getId(equipment_id)
-    this.getEquipmentID(id)
-    let params = this.getparams();
-    this.getCurrentPage(params);
+    this.getEquipmentID(equipment_id)
+  }
+
+  componentWillUnmount() {
+    this.setState = (state,callback)=>{
+      return;
+    };
   }
 
   //数据请求
@@ -52,10 +57,9 @@ class WaterRemind extends Component{
     this.setState({isLoading: true})
     model.fetch(
       params,
-      waterRemindUrl,
+      operationRecordUrl,
       'get',
       function(response) {
-        if (me.state.whetherTest === false) {
           me.setState({
             isLoading: false,
             total: response.data.count,
@@ -63,88 +67,78 @@ class WaterRemind extends Component{
             currentPage: params['currentPage'],
             size: params['size'],
           })
-          console.log(me.state.data)
-        } else {
-          me.setState({
-            isLoading: false,
-            data: response.data.data,
-          })
-        }
+          console.log(response.data.data)
       },
       function() {
         message.warning('加载失败，请重试')
       },
-      this.state.whetherTest
+      false,
     )
   }
 
   //得到设备编号
-  getId( equipment_id=null ) {
-    let params = {};
-    params = {
-      equipment_id,
-    }
-    return params;
-  }
-  
-  getEquipmentID(params) {
-    for (let i in params) {
-      if (params[i] === undefined || params[i] === null) {
-        params[i] = ''
-      }
-    }
+  getEquipmentID(id) {
     let me = this;
     model.fetch(
-      params,
+      {equipment_id: id},
       equipmentUrl,
       'get',
       function(response) {
-        if (me.state.whetherTest === false) {
           me.setState({
-            equipmentIdData: response.data.data[0]
+            equipmentIdData: response.data.data[0],
+            equipmentCode: response.data.data[0].equipment_code
           })
-          // console.log(me.state.equipmentIdData)
-        } else {
-          me.setState({
-            equipmentIdData: response.data.data,
-          })
-          console.log(me.state.equipmentIdData)
-        }
+          const equipment_code = response.data.data[0].equipment_code
+          const params = me.getparams(1, 10, equipment_code)
+          me.getCurrentPage(params)
+          store.dispatch(index.getEquipmentPumpsInfo(equipment_code))
       },
       function() {
         console.log('加载失败，请重试')
       },
-      this.state.whetherTest
+      false
     )
   }
 
 
   //翻页获取内容
   getPage = (currentPage, pageSize) => {
-    let [ search_sensor_type, search_begin_time ] =[null, null];
+    let [ search_pump_code, search_begin_time ] =[null, null];
     if(this.state.search === true){
-      search_sensor_type = this.state.search_sensor_type;
+      search_pump_code = this.state.search_pump_code;
       search_begin_time = this.state.search_begin_time;
     }
     
-    const params = this.getparams(currentPage, pageSize, this.props.match.params.equipment_id, search_sensor_type, search_begin_time, )
+    const params = this.getparams(currentPage, pageSize, this.state.equipmentCode, search_pump_code, search_begin_time,)
     this.getCurrentPage(params);
   }
 
-  getparams(currentPage=1, size=10, equipment_id=this.props.match.params.equipment_id , type_name=null, search_begin_time=null) {
+   //改变pageSIze获取内容
+   getSize = (current, size) => {
+    let [ search_pump_code, search_begin_time] =[null, null];
+    if(this.state.search === true){
+      search_pump_code = this.state.search_pump_code;
+      search_begin_time = this.state.search_begin_time;
+    }
+    const params = this.getparams(1, size, this.state.equipmentCode, search_pump_code, search_begin_time )
+    this.getCurrentPage(params);
+    document.scrollingElement.scrollTop = 0
+  }
+
+  getparams(currentPage=1, size=10, equipment_code=null, pump_code=null, search_begin_time=null) {
     let params = {};
-    let begin_time = null;
-    let end_time = null;
+    let operation_time_gte = null;
+    let operation_time_lte = null;
     if(search_begin_time !== null) {
-      [begin_time, end_time] = this.handleDate(search_begin_time);
+      [operation_time_gte, operation_time_lte] = this.handleDate(search_begin_time);
     }
     params = {
       currentPage,
       size,
-      equipment_id,
-      type_name,
-      begin_time,
-      end_time,
+      equipment_code,
+      pump_code,
+      operation_time_gte,
+      operation_time_lte,
     }
     return params;
   }
@@ -162,35 +156,22 @@ class WaterRemind extends Component{
     this.setState({
       search_begin_time: dateString
     })
-    // console.log( this.state.search_begin_time )
-  }
-
-  //改变pageSIze获取内容
-  getSize = (current, size) => {
-    let [ search_sensor_type, search_begin_time] =[null, null];
-    if(this.state.search === true){
-      search_sensor_type = this.state.search_sensor_type;
-      search_begin_time = this.state.search_begin_time;
-    }
-    const params = this.getparams(1, size, this.props.match.params.equipment_id ,search_sensor_type, search_begin_time )
-    this.getCurrentPage(params);
-    document.scrollingElement.scrollTop = 0
   }
 
   //设备状态下拉框值改变时触发的函数
   handleChange = (value) => {
-    // console.log(value);
     this.setState({
-      search_sensor_type: value,
+      search_pump_code: value,
     })
   }
 
   //重置按钮
   handleReset = () => {
-    let params = this.getparams();
-    this.getCurrentPage(params);
+    const { equipmentCode } = this.state
+    const params = this.getparams(1, 10, equipmentCode)
+    this.getCurrentPage(params)
     this.setState({
-      search_sensor_type: null,
+      search_pump_code: null,
       keyValue: new Date(),
       search_begin_time: null,
       currentPage: 1,
@@ -201,10 +182,10 @@ class WaterRemind extends Component{
 
   //搜索按钮
   searchInfo = () => {
-    this.setState({search: true});
-    const { search_sensor_type, search_begin_time } = this.state;
-    let params = this.getparams(1, 10, this.props.match.params.equipment_id  ,search_sensor_type, search_begin_time);
-    this.getCurrentPage(params);
+    this.setState({search: true})
+    const { search_pump_code, search_begin_time, equipmentCode } = this.state
+    const params = this.getparams(1, 10, equipmentCode, search_pump_code, search_begin_time )
+    this.getCurrentPage(params)
   }
 
   // 截取时间
@@ -221,29 +202,31 @@ class WaterRemind extends Component{
   render() {
     const allowClear = true
     const {data, isLoading, showPagination, size, total, currentPage, } = this.state;
-    const tableDate = [];
+    const tableData = [];
     if(data !== undefined ) {
-      data.map((item, index) => {
-        tableDate.push({
-          measurement: parseFloat(item.measurement).toFixed(2),
-          notice_content: item.notice_content,
-          notice_time: this.getTime(item.notice_time),
-          type_name: item.type_name,
-          key: index
+      for(let i=0; i<data.length; i++) {
+        tableData.push({
+          operation_time: this.getTime(data[i].operation_time),
+          pump_code: data[i].pump_code,
+          open_time: data[i].open_time,
+          operate_status: data[i].operate_status,
+          pump_name: data[i].pump_name,
+          pump_code: data[i].operation_pump_code,
+          user_name: data[i].user_name,
+          key: i 
         })
-        return null;
-      })
+      }
     }
 
     return (
-      <div className='equipmentMaintenance'>
+      <div className='equipmentOperation'>
         <PageHeader className='row'
           onBack={() => window.history.back()}
           title="返回"
         />
         <span className='name'>设备编号：{ this.state.equipmentIdData.equipment_code }</span>
         <div className='wrapper'>
-          <span className='pageName'>水质提醒记录</span>
+          <span className='pageName'>设备使用日志</span>
           <div className='func'>
             <div>
               <div style={{ float: 'left', marginLeft: '20px' }} >
@@ -256,13 +239,13 @@ class WaterRemind extends Component{
               </div>
 
               <div className="inputWrapper" >
-                <div className="input" >传感器名称:</div>
+                <div className="input" >泵编号:</div>
                 <Select  allowClear={ allowClear } key={this.state.keyName} style={{ width: 120, }} onChange={ this.handleChange } >
-                        <Option value="pH值传感器">pH值传感器</Option>
-                        <Option value="ORP传感器">ORP传感器</Option>
-                        <Option value="温度传感器">温度传感器</Option>
-                        <Option value="电导率传感器">电导率传感器</Option>
-                        <Option value="COD传感器">COD传感器</Option>
+                        {
+                          this.props.equipmnetPumps.map((item, index) => {
+                            return <Option key={item.pump_id} value={item.pump_code}>{item.pump_code}</Option>
+                          })
+                        }
                 </Select>
               </div>
             </div>
@@ -273,16 +256,16 @@ class WaterRemind extends Component{
               </div>
           </div>
           <div className='tableWrapper'>
-              <WaterRemindInfo
-                data={ tableDate }
-                isLoading={ isLoading }
-                showPagination={ showPagination }
-                size={ size }
-                total={ total }
-                changePage={ this.getPage }
-                changeSize={ this.getSize }
-                currentPage={ currentPage }
-              />
+                <OperationRecordTable
+                  data={ tableData }
+                  isLoading={ isLoading }
+                  showPagination={ showPagination }
+                  size={ size }
+                  total={ total }
+                  changePage={ this.getPage }
+                  changeSize={ this.getSize }
+                  currentPage={ currentPage }
+                />
           </div>
         </div>
       </div>
@@ -290,4 +273,10 @@ class WaterRemind extends Component{
   }
 }
 
-export default WaterRemind;
+const mapStateToProps = (state) => {
+  return {
+    equipmnetPumps: state.get('index').get('equipmentPumps').toJS()
+  }
+}
+
+export default connect(mapStateToProps, null)(EquipmentOprationRecord)

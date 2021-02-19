@@ -1,23 +1,28 @@
 import React, { Component } from 'react';
 import { Model } from '../../dataModule/testBone';
+import { connect } from 'react-redux'
+import store from '../../store'
+import { actionCreators as index } from '../../components/index/store'
 
 import  './style/monitor.less';
 import Line from './publicComponents/sensorLine';
 import CompanyInfo from './publicComponents/companyInfo';
 import EquipInfo from './publicComponents/equipInfo';
+import DownEquipData from './publicComponents/downEquipData'
 import { equipmentUrl, 
   sensorDataUrl, 
-  device, 
   clientUrl, 
   equipmentInfoUrl, 
   equipMaintainUrl, 
   sensorOfequipmentUrl,
   websocketUrl,
+  getRealTimeDataUrl
  } from '../../dataModule/UrlList';
 
 import { Icon, Tabs, DatePicker, Button, PageHeader, message } from 'antd';
 import { Link } from 'react-router-dom';
 import Control  from './equipmentControl/comtrolmodal';
+import CircleControl from './cricleEquipmentControl/index'
 
 const model = new Model()
 const { TabPane } = Tabs;
@@ -29,6 +34,7 @@ class Monitor extends Component{
     super (props);
     this.state = {
       equipmentData: [],
+      equipmentCode: '',
       sensorData:[],
       whetherTest: false, 
       whetherTest1: false,
@@ -43,7 +49,12 @@ class Monitor extends Component{
       equipMaintenanceData:[],   //存设备维护的数据
       sensorModel:[],            //存储设备对应的传感器类型及型号
       controlVisisible: false,   //控制界面的打开
-      aim_id: "",              
+      circleControlVisible: false,     //循环控制界面的打开
+      aim_id: "",
+      equipmentSortData: null,
+      downEquipDataVisible: false,
+      currentSensor: null,
+      realTimeData: []
     }
   }
 
@@ -53,22 +64,16 @@ class Monitor extends Component{
     // 获得设备编号和客户公司
     let params = this.getparams(equipment_aid);
     this.getEquipmentData(params);
-    //获得传感器的数据
-    // const { search_begin_time } = this.state;
-    let params1 = this.getSensorParams("001");
-    this.getSensorData(params1);
-    //设置定时器
-    this.intervalId = setInterval(() => {
-      let params2 = this.getSensorParams("001");
-      this.getSensorData(params2);
-    }, 300000)
     this.getEquipmentInfo()
     this.getSensorModel()
     this.getEquipmentMaintenace()
   }
-
+  
   componentWillUnmount() {
     clearInterval(this.intervalId)
+    this.setState = (state,callback)=>{
+      return;
+    };
   }
 
   getparams( equipment_id=null ) {
@@ -93,19 +98,28 @@ class Monitor extends Component{
       'get',
       function(response) {
         if (me.state.whetherTest === false) {
+          
+          const equipment_code = response.data.data[0].equipment_code
           me.setState({
-            equipmentData: response.data.data[0]
+            equipmentData: response.data.data[0],
+            equipmentCode: response.data.data[0].equipment_code
           })
           me.getAimId();
           //获得设备对应的传感器类型
-          const sensor = me.getSensor(me.state.equipmentData.equipment_code);
-          me.getSensors(sensor);
-          // console.log(me.state.equipmentData)
-        } else {
-          me.setState({
-            equipmentData: response.data.data,
-          })
-          // console.log(me.state.equipmentData)
+          store.dispatch(index.getEquipmentSensor(equipment_code))
+          //获得设备对应的泵信息
+          store.dispatch(index.getEquipmentPumpsInfo(equipment_code))
+          //获得传感器的数据
+          // const { search_begin_time } = this.state;
+          let params1 = me.getSensorParams(equipment_code);
+          me.getSensorData(params1);
+          //设置定时器
+          me.intervalId = setInterval(() => {
+            let params2 = me.getSensorParams(equipment_code);
+            me.getSensorData(params2);
+          }, 300000)
+          // 获得实时监控数据
+          me.getRealTimeData(equipment_code)
         }
       },
       function() {
@@ -114,6 +128,7 @@ class Monitor extends Component{
       this.state.whetherTest
     )
   }
+
   //获取设备id
   getAimId(code) {
     let me = this;
@@ -128,7 +143,7 @@ class Monitor extends Component{
           me.setState({
             aim_id: response.data.websocket_id,
           })
-          console.log(response.data.websocket_id)
+          // console.log(response.data.websocket_id)
       },
       function() {
         console.log('加载失败，请重试')
@@ -137,7 +152,7 @@ class Monitor extends Component{
     )
   }
 
-  getSensorParams( deviceNum='001', search_begin_time=null) {
+  getSensorParams( deviceNum='', search_begin_time=null) {
     let params = {};
     let begin_time = null;
     let end_time = null;
@@ -167,13 +182,20 @@ class Monitor extends Component{
         if (me.state.whetherTest1 === false) {
           me.setState({
             sensorData: response.data
-          }) 
-          // console.log(me.state.sensorData)
-        } else {
-          me.setState({
-            sensorData: response.data.data,
           })
-          // console.log(me.state.sensorData)
+          const data = me.props.equipmentSensor
+          const sensorData = me.state.sensorData
+          const equipmentSortData = {}
+          const time = []
+          for (let i = 0; i< data.length; i++ ) {
+            equipmentSortData[data[i]['type_name']] = []
+          }
+          // console.log(equipmentSortData)
+          // for (let y = 0; y< sensorData.length; y++) {
+          //   if (y.type_name === )
+          // }
+
+
         }
       },
       function() {
@@ -183,47 +205,23 @@ class Monitor extends Component{
     )
   }
 
-  //  获得设备对应的传感器类型
-  getSensor( deviceNum=this.state.equipmentData.equipment_code ) {
-    let params = {};
-    params = {
-      deviceNum,
-    }
-    return params;
-  } 
-
-  getSensors(params) {
-    for (let i in params) {
-      if (params[i] === undefined || params[i] === null) {
-        params[i] = ''
-      }
-    }
-    let me = this;
+  getRealTimeData = (code) => {
+    let me = this
     model.fetch(
-      params,
-      device,
+      {equipment_code: code},
+      getRealTimeDataUrl,
       'get',
       function(response) {
-        if (me.state.whetherTest1 === false) {
-          me.setState({
-            equipSensor: response.data
-          }) 
-          // console.log(me.state.equipSensor)
-        } else {
-          me.setState({
-            equipSensor: response.data.data,
-          })
-        }
+        // console.log(response.data)
+        me.setState({
+          realTimeData: response.data
+        })
       },
       function() {
-        console.log('加载失败，请重试')
+        message.error('获取实时监控数据失败，请刷新页面！')
       },
-      this.state.whetherTest1
+      false
     )
-  }
-
-  callback = (key) => {
-    // console.log(key);
   }
 
   handleStatusColor = (numb) => {
@@ -265,15 +263,15 @@ class Monitor extends Component{
   //搜索按钮
   searchInfo = () => {
     // this.setState({search: true});
-    const { search_begin_time } = this.state;
-    let params = this.getSensorParams("001",search_begin_time);
+    const { search_begin_time, equipmentCode } = this.state;
+    let params = this.getSensorParams(equipmentCode, search_begin_time);
     this.getSensorData(params);
 
   }
 
   //重置按钮
   reset = () => {
-    let params = this.getSensorParams("001");
+    let params = this.getSensorParams(this.state.equipment_code);
     this.getSensorData(params);
     this.setState({
       search_begin_time: null,
@@ -288,7 +286,7 @@ class Monitor extends Component{
     });
        let me = this;
         model.fetch(
-          '11:11',
+          {},
           `${clientUrl}${this.state.equipmentData.client_id}/`,
           'get',
           function(response) {
@@ -311,12 +309,19 @@ class Monitor extends Component{
   };
 
   //显示设备详情弹窗
-  showEquipmentModal = () => {
+  // showEquipmentModal = () => {
+  //   this.setState({
+  //     equipModalVisible: true,
+  //   })
+  // };
+
+  downInfoShow = (sensorName) => {
     this.setState({
-      equipModalVisible: true,
-    });
-    // this.getEquipmentInfo()
-  };
+      downEquipDataVisible: true,
+      currentSensor: sensorName
+    })
+    console.log(sensorName)
+  }
 
   //获得设备详情（除了对应的传感器类型及型号）
   getEquipmentInfo() {
@@ -371,12 +376,37 @@ class Monitor extends Component{
     })
   }
 
+  showCircleControl = () => {
+    this,this.setState({
+      circleControlVisible: true
+    })
+  }
+
+  showModal = (type) => {
+    switch(type) {
+      case 'equipmentDetail':
+        return this.setState({
+                equipModalVisible: true,
+              })
+      case 'control':
+        return this.setState({
+                controlVisisible: true,
+              })
+      case 'circleControl':
+        return this.setState({
+                circleControlVisible: true,
+              })
+    }
+  }
+
   //关闭弹窗
   closeModal = (visible) => {
     this.setState({
       CompanyModalVisible: visible,
       equipModalVisible: visible,
       controlVisisible: false,
+      downEquipDataVisible: false,
+      circleControlVisible: false
     })
   }
 
@@ -440,13 +470,20 @@ class Monitor extends Component{
       search_begin_time:[],
       keyValue: new Date()
     })
-    let params1 = this.getSensorParams("001");
+    let params1 = this.getSensorParams(this.state.equipment_code);
     this.getSensorData(params1);
   }
 
   render() {
     const equipment_id = this.props.match.params.equipment_aid;
-    const { whetherTest, CompanyModalVisible, equipModalVisible, equipmentInfo, companyInfo, sensorModel, controlVisisible } = this.state
+    const {
+       whetherTest, CompanyModalVisible, equipModalVisible, equipmentInfo, companyInfo, sensorModel, controlVisisible,
+       currentSensor, downEquipDataVisible, circleControlVisible, equipmentCode, realTimeData
+    } = this.state
+    const { equipmentPumps } = this.props
+    if (equipmentPumps.length === 0 || realTimeData.length === 0 ) return null
+    const currentPumpCode = equipmentPumps[0].pump_code
+
     const time = [];
     const pH =[];
     const orp = [];
@@ -521,30 +558,53 @@ class Monitor extends Component{
                   </div>
                   <div className='status'  >设备状态</div>
                 </span>
-                <span className='main' onClick={ this.showEquipmentModal }  >
+                <span className='main' onClick={ () => this.showModal('equipmentDetail') }  >
                   <div className=' water'>
                     <Icon className='icon' type="profile" theme="filled"  />
                     <div className='describe '  >设备详情</div>
                   </div>
                 </span>
-                <span className='main' onClick={ this.showControl }>
+                <span className='main' onClick={ () => this.showModal('control') }>
+                  <div className=' water'>
                     <Icon className='icon' type="build" theme="filled"  />
-                    <div className='describe'>设备控制</div>
+                    <div className='describe'>设备单次控制</div>
+                  </div>
+                </span>
+                <span className='main' onClick={ () => this.showModal('circleControl') }>
+                  <div className=' water'>
+                    <Icon className='icon' theme="filled" type="clock-circle" />
+                    <div className='describe'>设备自动控制</div>
+                  </div>
+                </span>
+                <span className='main'>
+                  <Link to={`/app/EquipmentOprationRecord/${ equipment_id}`} className=' water'>
+                    <Icon className='icon' type="schedule" theme="filled" />
+                    <div className='describe' >设备使用日志</div>
+                  </Link>
                 </span>
               </div>
             </div>
               <div >
-              <Tabs className='tab' defaultActiveKey="0" onChange={this.callback} type='card' onChange={this.changeTab}>
+              <Tabs className='tab' defaultActiveKey="实时数据"  type='card' onChange={this.changeTab}>
+                <TabPane tab='实时数据' key='实时数据'>
+                  <div className='currentData'>
+                    {
+                      realTimeData.map((item, index) => {
+                        return <div key={item.uuid} ><span className='sensorValue'>{item.mearsure_type}: </span><span>{item.measurement}</span></div>
+                      })
+                    }
+                  </div>
+                </TabPane>
                   {
-                    this.state.equipSensor.map((item, index) => {
+                    this.props.equipmentSensor.map((item, index) => {
                     return  <TabPane tab={ item.type_name } key={ index } >
-
                                 <RangePicker className='time' 
                                   key={ this.state.keyValue }
                                   onChange={ this.handleBeginTime } 
                                 />
                                 <Button type="primary" className='search' onClick={ this.searchInfo } >搜索</Button>
                                 <Button  className='reset' onClick={ this.reset } >重置</Button>
+                                <Button className='downData' key={item.type_name} type="primary" onClick={() => this.downInfoShow(item.type_name)} >历史数据下载</Button>
                                 <Line  
                                   Xdata = { time } 
                                   Ydata = { commitInfo(item.type_name)}
@@ -561,16 +621,37 @@ class Monitor extends Component{
                   data={ equipmentInfo }
                   sensorModel = { sensorModel }
                 />
-                <Control 
+              <Control 
                   visible={ controlVisisible }
                   close={ this.closeModal }
                   equipment_code={ this.state.equipmentData.equipment_code }
                   aim_id={ this.state.aim_id }
-                />
+                  equipmentPumps= {equipmentPumps}
+              />
+              <CircleControl
+                  visible={ circleControlVisible }
+                  close={ this.closeModal }
+                  equipmentPumps= {equipmentPumps}
+                  currentPumpCode = {currentPumpCode}
+              />
+              <DownEquipData
+                  visible= {downEquipDataVisible}
+                  close = { this.closeModal }
+                  currentSensor = { currentSensor }
+                  equipmentCode = { equipmentCode}
+              />
+              {/* <div id='downloadDiv' style={{display:'none'}}></div> */}
         </div>
       </div>
     )
   }
 }
 
-export default Monitor;
+const mapStateToProps = (state) => {
+  return {
+    equipmentSensor: state.get('index').get('equipmentSensor').toJS(),
+    equipmentPumps: state.get('index').get('equipmentPumps').toJS()
+  }
+}
+
+export default connect(mapStateToProps, null)(Monitor)

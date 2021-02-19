@@ -15,7 +15,7 @@ class Index extends Component {
 
   render() {
     return (
-      <div style={{overflowX: 'auto', marginTop: 60}}>
+      <div >
 
       </div>
     )

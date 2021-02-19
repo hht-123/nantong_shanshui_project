@@ -25,6 +25,7 @@ import Monitor from '../../views/maintenance/monitor';
 import EquipmentMaintenance from '../../views/maintenance/equipmentMaintenance/equipmentMaintenance';
 import WaterRemind from '../../views/maintenance/waterRemind/waterRemind';
 import SensorCalibration from '../../views/maintenance/sensorCalibration/sensorCalibration';
+import EquipmentOprationRecord from '../../views/maintenance/equipmentOperationRecord/index'
 
 import RolePower from '../../views/accountAndRole/rolePower'
 import equipmentScrap from '../../views/fixedAssets/equipmentScrap';
@@ -99,10 +100,11 @@ class App extends Component {verifyUrl
     if (this.state.roleData === undefined) return null
     let maintenanceUrl = [
       <Route path='/app/maintenance' key='maintenance' component={MaintenanceIndex} />,
-      <Route path='/app/monitor/:equipment_aid' key='monitor' component={Monitor} />,
+      <Route path='/app/monitor/:equipment_aid' key='monitor' component={(props) => <Monitor {...props}/>} />,
       <Route path='/app/equipmentMaintenance/:equipment_id' key='equipmentMaintenance' component={EquipmentMaintenance} />,
       <Route path='/app/waterRemind/:equipment_id' key='waterRemind' component={WaterRemind} />,
       <Route path='/app/sensorCalibratin/:equipment_id' key='sensorCalibratin' component={SensorCalibration} />,
+      <Route path='/app/EquipmentOprationRecord/:equipment_id' key='EquipmentOprationRecord' component={(props) => <EquipmentOprationRecord {...props}/>} />
     ]
     
     

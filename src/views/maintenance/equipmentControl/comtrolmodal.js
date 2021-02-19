@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import  './style.less';
-import { Tabs, Modal, Button, Statistic, TimePicker, Switch, message } from 'antd';
+import { Tabs, Modal, Button, Statistic, TimePicker, Switch, message, Input } from 'antd';
 import moment from 'moment';
 import blowdown from '../../../statistics/blowdown.png'
 import { throttle } from '../../../publicFunction';
@@ -27,7 +27,11 @@ class Control extends Component{
             disabledWater: false,
             disabledMedicine: false,
             currentChoice: "water",    //当前选择的窗口  water  / medicine
-            userID:""
+            userID:"",
+            pumps: this.props.equipmentPumps,
+            // pumps: ['加药泵', '排污泵', 'XXX'],
+            sendTime: null,
+            dosage: null
         }
     }
 
@@ -50,7 +54,11 @@ class Control extends Component{
         }
         websocket.onmessage = function (event) {
             const backInfo = event.data;
-            console.log(event.data);
+            if( backInfo === "该设备未登录" ) {
+                message.warning('该设备未登录')
+            } else {
+                console.log(event.data);
+            }
             if(backInfo === "11"){
                 const { hour, minitue, seconds } = me.state;
                 const deadline = Date.now() + 1000 * (parseInt(seconds, 0) + 60 * parseInt(minitue, 0) + 3600 * parseInt(hour, 0));
@@ -110,7 +118,7 @@ class Control extends Component{
     //关闭窗口
     handleCancel = e => {
         this.closeWebSocket();
-        console.log(websocket.readyState)
+        console.log(websocket)
         if(websocket.readyState === 2 || websocket.readyState == 3){
             this.props.close();
         }else{
@@ -135,9 +143,21 @@ class Control extends Component{
         });
     };
 
-    operation = (checked, choice) => {
-        const { time, flag } = this.state;
-        if(time === null)
+    // 处理剂量
+    handledosage = (e, numb) => {
+         this.setState({
+             dosage: e.target.value
+         })
+         const seconds = Number(e.target.value)/ numb
+         this.setState({
+             seconds:seconds
+         })
+        //  console.log(Number(e.target.value)/ numb)
+    }
+
+    operation = (checked, pump) => {
+        const { dosage, flag } = this.state;
+        if(dosage === null)
         {
             if(flag === true) {
                 this.setState({
@@ -145,39 +165,31 @@ class Control extends Component{
                     deadline: Date.now()
                 });
             }else{
-                if(choice === "water"){
-                    message.warning("请先设置排污时间");
-                }else if(choice === "medicine"){
-                    message.warning("请先设置加药时间");
-                }
+                    message.warning('请先设置'+ pump.pump_name + '剂量')
             }
         }else{
             const url = websocketConnect;
-            this.createWebSocket(url, choice);
+            this.createWebSocket(url, pump);
         }     
     }
 
     open = throttle((choice) => {    
-        let json = "";  
-        if(choice === "water"){
-            json ={
-                send_id: this.state.userID,                               //用户id
-                equipment_code: this.props.equipment_code,   //设备id      
-                action: "11",
-                distinguish_code: "1",
-                aim_id: this.props.aim_id,
-                }
-            console.log(JSON.stringify(json));
-        }else if(choice === "medicine"){
-            json ={
-                send_id: this.state.userID,                               //用户id
-                equipment_code: this.props.equipment_code,   //设备id      
-                action: "21",
-                distinguish_code: "1",
-                aim_id: this.props.aim_id,
-                }
-            console.log(JSON.stringify(json));
+        let json = "";
+        const { seconds, dosage } = this.state;
+        const sendTime =  String(seconds)
+        let actionInfo = {
+            pump_code: choice.pump_code,
+            open_time: sendTime,
+            dosage: dosage + 'L'
         }
+        json ={
+            send_id: this.state.userID,                               //用户id
+            equipment_code: this.props.equipment_code,   //设备id      
+            action: actionInfo,
+            distinguish_code: "1",
+            aim_id: this.aimIdChange(),
+            }
+        console.log(JSON.stringify(json));
 
         if(websocket.readyState === 1 && json !== ""){
             websocket.send(JSON.stringify(json));
@@ -186,7 +198,15 @@ class Control extends Component{
         }
     }, 500);
 
-    //关闭泵
+    aimIdChange = () => {
+        if( this.props.aim_id === undefined ) {
+            return " "
+        } else {
+            return this.props.aim_id
+        }
+    }
+
+    //关闭泵命令
     close = throttle((choice) => {
         console.log(choice)
         let json = "";
@@ -199,33 +219,19 @@ class Control extends Component{
                 aim_id: this.props.aim_id,
                 }
             console.log(JSON.stringify(json));
-        }else if(choice === "medicine"){
-            json ={
-                send_id: this.state.userID,                              //用户id
-                equipment_code: this.props.equipment_code,   //设备id      
-                action: "22",
-                distinguish_code: "1",
-                aim_id: this.props.aim_id,
-            }
-            console.log(JSON.stringify(json));
-        }
-
-        if(websocket.readyState === 1 && json !== ""){
-            websocket.send(JSON.stringify(json));
         }
     }, 4000);
 
     reset = () => {
         this.setState({
             time: null,              
-            hour: null,
-            minitue: null,
             seconds: null,
             deadline: Date.now(),          
             flag: false,             
             color: "#b3b3b3",
             disabledWater: false,
-            disabledMedicine: false      
+            disabledMedicine: false,
+            dosage: null  
         })
     }
 
@@ -246,7 +252,9 @@ class Control extends Component{
     
     //状态：启动
     render() {
-        const {time, deadline, flag, color, disabledMedicine, disabledWater} = this.state;
+        const {time, deadline, flag, color, disabledMedicine, disabledWater, pumps, dosage, seconds} = this.state;
+        if (pumps.length === 0) return null
+
         return (
             <div className="control">
                 <Modal
@@ -260,32 +268,37 @@ class Control extends Component{
                 }
                 >
                     <Tabs defaultActiveKey="1" className="operation" onChange={this.swift}>
-                        <TabPane tab="排污" key="1" disabled={disabledWater}>
-                            <img src={ blowdown } className="blowdown" alt=""></img>
-                            <div className="blowdownRight">
-                                <Countdown value={deadline} onFinish={ () => this.onFinish("water") } />
-                                <div style={{marginTop: "5px"}}>
-                                    <div style={{float: "left"}}>状态:</div>
-                                    <div className="start" style={{background: color}} >&nbsp;&nbsp;启动&nbsp;&nbsp;</div>
-                                </div>
-                                <div>排污量: 5m^3/s</div>
-                                <div>排污时长：
-                                    <TimePicker 
-                                        value={time} 
-                                        onChange={this.setTime}  
-                                        placeholder="设置排污时长"
-                                        defaultOpenValue={moment('00:00:00', 'HH:mm:ss')}
-                                    />
-                                </div>
-                                <div>操作：
-                                    <Switch 
-                                    defaultChecked 
-                                    checked={flag} 
-                                    onChange={(checked) => this.operation(checked, "water")}/>
-                                </div>
-                            </div>
-                        </TabPane>
-                        <TabPane tab="加药" key="2" disabled={false} disabled={disabledMedicine}>
+                        {
+                            pumps.map((item, index) => {
+                                return  <TabPane tab={item.pump_name} key={item.pump_code} disabled={disabledWater}>
+                                            <img src={ blowdown } className="blowdown" alt=""></img>
+                                            <div className="blowdownRight">
+                                                <Countdown 
+                                                    value={deadline} 
+                                                    // onFinish={ () => this.onFin ish("water") } 
+                                                />
+                                                <div style={{marginTop: "5px"}}>
+                                                    <div style={{float: "left"}}>状态:</div>
+                                                    <div className="start" style={{background: color}} >&nbsp;&nbsp;启动&nbsp;&nbsp;</div>
+                                                </div>
+                                                <div>流量：{item.fluid_flow}L/s</div>
+                                                <div style={{marginTop: "5px"}}>剂量：
+                                                    <Input name='dosage' style={{width: '130px'}} addonAfter="L(升)" onChange={(e) => this.handledosage(e, 5)} value={dosage} />
+                                                </div>
+                                                <div style={{marginTop: "5px"}}>时长：
+                                                    <Input style={{width: '130px'}} addonAfter="S(秒)" disabled value={seconds} />
+                                                </div>
+                                                <div style={{marginTop: "5px"}}>操作：
+                                                    <Switch
+                                                    defaultChecked
+                                                    checked={flag}
+                                                    onChange={(checked) => this.operation(checked, item)}/>
+                                                </div>
+                                            </div>
+                                        </TabPane>
+                            })
+                        }
+                        {/* <TabPane tab="加药" key="2" disabled={false} disabled={disabledMedicine}>
                             <img src={blowdown} className="blowdown" alt=""></img>
                             <div className="blowdownRight">
                                 <Countdown value={deadline} onFinish={ () => this.onFinish("medicine") } />
@@ -309,7 +322,7 @@ class Control extends Component{
                                     onChange={(checked) => this.operation(checked, "medicine")}/>
                                 </div>
                             </div>
-                        </TabPane>
+                        </TabPane> */}
                     </Tabs>
                 </Modal>
             </div>

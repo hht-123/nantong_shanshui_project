@@ -1,6 +1,7 @@
 import React ,{ Component } from 'react';
 import { Card } from 'antd'
 import ReactEcharts from 'echarts-for-react';
+import { Button } from 'antd';
 
 class Line extends Component{
     constructor(props){
@@ -59,8 +60,10 @@ class Line extends Component{
 
         return(
             <div>
-                <Card>
+                <Card >
+                    <div>
                     <ReactEcharts option={this.getOption(this.props.Ydata)} />
+                    </div>
                 </Card>
             </div>
         )

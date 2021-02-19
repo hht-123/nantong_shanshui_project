@@ -310,7 +310,7 @@ class SensorCalibration extends Component{
     }
 
     return (
-      <div className='equipmentMaintenance'>
+      <div className='calibraionMark'>
         <PageHeader className='row'
           onBack={() => window.history.back()}
           title="返回"
