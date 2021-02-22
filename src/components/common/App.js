@@ -9,7 +9,8 @@ import { Model } from '../../dataModule/testBone';
 
 import SideMenu from './SideMenu';
 import HeaderCustom from './HeaderCustom';
-import noMatch from './404';
+// import noMatch from './404';
+import PumpInfo from '../../views/basicInfo/pumpsinfo'
 import EngineInfo from '../../views/basicInfo/engineInfo';
 import SensorInfo from '../../views/basicInfo/sensorInfo';
 import EpuipmentInfo from '../../views/fixedAssets/equipmentInfo';
@@ -27,6 +28,7 @@ import WaterRemind from '../../views/maintenance/waterRemind/waterRemind';
 import SensorCalibration from '../../views/maintenance/sensorCalibration/sensorCalibration';
 import EquipmentOprationRecord from '../../views/maintenance/equipmentOperationRecord/index'
 
+import PumpPower from '../../views/accountAndRole/PumpPower/index'
 import RolePower from '../../views/accountAndRole/rolePower'
 import equipmentScrap from '../../views/fixedAssets/equipmentScrap';
 import EpuipmentConfigure from '../../views/fixedAssets/equipmentConfigure';
@@ -120,6 +122,8 @@ class App extends Component {verifyUrl
               </Sider>
               <Content style={{ padding: '0 24px', minHeight: 'calc(100vh - 111px)' }}>
                 <Switch>
+                  <Route path='/app/pumps' component={(props) => <PumpInfo {...props} />} />,
+                  <Route path='/app/pumpsPower' component={(props) => <PumpPower {...props} />} />,
                   { Array.from(this.state.roleData).map((item,index) => {
                     if(item === 'equipment_maintenance_retrieve') {
                       return [<Route path='/app/equipment' component={(props) => <EpuipmentInfo {...props}/>} />,

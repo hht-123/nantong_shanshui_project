@@ -4,7 +4,7 @@ import '../../../style/wrapper.less'
 import './style.less'
 import EquipmentTable from './equipmentTable';
 import { Model } from "../../../dataModule/testBone";
-import { epuipmentInfoUrl, sensorOfequipmentUrl } from '../../../dataModule/UrlList';
+import { epuipmentInfoUrl, sensorOfequipmentUrl, pumpsOfequipmentUrl } from '../../../dataModule/UrlList';
 import EngineSensorModal from './modal/engineSensorModal';
 import CreateModal from './modal/createModal';
 import EditModal from './modal/editModal';
@@ -45,6 +45,7 @@ class EpuipmentInfo extends Component {
         allocationEqiipmentInfo:{},
         backModalvisible: false,
         backEquipmentInfo: {},
+        pumpsModalData: []                   //泵的数据
       }
   }
 
@@ -108,6 +109,7 @@ class EpuipmentInfo extends Component {
       sensorOfequipmentUrl,
       'get',
       function(response) {
+          // console.log('传感器',response.data)
           me.setState({
             sensorModalData: response.data.data
           })
@@ -116,6 +118,29 @@ class EpuipmentInfo extends Component {
         message.warning('加载失败，请重试')
       },
       this.state.whetherTest
+    )
+  }
+
+  //获取当前设备泵的信息
+  getPumpInfo = (params) => {
+    let me = this
+    model.fetch(
+      params,
+      pumpsOfequipmentUrl,
+      'get',
+      function(response){
+        // console.log('response',response.data)
+        if(response.data.msg === '获取成功'){
+          me.setState({
+            pumpsModalData: response.data.pump_object_list
+          })
+        }else {
+          me.setState({
+            pumpsModalData: []
+          })
+        }
+       
+      }
     )
   }
 
@@ -144,7 +169,7 @@ class EpuipmentInfo extends Component {
     document.scrollingElement.scrollTop = 0;
   }
 
-  //
+  //保持创建，编辑之后搜索条件不变和页面刷新
   afterCreateOrEdit = () => {
     let [searchEngineCode, searchEquipmentCode] = [null, null];
     const { status } = this.state;
@@ -205,6 +230,7 @@ class EpuipmentInfo extends Component {
         break;
       case 'edit':
         this.getSensorInfo({equipment_id: record.key});
+        this.getPumpInfo({equipment_code: record.equipment_code})
         this.setState({
           editVisible: true,
           currentEnquimentInfo: record,
@@ -293,7 +319,7 @@ class EpuipmentInfo extends Component {
     const { searchEngineCode, searchEquipmentCode, isLoading, showPagination, size, 
       total, sensorModalVisiable, currentPage, sensorModalData, sensorTitle, createVisible, 
       editVisible, currentEnquimentInfo, scrapListVisible, scrapEquipmentInfo, allocationListVisible, 
-      allocationEqiipmentInfo, key, status, backModalvisible, backEquipmentInfo} = this.state;
+      allocationEqiipmentInfo, key, status, backModalvisible, backEquipmentInfo, pumpsModalData} = this.state;
     const tableDate = this.handleData();
     const allenginecode = this.handlenginecode();
 
@@ -363,6 +389,7 @@ class EpuipmentInfo extends Component {
               closeModal={ this.closeModal }
               data={ currentEnquimentInfo }
               sensorModalData={ sensorModalData }
+              pumpsModalData={  pumpsModalData}
               afterCreateOrEdit={ this.afterCreateOrEdit }
             />
           </div>

@@ -1,0 +1,209 @@
+.wrapper {
+  width: 100%;
+  min-width: 1200px;
+  min-height: 450px;
+  margin: 0 auto;
+  margin-top: 0px;
+  margin-bottom: 80px;
+  background: #fff;
+  padding: 24px;
+}
+.wrapper .func {
+  width: 100%;
+  height: 200px;
+  margin: 0 auto;
+  background: #EEF5F9;
+  margin-bottom: 15px;
+  padding: 30px;
+}
+.wrapper .func .input {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+.wrapper .func .line {
+  width: 40%;
+  border-bottom: solid #000 1px;
+  margin-top: 100px;
+}
+.wrapper .inputWrapper {
+  float: left;
+  margin-left: 30px;
+}
+.wrapper .divsion {
+  float: right;
+  margin-right: 0px;
+  margin-bottom: 15px;
+  width: 28%;
+  height: 200px;
+  border-left: dashed 1px #000;
+}
+.wrapper .icon {
+  margin-right: 20px;
+}
+.sidePosition {
+  margin-left: 20px;
+}
+.sidePosition .sidetitle {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.sidePosition .sideTable {
+  width: 100%;
+  border: 1px solid #E8E8E8;
+  border-radius: 2px;
+  border-collapse: collapse;
+}
+.sidePosition .sideHead {
+  background: #EEF5F9;
+  height: 30px;
+  font-size: 16px;
+}
+.sidePosition .sideBodyTr {
+  height: 30px;
+  font-size: 14px;
+}
+.sidePosition .sideBodyTr .sideBodyTh {
+  font-weight: 400;
+}
+.button-color-sunset {
+  background-color: #FAAD14;
+  border-color: #FAAD14;
+}
+.button-color-sunset:hover,
+.button-color-sunset:focus {
+  background-color: #ffc53d;
+  border-color: #ffc53d;
+}
+.button-color-sunset:active,
+.button-color-sunset.active {
+  background-color: #d48806;
+  border-color: #d48806;
+}
+.createTitle {
+  margin-left: 18px;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+.createWrapper {
+  width: 100%;
+  min-width: 1270px;
+  height: 100%;
+  margin: 0 auto;
+  margin-top: 0px;
+  background: #fff;
+  padding: 24px;
+}
+.createWrapper .middlewrapper {
+  width: 95%;
+  margin: 0 auto;
+}
+.createWrapper .middlewrapper .createleft {
+  padding: 20px;
+  border-radius: 8px;
+  background: #EEF5F9;
+  width: 100%;
+  height: auto;
+  min-height: 220px;
+}
+.createWrapper .middlewrapper .createright {
+  border-radius: 8px;
+  float: left;
+  position: relative;
+  background: #EEF5F9;
+  width: 56%;
+  min-height: 425px;
+  margin-top: 20px;
+}
+.createWrapper .middlewrapper .createright .hardtitle {
+  margin: 10px 10px 10px 10px;
+  font-size: 18px;
+}
+.createWrapper .middlewrapper .createright .sensorSubmit {
+  position: absolute;
+  width: 90%;
+  margin: 0 5%;
+  right: 0px;
+  bottom: 10px;
+}
+.createWrapper .middlewrapper .creatPump {
+  border-radius: 8px;
+  float: right;
+  position: relative;
+  background: #EEF5F9;
+  width: 42%;
+  min-height: 425px;
+  margin-top: 20px;
+  margin-left: 10px;
+}
+.createWrapper .middlewrapper .creatPump .pumpTitle {
+  margin: 10px 10px 10px 10px;
+  font-size: 18px;
+}
+.createWrapper .eCreateBlock {
+  margin-left: 20px;
+  float: left;
+  margin-bottom: 20px;
+}
+.createWrapper .eCreateBlock .choice {
+  width: 170px;
+}
+.createWrapper .eCreateBlock .eCreateName {
+  margin-bottom: 3px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.85);
+}
+.createWrapper .pCreateName {
+  margin-left: 40px;
+  margin-bottom: 3px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.85);
+}
+.createWrapper .pumpAlone {
+  height: 80px;
+}
+.createWrapper .pumpchoice {
+  margin-left: 40px;
+  width: 200px;
+  float: left;
+}
+.createWrapper .pIcon {
+  margin-left: 50px;
+  float: left;
+  margin-top: 6px;
+}
+.createWrapper .eIcon {
+  margin-left: 15px;
+  float: left;
+  margin-top: 28px;
+}
+.scrapTable {
+  text-align: center;
+}
+.scrapTable td {
+  width: 100px;
+  height: 50px;
+  padding: 0px;
+}
+.scrapTable th {
+  height: 40px;
+  background-color: #EEF5F9;
+}
+.inputNOborder {
+  border: 0;
+  outline: none;
+  background-color: rgba(0, 0, 0, 0);
+  width: 100%;
+}
+.textareaNOborder {
+  border: 0;
+  outline: none;
+  background-color: rgba(0, 0, 0, 0);
+  resize: none;
+  width: 100%;
+  height: 100%;
+}
+.spin {
+  margin-left: 50%;
+  margin-top: 200px;
+}

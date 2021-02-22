@@ -13,6 +13,11 @@ export const originalUrl = 'http://122.51.80.50:8000/';   //服务器
 // export const websocketConnect = 'ws://10.41.7.235:90/' 
 export const websocketConnect = 'ws://122.51.80.50:90/' 
 
+export const pumpInfoUrl = 'pump/';           //泵表
+export const pumpPowerAccountUrl = 'app/pump_and_user/'     //获取该泵权限对应的用户
+export const pumpActionDeleteUrl = 'pump_permission/'         //删除泵的操作者
+export const addPumpActionUrl = 'pump_permission/'            //增加泵的操作者
+
 export const enginInfoUrl = 'main_engine/';
 export const messageCUrl = 'client/';
 export const contactUrl = 'contact_people/';
@@ -29,6 +34,7 @@ export const allEngineName = 'app/main_engine_code_and_name/'   //获取所有�
 
 export const epuipmentInfoUrl = 'app/equipment_to_engine_name/';  //设备的所有信息
 export const sensorOfequipmentUrl = 'app/equipment_to_sensor3/';  //设备对应的传感器的路由
+export const pumpsOfequipmentUrl = 'app/get_equipped_pump/';        //设备对应的泵的路由
 export const addEquipment = 'equipment/';                         //新增设备
 export const editEquipment = 'equipment/';                        //新增设备
 export const sensorequipmentUrl = 'app/deviceNum_to_typename/'    //通过设备编号获取传感器信息  好像没用了

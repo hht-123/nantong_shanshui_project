@@ -6,6 +6,7 @@ import { Model } from "../../../../dataModule/testBone";
 import {  sensorequipmentUrl, allEngineName, editEquipment} from '../../../../dataModule/UrlList';
 import { connect } from 'react-redux';
 import SensorSetting from './SensorSetting';
+import PumpSetting from './PumpSetting'
 
 
 const model = new Model();
@@ -30,7 +31,12 @@ class EditModal extends Component {
             sensorTypes: [],      //获取传入的类型
             confirmLoading: false, 
             spinning: true,
-            display: 'none',       
+            display: 'none',  
+            pumps: [],               //增加泵的
+            pumpsName: [],             //存放获取的泵名称
+            pumpsId: [],               //存放新的泵的pump_id
+            pumpNumber: 1,
+            pumpTypeSize: 10           //存放泵的数量     
         }
     }
     //11.27update
@@ -43,8 +49,13 @@ class EditModal extends Component {
         for(let i = 0; i< this.props.sensorTypes.size; i++){
             sensors.push({});
         }
+        const pumps = this.state.pumps
+        for(let i = 0; i< this.props.pumpsModalData.size; i++){
+            pumps.push({});
+        }
         this.setState({
             sensors,
+            pumps
         })
     }
 
@@ -62,12 +73,13 @@ class EditModal extends Component {
                 equipment_aid: data.key,
               })
         }
-        //获取当前设备的传感器设备 并存储当前aid
+        //获取当前设备的传感器设备,并存储当前aid
         if(this.props.sensorModalData !== prevProps.sensorModalData){
             const { sensorModalData } = this.props;
-            const aids = sensorModalData.map((item) => item.equipment_id);
+            // const aids = sensorModalData.map((item) => item.equipment_id);
             const sensorTypes = sensorModalData.map((item) => (item.type_name));        //初始化类型
             const sensorCodeAids = sensorModalData.map((item) => (item.aid))   //初始化aid
+            // console.log('sensorCodeAids',sensorCodeAids)
             if(sensorModalData.length === 0){
                 sensorModalData.push({});
             }
@@ -77,7 +89,21 @@ class EditModal extends Component {
                 spinning: false,
                 display: 'block',
                 sensorTypes,
-                sensorCodeAids,
+                sensorCodeAids
+            })
+        }
+        //获取当前设备泵的信息和存储pump_id
+        if(this.props.pumpsModalData !== prevProps.pumpsModalData){
+            const { pumpsModalData } = this.props
+            // console.log('pumpsModalData',pumpsModalData)
+            const pumpsId = pumpsModalData.map((item) => (item.pump_id))
+            if(pumpsModalData.length === 0){
+                pumpsModalData.push({})
+            }
+            this.setState({
+                pumpNumber: pumpsModalData.length,
+                pumps: pumpsModalData,
+                pumpsId
             })
         }
     }
@@ -155,16 +181,29 @@ class EditModal extends Component {
 
     //处理要发送的数据
     hanleData = () => {
-        const {equipment_code, engine_code, storehouse, storage_location, note, sensorCodeAids, equip_person } = this.state;
+        const {equipment_code, engine_code, storehouse, storage_location, note, sensorCodeAids, equip_person, pumpsId } = this.state;
         let equipment_sensor = '';
+        let equipment_pump = ''
         if(storehouse === '' || storage_location==='' || equip_person === '') return 0;
         
         if(sensorCodeAids.length > 1){
-            equipment_sensor = sensorCodeAids.join(',');
-        }else if(sensorCodeAids.length === 1){
-            equipment_sensor = sensorCodeAids[0];
-        }else{
+            equipment_sensor = sensorCodeAids.join(',')
+        }
+        else if(sensorCodeAids.length === 1 ){
+            equipment_sensor = sensorCodeAids[0]
+        }
+        else{
             equipment_sensor = 'false';
+        }
+
+        if( pumpsId.length > 1){
+            equipment_pump = pumpsId.join(',')
+        }
+        else if( pumpsId.length === 1){
+            equipment_pump = pumpsId[0]
+        }
+        else{
+            equipment_pump = 'false'
         }
 
         const params = {
@@ -176,6 +215,7 @@ class EditModal extends Component {
             equipment_sensor,
             equip_person,
             status : 1,
+            equipment_pump
         }
         return params;
     }
@@ -184,10 +224,8 @@ class EditModal extends Component {
      submitNewEquipment = () => {
         const { validateFields } = this.props.form;  //验证
         validateFields();
-        const { equipment_code, engine_code, storehouse, storage_location, equip_person, sensorCodeAids, sensorTypes } = this.state;
+        const { equipment_code, engine_code, storehouse, storage_location, equip_person, sensorCodeAids, sensorTypes, pumpsId } = this.state;
         if(equipment_code ==='' || engine_code === '' || storehouse === '' || storage_location==='' || equip_person === '') return 0;   
-        console.log(sensorCodeAids.length, sensorTypes.length)
-        console.log(sensorCodeAids)
 
         if(sensorCodeAids.length !== sensorTypes.length){
             message.warning("请选择传感器型号或名称");
@@ -200,7 +238,14 @@ class EditModal extends Component {
             return 0;
         }
 
+        const pumpRepeat = this.isRepeat(pumpsId)
+        if(pumpRepeat === true) {
+            message.warning("请不要选择重复的泵");
+            return 0;
+        }
+
         const params = this.hanleData();
+        // console.log('提交', params)
         this.editEquipment(params);
         this.props.afterCreateOrEdit();
     }
@@ -228,6 +273,23 @@ class EditModal extends Component {
             number: newNumber,
             sensors: addSensors,
         });
+    }
+
+    //增加泵的个数
+    addPump = (newNumber) => {
+        const { pumps } = this.state
+        const addPumps = pumps
+        if(newNumber <= this.state.pumpTypeSize){
+            addPumps.push({})
+        }else {
+            message.warning("添加泵以达到最大数量上限")
+            newNumber = this.state.pumpTypeSize
+        }
+        this.setState({
+            pumpNumber: newNumber,
+            pumps: addPumps
+        })
+        // console.log('pumps', this.state.pumps)
     }
 
     //删除条数
@@ -267,6 +329,49 @@ class EditModal extends Component {
         });
     }
 
+     //删除泵的个数
+     deletePump = (newNumber, index) => {
+        const { pumps, pumpsId } = this.state
+        const [deletePumps, deleteId] = [pumps, pumpsId ]
+        if(deleteId[index] !== undefined ){
+            deleteId.splice(index, 1);
+        }
+        
+        if(newNumber === 0){
+            const { pumps } = this.state
+            pumps[index].pump_name = ''
+            pumps[index].pump_id = ''
+            this.setState({
+                pumps: deletePumps,
+                pumpsId: deleteId
+            })
+            message.warning('如不添加泵，单击确定提交')
+            return 0;
+        }
+        deletePumps.splice(index, 1); 
+        this.setState({
+            pumpNumber: newNumber,
+            pumps: deletePumps,
+            pumpsId: deleteId
+        })
+        // console.log('pumps', this.state.pumps)
+        // console.log('pumpsId', this.state.pumpsId)
+    }
+
+     //拿到泵的id
+     getPumpId = (string, index) => {
+        const pumpsId = this.state.pumpsId
+        if(pumpsId[index] === undefined) {
+            pumpsId.push(string)
+        }else {
+            pumpsId[index] = string
+        }
+        this.setState({
+            pumpsId
+        })
+        // console.log('pumpsId', this.state.pumpsId)
+     }
+
     //获取当前的传感器编号
     getSensorAid = (string, index) => {
         const sensorCodeAids = this.state.sensorCodeAids; 
@@ -278,6 +383,7 @@ class EditModal extends Component {
         this.setState({
             sensorCodeAids,
         })
+        // console.log('sensorCodeAids', this.state.sensorCodeAids)
     }
 
     //获取选择的传感器的型号
@@ -345,6 +451,28 @@ class EditModal extends Component {
         }
     }
 
+     //把对应的name和id存到pumps中
+     getString = (name, index, string ) => {
+        let data = this.state.pumps
+        switch(name) {
+            case 'name':
+                data[index].pump_name = string
+                this.setState({
+                    pumps: data
+                })
+                break;
+            case 'pumpid':
+                data[index].pump_id = string
+                this.setState({
+                    pumps: data
+                })
+                break;
+            default:
+                return 0;
+        }
+        // console.log('pumps', this.state.pumps)
+    }
+
     //处理传感器型号
     handleSensorTypeData = () => {
         const aftersensorTypes = [];
@@ -396,7 +524,19 @@ class EditModal extends Component {
 
     render() {
 
-        const { equipment_code, storehouse , storage_location, equip_person, note, number, sensors, confirmLoading, spinning, display} = this.state;
+        const { equipment_code, 
+            storehouse , 
+            storage_location, 
+            equip_person, note, 
+            number, 
+            sensors, 
+            confirmLoading, 
+            spinning, 
+            display,
+            pumps,
+            pumpNumber
+        } = this.state;
+
         const { visible } = this.props;
         const equipmentData = this.handleEngineDefault();
         const handleEngineNmaeDate = this.handleAllEngineName();
@@ -427,6 +567,7 @@ class EditModal extends Component {
                  <div className='createWrapper'>
                      <div className='middlewrapper'>
                          <div className='createleft'>
+                            <div style={{float:'left', width: '450px'}}>
                             <Form { ...formItemLayout }>
                                 <Form.Item
                                     label='设备编号'
@@ -478,6 +619,11 @@ class EditModal extends Component {
                                     )}
                                 </Form.Item>
 
+                                </Form>
+                            </div>
+
+                            <div style={{float:'right', width: '450px',marginRight:'60px'}}>
+                            <Form { ...formItemLayout }>
                                 <Form.Item
                                     label='库位'
                                     colon
@@ -514,6 +660,7 @@ class EditModal extends Component {
                                
                                 </Form.Item>
                             </Form>
+                            </div>
                          </div>
 
                          <div className='createright'>
@@ -536,10 +683,30 @@ class EditModal extends Component {
                                     getSensorTypes = { this.getSensorTypes }
                                 />
                             ))
-                        }
-                            
-                         </div>
-                         <div style={{clear: 'both'}}></div>
+                        }    
+                        </div>
+                        
+                        <div className="creatPump">
+                            <div className="pumpTitle">控制泵的配置：</div>
+                            <div>
+                                {
+                                    pumps.map((item, index) => (
+                                        <PumpSetting
+                                            item={ item }
+                                            key={ index }
+                                            number={ pumpNumber }
+                                            addInfo={ this.addPump }
+                                            delectInfo={ this.deletePump }
+                                            index={ index }
+                                            getString={ this.getString }
+                                            getPumpId={ this.getPumpId }
+                                        />
+                                    ))
+                                }
+                            </div>
+                        </div>
+
+                        <div style={{clear: 'both'}}></div>
                      </div>
                  </div>
             </Modal>

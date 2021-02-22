@@ -97,7 +97,7 @@ class EngineTable extends Component{
             />
             <div style={{ marginTop:15, position: 'absolute', right: '0%' }}>
               {showPagination?
-                <Pagination 
+                <Pagination
                   size="small"
                   current={ currentPage } 
                   total={ total }  

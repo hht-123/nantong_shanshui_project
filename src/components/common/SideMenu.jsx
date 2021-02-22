@@ -53,8 +53,9 @@ export default class SideMenu extends Component {
         >
           <Menu.Item key="1"><Link to='/app/engine'>主机信息</Link></Menu.Item>
           <Menu.Item key="2"><Link to='/app/sensor'>传感器信息</Link></Menu.Item>
-          <Menu.Item key="3"><Link to="/app/message">客户信息</Link></Menu.Item>
-          <Menu.Item key="4"><Link to="/app/equipment">设备信息</Link></Menu.Item>
+          <Menu.Item key="3"><Link to='/app/pumps'>控制泵信息</Link></Menu.Item>
+          <Menu.Item key="4"><Link to="/app/message">客户信息</Link></Menu.Item>
+          <Menu.Item key="5"><Link to="/app/equipment">设备信息</Link></Menu.Item>
         </SubMenu>
         <SubMenu
           
@@ -110,6 +111,7 @@ export default class SideMenu extends Component {
           }
           return true
         })}
+         <Menu.Item key="pupmPower"><Link to="/app/pumpsPower">泵的权限</Link></Menu.Item>
         </SubMenu> 
         {/* <SubMenu
           key="accountAndRole"

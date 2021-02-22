@@ -15,11 +15,12 @@ class ModelModal extends Component {
             allmodel: '',
             sensor_model: '',           //传感器型号
             notice_content: '',         //提示内容
-            sensor_threshold: ''
+            high_sensor_threshold: '',
+            down_sensor_threshold: ''
         }
     }
 
-    createNewModel(params) {
+    createNewModel = (params) => {
         this.setState({
             confirmLoading: true,
         });
@@ -75,12 +76,13 @@ class ModelModal extends Component {
     handleOk = () => {
         const { validateFields } = this.props.form;
         const { typesAndAid } = this.props;
-        const { sensor_model, sensor_type, allmodel, notice_content, sensor_threshold } = this.state;
+        const { sensor_model, sensor_type, allmodel, notice_content, high_sensor_threshold, down_sensor_threshold } = this.state;
         let typeAid = '';
         validateFields();
         if(sensor_model === '') return;
         if(sensor_type === '') return;
-        if(sensor_threshold === '') return;
+        if(high_sensor_threshold === '') return;
+        if(down_sensor_threshold === '') return;
         if(notice_content === '') return;
 
         let repeat = false; 
@@ -108,8 +110,10 @@ class ModelModal extends Component {
             sensor_type_id: typeAid,
             sensor_model,
             notice_content,
-            sensor_threshold
+            high_sensor_threshold,
+            down_sensor_threshold
         }
+        // console.log(55,params)
         this.createNewModel(params);
     };
     
@@ -136,7 +140,8 @@ class ModelModal extends Component {
         this.setState({
             sensor_type: '',            //传感器类型
             sensor_model: '',
-            sensor_threshold: '',
+            high_sensor_threshold: '',
+            down_sensor_threshold: '',
             notice_content: ''
         })
     }
@@ -157,13 +162,13 @@ class ModelModal extends Component {
         return (
             <div>
                 <Modal
-                title="新增传感器型号"
-                visible={ visible }
-                confirmLoading={ confirmLoading }
-                destroyOnClose={ true }
-                onOk={ this.handleOk }
-                onCancel={ this.handleCancel }
-                afterClose={ this.afterClose }
+                    title="新增传感器型号"
+                    visible={ visible }
+                    confirmLoading={ confirmLoading }
+                    destroyOnClose={ true }
+                    onOk={ this.handleOk }
+                    onCancel={ this.handleCancel }
+                    afterClose={ this.afterClose }
                 >
                 <div>
                     <Form { ...formItemLayout }>
@@ -193,13 +198,24 @@ class ModelModal extends Component {
                         </Form.Item>
 
                         <Form.Item
-                            label="传感器默认阈值"
+                            label="传感器上阈值"
                             colon
                         >
-                            {getFieldDecorator('sensor_threshold', {
-                                rules: [{ required: true, message: '请输入传感器默认阈值' }],
+                            {getFieldDecorator('high_sensor_threshold', {
+                                rules: [{ required: true, message: '请输入传感器上阈值' }],
                             })(
-                                <Input  name="sensor_threshold" onChange={this.handleChange} />
+                                <Input  name="high_sensor_threshold" onChange={this.handleChange} />
+                            )}
+                        </Form.Item>
+
+                        <Form.Item
+                            label="传感器下阈值"
+                            colon
+                        >
+                            {getFieldDecorator('down_sensor_threshold', {
+                                rules: [{ required: true, message: '请输入传感器下阈值' }],
+                            })(
+                                <Input  name="down_sensor_threshold" onChange={this.handleChange} />
                             )}
                         </Form.Item>
 

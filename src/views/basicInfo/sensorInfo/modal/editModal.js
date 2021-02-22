@@ -10,7 +10,8 @@ class EditModal extends Component {
         this.state = {
             confirmLoading: false,
             status: '',
-            sensor_threshold: '',       //传感器阈值
+            high_sensor_threshold: '',       //传感器下阈值
+            down_sensor_threshold: '',       //传感器下阈值
             notice_content: '',         //提示内容
             default_compensation: '',   //默认补偿值
             note:'',
@@ -26,7 +27,8 @@ class EditModal extends Component {
                 sensorAid: editInfo.key,
                 sensor_code: editInfo.sensor_code,
                 status: editInfo.status,
-                sensor_threshold: editInfo.sensor_threshold,
+                high_sensor_threshold: editInfo.high_sensor_threshold,
+                down_sensor_threshold: editInfo.down_sensor_threshold,
                 notice_content: editInfo.notice_content,
                 default_compensation: editInfo.default_compensation,
                 theoretical_value: editInfo.theoretical_value,
@@ -66,21 +68,23 @@ class EditModal extends Component {
       }
 
     handleOk = () => {
-        const { status, sensor_threshold, notice_content, default_compensation, note, sensorAid, theoretical_value} = this.state;
+        const { status, high_sensor_threshold, down_sensor_threshold, notice_content, default_compensation, note, sensorAid, theoretical_value} = this.state;
         const { validateFields } = this.props.form;
         validateFields();
-        if(sensor_threshold === '' || notice_content === '' || default_compensation=== '' || theoretical_value === '') return 
+        if(high_sensor_threshold === '' || down_sensor_threshold === '' || notice_content === '' || default_compensation=== '' || theoretical_value === '') return 
         const params = {
             status,
             theoretical_value,
-            sensor_threshold,
+            high_sensor_threshold,
+            down_sensor_threshold,
             notice_content,
             default_compensation,
             note,
         }
         this.setState({
           confirmLoading: true,
-        });
+        })
+        // console.log(56, params)
         this.editEngineInfo(params, sensorAid);
       };
 
@@ -104,12 +108,12 @@ class EditModal extends Component {
 
     render() {
         const { visible } = this.props;
-        const { confirmLoading, note, status, sensor_threshold, notice_content, default_compensation, theoretical_value } = this.state;
+        const { confirmLoading, note, status, high_sensor_threshold, down_sensor_threshold, notice_content, default_compensation, theoretical_value } = this.state;
         const { getFieldDecorator } = this.props.form;
         const { Option } = Select;
         const formItemLayout = {
             labelCol: {
-              span: 5
+              span: 6
             },
             wrapperCol: {
               span: 16,
@@ -168,14 +172,27 @@ class EditModal extends Component {
                         </Form.Item>
 
                         <Form.Item
-                            label="传感器阈值"
+                            label="传感器上阈值"
                             colon
                         >
-                            {getFieldDecorator('sensor_threshold', {
-                                rules: [{ required: true, message: '请添加传感器阈值' }],
-                                initialValue: sensor_threshold,
+                            {getFieldDecorator('high_sensor_threshold', {
+                                rules: [{ required: true, message: '请添加传感器上阈值' }],
+                                initialValue: high_sensor_threshold,
                             })(
-                                <Input  name="sensor_threshold" onChange={this.handleChange} />
+                                <Input  name="high_sensor_threshold" onChange={this.handleChange} />
+                            )}
+                                
+                        </Form.Item>
+
+                        <Form.Item
+                            label="传感器下阈值"
+                            colon
+                        >
+                            {getFieldDecorator('down_sensor_threshold', {
+                                rules: [{ required: true, message: '请添加传感器下阈值' }],
+                                initialValue: down_sensor_threshold,
+                            })(
+                                <Input  name="down_sensor_threshold" onChange={this.handleChange} />
                             )}
                                 
                         </Form.Item>

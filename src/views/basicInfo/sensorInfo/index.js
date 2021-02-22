@@ -77,6 +77,7 @@ class SensorInfo extends Component {
       sensorInfoUrl,
       'get',
       function(response) {
+        // console.log(11, response.data)
         if (me.state.whetherTest === false) {
             me.setState({
               isLoading: false,
@@ -263,7 +264,8 @@ class SensorInfo extends Component {
           type_name: item.type_name,
           sensor_model: item.sensor_model,
           sensor_code: parseInt(item.sensor_code, 0),
-          sensor_threshold: item.sensor_threshold,
+          high_sensor_threshold: item.high_sensor_threshold,
+          down_sensor_threshold: item.down_sensor_threshold,
           theoretical_value: item.theoretical_value,
           notice_content: item.notice_content,
           default_compensation: item.default_compensation,

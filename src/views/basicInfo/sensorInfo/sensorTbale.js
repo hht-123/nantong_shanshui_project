@@ -20,55 +20,62 @@ class SensorTable extends Component{
           title: '传感器编号',
           dataIndex: 'sensor_code',
           align: 'center',
-          width: 120,
+          width: '10%',
         },
         {
           title: '传感器类型',
           dataIndex: 'type_name',
           align: 'center',
-          width: 150
+          width: '10%'
         },
         {
           title: '传感器型号',
           dataIndex: 'sensor_model',
           align: 'center',
-          width: 150
+          width: '10%'
         },
         {
           title: '标定理论值',
           dataIndex: 'theoretical_value',
           align: 'center',
-          width: 100
+          width: '10%'
         },
         {
           title: '默认补偿值',
           dataIndex: 'default_compensation',
           align: 'center',
-          width: 100
+          width: '10%'
         },
         {
-          title: '传感器阈值',
-          dataIndex: 'sensor_threshold',
+          title: '传感器上阈值',
+          dataIndex: 'high_sensor_threshold',
           align: 'center',
-          width: 100
+          width: '10%'
+        },
+        {
+          title: '传感器下阈值',
+          dataIndex: 'down_sensor_threshold',
+          align: 'center',
+          width: '10%'
         },
         {
           title: '提示内容',
           dataIndex: 'notice_content',
           align: 'center',
-          width: 150
+          width: '15%'
         },
         {
           title: '状态',
           dataIndex: 'status',
           align: 'center',
-          width: 100,
+          width: '5%',
           render: text => <div style={this.handleStatusColor(text)}>{text}</div>
         },
         {
           title: '备注',
           dataIndex: 'note',
-          align: 'center'
+          align: 'center',
+          width: '5%'
         },
       ];
 
@@ -77,7 +84,7 @@ class SensorTable extends Component{
           title: '操作',
           dataIndex: 'action',
           align: 'center',
-          width: 80,
+          width: '5%',
           render: (text, record, index) => (
             <Tooltip  title="编辑信息" trigger="hover" >
               <Icon type="edit" theme="twoTone" onClick={() => this.props.showEditModal(record)}/>

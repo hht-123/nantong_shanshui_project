@@ -1,0 +1,25 @@
+.pumpsearch {
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  background: #EEF5F9;
+  margin-bottom: 15px;
+  padding: 30px;
+}
+.searchflex {
+  width: 100%;
+  margin-left: 10px;
+  display: flex;
+  flex-direction: row;
+}
+.titles {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+.pumpbuttons {
+  width: 300px;
+  margin-top: 40px;
+  margin-left: 40px;
+  display: flex;
+  justify-content: space-between;
+}
