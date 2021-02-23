@@ -120,7 +120,7 @@ class Control extends Component{
          this.setState({
              dosage: e.target.value
          })
-         const seconds = Number(e.target.value)/ numb
+         const seconds = (Number(e.target.value)/ parseInt(numb)).toFixed(2)
          this.setState({
              seconds:seconds
          })
@@ -255,7 +255,7 @@ class Control extends Component{
                                                 </div>
                                                 <div>流量：{item.fluid_flow}L/s</div>
                                                 <div style={{marginTop: "5px"}}>剂量：
-                                                    <Input name='dosage' style={{width: '130px'}} addonAfter="L(升)" onChange={(e) => this.handledosage(e, 5)} value={dosage} />
+                                                    <Input name='dosage' style={{width: '130px'}} addonAfter="L(升)" onChange={(e) => this.handledosage(e, item.fluid_flow)} value={dosage} />
                                                 </div>
                                                 <div style={{marginTop: "5px"}}>时长：
                                                     <Input style={{width: '130px'}} addonAfter="S(秒)" disabled value={seconds} />
