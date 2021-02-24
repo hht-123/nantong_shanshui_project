@@ -43,7 +43,7 @@ export default class RolePower extends Component {
   }
 
   queryRolePower = (params, thenFunction) => {
-    const me = this
+    // const me = this
     model.fetch(
       params,
       originalUrl + rolePower,

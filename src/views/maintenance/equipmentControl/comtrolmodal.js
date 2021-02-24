@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import  './style.less';
-import { Tabs, Modal, Button, Statistic, TimePicker, Switch, message, Input } from 'antd';
-import moment from 'moment';
+import { Tabs, Modal, Button, Statistic,  Switch, message, Input } from 'antd';
+// import moment from 'moment';
 import blowdown from '../../../statistics/blowdown.png'
 import { throttle } from '../../../publicFunction';
 import { websocketConnect } from '../../../dataModule/UrlList'

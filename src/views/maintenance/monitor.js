@@ -184,9 +184,9 @@ class Monitor extends Component{
             sensorData: response.data
           })
           const data = me.props.equipmentSensor
-          const sensorData = me.state.sensorData
+          // const sensorData = me.state.sensorData
           const equipmentSortData = {}
-          const time = []
+          // const time = []
           for (let i = 0; i< data.length; i++ ) {
             equipmentSortData[data[i]['type_name']] = []
           }
@@ -377,7 +377,7 @@ class Monitor extends Component{
   }
 
   showCircleControl = () => {
-    this,this.setState({
+    this.setState({
       circleControlVisible: true
     })
   }
@@ -396,6 +396,8 @@ class Monitor extends Component{
         return this.setState({
                 circleControlVisible: true,
               })
+      default:
+        return 0
     }
   }
 
@@ -434,6 +436,7 @@ class Monitor extends Component{
             equipMaintenanceData: response.data.data,
           })
           if (me.state.equipMaintenanceData === undefined || me.state.equipMaintenanceData === []) return  null
+          // eslint-disable-next-line array-callback-return
           me.state.equipMaintenanceData.map((item,index) => {
             if(item.maintain_status === '0') {
               i = i +1
