@@ -95,8 +95,13 @@ export const  getEquipmentPumpsInfo = (equipment_code) => {
             getEquipmentPumsUrl,
             'get',
             function(response) {
-                const result = response.data.pump_object_list
-                dispatch(equipmentPumps(result));
+                if(response.data.msg === '获取成功') {
+                    const result = response.data.pump_object_list
+                    dispatch(equipmentPumps(result));
+                } else {
+                    const result = []
+                    dispatch(equipmentPumps(result));
+                }
             },
             function() {
                 message.warning('获取设备对应泵数据失败，请重试')

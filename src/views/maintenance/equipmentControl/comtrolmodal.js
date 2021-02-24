@@ -59,9 +59,10 @@ class Control extends Component{
             } else {
                 console.log(event.data);
             }
+
             if(backInfo === "11"){
-                const { hour, minitue, seconds } = me.state;
-                const deadline = Date.now() + 1000 * (parseInt(seconds, 0) + 60 * parseInt(minitue, 0) + 3600 * parseInt(hour, 0));
+                const { seconds } = me.state;
+                const deadline = Date.now() + 1000 * (parseInt(seconds, 0));
                 me.setState({
                     flag: true,
                     time: null,
@@ -70,35 +71,6 @@ class Control extends Component{
                     disabledMedicine: true
                 })
             }
-            if(backInfo === "12"){
-                me.setState({
-                    flag: false,
-                    color: "#b3b3b3",
-                    disabledMedicine: false,
-                })
-                me.closeWebSocket();
-            }
-    
-            if(backInfo === "21"){
-                const { hour, minitue, seconds } = me.state;
-                const deadline = Date.now() + 1000 * (parseInt(seconds, 0) + 60 * parseInt(minitue, 0) + 3600 * parseInt(hour, 0));
-                me.setState({
-                    flag: true,
-                    time: null,
-                    deadline,
-                    color: "#84d3c9",
-                    disabledWater: true
-                })
-            }
-
-            if(backInfo === "22"){
-                me.setState({
-                    flag: false,
-                    color: "#b3b3b3",
-                    disabledWater: false,
-                })
-                me.closeWebSocket();
-            } 
 
             if(backInfo === "设备正在被使用"){
                 message.warning("设备正在被使用,请稍后再试")
@@ -148,7 +120,7 @@ class Control extends Component{
          this.setState({
              dosage: e.target.value
          })
-         const seconds = Number(e.target.value)/ numb
+         const seconds = (Number(e.target.value)/ parseInt(numb)).toFixed(2)
          this.setState({
              seconds:seconds
          })
@@ -283,7 +255,7 @@ class Control extends Component{
                                                 </div>
                                                 <div>流量：{item.fluid_flow}L/s</div>
                                                 <div style={{marginTop: "5px"}}>剂量：
-                                                    <Input name='dosage' style={{width: '130px'}} addonAfter="L(升)" onChange={(e) => this.handledosage(e, 5)} value={dosage} />
+                                                    <Input name='dosage' style={{width: '130px'}} addonAfter="L(升)" onChange={(e) => this.handledosage(e, item.fluid_flow)} value={dosage} />
                                                 </div>
                                                 <div style={{marginTop: "5px"}}>时长：
                                                     <Input style={{width: '130px'}} addonAfter="S(秒)" disabled value={seconds} />
