@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import {Input, message, Modal, Select} from "antd";
 
 import { Model } from '../../../dataModule/testBone'
-import {getUserId, getUserName} from "../../../publicFunction"
+import {
+  // getUserId,
+   getUserName} from "../../../publicFunction"
 import {originalUrl, user} from "../../../dataModule/UrlList";
 
 const { Option } = Select

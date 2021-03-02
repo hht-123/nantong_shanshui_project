@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import  './style.less';
-import { Tabs, Modal, Button, Statistic, TimePicker, Switch, message, Input } from 'antd';
-import moment from 'moment';
+import { Tabs, Modal, Button, Statistic, Switch, message, Input } from 'antd';
+// import moment from 'moment';
 import blowdown from '../../../statistics/blowdown.png'
 import { throttle } from '../../../publicFunction';
 import { websocketConnect } from '../../../dataModule/UrlList'
@@ -91,7 +91,7 @@ class Control extends Component{
     handleCancel = e => {
         this.closeWebSocket();
         console.log(websocket)
-        if(websocket.readyState === 2 || websocket.readyState == 3){
+        if(websocket.readyState === 2 || websocket.readyState === 3){
             this.props.close();
         }else{
             if(this.state.currentChoice === "water"){
@@ -120,7 +120,7 @@ class Control extends Component{
          this.setState({
              dosage: e.target.value
          })
-         const seconds = (Number(e.target.value)/ parseInt(numb)).toFixed(2)
+         const seconds = (Number(e.target.value)/ parseInt(numb, 0)).toFixed(2)
          this.setState({
              seconds:seconds
          })
@@ -224,7 +224,10 @@ class Control extends Component{
     
     //状态：启动
     render() {
-        const {time, deadline, flag, color, disabledMedicine, disabledWater, pumps, dosage, seconds} = this.state;
+        const {
+            deadline, flag, color, 
+            // disabledMedicine, 
+            disabledWater, pumps, dosage, seconds} = this.state;
         if (pumps.length === 0) return null
 
         return (

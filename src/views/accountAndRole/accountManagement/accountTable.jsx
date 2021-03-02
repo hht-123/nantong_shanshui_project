@@ -1,4 +1,4 @@
-import { Table, Pagination, Icon, Popover, Tooltip } from 'antd';
+import { Table, Pagination, Icon, Tooltip } from 'antd';
 import React, { Component } from 'react';
 
 class AccountTable extends Component{
@@ -9,9 +9,9 @@ class AccountTable extends Component{
         isLoading,
         data,
         total,
-        showPagination,
+        // showPagination,
         changePage,
-        changeSize,
+        // changeSize,
         currentPage,
         rolesObject
       } = this.props;

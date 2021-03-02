@@ -92,7 +92,7 @@ class DownEquipData extends Component {
                 // 转换完成，创建一个a标签用于下载
                 const a = document.createElement('a');
                 a.style.display = 'none';
-                a.download = begin_time + '至' + end_time + ' ' + currentSensor + '数据'  + '.xls';
+                a.download = `${begin_time}至${end_time} ${currentSensor}数据.xls`
                 a.href = e.target.result;
                 document.body.appendChild(a);
                 a.click();  // 自动触发点击a标签的click事件

@@ -6,6 +6,7 @@ import { autoControlUrl } from '../../../dataModule/UrlList'
 import { Model } from '../../../dataModule/testBone'
 import { getUserId } from '../../../publicFunction'
 import AutoOperationTable from './table.js'
+import moment from 'moment'
 
 const model = new Model()
 const { Option } = Select;
@@ -55,7 +56,7 @@ class CircleControl extends Component{
         this.setState({
             dosage: e.target.value
         })
-        const seconds = Number(e.target.value)/ parseInt(numb)
+        const seconds = Number(e.target.value)/ parseInt(numb, 0)
         this.setState({
             seconds:seconds.toFixed(2)
         })
@@ -301,6 +302,11 @@ class CircleControl extends Component{
         }
     }
 
+    // 禁止选择今天日期之前的日期
+    disabledDate = (current) => {
+        return current && current < moment().endOf('day');
+    }
+
     render() {
         const { disabledWater, pumps, days, dosage, seconds} = this.state
         const { tableVisible, tableData } = this.state
@@ -330,11 +336,11 @@ class CircleControl extends Component{
                                                 <div>流量: {item.fluid_flow}L/s</div>
                                                 <div style={{marginTop: '5px'}}>
                                                     开始日期：
-                                                    <DatePicker showTime onChange={this.setBeginTime} />
+                                                    <DatePicker showTime onChange={this.setBeginTime} disabledDate={this.disabledDate} />
                                                 </div>
                                                 <div style={{marginTop: '5px'}}>
                                                     结束日期：
-                                                    <DatePicker showTime onChange={this.setEndTime} placeholder='定时设置时请勿填写' />
+                                                    <DatePicker showTime onChange={this.setEndTime} placeholder='定时设置时请勿填写' disabledDate={this.disabledDate} />
                                                 </div>
                                                 <div style={{marginTop: '5px'}}>
                                                     时间间隔：

@@ -6,7 +6,7 @@ import { maintenanceUrl, verifyUrl } from '../../../dataModule/UrlList';
 import './style.less'
 import  Equipment   from './equipment';
 import {getUserId, getRoleId}  from '../../../publicFunction/index';
-import { message } from 'antd';
+// import { message } from 'antd';
 
 const model = new Model()
 class ClientIndex extends Component {
@@ -92,6 +92,7 @@ class ClientIndex extends Component {
       if( item.client_id === this.state.clientID && item.status !=='1'&& item.status !== '2' ) {
         newData.push(item)
       }
+      return null
     })
     console.log(newData)
     if(newData.length === 0) {

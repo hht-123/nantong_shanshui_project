@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal,  message, Table, Icon, Popconfirm, Tooltip } from 'antd';
+import { Modal, Table, Icon, Popconfirm, Tooltip } from 'antd';
 
 class AutoOperationTable extends Component{
 
@@ -16,7 +16,7 @@ class AutoOperationTable extends Component{
 
     render() {
         const { visible, } = this.props;
-        const { isLoading, data, total, showPagination, changePage, changeSize, currentPage, size } = this.props;
+        const { isLoading, data,  } = this.props;
         const { confirmLoading } = this.state;
 
         const columns =  [

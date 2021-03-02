@@ -150,10 +150,17 @@ class MessageIndex extends Component{
         this.setState({
             contactVisble: true,
         })
-        record === undefined ? null :
-        this.setState({
-            client_id: record
-        })
+        // record === undefined ? null :
+        // this.setState({
+        //     client_id: record
+        // })
+        if(record === undefined) {
+            return null
+        } else {
+            this.setState({
+                client_id: record
+            })
+        }
     }
     
     closeAddModal = () => {

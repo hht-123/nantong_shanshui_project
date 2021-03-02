@@ -16,13 +16,15 @@ import { equipmentUrl,
   equipMaintainUrl, 
   sensorOfequipmentUrl,
   websocketUrl,
-  getRealTimeDataUrl
+  getRealTimeDataUrl,
+  ClientWaterRemindUrl
  } from '../../dataModule/UrlList';
 
 import { Icon, Tabs, DatePicker, Button, PageHeader, message } from 'antd';
 import { Link } from 'react-router-dom';
 import Control  from './equipmentControl/comtrolmodal';
 import CircleControl from './cricleEquipmentControl/index'
+import moment from 'moment';
 
 const model = new Model()
 const { TabPane } = Tabs;
@@ -46,6 +48,7 @@ class Monitor extends Component{
       companyInfo: [],
       equipmentInfo:[],
       equipmentDot: false,     // 设备维护的红点提示
+      waterRemindDot: false,   // 水质提醒记录红点提示
       equipMaintenanceData:[],   //存设备维护的数据
       sensorModel:[],            //存储设备对应的传感器类型及型号
       controlVisisible: false,   //控制界面的打开
@@ -67,10 +70,12 @@ class Monitor extends Component{
     this.getEquipmentInfo()
     this.getSensorModel()
     this.getEquipmentMaintenace()
+    this.getWaterRemind()
   }
   
   componentWillUnmount() {
     clearInterval(this.intervalId)
+    clearInterval(this.intervalRealTime)
     this.setState = (state,callback)=>{
       return;
     };
@@ -118,6 +123,10 @@ class Monitor extends Component{
             let params2 = me.getSensorParams(equipment_code);
             me.getSensorData(params2);
           }, 300000)
+          me.intervalRealTime = setInterval(() => {
+            me.getRealTimeData(equipment_code)
+            me.getWaterRemind()
+          }, 3000);
           // 获得实时监控数据
           me.getRealTimeData(equipment_code)
         }
@@ -158,6 +167,10 @@ class Monitor extends Component{
     let end_time = null;
     if(search_begin_time !== null) {
       [begin_time, end_time] = this.handleDate(search_begin_time);
+    } else {
+      // console.log(moment().format('YYYY-MM-DD'))
+      begin_time = moment().format('YYYY-MM-DD')
+      end_time = moment().format('YYYY-MM-DD')
     }
     params = {
       deviceNum,
@@ -184,9 +197,9 @@ class Monitor extends Component{
             sensorData: response.data
           })
           const data = me.props.equipmentSensor
-          const sensorData = me.state.sensorData
+          // const sensorData = me.state.sensorData
           const equipmentSortData = {}
-          const time = []
+          // const time = []
           for (let i = 0; i< data.length; i++ ) {
             equipmentSortData[data[i]['type_name']] = []
           }
@@ -194,12 +207,10 @@ class Monitor extends Component{
           // for (let y = 0; y< sensorData.length; y++) {
           //   if (y.type_name === )
           // }
-
-
         }
       },
       function() {
-        message.warning('没有该时段数据')
+        message.error('获取数据失败，请刷新再试！')
       },
       this.state.whetherTest1
     )
@@ -212,9 +223,10 @@ class Monitor extends Component{
       getRealTimeDataUrl,
       'get',
       function(response) {
-        // console.log(response.data)
+        let realTimeData = response.data.sort((a, b) => { a.mearsure_type.localeCompare(b.mearsure_type)})
+        // console.log(realTimeData)
         me.setState({
-          realTimeData: response.data
+          realTimeData: realTimeData
         })
       },
       function() {
@@ -377,7 +389,7 @@ class Monitor extends Component{
   }
 
   showCircleControl = () => {
-    this,this.setState({
+    this.setState({
       circleControlVisible: true
     })
   }
@@ -396,6 +408,8 @@ class Monitor extends Component{
         return this.setState({
                 circleControlVisible: true,
               })
+      default:
+        return null
     }
   }
 
@@ -430,15 +444,12 @@ class Monitor extends Component{
       function(response) {
         let i = 0
         if (me.state.whetherTest === false) {
-          me.setState({
-            equipMaintenanceData: response.data.data,
-          })
-          if (me.state.equipMaintenanceData === undefined || me.state.equipMaintenanceData === []) return  null
-          me.state.equipMaintenanceData.map((item,index) => {
-            if(item.maintain_status === '0') {
+          if (response.data.data === undefined || response.data.data === []) return  null
+          for (let j = 0; j < response.data.data.length; j++) {
+            if(response.data.data[j].maintain_status === '0') {
               i = i +1
             }
-          })
+          }
           if ( i> 0) {
             me.setState({
               equipmentDot:true
@@ -457,8 +468,51 @@ class Monitor extends Component{
     )
   }
 
+  getWaterRemind() {
+    let me = this;
+    model.fetch(
+      {'equipment_id': me.props.match.params.equipment_aid},
+      ClientWaterRemindUrl,
+      'get',
+      function(response) {
+        let i = 0
+          // console.log(response.data.data)
+          if (response.data.data === undefined || response.data.data === []) return  null
+          for (let k = 0; k < response.data.data.length; k++) {
+            if( response.data.data[k].deal_status === '1') {
+              i = i +1
+            }
+          }
+          if ( i> 0) {
+            me.setState({
+              waterRemindDot:true
+            })
+          }else {
+            me.setState({
+              waterRemindDot:false
+            })
+          }
+      },
+      function() {
+        message.warning('加载失败，请重试')
+      },
+      this.state.whetherTest
+    )
+  }
+
+
+  // 设备维护页面红点显示
   showEquipmentDot = () => {
     if( this.state.equipmentDot === true) {
+      return {display:''}
+    }else {
+      return {display:'none'}
+    }
+  }
+
+  // 水质提醒记录红点显示
+  showWaterRemindDot = () => {
+    if( this.state.waterRemindDot === true) {
       return {display:''}
     }else {
       return {display:'none'}
@@ -476,6 +530,7 @@ class Monitor extends Component{
 
   render() {
     const equipment_id = this.props.match.params.equipment_aid;
+    const today = moment()
     const {
        whetherTest, CompanyModalVisible, equipModalVisible, equipmentInfo, companyInfo, sensorModel, controlVisisible,
        currentSensor, downEquipDataVisible, circleControlVisible, equipmentCode, realTimeData
@@ -536,14 +591,14 @@ class Monitor extends Component{
                     <Icon className='icon' type="warning" theme="filled" />
                     <div className='describe' >水质提醒记录</div>
                   </Link>
+                  <div className='dot' style={this.showWaterRemindDot()} ></div>
                 </span>
                 <span className='main'>
                   <Link to={`/app/equipmentMaintenance/${ equipment_id}`} className=' water'>
                     <Icon className='icon' type="tool" theme="filled" />
                     <div className='describe ' >设备维护</div>
                   </Link>
-                  <div className='dot' style={this.showEquipmentDot() } >
-                  </div>
+                  <div className='dot' style={this.showEquipmentDot() } ></div>
                 </span>
                 <span className='main'> 
                   <Link to={`/app/sensorCalibratin/${ equipment_id}`} className=' water'>
@@ -601,6 +656,7 @@ class Monitor extends Component{
                                 <RangePicker className='time' 
                                   key={ this.state.keyValue }
                                   onChange={ this.handleBeginTime } 
+                                  defaultValue={[moment(today), moment(today)]}
                                 />
                                 <Button type="primary" className='search' onClick={ this.searchInfo } >搜索</Button>
                                 <Button  className='reset' onClick={ this.reset } >重置</Button>

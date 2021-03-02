@@ -67,7 +67,7 @@ class EquipmentOprationRecord extends Component{
             currentPage: params['currentPage'],
             size: params['size'],
           })
-          console.log(response.data.data)
+          // console.log(response.data.data)
       },
       function() {
         message.warning('加载失败，请重试')
@@ -207,11 +207,11 @@ class EquipmentOprationRecord extends Component{
       for(let i=0; i<data.length; i++) {
         tableData.push({
           operation_time: this.getTime(data[i].operation_time),
-          pump_code: data[i].pump_code,
+          pump_code: data[i].operation_pump_code,
           open_time: data[i].open_time,
           operate_status: data[i].operate_status,
           pump_name: data[i].pump_name,
-          pump_code: data[i].operation_pump_code,
+          operation_pump_code: data[i].operation_pump_code,
           user_name: data[i].user_name,
           key: i 
         })

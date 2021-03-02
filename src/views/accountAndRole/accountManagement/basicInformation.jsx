@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import {Input, message, Modal, Select} from "antd";
-import {getUserId, getUserName} from "../../../publicFunction";
+import {
+  getUserId, 
+  // getUserName
+} from "../../../publicFunction";
 import {originalUrl, user} from "../../../dataModule/UrlList";
 import {Model} from "../../../dataModule/testBone";
 

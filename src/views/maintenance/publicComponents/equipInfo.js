@@ -26,12 +26,14 @@ class EquipInfo extends Component {
             if(item.status === '1') {
                 Newdata.push(item)
             } 
+            return null
         })
         Newdata.map((item) => {
             if(tel.indexOf(item['contact_tel']) == -1) {
                 tel.push(item['contact_tel'])
                 NNewdata.push(item)
             }
+            return null
         })
     
 
