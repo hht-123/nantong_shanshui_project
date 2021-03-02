@@ -34,7 +34,7 @@ class CreateModal extends Component {
             pumps: [{}],               //增加泵的
             pumpsId: [],               //存放泵的pump_id
             pumpNumber: 1,
-            pumpTypeSize: 10           //存放泵的数量
+            pumpTypeSize: 4          //存放泵的数量
         }
     }
     componentDidMount() {

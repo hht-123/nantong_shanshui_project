@@ -115,6 +115,8 @@ class Monitor extends Component{
           //获得设备对应的泵信息
           store.dispatch(index.getEquipmentPumpsInfo(equipment_code))
           //获得传感器的数据
+          store.dispatch(index.getPumpRoles())
+          //获得用户对应泵的权限
           // const { search_begin_time } = this.state;
           let params1 = me.getSensorParams(equipment_code);
           me.getSensorData(params1);
@@ -583,7 +585,7 @@ class Monitor extends Component{
           cancel={ this.closeModal }
           data = { companyInfo }
         />
-        <div className='wrapper'>
+        <div className='wrappers'>
             <div className='table'>
               <div>
                 <span>
@@ -603,7 +605,7 @@ class Monitor extends Component{
                 <span className='main'> 
                   <Link to={`/app/sensorCalibratin/${ equipment_id}`} className=' water'>
                     <Icon className='icon' type="dashboard" theme="filled" />
-                    <div className='describe  '  >传感器标定</div>
+                    <div className='describe'>传感器标定</div>
                   </Link>
                 </span>
                 {/* <span className='main'><Icon className='icon' type="video-camera" theme="filled" /><div className='describe' >视频监控</div></span> */}
@@ -639,8 +641,8 @@ class Monitor extends Component{
                 </span>
               </div>
             </div>
-              <div >
-              <Tabs className='tab' defaultActiveKey="实时数据"  type='card' onChange={this.changeTab}>
+              <div className='tabborder'>
+              <Tabs className='tab' defaultActiveKey="实时数据"  type='line' size='large' onChange={this.changeTab}>
                 <TabPane tab='实时数据' key='实时数据'>
                   <div className='currentData'>
                     {
@@ -706,7 +708,8 @@ class Monitor extends Component{
 const mapStateToProps = (state) => {
   return {
     equipmentSensor: state.get('index').get('equipmentSensor').toJS(),
-    equipmentPumps: state.get('index').get('equipmentPumps').toJS()
+    equipmentPumps: state.get('index').get('equipmentPumps').toJS(),
+    pumpRoles:  state.get('index').get('pumpRoles').toJS()
   }
 }
 

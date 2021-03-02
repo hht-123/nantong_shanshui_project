@@ -11,25 +11,25 @@ class EditableTable extends Component {
           title: '联系人  ',
           dataIndex: 'contact_person',
           align: 'center',
-          width: '100px',
+          width: '20%',
         },
         {
           title: '联系人职位',
           dataIndex: 'contact_position',
           align: 'center',
-          width: '100px',
+          width: '20%'
         },
         {
           title: '联系人电话',
           dataIndex: 'contact_tel',
           align: 'center',
-          width: '100px',
+          width: '20%'
         },
         {
             title: '备注',
             dataIndex: 'remark',
             align: 'center',
-            width: '100px',
+            width: '20%'
           },
       ];
 
@@ -38,7 +38,7 @@ class EditableTable extends Component {
           title: '操作',
           dataIndex: 'operation',
           align: 'center',
-          width: '100px',
+          width: '20%',
           render: (text, record, index) => {
             //<icon 图标
             return (

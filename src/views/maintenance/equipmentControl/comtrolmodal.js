@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 import  './style.less';
 import { Tabs, Modal, Button, Statistic, Switch, message, Input } from 'antd';
 // import moment from 'moment';
 import blowdown from '../../../statistics/blowdown.png'
-import { throttle } from '../../../publicFunction';
+import { throttle, getUserId } from '../../../publicFunction';
 import { websocketConnect } from '../../../dataModule/UrlList'
-import { getUserId } from '../../../publicFunction'
-
 
 const { TabPane } = Tabs;
 const { Countdown } = Statistic;
@@ -31,7 +30,8 @@ class Control extends Component{
             pumps: this.props.equipmentPumps,
             // pumps: ['加药泵', '排污泵', 'XXX'],
             sendTime: null,
-            dosage: null
+            dosage: null,
+            pumpRole: this.props.pumpRoles
         }
     }
 
@@ -40,6 +40,19 @@ class Control extends Component{
         this.setState({
             userID,
         })
+    }
+
+
+    //拿到所有泵的pump_id
+    getAllPumpId(array, key) {
+        var namekey = key || "pump_id";
+        var res = [];
+        if (array) {
+            array.forEach(function(t) {
+                res.push(t[namekey]);
+            });
+        }
+        return res;
     }
 
     createWebSocket = (url, choice) => {
@@ -150,7 +163,8 @@ class Control extends Component{
         const { seconds, dosage } = this.state;
         const sendTime =  String(seconds)
         let actionInfo = {
-            pump_code: choice.pump_code,
+            // pump_code: choice.pump_code,
+            pump_code: 1,
             open_time: sendTime,
             dosage: dosage + 'L'
         }
@@ -221,13 +235,14 @@ class Control extends Component{
                 return;
         }
     }
+
+
     
     //状态：启动
     render() {
-        const {
-            deadline, flag, color, 
-            // disabledMedicine, 
-            disabledWater, pumps, dosage, seconds} = this.state;
+        // const { time, disabledMedicine } = this.state
+        const { deadline, flag, color, disabledWater, pumps, dosage, seconds, pumpRole} = this.state;
+        var newData = this.getAllPumpId(pumpRole, 'pump_id')
         if (pumps.length === 0) return null
 
         return (
@@ -263,12 +278,22 @@ class Control extends Component{
                                                 <div style={{marginTop: "5px"}}>时长：
                                                     <Input style={{width: '130px'}} addonAfter="S(秒)" disabled value={seconds} />
                                                 </div>
-                                                <div style={{marginTop: "5px"}}>操作：
-                                                    <Switch
-                                                    defaultChecked
-                                                    checked={flag}
-                                                    onChange={(checked) => this.operation(checked, item)}/>
-                                                </div>
+                                                <div>       
+                                                {
+                                                    (() => {
+                                                        for(const i of newData){
+                                                            if(i === item.pump_id){
+                                                                return  <div style={{marginTop: "5px"}}>操作：
+                                                                            <Switch
+                                                                            defaultChecked
+                                                                            checked={flag}
+                                                                            onChange={(checked) => this.operation(checked, item)}/>
+                                                                        </div>
+                                                            }
+                                                        }
+                                                    })()
+                                                }
+                                                </div>  
                                             </div>
                                         </TabPane>
                             })
@@ -305,4 +330,10 @@ class Control extends Component{
     }
 }
 
-export default Control;
+const mapStateToProps = (state) => {
+    return {
+      pumpRoles:  state.get('index').get('pumpRoles').toJS()
+    }
+  }
+
+export default connect(mapStateToProps, null)(Control);

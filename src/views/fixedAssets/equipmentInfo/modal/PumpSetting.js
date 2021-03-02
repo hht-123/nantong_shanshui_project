@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Select, Icon } from 'antd'
 
 import { Model } from '../../../../dataModule/testBone'
-import { pumpInfoUrl } from '../../../../dataModule/UrlList'
+import { unequipmentPimpUrl } from '../../../../dataModule/UrlList'
 
 import '../style.less'
 
@@ -21,20 +21,25 @@ class PumpSetting extends Component{
         this.getPumpData()
     }
 
+    
+    componentWillUnmount = () => {
+        this.setState = (state,callback)=>{
+            return;
+        };
+    }
+
     //获得泵的名称
     getPumpData(){
         let me = this
         model.fetch(
             {
-                status: 0,
-                pump_code: ''
+                status: 0
             },
-            pumpInfoUrl,
+            unequipmentPimpUrl,
             'get',
             function(response) {
-                // console.log(66,response.data)
                 me.setState({
-                    pumpsModal: response.data.results,
+                    pumpsModal: response.data.data
                 })
             },
             function() {
@@ -71,7 +76,7 @@ class PumpSetting extends Component{
         // console.log('item',item)
         const { pumpsModal } = this.state
         return(
-            <div className="pumpAlone">
+            <div className="pumpAlone"> 
                 <div className="pCreateName">控制泵的名称：</div>
                 <div>
                     <Select 
@@ -81,7 +86,7 @@ class PumpSetting extends Component{
                         >
                             {
                                 pumpsModal.size !== 0? 
-                                pumpsModal.map((item, index) => <Option key={index} value={item.pump_name}>{item.pump_name}</Option>) 
+                                pumpsModal.map((item, index) => <Option key={item.pump_code} value={item.pump_name}>{item.pump_name}</Option>) 
                                 : null
                             }
                     </Select>

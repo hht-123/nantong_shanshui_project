@@ -6,7 +6,8 @@ const defaultState = fromJS({
     roleData: [],
     usingSensorTypes: [],
     equipmentSensor: [],
-    equipmentPumps:[]
+    equipmentPumps:[],
+    pumpRoles: []
 });
 
 
@@ -21,6 +22,8 @@ export default (state = defaultState, action) => {
             })
         case constants.STORE_ROLE_DATA:
             return state.set('roleData', fromJS(action.roleData));
+        case  constants.PUMP_ROLES:
+            return state.set('pumpRoles', fromJS(action.pumpRoles))
         case constants.EQUIPMENT_SENSOR:
             return state.set('equipmentSensor', fromJS(action.equipmentSensor))
         case constants.EQUIPMENT_PUMPS:

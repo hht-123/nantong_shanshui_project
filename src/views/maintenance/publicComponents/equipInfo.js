@@ -22,14 +22,16 @@ class EquipInfo extends Component {
         let NNewdata = []
         let tel = []
         if (data.length === 0 || sensorModel.length === 0 ) return null
+        // eslint-disable-next-line array-callback-return
         data.map((item) => {
             if(item.status === '1') {
                 Newdata.push(item)
             } 
             return null
         })
+        // eslint-disable-next-line array-callback-return
         Newdata.map((item) => {
-            if(tel.indexOf(item['contact_tel']) == -1) {
+            if(tel.indexOf(item['contact_tel']) === -1) {
                 tel.push(item['contact_tel'])
                 NNewdata.push(item)
             }

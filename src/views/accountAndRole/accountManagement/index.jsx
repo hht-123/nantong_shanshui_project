@@ -54,7 +54,7 @@ export default class AccountManagement extends Component{
         me.setState({
           roles: data
         })
-        console.log(me.state.roles)
+        // console.log(me.state.roles)
         const rolesObject = {}
         for (let i = 0; i < data.length; i++) {
           rolesObject[data[i]['aid']] = data[i]['role_name']
