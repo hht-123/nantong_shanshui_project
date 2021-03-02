@@ -21,7 +21,6 @@ import ContactIndex from '../../views/Message/ContactMes/ContactIndex';
 import '../../style/index.less';
 import Monitor from '../../views/maintenance/monitor';
 //import { connect } from 'react-redux';
-//import { Model } from '../../dataModule/testBone';
 //import { actionCreators } from '../index/store';
 import EquipmentMaintenance from '../../views/maintenance/equipmentMaintenance/equipmentMaintenance';
 import WaterRemind from '../../views/maintenance/waterRemind/waterRemind';
@@ -122,8 +121,6 @@ class App extends Component {verifyUrl
               </Sider>
               <Content style={{ padding: '0 24px', minHeight: 'calc(100vh - 111px)' }}>
                 <Switch>
-                  <Route path='/app/pumps' component={(props) => <PumpInfo {...props} />} />,
-                  <Route path='/app/pumpsPower' component={(props) => <PumpPower {...props} />} />,
                   { Array.from(this.state.roleData).map((item,index) => {
                     if(item === 'equipment_maintenance_retrieve') {
                       return [<Route path='/app/equipment' component={(props) => <EpuipmentInfo {...props}/>} />,
@@ -134,6 +131,9 @@ class App extends Component {verifyUrl
                     }else if( item === 'client_message_retrieve') {
                       return [<Route path='/app/message' component={(props) => <MessageIndex {...props}/>} />,
                               <Route path='/app/contact/:client_id' component={ContactIndex} />,
+                      ]
+                    }else if( item === 'pump_information_view') {
+                      return [<Route path='/app/pumps' component={(props) => <PumpInfo {...props} />} />,
                       ]
                     }else if( item === 'engine_message_retrieve') {
                       return [<Route path='/app/engine' component={EngineInfo} />,
@@ -152,7 +152,10 @@ class App extends Component {verifyUrl
                     }else if( item === 'role_permissions_retrieve') {
                       return [<Route path='/app/rolePower' component={RolePower}/>]
                     }else if( item === 'account_management') {
-                      return [<Route path='/app/accountManagement' component={AccountManagement}/>]
+                      return [
+                      <Route path='/app/accountManagement' component={AccountManagement}/>,
+                      <Route path='/app/pumpsPower' component={(props) => <PumpPower {...props} />} />
+                      ]
                     }
                     return null;
                   })}

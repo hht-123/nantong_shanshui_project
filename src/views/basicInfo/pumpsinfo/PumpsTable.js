@@ -66,6 +66,7 @@ class PumpsTable extends Component {
                 align: 'center',
                 width: '15%'
             }]
+            if(this.props.roleData.includes("pump_information_management")) {
             columns.push({
                 title: '操作',
                 dataIndex: 'action',
@@ -102,7 +103,7 @@ class PumpsTable extends Component {
                     return content
                 }
             })
-        
+            }
 
         return(
             <div>

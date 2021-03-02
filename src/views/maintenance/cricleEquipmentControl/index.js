@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 import { Tabs, Modal, Button, message, DatePicker, Select, Input } from 'antd';
 import blowdown from '../../../statistics/blowdown.png'
 import { throttle } from '../../../publicFunction';
@@ -36,13 +37,26 @@ class CircleControl extends Component{
             seconds: null,
             // 操作记录相关
             tableVisible: false,
-            tableData: null
+            tableData: null,
+            pumpRole: this.props.pumpRoles
         }
     }
 
     componentDidMount(){    
         this.addDays()
         // console.log(this.state)
+    }
+
+    //拿到所有泵的pump_id
+    getAllPumpId(array, key) {
+        var namekey = key || "pump_id";
+        var res = [];
+        if (array) {
+            array.forEach(function(t) {
+                res.push(t[namekey]);
+            });
+        }
+        return res;
     }
 
     //关闭窗口
@@ -55,6 +69,7 @@ class CircleControl extends Component{
         this.setState({
             dosage: e.target.value
         })
+        // eslint-disable-next-line radix
         const seconds = Number(e.target.value)/ parseInt(numb)
         this.setState({
             seconds:seconds.toFixed(2)
@@ -140,6 +155,7 @@ class CircleControl extends Component{
         const me = this
         const params = {
             pump_code: currentPumpCode,
+            // pump_code: 1,
             operation_type: setTimeType,
             operation_time: String(sendTime),
             begin_time: begin_time,
@@ -180,6 +196,7 @@ class CircleControl extends Component{
         const sendTime = seconds
         const params = {
             pump_code: currentPumpCode,
+            // pump_code: 1,
             operation_type: circleTimeType,
             operation_time: String(sendTime),
             begin_time: begin_time,
@@ -302,8 +319,9 @@ class CircleControl extends Component{
     }
 
     render() {
-        const { disabledWater, pumps, days, dosage, seconds} = this.state
+        const { disabledWater, pumps, days, dosage, seconds, pumpRole} = this.state
         const { tableVisible, tableData } = this.state
+        var newData = this.getAllPumpId(pumpRole, 'pump_id')
         if (pumps.length === 0) return null
 
         return (
@@ -311,11 +329,12 @@ class CircleControl extends Component{
                 <Modal
                 title="设备控制"
                 visible={ this.props.visible }
-                onOk={ this.handleOk }
                 onCancel={ this.handleCancel }
                 afterClose={ this.reset }
-                okText='设置'
                 destroyOnClose
+                footer={[
+                    <Button  key="back" onClick={this.handleCancel}>取消</Button>
+                ]}
                 >
                     <Tabs  className="operation" onChange={this.swift}>
                         {
@@ -355,6 +374,15 @@ class CircleControl extends Component{
                                                 </div>
                                                 <div style={{marginTop: '10px'}}>
                                                     <Button type="primary" onClick={() => this.getUndoneData(item.pump_code)}>泵的操作查看</Button>
+                                                    {
+                                                        (() => {
+                                                            for(const i of newData){
+                                                                if(i === item.pump_id){
+                                                                    return  <Button  type="primary" icon="poweroff" style={{marginLeft: '20px'}} onClick={ this.handleOk}>开启</Button>
+                                                                }
+                                                            }
+                                                        })()
+                                                    }
                                                 </div>
                                             </div>
                                         </TabPane>
@@ -373,4 +401,10 @@ class CircleControl extends Component{
     }
 }
 
-export default CircleControl;
+const mapStateToProps = (state) => {
+    return {
+      pumpRoles:  state.get('index').get('pumpRoles').toJS()
+    }
+}
+
+export default connect(mapStateToProps, null)(CircleControl);

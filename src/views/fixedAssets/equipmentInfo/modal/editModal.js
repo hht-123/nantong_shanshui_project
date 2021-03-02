@@ -36,7 +36,7 @@ class EditModal extends Component {
             pumpsName: [],             //存放获取的泵名称
             pumpsId: [],               //存放新的泵的pump_id
             pumpNumber: 1,
-            pumpTypeSize: 10           //存放泵的数量     
+            pumpTypeSize: 4        //存放泵的数量   
         }
     }
     //11.27update
@@ -247,7 +247,7 @@ class EditModal extends Component {
         const params = this.hanleData();
         // console.log('提交', params)
         this.editEquipment(params);
-        this.props.afterCreateOrEdit();
+        // this.props.afterCsreateOrEdit();
     }
 
     //处理数据获取主机编号
@@ -687,7 +687,7 @@ class EditModal extends Component {
                         </div>
                         
                         <div className="creatPump">
-                            <div className="pumpTitle">控制泵的配置：</div>
+                            <div className="pumpTitle">控制泵的配置：</div> 
                             <div>
                                 {
                                     pumps.map((item, index) => (

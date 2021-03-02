@@ -17,6 +17,7 @@ export const pumpInfoUrl = 'pump/';           //泵表
 export const pumpPowerAccountUrl = 'app/pump_and_user/'     //获取该泵权限对应的用户
 export const pumpActionDeleteUrl = 'pump_permission/'         //删除泵的操作者
 export const addPumpActionUrl = 'pump_permission/'            //增加泵的操作者
+export const unequipmentPimpUrl = 'app/get_unequipped_pump/'   //获取未使用的所有的泵
 
 export const enginInfoUrl = 'main_engine/';
 export const messageCUrl = 'client/';

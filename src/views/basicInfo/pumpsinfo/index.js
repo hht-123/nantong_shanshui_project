@@ -7,7 +7,8 @@ import EditPumpModal from './EditPumpModal'
 
 import { Model } from '../../../dataModule/testBone'
 
-import { pumpInfoUrl } from '../../../dataModule/UrlList'
+import { pumpInfoUrl, verifyUrl } from '../../../dataModule/UrlList'
+import {getUserId, getRoleId}  from '../../../publicFunction/index'
 
 import '../../../style/wrapper.less'
 import './style.less'
@@ -31,6 +32,7 @@ class PumpInfo extends Component{
             isLoading: false,       //表格是否加载
             EditPumpVisible: false,     //是否打开编辑弹窗
             editInfo: {},             //获取到编辑行的信息
+            roleData: []
         }
     }
 
@@ -39,6 +41,7 @@ class PumpInfo extends Component{
         let params = this.getParams()
         // console.log(44,params)
         this.getPumpData(params)
+        this.getRoleData()
     }
 
     //获得搜索泵的编号
@@ -105,7 +108,7 @@ class PumpInfo extends Component{
         })
         const { status, pump_code } = this.state
         let params = this.getParams(1, 10, status,  pump_code )
-        // console.log(33, params)
+        console.log(33, params)
         this.getPumpData(params)
     }
 
@@ -233,11 +236,28 @@ class PumpInfo extends Component{
             },
         )
     }
+
+    getRoleData() {
+        const me = this
+        model.fetch(
+          {'user_id': getUserId(), 'role_id': getRoleId()},
+          verifyUrl,
+          'get',
+          function(response) {
+            me.setState({
+              roleData: response.data.power_num
+            })
+        },
+        function() {
+          console.log('失败'); //失败信息
+        },
+        )
+    }
+    
         
     render(){
-        const { addModalVisible, keyValue, pump_code, size, total, currentPage, isLoading, EditPumpVisible, editInfo } = this.state
+        const { addModalVisible, keyValue, pump_code, size, total, currentPage, isLoading, EditPumpVisible, editInfo, roleData } = this.state
         const tableData = this.handleData();
-        // console.log(12,tableData)
         return(
             <div>
                 <div className='name'>控制泵信息：</div>
@@ -267,8 +287,13 @@ class PumpInfo extends Component{
                             </div>
                             <div className="pumpbuttons">
                                 <Button onClick={this.getSearchContent} >搜索</Button>
-                                <Button onClick={this.handleReset}>重置</Button>
-                                <Button type="primary" onClick={() => this.AddNewPump()}>新增控制泵</Button>
+                                <Button onClick={this.handleReset} style={{marginLeft:'20px'}}>重置</Button>
+                                { Array.from(roleData).map((item,index) => {
+                                    if ( item === 'pump_information_management') {
+                                        return <Button type="primary" onClick={() => this.AddNewPump()} key={index} style={{marginLeft:'20px'}}>新增控制泵</Button>                  
+                                    }
+                                    return null; 
+                                })}
                             </div>
                             <AddPumpModal
                                 addPumpVisible = { addModalVisible }
@@ -289,6 +314,7 @@ class PumpInfo extends Component{
                             changeSize = { this.getSize }
                             deletePump = { this.deletePump }
                             showEditModal = { this.showEditModal }
+                            roleData = { roleData }
                         />
                         <EditPumpModal
                             EditPumpVisible = { EditPumpVisible }
