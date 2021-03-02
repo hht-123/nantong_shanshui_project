@@ -243,7 +243,7 @@ class Control extends Component{
         // const { time, disabledMedicine } = this.state
         const { deadline, flag, color, disabledWater, pumps, dosage, seconds, pumpRole} = this.state;
         var newData = this.getAllPumpId(pumpRole, 'pump_id')
-        if (pumps.length === 0) return null
+        const {equipmentPumps } = this.props
 
         return (
             <div className="control">
@@ -257,10 +257,11 @@ class Control extends Component{
                     <Button onClick={ this.handleCancel }>关闭</Button>
                 }
                 >
-                    <Tabs defaultActiveKey="1" className="operation" onChange={this.swift}>
+                    <Tabs defaultActiveKey="0" className="operation" onChange={this.swift}>
                         {
-                            pumps.map((item, index) => {
-                                return  <TabPane tab={item.pump_name} key={item.pump_code} disabled={disabledWater}>
+                            equipmentPumps.length === 0 ? <TabPane tab='未配置泵' key='未配置泵' ></TabPane>
+                            :equipmentPumps.map((item, index) => {
+                                return  <TabPane tab={item.pump_name} key={index} disabled={disabledWater}>
                                             <img src={ blowdown } className="blowdown" alt=""></img>
                                             <div className="blowdownRight">
                                                 <Countdown 
@@ -332,7 +333,8 @@ class Control extends Component{
 
 const mapStateToProps = (state) => {
     return {
-      pumpRoles:  state.get('index').get('pumpRoles').toJS()
+      pumpRoles:  state.get('index').get('pumpRoles').toJS(),
+      equipmentPumps: state.get('index').get('equipmentPumps').toJS(),
     }
   }
 

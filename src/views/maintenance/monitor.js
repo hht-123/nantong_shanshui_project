@@ -103,7 +103,6 @@ class Monitor extends Component{
       'get',
       function(response) {
         if (me.state.whetherTest === false) {
-          
           const equipment_code = response.data.data[0].equipment_code
           me.setState({
             equipmentData: response.data.data[0],
@@ -114,9 +113,9 @@ class Monitor extends Component{
           store.dispatch(index.getEquipmentSensor(equipment_code))
           //获得设备对应的泵信息
           store.dispatch(index.getEquipmentPumpsInfo(equipment_code))
-          //获得传感器的数据
-          store.dispatch(index.getPumpRoles())
           //获得用户对应泵的权限
+          store.dispatch(index.getPumpRoles())
+          //获得传感器的数据
           // const { search_begin_time } = this.state;
           let params1 = me.getSensorParams(equipment_code);
           me.getSensorData(params1);
@@ -134,7 +133,8 @@ class Monitor extends Component{
         }
       },
       function() {
-        console.log('加载失败，请重试')
+        // console.log('加载失败，请重试')
+        message.error('加载失败，请重试!')
       },
       this.state.whetherTest
     )
@@ -157,7 +157,8 @@ class Monitor extends Component{
           // console.log(response.data.websocket_id)
       },
       function() {
-        console.log('加载失败，请重试')
+        // console.log('加载失败，请重试')
+        message.error('加载失败，请重试!')
       },
       this.state.whetherTest
     )
@@ -334,7 +335,7 @@ class Monitor extends Component{
       downEquipDataVisible: true,
       currentSensor: sensorName
     })
-    console.log(sensorName)
+    // console.log(sensorName)
   }
 
   //获得设备详情（除了对应的传感器类型及型号）
@@ -349,10 +350,6 @@ class Monitor extends Component{
               me.setState({
                 equipmentInfo: response.data
               }) 
-            } else {
-              me.setState({
-                equipmentInfo: response.data.data,
-              })
             }
           },
           function() {
@@ -378,22 +375,11 @@ class Monitor extends Component{
         } 
       },
       function() {
-        console.log('加载失败，请重试')
+        // console.log('加载失败，请重试')
+        message.error('获取数据失败，请刷新再试！')
       },
       this.state.whetherTest
     )
-  }
-
-  showControl = () => {
-    this.setState({
-      controlVisisible: true,
-    })
-  }
-
-  showCircleControl = () => {
-    this.setState({
-      circleControlVisible: true
-    })
   }
 
   showModal = (type) => {
@@ -538,8 +524,6 @@ class Monitor extends Component{
        currentSensor, downEquipDataVisible, circleControlVisible, equipmentCode, realTimeData
     } = this.state
     const { equipmentPumps } = this.props
-    if (equipmentPumps.length === 0 || realTimeData.length === 0 ) return null
-    const currentPumpCode = equipmentPumps[0].pump_code
 
     const time = [];
     const pH =[];
@@ -646,7 +630,8 @@ class Monitor extends Component{
                 <TabPane tab='实时数据' key='实时数据'>
                   <div className='currentData'>
                     {
-                      realTimeData.map((item, index) => {
+                      realTimeData.length === 0 ? <div>无实时数据</div>
+                      :realTimeData.map((item, index) => {
                         return <div key={item.uuid} ><span className='sensorValue'>{item.mearsure_type}: </span><span>{item.measurement}</span></div>
                       })
                     }
@@ -684,13 +669,13 @@ class Monitor extends Component{
                   close={ this.closeModal }
                   equipment_code={ this.state.equipmentData.equipment_code }
                   aim_id={ this.state.aim_id }
-                  equipmentPumps= {equipmentPumps}
+                  // equipmentPumps= {equipmentPumps}
               />
               <CircleControl
                   visible={ circleControlVisible }
                   close={ this.closeModal }
-                  equipmentPumps= {equipmentPumps}
-                  currentPumpCode = {currentPumpCode}
+                  // equipmentPumps= {equipmentPumps}
+                  currentPumpCode = {equipmentPumps.length === 0 ? '' : equipmentPumps[0].pump_code}
               />
               <DownEquipData
                   visible= {downEquipDataVisible}

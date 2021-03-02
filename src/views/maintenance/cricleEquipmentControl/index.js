@@ -239,6 +239,7 @@ class CircleControl extends Component{
     }
     
     getUndoneData = (e) => {
+        console.log(e)
         let me = this
         model.fetch(
             {pump_code: e, status: '0'},
@@ -326,8 +327,8 @@ class CircleControl extends Component{
     render() {
         const { disabledWater, pumps, days, dosage, seconds, pumpRole} = this.state
         const { tableVisible, tableData } = this.state
+        const {equipmentPumps } = this.props
         var newData = this.getAllPumpId(pumpRole, 'pump_id')
-        if (pumps.length === 0) return null
 
         return (
             <div className="control">
@@ -342,8 +343,9 @@ class CircleControl extends Component{
                 ]}
                 >
                     <Tabs  className="operation" onChange={this.swift}>
-                        {
-                            pumps.map((item, index) => {
+                        {   
+                            equipmentPumps.length === 0 ? <TabPane tab='未配置泵' key='未配置泵' ></TabPane>
+                            :equipmentPumps.map((item, index) => {
                                 return  <TabPane tab={item.pump_name} key={item.pump_code} disabled={disabledWater}>
                                             <img src={ blowdown } className="blowdown" alt=""></img>
                                             <div className="blowdownRight">
@@ -408,7 +410,8 @@ class CircleControl extends Component{
 
 const mapStateToProps = (state) => {
     return {
-      pumpRoles:  state.get('index').get('pumpRoles').toJS()
+      pumpRoles:  state.get('index').get('pumpRoles').toJS(),
+      equipmentPumps: state.get('index').get('equipmentPumps').toJS(),
     }
 }
 

@@ -1,14 +1,26 @@
 import React, { Component } from 'react';
 import { Model } from '../../../dataModule/testBone';
+import { connect } from 'react-redux'
+import store from '../../../store'
+import { actionCreators as index } from '../../../components/index/store'
 
 import  './monitor.less';
 import Line from '../../maintenance/publicComponents/sensorLine';
 import CompanyInfo from '../../maintenance/publicComponents/companyInfo';
 import EquipInfo from '../../maintenance/publicComponents/equipInfo';
-import { equipmentUrl, sensorDataUrl, device, clientUrl, equipmentInfoUrl, equipMaintainUrl, ClientWaterRemindUrl,sensorOfequipmentUrl  } from '../../../dataModule/UrlList';
+import DownEquipData from '../../maintenance/publicComponents/downEquipData'
+import { 
+  equipmentUrl, sensorDataUrl, clientUrl, equipmentInfoUrl, equipMaintainUrl, ClientWaterRemindUrl,
+  sensorOfequipmentUrl,
+  websocketUrl,
+  getRealTimeDataUrl,
+} from '../../../dataModule/UrlList';
 
 import { Icon, Tabs, DatePicker, Button, PageHeader, message } from 'antd';
 import { Link } from 'react-router-dom';
+import Control  from '../../maintenance/equipmentControl/comtrolmodal';
+import CircleControl from '../../maintenance/cricleEquipmentControl/index'
+import moment from 'moment';
 
 const model = new Model()
 const { TabPane } = Tabs;
@@ -20,6 +32,7 @@ class ClientMonitor extends Component{
     super (props);
     this.state = {
       equipmentData: [],
+      equipmentCode: '',
       sensorData:[],
       whetherTest: false, 
       whetherTest1: false,
@@ -27,13 +40,21 @@ class ClientMonitor extends Component{
       equipSensor:[],
       CompanyModalVisible: false,  //客户信息是否显示
       equipModalVisible:false,    //设备详情是否显示
+      keyValue: "",             //用于时间重置
       companyInfo: [],
       equipmentInfo:[],
       equipmentDot: false,     // 设备维护的红点提示
+      waterRemindDot: false,   // 水质提醒记录红点提示
       equipMaintenanceData:[],   //存设备维护的数据
       waterRemind:[],            //存储未处理的水质提醒记录
-      waterRemindDot: false,
       sensorModel:[],            //存储设备对应的传感器类型及型号
+      controlVisisible: false,   //控制界面的打开
+      circleControlVisible: false,     //循环控制界面的打开
+      aim_id: "",
+      equipmentSortData: null,
+      downEquipDataVisible: false,
+      currentSensor: null,
+      realTimeData: []
     }
   }
 
@@ -43,15 +64,6 @@ class ClientMonitor extends Component{
     // 获得设备编号和客户公司
     let params = this.getparams(equipment_aid);
     this.getEquipmentData(params);
-    //获得传感器的数据
-    const { search_begin_time } = this.state;
-    let params1 = this.getSensorParams("001",search_begin_time);
-    this.getSensorData(params1);
-    //设置定时器
-    this.intervalId = setInterval(() => {
-      let params2 = this.getSensorParams("001",search_begin_time);
-      this.getSensorData(params2);
-    }, 300000)
     this.getEquipmentInfo()
     this.getSensorModel()
     this.getEquipmentMaintenace()
@@ -60,6 +72,10 @@ class ClientMonitor extends Component{
 
   componentWillUnmount() {
     clearInterval(this.intervalId)
+    clearInterval(this.intervalRealTime)
+    this.setState = (state,callback)=>{
+      return;
+    };
   }
 
   getparams( equipment_id=null ) {
@@ -83,33 +99,75 @@ class ClientMonitor extends Component{
       'get',
       function(response) {
         if (me.state.whetherTest === false) {
+          const equipment_code = response.data.data[0].equipment_code
           me.setState({
-            equipmentData: response.data.data[0]
+            equipmentData: response.data.data[0],
+            equipmentCode: response.data.data[0].equipment_code
           })
-          //获得设备对应的传感器
-          let sensor = me.getSensor(me.state.equipmentData.equipment_code);
-          me.getSensors(sensor);
-          // console.log(me.state.equipmentData)
-        } else {
-          me.setState({
-            equipmentData: response.data.data,
-          })
-          // console.log(me.state.equipmentData)
+          me.getAimId();
+          //获得设备对应的传感器类型
+          store.dispatch(index.getEquipmentSensor(equipment_code))
+          //获得设备对应的泵信息
+          store.dispatch(index.getEquipmentPumpsInfo(equipment_code))
+          //获得用户对应泵的权限
+          store.dispatch(index.getPumpRoles())
+          //获得传感器的数据
+          let params1 = me.getSensorParams(equipment_code);
+          me.getSensorData(params1);
+          //设置定时器
+          me.intervalId = setInterval(() => {
+            let params2 = me.getSensorParams(equipment_code);
+            me.getSensorData(params2);
+          }, 300000)
+          me.intervalRealTime = setInterval(() => {
+            me.getRealTimeData(equipment_code)
+            me.getWaterRemind()
+          }, 3000);
+          // 获得实时监控数据
+          me.getRealTimeData(equipment_code)
         }
       },
       function() {
-        console.log('加载失败，请重试')
+        // console.log('加载失败，请重试')
+        message.error('加载失败，请重试!')
       },
       this.state.whetherTest
     )
   }
 
-  getSensorParams( deviceNum='001', search_begin_time=null) {
+    //获取设备id
+    getAimId(code) {
+      let me = this;
+      model.fetch(
+        {
+          "object_code": this.state.equipmentData.equipment_code,
+          "distinguish_code":"0"
+        },
+        websocketUrl,
+        'get',
+        function(response) {
+            me.setState({
+              aim_id: response.data.websocket_id,
+            })
+            // console.log(response.data.websocket_id)
+        },
+        function() {
+          // console.log('加载失败，请重试')
+          message.error('加载失败，请重试!')
+        },
+        this.state.whetherTest
+      )
+    }
+
+  getSensorParams( deviceNum='', search_begin_time=null) {
     let params = {};
     let begin_time = null;
     let end_time = null;
     if(search_begin_time !== null) {
       [begin_time, end_time] = this.handleDate(search_begin_time);
+    } else {
+      begin_time = moment().format('YYYY-MM-DD')
+      end_time = moment().format('YYYY-MM-DD')
     }
     params = {
       deviceNum,
@@ -136,61 +194,33 @@ class ClientMonitor extends Component{
             sensorData: response.data
           }) 
           // console.log(me.state.sensorData)
-        } else {
-          me.setState({
-            sensorData: response.data.data,
-          })
-          // console.log(me.state.sensorData)
         }
       },
       function() {
-        message.warning('没有该时段数据')
+        message.warning('获取数据失败，请刷新再试！')
       },
       this.state.whetherTest1
     )
   }
 
-  //  获得设备对应的传感器
-  getSensor( deviceNum=this.state.equipmentData.equipment_code ) {
-    let params = {};
-    params = {
-      deviceNum,
-    }
-    return params;
-  } 
-
-  getSensors(params) {
-    for (let i in params) {
-      if (params[i] === undefined || params[i] === null) {
-        params[i] = ''
-      }
-    }
-    let me = this;
+  getRealTimeData = (code) => {
+    let me = this
     model.fetch(
-      params,
-      device,
+      {equipment_code: code},
+      getRealTimeDataUrl,
       'get',
       function(response) {
-        if (me.state.whetherTest1 === false) {
-          me.setState({
-            equipSensor: response.data
-          }) 
-          // console.log(me.state.equipSensor)
-        } else {
-          me.setState({
-            equipSensor: response.data.data,
-          })
-        }
+        let realTimeData = response.data.sort((a, b) => { a.mearsure_type.localeCompare(b.mearsure_type)})
+        // console.log(realTimeData)
+        me.setState({
+          realTimeData: realTimeData
+        })
       },
       function() {
-        console.log('加载失败，请重试')
+        message.error('获取实时监控数据失败，请刷新页面！')
       },
-      this.state.whetherTest1
+      false
     )
-  }
-
-  callback = (key) => {
-    // console.log(key);
   }
 
   handleStatusColor = (numb) => {
@@ -232,17 +262,18 @@ class ClientMonitor extends Component{
   //搜索按钮
   searchInfo = () => {
     // this.setState({search: true});
-    const { search_begin_time } = this.state;
-    let params = this.getSensorParams("001",search_begin_time);
+    const { search_begin_time, equipmentCode } = this.state;
+    let params = this.getSensorParams(equipmentCode, search_begin_time);
     this.getSensorData(params);
   }
 
   //重置按钮
   reset = () => {
-    let params = this.getSensorParams("001");
+    let params = this.getSensorParams(this.state.equipment_code);
     this.getSensorData(params);
     this.setState({
-      search_begin_time: null
+      search_begin_time: null,
+      keyValue: new Date(),
     })
   }
 
@@ -253,7 +284,7 @@ class ClientMonitor extends Component{
     });
        let me = this;
         model.fetch(
-          '11:11',
+          {},
           `${clientUrl}${this.state.equipmentData.client_id}/`,
           'get',
           function(response) {
@@ -275,13 +306,13 @@ class ClientMonitor extends Component{
         )
   };
 
-  //显示设备详情弹窗
-  showEquipmentModal = () => {
+  downInfoShow = (sensorName) => {
     this.setState({
-      equipModalVisible: true,
-    });
-    // this.getEquipmentInfo()
-  };
+      downEquipDataVisible: true,
+      currentSensor: sensorName
+    })
+    // console.log(sensorName)
+  }
 
   //获得设备详情（除了对应的传感器类型及型号）
   getEquipmentInfo() {
@@ -295,10 +326,6 @@ class ClientMonitor extends Component{
               me.setState({
                 equipmentInfo: response.data
               }) 
-            } else {
-              me.setState({
-                equipmentInfo: response.data.data,
-              })
             }
           },
           function() {
@@ -323,10 +350,30 @@ class ClientMonitor extends Component{
         } 
       },
       function() {
-        console.log('加载失败，请重试')
+        // console.log('加载失败，请重试')
+        message.error('获取数据失败，请刷新再试！')
       },
       this.state.whetherTest
     )
+  }
+
+  showModal = (type) => {
+    switch(type) {
+      case 'equipmentDetail':
+        return this.setState({
+                equipModalVisible: true,
+              })
+      case 'control':
+        return this.setState({
+                controlVisisible: true,
+              })
+      case 'circleControl':
+        return this.setState({
+                circleControlVisible: true,
+              })
+      default:
+        return null
+    }
   }
 
   //关闭弹窗
@@ -334,6 +381,9 @@ class ClientMonitor extends Component{
     this.setState({
       CompanyModalVisible: visible,
       equipModalVisible: visible,
+      controlVisisible: false,
+      downEquipDataVisible: false,
+      circleControlVisible: false
     })
   }
 
@@ -356,15 +406,12 @@ class ClientMonitor extends Component{
       function(response) {
         let i = 0
         if (me.state.whetherTest === false) {
-          me.setState({
-            equipMaintenanceData: response.data.data,
-          })
-          if (me.state.equipMaintenanceData === undefined || me.state.equipMaintenanceData === []) return  null
-          me.state.equipMaintenanceData.map((item,index) => {
-            if(item.maintain_status === '0') {
+          if (response.data.data === undefined || response.data.data === []) return  null
+          for (let j = 0; j < response.data.data.length; j++) {
+            if(response.data.data[j].maintain_status === '0') {
               i = i +1
             }
-          })
+          }
           if ( i> 0) {
             me.setState({
               equipmentDot:true
@@ -383,27 +430,21 @@ class ClientMonitor extends Component{
     )
   }
 
-  showEquipmentDot = () => {
-    if( this.state.equipmentDot === true) {
-      return {display:''}
-    }else {
-      return {display:'none'}
-    }
-  }
-
-  //水质记录红点提醒
-  getWaterRemind () {
+  getWaterRemind() {
     let me = this;
     model.fetch(
-      {'equipment_id': me.props.match.params.equipment_aid, 'deal_status':'1' },
+      {'equipment_id': me.props.match.params.equipment_aid},
       ClientWaterRemindUrl,
       'get',
       function(response) {
-        if (me.state.whetherTest === false) {
-          me.setState({
-            data: response.data.data,
-          })
-          if(me.state.data.length > 0) {
+        let i = 0
+          if (response.data.data === undefined || response.data.data === []) return  null
+          for (let k = 0; k < response.data.data.length; k++) {
+            if( response.data.data[k].deal_status === '1') {
+              i = i +1
+            }
+          }
+          if ( i> 0) {
             me.setState({
               waterRemindDot:true
             })
@@ -412,7 +453,6 @@ class ClientMonitor extends Component{
               waterRemindDot:false
             })
           }
-        } 
       },
       function() {
         message.warning('加载失败，请重试')
@@ -421,7 +461,15 @@ class ClientMonitor extends Component{
     )
   }
 
-  showWaterDot = () => {
+  showEquipmentDot = () => {
+    if( this.state.equipmentDot === true) {
+      return {display:''}
+    }else {
+      return {display:'none'}
+    }
+  }
+
+  showWaterRemindDot = () => {
     if( this.state.waterRemindDot === true) {
       return {display:''}
     }else {
@@ -434,13 +482,19 @@ class ClientMonitor extends Component{
       search_begin_time:[],
       keyValue: new Date()
     })
-    let params1 = this.getSensorParams("001");
+    let params1 = this.getSensorParams(this.state.equipment_code);
     this.getSensorData(params1);
   }
 
   render() {
-    const equipment_id = this.props.match.params.equipment_aid;
-    const { whetherTest, CompanyModalVisible, equipModalVisible, equipmentInfo, companyInfo, sensorModel } = this.state
+    const equipment_id = this.props.match.params.equipment_aid
+    const today = moment()
+    const { 
+      whetherTest, CompanyModalVisible, equipModalVisible, equipmentInfo, companyInfo, sensorModel, controlVisisible,
+      currentSensor, downEquipDataVisible, circleControlVisible, equipmentCode, realTimeData
+    } = this.state
+    const { equipmentPumps } = this.props
+
     const time = [];
     const pH =[];
     const orp = [];
@@ -492,7 +546,7 @@ class ClientMonitor extends Component{
                     <Icon className='icon' type="warning" theme="filled" />
                     <div className='describe' >水质提醒记录</div>
                   </Link>
-                  <div className='dot' style={this.showWaterDot()} ></div>
+                  <div className='dot' style={this.showWaterRemindDot()} ></div>
                 </span>
                 <span className='main'>
                   <Link to={`/app/clientEquipMaintenace/${ equipment_id}`} className=' water'>
@@ -520,23 +574,48 @@ class ClientMonitor extends Component{
                     <div className='describe'  >设备详情</div>
                   </div>
                 </span>
-                <EquipInfo
-                  whetherTest={ whetherTest }
-                  visible={ equipModalVisible }
-                  cancel={ this.closeModal }
-                  data={ equipmentInfo }
-                  sensorModel={ sensorModel }
-                />
+                <span className='main' onClick={ () => this.showModal('control') }>
+                  <div className=' water'>
+                    <Icon className='icon' type="build" theme="filled"  />
+                    <div className='describe'>设备单次控制</div>
+                  </div>
+                </span>
+                <span className='main' onClick={ () => this.showModal('circleControl') }>
+                  <div className=' water'>
+                    <Icon className='icon' theme="filled" type="clock-circle" />
+                    <div className='describe'>设备自动控制</div>
+                  </div>
+                </span>
+                <span className='main'>
+                  <Link to={`/app/EquipmentOprationRecord/${ equipment_id}`} className=' water'>
+                    <Icon className='icon' type="schedule" theme="filled" />
+                    <div className='describe' >设备使用日志</div>
+                  </Link>
+                </span>
             </div>
-              <Tabs className='ClientTab' defaultActiveKey="0" onChange={this.callback} type='card' onChange={this.changeTab}>
+              <div className='tabborder'>
+              <Tabs className='ClientTab' defaultActiveKey="实时数据" onChange={this.callback} type='line' size='large' onChange={this.changeTab}>
+                <TabPane tab='实时数据' key='实时数据'>
+                  <div className='currentData'>
+                    {
+                      realTimeData.length === 0 ? <div>无实时数据</div>
+                      :realTimeData.map((item, index) => {
+                        return <div key={item.uuid} ><span className='sensorValue'>{item.mearsure_type}: </span><span>{item.measurement}</span></div>
+                      })
+                    }
+                  </div>
+                </TabPane>
                   {
                     this.state.equipSensor.map((item, index) => {
                     return  <TabPane tab={ item.type_name } key={ index }>
                                 <RangePicker className='time' 
-                                  onChange={ this.handleBeginTime } 
+                                  key={ this.state.keyValue }
+                                  onChange={ this.handleBeginTime }
+                                  defaultValue={[moment(today), moment(today)]}
                                 />
                                 <Button type="primary" className='search' onClick={ this.searchInfo } >搜索</Button>
                                 <Button  className='reset' onClick={ this.reset } >重置</Button>
+                                <Button className='downData' key={item.type_name} type="primary" onClick={() => this.downInfoShow(item.type_name)} >历史数据下载</Button>
                                 <Line  
                                   Xdata = { time } 
                                   Ydata = { commitInfo(item.type_name)}
@@ -545,10 +624,45 @@ class ClientMonitor extends Component{
                     })
                   }
               </Tabs>
+              </div>
+              <EquipInfo
+                  whetherTest={ whetherTest }
+                  visible={ equipModalVisible }
+                  cancel={ this.closeModal }
+                  data={ equipmentInfo }
+                  sensorModel={ sensorModel }
+              />
+              <Control 
+                  visible={ controlVisisible }
+                  close={ this.closeModal }
+                  equipment_code={ this.state.equipmentData.equipment_code }
+                  aim_id={ this.state.aim_id }
+                  equipmentPumps= {equipmentPumps}
+              />
+              <CircleControl
+                  visible={ circleControlVisible }
+                  close={ this.closeModal }
+                  equipmentPumps= {equipmentPumps}
+                  currentPumpCode = { equipmentPumps.length === 0 ? '' : equipmentPumps[0].pump_code}
+              />
+              <DownEquipData
+                  visible= {downEquipDataVisible}
+                  close = { this.closeModal }
+                  currentSensor = { currentSensor }
+                  equipmentCode = { equipmentCode}
+              />
         </div>
       </div>
     )
   }
 }
 
-export default ClientMonitor;
+const mapStateToProps = (state) => {
+  return {
+    equipmentSensor: state.get('index').get('equipmentSensor').toJS(),
+    equipmentPumps: state.get('index').get('equipmentPumps').toJS(),
+    pumpRoles:  state.get('index').get('pumpRoles').toJS()
+  }
+}
+
+export default connect(mapStateToProps, null)(ClientMonitor)
