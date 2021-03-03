@@ -1,7 +1,4 @@
-.monitor1 {
-  min-width: 1000px;
-}
-.monitor1 .wrappers {
+.monitor2 .clientWrapper {
   width: 100%;
   min-width: 1200px;
   min-height: 450px;
@@ -10,20 +7,20 @@
   margin-bottom: 80px;
   padding: 24px;
 }
-.monitor1 .wrappers .water {
+.monitor2 .clientWrapper .water {
   color: grey;
 }
-.monitor1 .wrappers .water:hover {
+.monitor2 .clientWrapper .water:hover {
   color: #00A0E9;
 }
-.monitor1 .wrappers .table {
+.monitor2 .clientWrapper .table {
   position: relative;
   margin-top: 20px;
   height: 120px;
   margin-bottom: 20px;
-  left: 15px;
+  left: 80px;
 }
-.monitor1 .wrappers .table span {
+.monitor2 .clientWrapper .table span {
   float: left;
   border: 2px solid white;
   border-radius: 8px;
@@ -33,7 +30,7 @@
   width: 120px;
   margin-left: 30px;
 }
-.monitor1 .wrappers .table span .describe {
+.monitor2 .clientWrapper .table span .describe {
   position: relative;
   top: 20px;
   font-size: 16px;
@@ -41,10 +38,10 @@
   text-align: center;
   cursor: pointer;
 }
-.monitor1 .wrappers .table span .equipMaintenance:hover {
+.monitor2 .clientWrapper .table span .equipMaintenance:hover {
   color: red;
 }
-.monitor1 .wrappers .table span .statusColor {
+.monitor2 .clientWrapper .table span .statusColor {
   position: relative;
   top: 35px;
   left: 25px;
@@ -56,21 +53,21 @@
   background: green;
   color: white;
 }
-.monitor1 .wrappers .table span .status {
+.monitor2 .clientWrapper .table span .status {
   position: relative;
   font-size: 16px;
   font-weight: 600;
   text-align: center;
   top: 55px;
 }
-.monitor1 .wrappers .table span .icon {
+.monitor2 .clientWrapper .table span .icon {
   font-size: 40px;
   font-weight: 600;
   margin-top: 30px;
   margin-left: 40px;
   cursor: pointer;
 }
-.monitor1 .wrappers .table span .dot {
+.monitor2 .clientWrapper .table span .dot {
   position: relative;
   background-color: red;
   width: 20px;
@@ -79,62 +76,45 @@
   left: 90px;
   top: -90px;
 }
-.monitor1 .wrappers .tabborder {
-  width: 95%;
+.monitor2 .clientWrapper .table .main {
+  border-left: 0px;
+}
+.monitor2 .clientWrapper .tabborder {
+  width: 82%;
   height: auto;
   border: 2px solid white;
   border-radius: 10px;
   box-shadow: 4px 4px #DCDCDC;
   background-color: white;
-  margin-left: 40px;
+  margin-left: 100px;
   margin-top: 50px;
 }
-.monitor1 .wrappers .tab {
+.monitor2 .clientWrapper .ClientTab {
   position: relative;
   left: 80px;
   width: 700px;
   margin-bottom: 40px;
 }
-.monitor1 .wrappers .tab .time {
+.monitor2 .clientWrapper .ClientTab .time {
   position: relative;
   margin-bottom: 10px;
 }
-.monitor1 .wrappers .tab .search {
+.monitor2 .clientWrapper .ClientTab .search {
   position: relative;
-  left: 50px;
+  margin-left: 20px;
 }
-.monitor1 .wrappers .tab .reset {
+.monitor2 .clientWrapper .ClientTab .reset {
   position: relative;
-  margin-left: 70px;
-}
-.monitor1 .wrappers .tab .downData {
-  float: right;
-}
-.monitor1 .wrappers .tab .currentData {
-  width: 700px;
-  min-height: 100px;
-  padding: 20px;
-  font-size: 20px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-.monitor1 .wrappers .tab .currentData div {
   margin-left: 40px;
-  margin-top: 30px;
-  width: 200px;
 }
-.monitor1 .wrappers .tab .currentData div .sensorValue {
-  font-weight: bold;
-}
-.monitor1 .name {
+.monitor2 .name {
   display: inline-block;
   width: 350px;
   margin: 60px 60px 10px 0px;
   color: #000;
   font-size: x-large;
 }
-.monitor1 .company {
+.monitor2 .company {
   display: inline-block;
   width: 350px;
   margin: 60px 60px 10px 0px;
@@ -142,7 +122,7 @@
   font-size: x-large;
   cursor: pointer;
 }
-.monitor1 .row {
+.monitor2 .row {
   display: inline-block;
   background: #F8FAFF;
 }

@@ -539,7 +539,7 @@ class ClientMonitor extends Component{
           cancel={ this.closeModal }
           data = { companyInfo }
         />
-        <div className='wrapper'>
+        <div className='clientWrapper'>
             <div className='table'>
                 <span >
                   <Link to={`/app/clientWaterRemind/${ equipment_id}`} className=' water'>
