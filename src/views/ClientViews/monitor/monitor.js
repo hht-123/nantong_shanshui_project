@@ -616,7 +616,7 @@ class ClientMonitor extends Component{
                                 />
                                 <Button type="primary" className='search' onClick={ this.searchInfo } >搜索</Button>
                                 <Button  className='reset' onClick={ this.reset } >重置</Button>
-                                <Button className='downData' key={item.type_name} type="primary" onClick={() => this.downInfoShow(item.type_name)} >历史数据下载</Button>
+                                <Button className='downData' style={{marginLeft: "20px"}} key={item.type_name} type="primary" onClick={() => this.downInfoShow(item.type_name)} >历史数据下载</Button>
                                 <Line  
                                   Xdata = { time } 
                                   Ydata = { commitInfo(item.type_name)}
