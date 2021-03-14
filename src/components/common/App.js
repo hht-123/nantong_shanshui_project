@@ -53,6 +53,7 @@ class App extends Component {verifyUrl
   state = {
     collapsed: getCookie("mspa_SiderCollapsed") === "true",
     roleData: '',
+    visible: true
   };
 
   toggle = () => {
@@ -79,6 +80,11 @@ class App extends Component {verifyUrl
       verifyUrl,
       'get',
       function(response) {
+        if(response.data.power_num.includes('client_manage') === false ) {
+          me.setState({
+            visible: false
+          })
+        }
         me.setState({
           roleData: response.data.power_num
         })
@@ -90,8 +96,9 @@ class App extends Component {verifyUrl
   }
 
   render() {
-    const { collapsed } = this.state;
+    const { collapsed, visible } = this.state;
     // const {location} = this.props;
+
     let name;
     if (!getCookie("mspa_user") || getCookie("mspa_user") === "undefined") {
       return <Redirect to="/login" />
@@ -107,6 +114,8 @@ class App extends Component {verifyUrl
       <Route path='/app/sensorCalibratin/:equipment_id' key='sensorCalibratin' component={SensorCalibration} />,
       <Route path='/app/EquipmentOprationRecord/:equipment_id' key='EquipmentOprationRecord' component={(props) => <EquipmentOprationRecord {...props}/>} />
     ]
+
+    
     
     
     return (
@@ -116,7 +125,8 @@ class App extends Component {verifyUrl
           <Content>
             {/*<HeaderMenu />*/}
             <Layout style={{ padding: '0 0', background: '#F8FAFF' }}>
-              <Sider width={200} style={{ background: '#fff' }} hidden={this.state.roleData.includes('client_manage')}>
+              {/* <Sider width={200} style={{ background: '#fff' }} hidden={this.state.roleData.includes('client_manage')} > */}
+              <Sider width={200} style={{ background: '#fff' }} hidden={visible} >
                 <SideMenu roleData={this.state.roleData} />
               </Sider>
               <Content style={{ padding: '0 24px', minHeight: 'calc(100vh - 111px)' }}>
@@ -148,6 +158,7 @@ class App extends Component {verifyUrl
                         <Route path='/app/clientWaterRemind/:equipment_id' component={ClientWaterRemind} />,
                         <Route path='/app/clientEquipMaintenace/:equipment_id' component={ClientEquipMaintenance} />,
                         <Route path='/app/clientSensorCalibration/:equipment_id' component={ClientSensorCalibration} />,
+                        <Route path='/app/EquipmentOprationRecord/:equipment_id' key='EquipmentOprationRecord' component={(props) => <EquipmentOprationRecord {...props}/>} />
                       ]
                     }else if( item === 'role_permissions_retrieve') {
                       return [<Route path='/app/rolePower' component={RolePower}/>]
@@ -160,8 +171,10 @@ class App extends Component {verifyUrl
                     return null;
                   })}
 
-                  <Route exact path='/app' component={ this.state.roleData.includes('client_manage') ? ClientIndex : MaintenanceIndex} />
-                  
+                  {/* <Route exact path='/app' component={ this.state.roleData.includes('client_manage') ? ClientIndex : MaintenanceIndex} /> */}
+                  <Route exact path='/app' component={ this.state.visible ? ClientIndex : MaintenanceIndex} />
+                  {/* <Route exact path='/app' component={  ClientIndex } /> */}
+
                   { this.state.roleData.includes('client_manage') ? null : maintenanceUrl }
                   {/* <Route path='/app/engine' component={EngineInfo} /> */}
                   {/* <Route path='/app/maintenance' component={MaintenanceIndex} /> */}

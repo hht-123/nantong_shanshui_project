@@ -29,6 +29,12 @@ class ClientIndex extends Component {
         this.getRoleData()
     }
 
+    componentWillUnmount() {
+      this.setState = (state,callback)=>{
+        return;
+      };
+    }
+
     getClientEquipment(clientId) {
       const me = this
         model.fetch(
@@ -36,21 +42,26 @@ class ClientIndex extends Component {
             maintenanceUrl,
             'get',
             function(response) {
-                if (me.state.whetherTest === false) {
-                  me.setState({
-                    data: response.data.data
-                  })
-                  console.log(me.state.data)
+                let newData = []
+                if(response.data.data.length !== 0 ) {
+                  for (let i = 0; i < response.data.data.length; i++) {
+                    if( response.data.data[i].client_id === clientId && response.data.data[i].status !=='1'&& response.data.data[i].status !== '2') {
+                      newData.push(response.data.data[i])
+                    }
+                  }
+                    me.setState({
+                      data: newData
+                    })
                 } else {
                   me.setState({
-                    data: response.data.data
+                    data: []
                   })
                 }
               },
               function() {
                 console.log('加载失败，请重试')
               },
-              this.state.whetherTest
+              false
         )
     }
   
@@ -75,7 +86,7 @@ class ClientIndex extends Component {
             clientID: response.data.client_id
           })
           // console.log(response.data)
-          me.getClientEquipment(me.state.clientID)
+          me.getClientEquipment(response.data.client_id)
           // console.log(me.state.clientID)
       },
       function() {
@@ -86,19 +97,6 @@ class ClientIndex extends Component {
 
   render() {
     const { data } = this.state
-    const newData = []
-    if(this.state.clientID === '') return null
-    data.map(item =>{
-      if( item.client_id === this.state.clientID && item.status !=='1'&& item.status !== '2' ) {
-        newData.push(item)
-      }
-      return null
-    })
-    console.log(newData)
-    if(newData.length === 0) {
-      // message.warning('未分配设备')
-      return null
-    }
 
     return (
         <div className="client" >
@@ -107,7 +105,7 @@ class ClientIndex extends Component {
             </div>
             <div className='line-top'></div>
                 <div  className='content' >
-                    { newData.map((item,index) => {
+                    { data.map((item,index) => {
                       return <Equipment key={ index } aid={ item.aid } equipment_code={ item.equipment_code }  status={ item.status } />
                     }) }
                 </div>

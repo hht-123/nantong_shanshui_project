@@ -72,7 +72,7 @@ class CircleControl extends Component{
         })
         const seconds = Number(e.target.value)/ parseInt(numb, 0)
         this.setState({
-            seconds:seconds.toFixed(2)
+            seconds:parseInt(seconds)
         })
         //  console.log(Number(e.target.value)/ numb)
     }
@@ -321,7 +321,8 @@ class CircleControl extends Component{
 
     // 禁止选择今天日期之前的日期
     disabledDate = (current) => {
-        return current && current < moment().endOf('day');
+        // return current && current < moment().endOf('day')    // 当天之前的不可选，包括当天
+        return current && current <moment().subtract(1, "days"); //当天之前的不可选，不包括当天
     }
 
     render() {

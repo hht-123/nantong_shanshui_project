@@ -389,6 +389,7 @@ class Monitor extends Component{
                 equipModalVisible: true,
               })
       case 'control':
+        this.getAimId()
         return this.setState({
                 controlVisisible: true,
               })
