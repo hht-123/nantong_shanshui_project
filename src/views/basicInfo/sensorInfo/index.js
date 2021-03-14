@@ -383,7 +383,7 @@ class SensorInfo extends Component {
                   { roleData.map((item,index) => {
                     if ( item === 'sensor_manage') {
                       return  <span key={index} className='script'>
-                              <Button type="primary" className="button" onClick={() => this.showModal('type')} >新增传感器类型</Button>
+                              {/* <Button type="primary" className="button" onClick={() => this.showModal('type')} >新增传感器类型</Button> */}
                               <Button type="primary" className="button" onClick={() => this.showModal('model')}>新增传感器型号</Button>
                               <Button type="primary" className="button" onClick={() => this.showModal('code')}>新增传感器</Button>
                               <Button type="danger" className="button" onClick={() => this.showModal('sensor')}>管理传感器类型和型号</Button>

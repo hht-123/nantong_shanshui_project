@@ -92,7 +92,7 @@
 .monitor1 .wrappers .tab {
   position: relative;
   left: 80px;
-  width: 700px;
+  width: 800px;
   margin-bottom: 40px;
 }
 .monitor1 .wrappers .tab .time {
@@ -111,7 +111,7 @@
   float: right;
 }
 .monitor1 .wrappers .tab .currentData {
-  width: 700px;
+  width: 800px;
   min-height: 100px;
   padding: 20px;
   font-size: 20px;
@@ -122,10 +122,15 @@
 .monitor1 .wrappers .tab .currentData div {
   margin-left: 40px;
   margin-top: 30px;
-  width: 200px;
+  width: 260px;
 }
 .monitor1 .wrappers .tab .currentData div .sensorValue {
   font-weight: bold;
+}
+.monitor1 .wrappers .tab .currentData .sensorValue {
+  display: inline-block;
+  width: 120px;
+  text-shadow: 3px 3px 3px #DCDCDC;
 }
 .monitor1 .name {
   display: inline-block;

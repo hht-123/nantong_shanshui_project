@@ -325,10 +325,10 @@ class CircleControl extends Component{
     }
 
     render() {
-        const { disabledWater, pumps, days, dosage, seconds, pumpRole} = this.state
+        const { disabledWater, pumps, days, dosage, seconds } = this.state
         const { tableVisible, tableData } = this.state
         const {equipmentPumps } = this.props
-        var newData = this.getAllPumpId(pumpRole, 'pump_id')
+        var newData = this.getAllPumpId(this.props.pumpRoles, 'pump_id')
 
         return (
             <div className="control">

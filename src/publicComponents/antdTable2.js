@@ -9,7 +9,7 @@ class AntdTbale2 extends Component{
         return (
           <div
             style={{
-                width: 800,
+                // width: 800,
                 width: '100%',
                 position: 'relative',
             }}

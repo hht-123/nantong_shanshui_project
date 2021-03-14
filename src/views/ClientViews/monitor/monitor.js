@@ -568,7 +568,8 @@ class ClientMonitor extends Component{
                   </div>
                   <div className='status' >设备状态</div>
                 </span>
-                <span className='main' onClick={ this.showEquipmentModal } >
+                {/* onClick={ this.showEquipmentModal }  */}
+                <span className='main' onClick={  () => this.showModal('equipmentDetail')} >  
                   <div className=' water'>
                     <Icon className='icon' type="profile" theme="filled"  />
                     <div className='describe'  >设备详情</div>
@@ -606,7 +607,7 @@ class ClientMonitor extends Component{
                   </div>
                 </TabPane>
                   {
-                    this.state.equipSensor.map((item, index) => {
+                    this.props.equipmentSensor.map((item, index) => {
                     return  <TabPane tab={ item.type_name } key={ index }>
                                 <RangePicker className='time' 
                                   key={ this.state.keyValue }

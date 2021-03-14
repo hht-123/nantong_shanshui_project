@@ -57,7 +57,15 @@ class NormalLoginForm extends Component {
                             message.error("账户名不存在"); //无账号信息
                         } else if(response.data.msg === "密码不正确") {
                             message.error("密码不正确");
-                        }else {
+                        } else if (response.data.role_id === '9ca9088b74694db5a1b4594bcb8b2912') {
+                            values['username'] = response.data.username;
+                            values['_id'] = response.data.user_id;
+                            values['role_id'] = response.data.role_id;
+                            setCookie('mspa_user',JSON.stringify(values));
+                            message.success("登录成功"); //成功信息
+                            me.props.history.push({pathname:'/app/clientIndex', state:values});
+                        }
+                        else {
                             values['username'] = response.data.username;
                             values['_id'] = response.data.user_id;
                             values['role_id'] = response.data.role_id;
