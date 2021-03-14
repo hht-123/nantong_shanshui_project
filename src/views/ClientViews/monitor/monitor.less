@@ -1,12 +1,11 @@
 .monitor2 {
-    .wrapper {
+    .clientWrapper {
         width: 100%;
         min-width: 1200px;
         min-height: 450px;
         margin: 0 auto;
         margin-top: 0px;
         margin-bottom: 80px;
-        background: #fff;
         padding: 24px;
         .water {
             color: grey;
@@ -23,13 +22,18 @@
             left: 80px;
             span {
                 float: left;
-                border: solid 1px;
+                border: 2px solid white;
+                border-radius: 8px;
+                box-shadow: 4px 4px #DCDCDC;
+                background-color: white;
                 height: 130px;
                 width: 120px;
+                margin-left: 30px;
                 .describe {
                     position: relative;
-                    top: 10px;
-                    font-size: 17px;
+                    top: 20px;
+                    font-size: 16px;
+                    font-weight: 600;
                     text-align: center;
                     cursor:pointer;
                 }
@@ -38,7 +42,7 @@
                 }
                 .statusColor {
                     position: relative;
-                    top:40px;
+                    top:35px;
                     left: 25px;
                     width: 70px;
                     height: 35px;
@@ -50,16 +54,18 @@
                 }
                 .status {
                     position: relative;
-                    font-size: 17px;
+                    font-size: 16px;
+                    font-weight: 600;
                     text-align: center;
                     top: 55px;
                 }
             .icon {
-                font-size: 60px;
-                    // padding: 30px;
-                    margin-top: 20px;
-                    margin-left: 30px;
-                    cursor:pointer;
+                font-size: 40px;
+                font-weight: 600;
+                // padding: 30px;
+                margin-top: 30px;
+                margin-left: 40px;
+                cursor:pointer;
             }
             .dot {
                 position: relative;
@@ -75,6 +81,18 @@
                 border-left: 0px;
             }
         }
+
+        .tabborder {
+            width: 82%;
+            height: auto;
+            border: 2px solid white;
+            border-radius: 10px;
+            box-shadow: 4px 4px #DCDCDC;
+            background-color: white;
+            margin-left: 100px;
+            margin-top: 50px;
+        }
+
         .ClientTab {
             // position: relative;
             // left: -520px;
@@ -82,6 +100,7 @@
             position: relative;
             left: 80px;
             width: 700px;
+            margin-bottom: 40px;
             .time {
                 position: relative;
                 margin-bottom: 10px;

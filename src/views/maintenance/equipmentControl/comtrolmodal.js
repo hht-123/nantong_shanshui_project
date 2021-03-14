@@ -31,7 +31,7 @@ class Control extends Component{
             // pumps: ['加药泵', '排污泵', 'XXX'],
             sendTime: null,
             dosage: null,
-            pumpRole: this.props.pumpRoles
+            pumpRole: []
         }
     }
 
@@ -39,7 +39,7 @@ class Control extends Component{
         const userID = getUserId();
         this.setState({
             userID,
-        })
+        })  
     }
 
 
@@ -253,8 +253,8 @@ class Control extends Component{
     //状态：启动
     render() {
         // const { time, disabledMedicine } = this.state
-        const { deadline, flag, color, disabledWater, pumps, dosage, seconds, pumpRole} = this.state;
-        var newData = this.getAllPumpId(pumpRole, 'pump_id')
+        const { deadline, flag, color, disabledWater, pumps, dosage, seconds } = this.state;
+        var newData = this.getAllPumpId(this.props.pumpRoles, 'pump_id')
         const {equipmentPumps } = this.props
 
         return (

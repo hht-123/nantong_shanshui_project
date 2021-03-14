@@ -12,29 +12,31 @@ class CalibrationMarkTable extends Component{
           title: '时间',
           dataIndex: 'calibrate_time',
           align: 'center',
-          width: 160
+          width: '20%'
         },
         {
           title: '传感器',
           dataIndex: 'type_name',
           align: 'center',
-          width: 170
+          width: '20%'
         },
         {
           title: '标定理论值',
           dataIndex: 'theoretical_value',
           align: 'center',
-          width: 170,
+          width: '20%'
         },
         {
           title: '标定实际值',
           dataIndex: 'actual_value',
           align: 'center',
+          width: '20%'
         },
         {
           title: '标定补偿值',
           dataIndex: 'calibrate_compensation',
           align: 'center',
+          width: '20%'
         },
       ];
 
@@ -49,7 +51,7 @@ class CalibrationMarkTable extends Component{
             <Table
               style={{
                 overflow: 'auto',
-                width: '100%',
+                width: '80%',
                 wordBreak: 'keep-all',
                 whiteSpace: 'nowrap',
                 fontSize: '5px',

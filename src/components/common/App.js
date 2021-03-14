@@ -52,8 +52,7 @@ const { Content, Footer, Sider } = Layout;
 class App extends Component {verifyUrl
   state = {
     collapsed: getCookie("mspa_SiderCollapsed") === "true",
-    roleData: '',
-    visible: true
+    roleData: []
   };
 
   toggle = () => {
@@ -69,8 +68,8 @@ class App extends Component {verifyUrl
       setCookie("mspa_SiderCollapsed", false);
     }
     store.dispatch(indexActionCreators.getSensorType())   //获取所有传感器的类型
-    this.getRoleData()
     store.dispatch(indexActionCreators.getRoleData())
+    this.getRoleData()
   }
 
   getRoleData() {
@@ -88,22 +87,22 @@ class App extends Component {verifyUrl
         me.setState({
           roleData: response.data.power_num
         })
-    },
-    function() {
-      console.log('失败'); //失败信息
-    },
+      },
+      function() {
+        console.log('失败'); //失败信息
+      },
     )
   }
 
   render() {
-    const { collapsed, visible } = this.state;
+    const { collapsed, roleData } = this.state
     // const {location} = this.props;
-
-    let name;
+    let name, role_id ;
     if (!getCookie("mspa_user") || getCookie("mspa_user") === "undefined") {
       return <Redirect to="/login" />
     } else {
       name = JSON.parse(getCookie("mspa_user")).username;
+      role_id = JSON.parse(getCookie("mspa_user")).role_id
     }
     if (this.state.roleData === undefined) return null
     let maintenanceUrl = [
@@ -126,34 +125,41 @@ class App extends Component {verifyUrl
             {/*<HeaderMenu />*/}
             <Layout style={{ padding: '0 0', background: '#F8FAFF' }}>
               {/* <Sider width={200} style={{ background: '#fff' }} hidden={this.state.roleData.includes('client_manage')} > */}
-              <Sider width={200} style={{ background: '#fff' }} hidden={visible} >
-                <SideMenu roleData={this.state.roleData} />
+              <Sider width={200} style={{ background: '#fff' }} hidden={role_id === '9ca9088b74694db5a1b4594bcb8b2912' ? true : false}>
+                <SideMenu roleData={roleData} />
               </Sider>
               <Content style={{ padding: '0 24px', minHeight: 'calc(100vh - 111px)' }}>
                 <Switch>
-                  { Array.from(this.state.roleData).map((item,index) => {
+                  { Array.from(roleData).map((item,index) => {
                     if(item === 'equipment_maintenance_retrieve') {
-                      return [<Route path='/app/equipment' component={(props) => <EpuipmentInfo {...props}/>} />,
+                      return [<Route exact path='/app' component={ MaintenanceIndex} />,
+                            <Route path='/app/equipment' component={(props) => <EpuipmentInfo {...props} />} />,
                             <Route path='/app/equipmentScrap' component={equipmentScrap} />,
                             <Route path='/app/EpuipmentConfigure' component={EpuipmentConfigure} />,
                             <Route path='/app/EpuipmentAllocation' component={EpuipmentAllocation} />,
                     ]
                     }else if( item === 'client_message_retrieve') {
-                      return [<Route path='/app/message' component={(props) => <MessageIndex {...props}/>} />,
+                      return [<Route exact path='/app' component={ MaintenanceIndex} />,
+                              <Route path='/app/message' component={(props) => <MessageIndex {...props} />} />,
                               <Route path='/app/contact/:client_id' component={ContactIndex} />,
                       ]
                     }else if( item === 'pump_information_view') {
-                      return [<Route path='/app/pumps' component={(props) => <PumpInfo {...props} />} />,
+                      return [<Route exact path='/app' component={ MaintenanceIndex} />,
+                              <Route path='/app/pumps' component={(props) => <PumpInfo {...props} />} />,
                       ]
                     }else if( item === 'engine_message_retrieve') {
-                      return [<Route path='/app/engine' component={EngineInfo} />,
-                            ]
+                      return [
+                        <Route exact path='/app' component={ MaintenanceIndex} />,
+                        <Route path='/app/engine' component={EngineInfo} />,
+                      ]
                     }else if( item === 'sensor_message_retrieve') {
-                      return [<Route path='/app/sensor' component={(props) =><SensorInfo {...props}/>} />,
+                      return [
+                        <Route exact path='/app' component={ MaintenanceIndex} />,
+                        <Route path='/app/sensor' component={(props) => <SensorInfo {...props} />} />,
                     ]
                     }else if( item === 'client_manage') {
                       return [
-                        // <Route path='/app/clientIndex' component={ClientIndex} />,
+                        <Route path='/app/clientIndex' component={ClientIndex} />,
                         <Route path='/app/clientMonitor/:equipment_aid' component={(props) => <ClientMonitor {...props}/>} />,
                         <Route path='/app/clientWaterRemind/:equipment_id' component={ClientWaterRemind} />,
                         <Route path='/app/clientEquipMaintenace/:equipment_id' component={ClientEquipMaintenance} />,
@@ -167,14 +173,12 @@ class App extends Component {verifyUrl
                       <Route path='/app/accountManagement' component={AccountManagement}/>,
                       <Route path='/app/pumpsPower' component={(props) => <PumpPower {...props} />} />
                       ]
-                    }
+                    } 
                     return null;
                   })}
 
-                  {/* <Route exact path='/app' component={ this.state.roleData.includes('client_manage') ? ClientIndex : MaintenanceIndex} /> */}
-                  <Route exact path='/app' component={ this.state.visible ? ClientIndex : MaintenanceIndex} />
-                  {/* <Route exact path='/app' component={  ClientIndex } /> */}
-
+                  {/* <Route exact path='/app' component={this.state.roleData.includes('client_manage') ? ClientIndex : MaintenanceIndex} /> */}
+    
                   { this.state.roleData.includes('client_manage') ? null : maintenanceUrl }
                   {/* <Route path='/app/engine' component={EngineInfo} /> */}
                   {/* <Route path='/app/maintenance' component={MaintenanceIndex} /> */}
