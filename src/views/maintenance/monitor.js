@@ -226,7 +226,8 @@ class Monitor extends Component{
       getRealTimeDataUrl,
       'get',
       function(response) {
-        let realTimeData = response.data.sort((a, b) => { return a.mearsure_type.localeCompare(b.mearsure_type) })
+        let realTimeData = response.data.sort((a, b) => { return a.mearsure_type.localeCompare(b.mearsure_type)})
+        // console.log(realTimeData)
         me.setState({
           realTimeData: realTimeData
         })
