@@ -23,7 +23,7 @@ import Monitor from '../../views/maintenance/monitor';
 //import { connect } from 'react-redux';
 //import { actionCreators } from '../index/store';
 import EquipmentMaintenance from '../../views/maintenance/equipmentMaintenance/equipmentMaintenance';
-import WaterRemind from '../../views/maintenance/waterRemind/waterRemind';
+// import WaterRemind from '../../views/maintenance/waterRemind/waterRemind';
 import SensorCalibration from '../../views/maintenance/sensorCalibration/sensorCalibration';
 import EquipmentOprationRecord from '../../views/maintenance/equipmentOperationRecord/index'
 
@@ -109,7 +109,8 @@ class App extends Component {verifyUrl
       <Route path='/app/maintenance' key='maintenance' component={MaintenanceIndex} />,
       <Route path='/app/monitor/:equipment_aid' key='monitor' component={(props) => <Monitor {...props}/>} />,
       <Route path='/app/equipmentMaintenance/:equipment_id' key='equipmentMaintenance' component={EquipmentMaintenance} />,
-      <Route path='/app/waterRemind/:equipment_id' key='waterRemind' component={WaterRemind} />,
+      // <Route path='/app/waterRemind/:equipment_id' key='waterRemind' component={WaterRemind} />,
+      <Route path='/app/waterRemind/:equipment_id' key='waterRemind' component={ClientWaterRemind} />,
       <Route path='/app/sensorCalibratin/:equipment_id' key='sensorCalibratin' component={SensorCalibration} />,
       <Route path='/app/EquipmentOprationRecord/:equipment_id' key='EquipmentOprationRecord' component={(props) => <EquipmentOprationRecord {...props}/>} />
     ]

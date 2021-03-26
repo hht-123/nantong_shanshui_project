@@ -210,7 +210,7 @@ class ClientMonitor extends Component{
       getRealTimeDataUrl,
       'get',
       function(response) {
-        let realTimeData = response.data.sort((a, b) => { a.mearsure_type.localeCompare(b.mearsure_type)})
+        let realTimeData = response.data.sort((a, b) => { return a.mearsure_type.localeCompare(b.mearsure_type)})
         // console.log(realTimeData)
         me.setState({
           realTimeData: realTimeData
@@ -595,7 +595,7 @@ class ClientMonitor extends Component{
                 </span>
             </div>
               <div className='tabborder'>
-              <Tabs className='ClientTab' defaultActiveKey="实时数据" onChange={this.callback} type='line' size='large' onChange={this.changeTab}>
+              <Tabs className='ClientTab' defaultActiveKey="实时数据"  type='line' size='large' onChange={this.changeTab}>
                 <TabPane tab='实时数据' key='实时数据'>
                   <div className='currentData'>
                     {

@@ -72,7 +72,7 @@ class CircleControl extends Component{
         })
         const seconds = Number(e.target.value)/ parseInt(numb, 0)
         this.setState({
-            seconds:parseInt(seconds)
+            seconds: parseInt(seconds, 0)
         })
         //  console.log(Number(e.target.value)/ numb)
     }
@@ -326,7 +326,7 @@ class CircleControl extends Component{
     }
 
     render() {
-        const { disabledWater, pumps, days, dosage, seconds } = this.state
+        const { disabledWater, days, dosage, seconds } = this.state
         const { tableVisible, tableData } = this.state
         const {equipmentPumps } = this.props
         var newData = this.getAllPumpId(this.props.pumpRoles, 'pump_id')

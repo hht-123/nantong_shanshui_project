@@ -145,7 +145,7 @@ class Control extends Component{
          this.setState({
              dosage: e.target.value
          })
-         const seconds = parseInt(Number(e.target.value)/ parseInt(numb, 0))
+         const seconds = parseInt(Number(e.target.value)/ parseInt(numb, 0), 0)
          this.setState({
              seconds:seconds
          })
@@ -253,7 +253,7 @@ class Control extends Component{
     //状态：启动
     render() {
         // const { time, disabledMedicine } = this.state
-        const { deadline, flag, color, disabledWater, pumps, dosage, seconds } = this.state;
+        const { deadline, flag, color, disabledWater, dosage, seconds } = this.state;
         var newData = this.getAllPumpId(this.props.pumpRoles, 'pump_id')
         const {equipmentPumps } = this.props
 
