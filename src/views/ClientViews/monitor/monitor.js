@@ -122,9 +122,8 @@ class ClientMonitor extends Component{
           me.intervalRealTime = setInterval(() => {
             me.getRealTimeData(equipment_code)
             me.getWaterRemind()
-          }, 3000);
+          }, 5000);
           // 获得实时监控数据
-          me.getRealTimeData(equipment_code)
         }
       },
       function() {
@@ -210,8 +209,7 @@ class ClientMonitor extends Component{
       getRealTimeDataUrl,
       'get',
       function(response) {
-        let realTimeData = response.data.sort((a, b) => { a.mearsure_type.localeCompare(b.mearsure_type)})
-        // console.log(realTimeData)
+        let realTimeData = response.data.sort((a, b) => { return a.mearsure_type.localeCompare(b.mearsure_type)})
         me.setState({
           realTimeData: realTimeData
         })

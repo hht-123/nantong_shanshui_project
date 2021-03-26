@@ -109,7 +109,8 @@ class App extends Component {verifyUrl
       <Route path='/app/maintenance' key='maintenance' component={MaintenanceIndex} />,
       <Route path='/app/monitor/:equipment_aid' key='monitor' component={(props) => <Monitor {...props}/>} />,
       <Route path='/app/equipmentMaintenance/:equipment_id' key='equipmentMaintenance' component={EquipmentMaintenance} />,
-      <Route path='/app/waterRemind/:equipment_id' key='waterRemind' component={WaterRemind} />,
+      // <Route path='/app/waterRemind/:equipment_id' key='waterRemind' component={WaterRemind} />,
+      <Route path='/app/waterRemind/:equipment_id' key='waterRemind' component={ClientWaterRemind} />,
       <Route path='/app/sensorCalibratin/:equipment_id' key='sensorCalibratin' component={SensorCalibration} />,
       <Route path='/app/EquipmentOprationRecord/:equipment_id' key='EquipmentOprationRecord' component={(props) => <EquipmentOprationRecord {...props}/>} />
     ]

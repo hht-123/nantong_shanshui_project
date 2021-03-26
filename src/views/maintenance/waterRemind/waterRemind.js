@@ -56,6 +56,7 @@ class WaterRemind extends Component{
       'get',
       function(response) {
         if (me.state.whetherTest === false) {
+          console.log(response.data.data)
           me.setState({
             isLoading: false,
             total: response.data.count,
