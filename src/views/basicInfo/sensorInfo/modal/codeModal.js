@@ -84,6 +84,7 @@ class CodeModal extends Component {
         addSensorModelUrl + string + '/',        
         'get',
         function(response) {
+            // console.log(response)
             me.setState({
                 notice_content: response.data.notice_content,
                 high_sensor_threshold: response.data.high_sensor_threshold,

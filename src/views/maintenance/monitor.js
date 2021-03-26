@@ -127,7 +127,7 @@ class Monitor extends Component{
           me.intervalRealTime = setInterval(() => {
             me.getRealTimeData(equipment_code)
             me.getWaterRemind()
-          }, 3000);
+          }, 5000);
           // 获得实时监控数据
           me.getRealTimeData(equipment_code)
         }
@@ -226,8 +226,7 @@ class Monitor extends Component{
       getRealTimeDataUrl,
       'get',
       function(response) {
-        let realTimeData = response.data.sort((a, b) => { a.mearsure_type.localeCompare(b.mearsure_type)})
-        // console.log(realTimeData)
+        let realTimeData = response.data.sort((a, b) => { return a.mearsure_type.localeCompare(b.mearsure_type) })
         me.setState({
           realTimeData: realTimeData
         })
@@ -389,6 +388,7 @@ class Monitor extends Component{
                 equipModalVisible: true,
               })
       case 'control':
+        this.getAimId()
         return this.setState({
                 controlVisisible: true,
               })
@@ -562,7 +562,7 @@ class Monitor extends Component{
           title="返回"
         />
         <span className='name'>设备编号：{ this.state.equipmentData.equipment_code }</span>
-        <span className='company' onClick={ this.showCompanyModal } >用户单位：{ this.state.equipmentData.client_unit }</span>
+        <span className='company' onClick={this.showCompanyModal} >用户单位：{ this.state.equipmentData.client_unit }</span>
         <CompanyInfo
           whetherTest={ whetherTest }
           visible={ CompanyModalVisible }

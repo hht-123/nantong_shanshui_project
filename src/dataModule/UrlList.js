@@ -12,6 +12,7 @@ export const originalUrl = 'http://122.51.80.50:8000/';   //服务器
 // export const originalUrl = 'http://192.168.1.103:8000/';
 // export const websocketConnect = 'ws://10.41.7.235:90/' 
 export const websocketConnect = 'ws://122.51.80.50:90/' 
+// export const websocketConnect = 'ws://192.168.1.113:90/' 
 
 export const pumpInfoUrl = 'pump/';           //泵表
 export const pumpPowerAccountUrl = 'app/pump_and_user/'     //获取该泵权限对应的用户

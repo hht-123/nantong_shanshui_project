@@ -73,7 +73,7 @@ class Control extends Component{
                 console.log(event.data);
             }
 
-            if(backInfo === "11"){
+            if(backInfo === "1"){
                 const { seconds } = me.state;
                 const deadline = Date.now() + 1000 * (parseInt(seconds, 0));
                 me.setState({
@@ -84,6 +84,11 @@ class Control extends Component{
                     disabledMedicine: true
                 })
             }
+
+            if(backInfo === "0"){
+                message.error('设备开启失败！')
+            }
+
 
             if(backInfo === "设备正在被使用"){
                 message.warning("设备正在被使用,请稍后再试")
@@ -97,7 +102,14 @@ class Control extends Component{
     
     //倒计时停止
     onFinish = (choice)=> {
-        this.close(choice);
+        // this.close(choice);
+        this.setState({
+            time: null,              
+            seconds: null,
+            deadline: Date.now(),          
+            flag: false,             
+            color: "#b3b3b3",
+        })
     }
 
     //关闭窗口
@@ -133,7 +145,7 @@ class Control extends Component{
          this.setState({
              dosage: e.target.value
          })
-         const seconds = (Number(e.target.value)/ parseInt(numb, 0)).toFixed(2)
+         const seconds = parseInt(Number(e.target.value)/ parseInt(numb, 0))
          this.setState({
              seconds:seconds
          })
@@ -163,8 +175,8 @@ class Control extends Component{
         const { seconds, dosage } = this.state;
         const sendTime =  String(seconds)
         let actionInfo = {
-            // pump_code: choice.pump_code,
-            pump_code: 1,
+            pump_code: choice.pump_code,
+            // pump_code: 1,
             open_time: sendTime,
             dosage: dosage + 'L'
         }
@@ -266,7 +278,7 @@ class Control extends Component{
                                             <div className="blowdownRight">
                                                 <Countdown 
                                                     value={deadline} 
-                                                    // onFinish={ () => this.onFin ish("water") } 
+                                                    onFinish={ () => this.onFinish() } 
                                                 />
                                                 <div style={{marginTop: "5px"}}>
                                                     <div style={{float: "left"}}>状态:</div>

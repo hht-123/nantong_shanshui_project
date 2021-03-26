@@ -79,6 +79,11 @@ class App extends Component {verifyUrl
       verifyUrl,
       'get',
       function(response) {
+        if(response.data.power_num.includes('client_manage') === false ) {
+          me.setState({
+            visible: false
+          })
+        }
         me.setState({
           roleData: response.data.power_num
         })
@@ -108,6 +113,8 @@ class App extends Component {verifyUrl
       <Route path='/app/sensorCalibratin/:equipment_id' key='sensorCalibratin' component={SensorCalibration} />,
       <Route path='/app/EquipmentOprationRecord/:equipment_id' key='EquipmentOprationRecord' component={(props) => <EquipmentOprationRecord {...props}/>} />
     ]
+
+    
     
     
     return (
@@ -117,6 +124,7 @@ class App extends Component {verifyUrl
           <Content>
             {/*<HeaderMenu />*/}
             <Layout style={{ padding: '0 0', background: '#F8FAFF' }}>
+              {/* <Sider width={200} style={{ background: '#fff' }} hidden={this.state.roleData.includes('client_manage')} > */}
               <Sider width={200} style={{ background: '#fff' }} hidden={role_id === '9ca9088b74694db5a1b4594bcb8b2912' ? true : false}>
                 <SideMenu roleData={roleData} />
               </Sider>

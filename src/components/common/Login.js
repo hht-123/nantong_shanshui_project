@@ -41,6 +41,7 @@ class NormalLoginForm extends Component {
     state = {
         isLoding:false,
     };
+
     handleSubmit = (e) => {
         e.preventDefault();
         const me = this
@@ -71,6 +72,7 @@ class NormalLoginForm extends Component {
                             values['role_id'] = response.data.role_id;
                             setCookie('mspa_user',JSON.stringify(values));
                             message.success("登录成功"); //成功信息
+
                             me.props.history.push({pathname:'/app', state:values});
                         }
                     },
@@ -92,13 +94,14 @@ class NormalLoginForm extends Component {
                 //     setTimeout(function() { //延迟进入
                 //         that.props.history.push({pathname:'/app',state:values});
                 //     }, 2000);
-
                 // }else{
                 //     message.error('login failed!'); //失败信息
                 // }
             }
         });
-    };
+    }
+
+
 
     render() {
         const { getFieldDecorator } = this.props.form;

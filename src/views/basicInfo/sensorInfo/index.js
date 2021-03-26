@@ -108,8 +108,9 @@ class SensorInfo extends Component {
       sensorModelUrl,
       'get',
       function(response) {
+        // console.log(response.data)
         me.setState({
-          sensorModels: response.data
+          sensorModels: response.data.filter((item) => item.states === '1')
         })
       },
       function() {
@@ -279,9 +280,9 @@ class SensorInfo extends Component {
   //处理传感器类型数据所有筛选条件
   handleSensorTypeData = () => {
     let aftersensorTypes = [];
-    const { sensorTypes } = this.props;
-    if(sensorTypes.size !== 0){
-      aftersensorTypes =  sensorTypes.map((item,index) => (
+    const { usingSensorTypes } = this.props;
+    if(usingSensorTypes.size !== 0){
+      aftersensorTypes =  usingSensorTypes.map((item,index) => (
         item.get('type_name')
       ))
     }
@@ -309,7 +310,7 @@ class SensorInfo extends Component {
 
   render() {
     const { whetherTest, addTypeVisible, addModelVisible, addCodeVisible, isLoading, 
-      showPagination, total, currentPage, key1, key2, key3, editvisible, editInfo, sensorModels, size, sensorEditVisible } =this.state;
+      showPagination, total, currentPage, key1, key2, key3, editvisible, editInfo,sensorModels, size, sensorEditVisible } =this.state;
     const tableDate = this.handleData();
     const aftersensorTypes = this.handleSensorTypeData();
     const addsensorTypes = this.addsensorTypes();

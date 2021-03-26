@@ -108,7 +108,7 @@ class PumpInfo extends Component{
         })
         const { status, pump_code } = this.state
         let params = this.getParams(1, 10, status,  pump_code )
-        console.log(33, params)
+        // console.log(33, params)
         this.getPumpData(params)
     }
 
