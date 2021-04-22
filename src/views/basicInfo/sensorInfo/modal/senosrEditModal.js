@@ -46,16 +46,17 @@ class SenosrEditModal extends Component {
         } 
     }
 
-    genExtra = (aid) => (
-        <Popconfirm
-            title="你确定要删除么?"
-            onConfirm={() => this.deleteType(aid)}
-            okText="Yes"
-            cancelText="No"
-        >
-            <Icon type="delete"  style={{color: 'red'}}/>
-        </Popconfirm>
-    )
+    //删除传感器类型的函数
+    // genExtra = (aid) => (
+    //     <Popconfirm
+    //         title="你确定要删除么?"
+    //         onConfirm={() => this.deleteType(aid)}
+    //         okText="Yes"
+    //         cancelText="No"
+    //     >
+    //         <Icon type="delete"  style={{color: 'red'}}/>
+    //     </Popconfirm>
+    // )
 
     deleteType = (aid) => {
         if(this.state.sensorModels.length !== 0){
@@ -114,7 +115,7 @@ class SenosrEditModal extends Component {
                     <Collapse  onChange={this.callback} accordion>
                     {
                         sensorTypes.map((item0) => (
-                            <Panel header={item0.get("type_name")} key={item0.get("aid") + ',' + item0.get("type_name")} extra={this.genExtra(item0.get("aid"))}>
+                            <Panel header={item0.get("type_name")} key={item0.get("aid") + ',' + item0.get("type_name")} >
                                 { 
                                     sensorModels.length > 0 ? sensorModels.map((item => (
                                         <div key={item.aid} style={ {marginBottom:'10px'}}>

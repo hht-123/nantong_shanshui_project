@@ -566,8 +566,8 @@ class Monitor extends Component{
           onBack={() => window.history.back()}
           title="返回"
         />
-        <span className='name' onClick={ () => this.text(equipmentPumps)}>设备编号：{ this.state.equipmentData.equipment_code }</span>
-        <span className='company' onClick={ this.showCompanyModal } >用户单位：{ this.state.equipmentData.client_unit }</span>
+        <span className='name'>设备编号：{ this.state.equipmentData.equipment_code }</span>
+        <span className='company' onClick={this.showCompanyModal} >用户单位：{ this.state.equipmentData.client_unit }</span>
         <CompanyInfo
           whetherTest={ whetherTest }
           visible={ CompanyModalVisible }

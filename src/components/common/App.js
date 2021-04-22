@@ -23,7 +23,7 @@ import Monitor from '../../views/maintenance/monitor';
 //import { connect } from 'react-redux';
 //import { actionCreators } from '../index/store';
 import EquipmentMaintenance from '../../views/maintenance/equipmentMaintenance/equipmentMaintenance';
-import WaterRemind from '../../views/maintenance/waterRemind/waterRemind';
+// import WaterRemind from '../../views/maintenance/waterRemind/waterRemind';
 import SensorCalibration from '../../views/maintenance/sensorCalibration/sensorCalibration';
 import EquipmentOprationRecord from '../../views/maintenance/equipmentOperationRecord/index'
 
@@ -47,7 +47,7 @@ import AccountManagement from '../../views/accountAndRole/accountManagement'
 
 import { actionCreators as indexActionCreators } from '../index/store';
 import {verifyUrl} from '../../dataModule/UrlList';
-import {getUserId, getRoleId}  from '../../publicFunction/index';
+import { getUserId, getRoleId } from '../../publicFunction/index';
 
 const model = new Model();
 const { Content, Footer, Sider } = Layout;

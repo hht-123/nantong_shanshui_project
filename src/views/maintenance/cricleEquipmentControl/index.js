@@ -72,7 +72,7 @@ class CircleControl extends Component{
         })
         const seconds = Number(e.target.value)/ parseInt(numb, 0)
         this.setState({
-            seconds:parseInt(seconds)
+            seconds: parseInt(seconds, 0)
         })
         //  console.log(Number(e.target.value)/ numb)
     }
@@ -326,10 +326,11 @@ class CircleControl extends Component{
     }
 
     render() {
-        const { disabledWater, pumps, days, dosage, seconds } = this.state
+        const { disabledWater, days, dosage, seconds } = this.state
         const { tableVisible, tableData } = this.state
         const {equipmentPumps } = this.props
         var newData = this.getAllPumpId(this.props.pumpRoles, 'pump_id')
+        // console.log('newData', newData)
 
         return (
             <div className="control">
@@ -384,7 +385,7 @@ class CircleControl extends Component{
                                                     <Button type="primary" onClick={() => this.getUndoneData(item.pump_code)}>泵的操作查看</Button>
                                                     {
                                                         (() => {
-                                                            for(const i of newData){
+                                                            for (const i of newData) {
                                                                 if(i === item.pump_id){
                                                                     return  <Button  type="primary" icon="poweroff" style={{marginLeft: '20px'}} onClick={ this.handleOk}>开启</Button>
                                                                 }

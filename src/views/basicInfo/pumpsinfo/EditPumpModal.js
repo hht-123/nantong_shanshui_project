@@ -104,7 +104,8 @@ class DeletePump extends Component{
                     visible={EditPumpVisible}
                     onCancel={this.handleCancel}
                     onOk={ this.handleOk }
-                    confirmLoading={ confirmLoading }
+                    confirmLoading={confirmLoading}
+                    destroyOnClose={true}
                 >
                     <div style={{margin: '20px auto'}}>
                         <Form { ...formItemLayout }>
