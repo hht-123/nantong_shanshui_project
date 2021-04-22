@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../style.less'
+import './style.less'
 
 
 class Transfer extends Component {
@@ -13,7 +13,7 @@ class Transfer extends Component {
         const { pumps } = this.state
         return (
             <div>
-                <div className="baseInfo">
+                <div className="baseInfoss">
                     <ul >
                         <li>
                             <label>设备编号：</label>

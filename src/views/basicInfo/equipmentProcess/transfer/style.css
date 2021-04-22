@@ -1,0 +1,20 @@
+.baseInfoss {
+  display: flex;
+  margin-left: 40px;
+}
+.baseInfoss ul li {
+  list-style: none;
+  margin: 14px 20px;
+}
+.baseInfoss ul li label,
+.baseInfoss span {
+  font-size: 18px;
+}
+.leftInfo {
+  margin-left: 300px;
+}
+.pumpInfos {
+  width: 40%;
+  margin: 20px 80px;
+  font-size: 18px;
+}
