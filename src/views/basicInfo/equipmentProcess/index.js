@@ -2,13 +2,16 @@ import React, { Component } from 'react';
 import { Steps, Button, message } from 'antd';
 import './style.less'
 import Sensors from './sensor/index'
+import Equipments from './Equipment/index'
+import Pumps from './pump/index'
+
 
 const { Step } = Steps;
 
 const steps = [
   {
     title: '创建设备',
-    content:'a',
+    content:<Equipments/>,
   },
   {
     title: '配置传感器',
@@ -16,7 +19,7 @@ const steps = [
   },
   {
     title: '配置控制泵',
-    content: 'Last-content',
+    content: <Pumps/>,
   },
   {
     title: '设备调拨',

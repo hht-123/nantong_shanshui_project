@@ -72,15 +72,19 @@ class PumpSetting extends Component{
     }
 
     render(){
-        const { addInfo, number, delectInfo, index, item } = this.props
+        const { addInfo, number, delectInfo, index, item, testStyle } = this.props
+        let pumpAloneStyle = 'pumpAlone'
+        if (testStyle !== undefined) {
+            pumpAloneStyle = pumpAloneStyle + ' ' + testStyle
+        }
         // console.log('item',item)
         const { pumpsModal } = this.state
         return(
-            <div className="pumpAlone"> 
-                <div className="pCreateName">控制泵的名称：</div>
-                <div>
+            <div className={pumpAloneStyle}> 
+                <div className="pCreateName pump_name">控制泵的名称：</div>
+                <div className='pump_aline'>
                     <Select 
-                            className='pumpchoice' 
+                            className='pumpchoice pump_choice' 
                             onSelect={(string) => this.handleSelect(string)} 
                             value={ item.pump_name  }
                         >
@@ -91,7 +95,7 @@ class PumpSetting extends Component{
                             }
                     </Select>
 
-                    <div className='pIcon'>
+                    <div className='pIcon pump_icon'>
                         <Icon 
                             type="plus-circle" 
                             theme="twoTone"

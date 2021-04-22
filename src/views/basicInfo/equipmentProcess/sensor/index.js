@@ -5,6 +5,7 @@ import './sensorStyle.less'
 import SensorSetting from '../../../fixedAssets/equipmentInfo/modal/SensorSetting'
 import ModelModal from '../../sensorInfo/modal/modelModal';
 import CodeModal from '../../sensorInfo/modal/codeModal';
+import Equipment from '../componemtCommon/equipment'
 
 class Sensors extends Component {
     constructor(props) {
@@ -187,6 +188,8 @@ class Sensors extends Component {
         const addsensorTypes = this.addsensorTypes();
 
         return (
+            <div>
+                <div><Equipment/></div>
             <div className='sensorPositon'>
                 <div className='sensorBtn'>
                     {/* <div className='hardtitle'>传感器配置：</div> */}
@@ -225,6 +228,7 @@ class Sensors extends Component {
                     // getInfo={ this.getInfo }
                     afterCreateOrEdit={ this.afterCreateOrEdit }
                 />
+            </div>
             </div>
         )
     }
