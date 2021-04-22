@@ -33,6 +33,9 @@ import equipmentScrap from '../../views/fixedAssets/equipmentScrap';
 import EpuipmentConfigure from '../../views/fixedAssets/equipmentConfigure';
 import EpuipmentAllocation from '../../views/fixedAssets/equipmentAllocation';
 
+// 配置流程
+import EpuipmentProInfo from '../../views/basicInfo/equipmentProcess/index'
+
 //客户端页面
 import  ClientIndex  from '../../views/ClientViews/index/index.js';
 import ClientMonitor from '../../views/ClientViews/monitor/monitor';
@@ -131,6 +134,7 @@ class App extends Component {verifyUrl
               </Sider>
               <Content style={{ padding: '0 24px', minHeight: 'calc(100vh - 111px)' }}>
                 <Switch>
+                  <Route path='/app/equipmentProcess' component={(props) => <EpuipmentProInfo {...props} />} />,
                   { Array.from(roleData).map((item,index) => {
                     if(item === 'equipment_maintenance_retrieve') {
                       return [<Route exact path='/app' component={ MaintenanceIndex} />,

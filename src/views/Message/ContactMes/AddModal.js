@@ -61,7 +61,7 @@ class Addcontact extends Component{
         this.setState({
             confirmLoading: true,
         });
-            this.createNewContact(params);
+        this.createNewContact(params);
     };
 
     //取消按钮事件

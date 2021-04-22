@@ -5,7 +5,6 @@ import '../style.less';
 import { sensorModelUrl, addSensorUrl, addSensorModelUrl } from '../../../../dataModule/UrlList'
 
 
-
 const model = new Model();
 const { Option } = Select;
 class CodeModal extends Component {

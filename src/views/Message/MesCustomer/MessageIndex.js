@@ -38,7 +38,7 @@ class MessageIndex extends Component{
 
     //生命周期函数
     componentDidMount() {
-        let params = this.getParams();
+        let params =  this.getParams();
         this.getCurrentPage(params);
     }
 

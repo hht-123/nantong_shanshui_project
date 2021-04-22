@@ -3,13 +3,13 @@ import { originalUrl } from './UrlList'
 // import form from "eslint-plugin-jsx-a11y/src/util/implicitRoles/form";
 
 // 使用拦截器在发送请求前添加 token
-axios.interceptors.request.use(config => {
-  // 从 sessionStorage 中获取
-  // config.headers.Authorization = window.sessionStorage.getItem('token')
-  config.headers.Authorization = 'test token'
-  // 必须 return config
-  return config
-})
+// axios.interceptors.request.use(config => {
+//   // 从 sessionStorage 中获取
+//   // config.headers.Authorization = window.sessionStorage.getItem('token')
+//   config.headers.Authorization = 'test token'
+//   // 必须 return config
+//   return config
+// })
 
 function fetch(me, params = null, methods = 'post', thenFun = null, catchFun = null, whetherTest = true) {
   /** params 为参数，以键值对形式传递

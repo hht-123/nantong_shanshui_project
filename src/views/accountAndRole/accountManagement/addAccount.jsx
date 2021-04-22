@@ -20,7 +20,7 @@ export default class AddAccount extends Component {
       telephone_num: '',
       power_id_str: '1',
       alter_power: '1',
-      client_id:'',
+      // client_id:'',
       add_by: getUserName(),
     }
   }
