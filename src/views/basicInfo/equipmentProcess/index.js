@@ -4,6 +4,7 @@ import './style.less'
 import Sensors from './sensor/index'
 import Equipments from './Equipment/index'
 import Pumps from './pump/index'
+import Transfer from './transfer/index'
 
 
 const { Step } = Steps;
@@ -23,7 +24,7 @@ const steps = [
     },
 {
     title: '设备调拨',
-    content: 'Last-content',
+    content: <Transfer/>,
     },
 ];
 

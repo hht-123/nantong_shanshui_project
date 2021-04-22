@@ -30,13 +30,6 @@
   width: 40%;
   margin-top: 20px;
 }
-.creatPumps {
-  width: 300px;
-  margin-top: 20px;
-}
-.creatPumps .pumpTitle {
-  font-size: 30px;
-}
 .pump_name {
   width: 200px;
   margin-left: 10px;
@@ -58,4 +51,23 @@
   justify-content: space-between;
   width: 60px;
   margin-left: 10px;
+}
+.baseInfo {
+  display: flex;
+  margin-left: 40px;
+}
+ul li {
+  list-style: none;
+  margin: 14px 20px;
+}
+ul li label,
+span {
+  font-size: 18px;
+}
+.leftInfo {
+  margin-left: 300px;
+}
+.pumpInfos {
+  margin: 20px 40px;
+  font-size: 18px;
 }

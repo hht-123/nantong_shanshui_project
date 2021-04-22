@@ -61,6 +61,42 @@ class Pumps extends Component {
         // console.log('pumpsId', this.state.pumpsId)
     }
 
+    //拿到泵的id
+    getPumpId = (string, index) => {
+        const pumpsId = this.state.pumpsId
+        if(pumpsId[index] === undefined) {
+            pumpsId.push(string)
+        }else {
+            pumpsId[index] = string
+        }
+        this.setState({
+            pumpsId
+        })
+        // console.log('pumpsId', this.state.pumpsId)
+    }
+
+     //把对应的name和id存到pumps中
+     getString = (name, index, string ) => {
+        let data = this.state.pumps
+        switch(name) {
+            case 'name':
+                data[index].pump_name = string
+                this.setState({
+                    pumps: data
+                })
+                break;
+            case 'pumpid':
+                data[index].pump_id = string
+                this.setState({
+                    pumps: data
+                })
+                break;
+            default:
+                return 0;
+        }
+        // console.log('pumps', this.state.pumps)
+    }
+
 
     render() {
         const {  pumps, pumpNumber } = this.state;

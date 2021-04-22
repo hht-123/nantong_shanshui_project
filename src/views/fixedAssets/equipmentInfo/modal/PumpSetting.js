@@ -84,7 +84,7 @@ class PumpSetting extends Component{
                 <div className="pCreateName pump_name">控制泵的名称：</div>
                 <div className='pump_aline'>
                     <Select 
-                            className='pumpchoice pump_choice' 
+                            className='pumpchoice pump_choice'
                             onSelect={(string) => this.handleSelect(string)} 
                             value={ item.pump_name  }
                         >
