@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import { Steps, Button, message } from 'antd';
 import './style.less'
+import { connect } from 'react-redux'
+import {changeInputDisabled} from './store/actionCreators'
 import Sensors from './sensor/index'
 import Equipments from './Equipment/index'
 import Pumps from './pump/index'
+import Transfer from './transfer/index'
+import store from '../../../store';
 
 
 const { Step } = Steps;
@@ -23,7 +27,7 @@ const steps = [
     },
 {
     title: '设备调拨',
-    content: 'Last-content',
+    content: <Transfer/>,
     },
 ];
 
@@ -39,11 +43,21 @@ class EquipmentPro extends Component {
     next() {
         const current = this.state.current + 1;
         this.setState({ current });
+        if( current > 0) {
+            this.props.inputChange(true)
+        } else {
+            this.props.inputChange(false)
+        }
       }
     
     prev() {
         const current = this.state.current - 1;
         this.setState({ current });
+        if( current > 0) {
+            this.props.inputChange(true)
+        } else {
+            this.props.inputChange(false)
+        }
     }
     render() {
         const { current } = this.state
@@ -80,4 +94,14 @@ class EquipmentPro extends Component {
     }
 }
 
-export default EquipmentPro
+const dispatchToProps = (dispatch) =>{
+    return {
+        inputChange(value){
+            const action = changeInputDisabled(value)
+            store.dispatch(action)
+        }
+    }
+}
+
+
+export default connect(null, dispatchToProps)(EquipmentPro)

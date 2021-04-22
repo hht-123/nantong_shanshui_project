@@ -1,0 +1,1 @@
+export const CHANGE_INPUT_DISABLED = "equipmentProcess/CHANGE_INPUT_DISABLED";

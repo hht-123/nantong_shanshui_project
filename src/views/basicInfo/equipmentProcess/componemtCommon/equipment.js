@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Form, Input, Select } from 'antd';
+import { connect } from 'react-redux'
 
 class Equipment extends Component {
     render() {
         // const handleEngineNmaeDate = this.handleAllEngineName();
         const { getFieldDecorator } = this.props.form;
+        const {inputDisabled} = this.props
         const formItemLayout = {
             labelCol: {
               span: 6
@@ -13,6 +15,7 @@ class Equipment extends Component {
               span: 16,
             },
         };
+        
         return (
             <div style={{display: 'flex'}}>
                 <div style={{ width: '450px'}}>
@@ -24,7 +27,7 @@ class Equipment extends Component {
                             {getFieldDecorator('equipment_code', {
                                 rules: [{ required: true, message: '请输入设备编号' }],
                             })(
-                                <Input  name="equipment_code" onChange={this.handleChange} />
+                                <Input  name="equipment_code" onChange={this.handleChange} disabled={inputDisabled} />
                             )}
                         
                         </Form.Item>
@@ -42,6 +45,7 @@ class Equipment extends Component {
                                     filterOption={(input, option) =>
                                         option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                     }
+                                    disabled={inputDisabled}
                                 >
                                     {/* {
                                         handleEngineNmaeDate.size !== 0? 
@@ -59,7 +63,7 @@ class Equipment extends Component {
                             {getFieldDecorator('storehouse', {
                                 rules: [{ required: true, message: '请输入设备仓库' }],
                             })(
-                                <Input  name="storehouse" onChange={this.handleChange} />
+                                <Input  name="storehouse" onChange={this.handleChange} disabled={inputDisabled} />
                             )}
                         </Form.Item>
 
@@ -75,7 +79,7 @@ class Equipment extends Component {
                         {getFieldDecorator('storage_location', {
                             rules: [{ required: true, message: '请输入设备库位' }],
                         })(
-                            <Input  name="storage_location" onChange={this.handleChange} />
+                            <Input  name="storage_location" onChange={this.handleChange} disabled={inputDisabled} />
                         )}
                     </Form.Item>
 
@@ -86,7 +90,7 @@ class Equipment extends Component {
                         {getFieldDecorator('equip_person', {
                             rules: [{ required: true, message: '请指定配置人' }],
                         })(
-                            <Input  name="equip_person" onChange={this.handleChange} />
+                            <Input  name="equip_person" onChange={this.handleChange} disabled={inputDisabled} />
                         )}
                     </Form.Item>
 
@@ -94,7 +98,7 @@ class Equipment extends Component {
                         label='备注'
                         colon
                     >
-                    <Input  name="note" onChange={this.handleChange}  />
+                    <Input  name="note" onChange={this.handleChange}  disabled={inputDisabled} />
                     </Form.Item>
                 </Form>
                 </div>
@@ -103,4 +107,8 @@ class Equipment extends Component {
     }
 }
 
-export default Form.create()(Equipment);
+const mapStateToProps = (state) => ({
+    inputDisabled: state.getIn(['equipmentProcess', 'inputDisabled']),
+})
+
+export default connect(mapStateToProps, null)(Form.create()(Equipment));
