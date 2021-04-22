@@ -33,6 +33,8 @@ import equipmentScrap from '../../views/fixedAssets/equipmentScrap';
 import EpuipmentConfigure from '../../views/fixedAssets/equipmentConfigure';
 import EpuipmentAllocation from '../../views/fixedAssets/equipmentAllocation';
 
+import EpuipmentProInfo from '../../views/basicInfo/equipmentProcess/index'
+
 //客户端页面
 import  ClientIndex  from '../../views/ClientViews/index/index.js';
 import ClientMonitor from '../../views/ClientViews/monitor/monitor';
@@ -44,7 +46,7 @@ import AccountManagement from '../../views/accountAndRole/accountManagement'
 
 import { actionCreators as indexActionCreators } from '../index/store';
 import {verifyUrl} from '../../dataModule/UrlList';
-import {getUserId, getRoleId}  from '../../publicFunction/index';
+import { getUserId, getRoleId } from '../../publicFunction/index';
 
 const model = new Model();
 const { Content, Footer, Sider } = Layout;
@@ -131,6 +133,7 @@ class App extends Component {verifyUrl
               </Sider>
               <Content style={{ padding: '0 24px', minHeight: 'calc(100vh - 111px)' }}>
                 <Switch>
+                <Route path='/app/equipmentProcess' component={(props) => <EpuipmentProInfo {...props} />} />,
                   { Array.from(roleData).map((item,index) => {
                     if(item === 'equipment_maintenance_retrieve') {
                       return [<Route exact path='/app' component={ MaintenanceIndex} />,

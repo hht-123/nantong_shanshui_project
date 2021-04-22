@@ -51,11 +51,12 @@ export default class SideMenu extends Component {
                 </span>
           }
         >
-          <Menu.Item key="1"><Link to='/app/engine'>主机信息</Link></Menu.Item>
-          <Menu.Item key="2"><Link to='/app/sensor'>传感器信息</Link></Menu.Item>
-          <Menu.Item key="3"><Link to='/app/pumps'>控制泵信息</Link></Menu.Item>
-          <Menu.Item key="4"><Link to="/app/message">客户信息</Link></Menu.Item>
-          <Menu.Item key="5"><Link to="/app/equipment">设备信息</Link></Menu.Item>
+          <Menu.Item key="engine"><Link to='/app/engine'>主机信息</Link></Menu.Item>
+          <Menu.Item key="sensor"><Link to='/app/sensor'>传感器信息</Link></Menu.Item>
+          <Menu.Item key="pumps"><Link to='/app/pumps'>控制泵信息</Link></Menu.Item>
+          <Menu.Item key="message"><Link to="/app/message">客户信息</Link></Menu.Item>
+          <Menu.Item key="equipment"><Link to="/app/equipment">设备信息</Link></Menu.Item>
+          <Menu.Item key="equipmentProcess"><Link to="/app/equipmentProcess">设备创建配置流程</Link></Menu.Item>
         </SubMenu>
         <SubMenu
           
@@ -68,9 +69,9 @@ export default class SideMenu extends Component {
           }
         >
           {/* <Menu.Item key="4"><Link to="/app/equipment">设备信息</Link></Menu.Item> */}
-          <Menu.Item key="5"><Link to="/app/EpuipmentConfigure">设备配置记录</Link></Menu.Item>
-          <Menu.Item key="7"><Link to="/app/EpuipmentAllocation">设备调拨记录</Link></Menu.Item>
-          <Menu.Item key="8"><Link to="/app/equipmentScrap">设备报废记录</Link></Menu.Item>
+          <Menu.Item key="EpuipmentConfigure"><Link to="/app/EpuipmentConfigure">设备配置记录</Link></Menu.Item>
+          <Menu.Item key="EpuipmentAllocation"><Link to="/app/EpuipmentAllocation">设备调拨记录</Link></Menu.Item>
+          <Menu.Item key="equipmentScrap"><Link to="/app/equipmentScrap">设备报废记录</Link></Menu.Item>
         </SubMenu>
         {/* { Array.from(this.props.roleData).map((item,index) => {
           if (item === 'role_permissions_retrieve' || item === 'account_management' ) {

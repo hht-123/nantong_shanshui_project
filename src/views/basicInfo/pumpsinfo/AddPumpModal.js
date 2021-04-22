@@ -163,7 +163,8 @@ class AddPumPModal extends Component{
                     visible={addPumpVisible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
-                    confirmLoading={confirmLoading }
+                    confirmLoading={confirmLoading}
+                    destroyOnClose={true}
                 >
                     <div>
                         <Form { ...formItemLayout }>

@@ -7,11 +7,14 @@
  * @LastEditTime: 2020-05-05 14:46:48
  */
 import { combineReducers } from 'redux-immutable';
-import { reducer as indexReducer} from '../components/index/store';
+import { reducer as indexReducer } from '../components/index/store';
+import { reducer as equipmentProcess } from '../views/basicInfo/equipmentProcess/store';
+
 
 
 const reducer = combineReducers({
     index: indexReducer,
+    equipmentProcess: equipmentProcess,
 });
 
 export default reducer;
