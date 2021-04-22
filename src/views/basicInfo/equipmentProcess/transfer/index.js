@@ -43,21 +43,35 @@ class Transfer extends Component {
                         </li>
                     </ul>
                 </div>
+                <div className="sensorInfo">
+                    <div className='sensorTitle'>传感器配置：</div>
+                    <div className='sensorCont'>
+                        <div><label>传感器类型：</label><span>11</span></div>
+                        <div><label>传感器型号：</label><span>11</span></div>
+                        <div><label>传感器编号：</label><span>11</span></div>
+                    </div>
+                    <div className='sensorCont'>
+                        <div><label>传感器类型：</label><span>11</span></div>
+                        <div><label>传感器型号：</label><span>11</span></div>
+                        <div><label>传感器编号：</label><span>11</span></div>
+                    </div>
+                </div>
                 <div>
                     {
                         pumps.map((item, index) => {
                             return (
                                 <div key='name' className="pumpInfos">
                                     <label>控制泵的名称：</label>
-                                    <span>{ item.name }</span>
+                                    <span>{item.name}</span>
                                 </div>
                             )
                         })
-                        }
+                    }
                 </div>
             </div>
         )
     }
+
 }
 
 export default Transfer

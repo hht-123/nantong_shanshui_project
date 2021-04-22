@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { Steps, Button, message } from 'antd';
 import './style.less'
+import { connect } from 'react-redux'
+import {changeInputDisabled} from './store/actionCreators'
 import Sensors from './sensor/index'
 import Equipments from './Equipment/index'
 import Pumps from './pump/index'
 import Transfer from './transfer/index'
+import store from '../../../store';
 
 
 const { Step } = Steps;
@@ -23,7 +26,7 @@ const steps = [
     content: <Pumps/>,
     },
 {
-    title: '设备调拨',
+    title: '信息确认',
     content: <Transfer/>,
     },
 ];
@@ -40,12 +43,30 @@ class EquipmentPro extends Component {
     next() {
         const current = this.state.current + 1;
         this.setState({ current });
+        if( current > 0) {
+            this.props.inputChange(true)
+        } else {
+            this.props.inputChange(false)
+        }
       }
     
     prev() {
         const current = this.state.current - 1;
         this.setState({ current });
+        if( current > 0) {
+            this.props.inputChange(true)
+        } else {
+            this.props.inputChange(false)
+        }
     }
+
+    SubInfo() {
+        message.success('创建设备成功')
+        this.setState({
+            current: 0,
+        })
+    }
+    
     render() {
         const { current } = this.state
         return (
@@ -65,8 +86,13 @@ class EquipmentPro extends Component {
                             </Button>
                         )}
                         {current === steps.length - 1 && (
-                            <Button type="primary" onClick={() => message.success('Processing complete!')}>
+                            <Button type="primary" onClick={() => this.SubInfo()}>
                                 完成
+                            </Button>
+                        )}
+                        {current === steps.length - 1 && (
+                            <Button type="primary" onClick={() => message.success('Processing complete!')} style={{marginLeft:'8px'}}>
+                                设备调拨
                             </Button>
                         )}
                         {current > 0 && (
@@ -75,10 +101,21 @@ class EquipmentPro extends Component {
                             </Button>
                         )}
                     </div>
+                    <div style={{clear: 'both'}}></div>
                 </div>
             </div>
         )
     }
 }
 
-export default EquipmentPro
+const dispatchToProps = (dispatch) =>{
+    return {
+        inputChange(value){
+            const action = changeInputDisabled(value)
+            store.dispatch(action)
+        }
+    }
+}
+
+
+export default connect(null, dispatchToProps)(EquipmentPro)
