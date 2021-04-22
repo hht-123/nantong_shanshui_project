@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Steps, Button, message } from 'antd';
 import './style.less'
-import AddRequment from './add.js'
 import Sensors from './sensor/index'
 
 const { Step } = Steps;
@@ -9,7 +8,7 @@ const { Step } = Steps;
 const steps = [
   {
     title: '创建设备',
-    content:<AddRequment/>,
+    content:'a',
   },
   {
     title: '配置传感器',
