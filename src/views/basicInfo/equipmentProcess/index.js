@@ -26,7 +26,7 @@ const steps = [
     content: <Pumps/>,
     },
 {
-    title: '设备调拨',
+    title: '信息确认',
     content: <Transfer/>,
     },
 ];
@@ -59,6 +59,7 @@ class EquipmentPro extends Component {
             this.props.inputChange(false)
         }
     }
+
     render() {
         const { current } = this.state
         return (
@@ -80,6 +81,11 @@ class EquipmentPro extends Component {
                         {current === steps.length - 1 && (
                             <Button type="primary" onClick={() => message.success('Processing complete!')}>
                                 完成
+                            </Button>
+                        )}
+                        {current === steps.length - 1 && (
+                            <Button type="primary" onClick={() => message.success('Processing complete!')}>
+                                设备调拨
                             </Button>
                         )}
                         {current > 0 && (
