@@ -43,6 +43,10 @@ class EquipmentPro extends Component {
         }
     }
 
+    componentWillUnmount() {
+        this.props.inputChange(false)
+    }
+
     next() {
         const current = this.state.current + 1;
         this.setState({ current });

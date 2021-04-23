@@ -213,7 +213,7 @@ class App extends Component {verifyUrl
             </Layout>
           </Content>
           <Footer style={{ textAlign: 'center', backgroundColor: "#778899", color: "white" }}>
-            <span style={{ display: "block" }}>公司地址：上海市杨浦区军工路516号上海理工大学</span>
+            <span style={{ display: "block" }}>公司地址：南通善水化工</span>
             <span style={{ display: "block" }}>联系电话：12345</span>
             <span style={{ display: "block" }}>邮箱：12345@qq.com</span>
           </Footer>

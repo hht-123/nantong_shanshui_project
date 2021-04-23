@@ -5,7 +5,7 @@ import { removeCookie } from "../../helpers/cookies";
 import { withRouter } from 'react-router-dom';
 
 import '../../style/header.less';
-import logo from '../../statistics/logo.png';
+import logo from '../../statistics/logo.jpg';
 import { nowTime } from '../../publicFunction/index';
 // import { setCookie } from "../../helpers/cookies";
 // import {color} from "echarts/src/export";
@@ -78,7 +78,7 @@ class HeaderCustom extends Component{
 
       return(
         <Header className="header-style header">
-          <img alt="logo" src={logo}/>
+          <img alt="logo" src={logo} width='200px'/>
           {/* <Link to="/technology-system"> */}
             <span className={'header-span'}>循环水智慧管家远程监控系统</span>
           {/* </Link> */}
