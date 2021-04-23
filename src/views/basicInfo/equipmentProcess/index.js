@@ -7,6 +7,7 @@ import Sensors from './sensor/index'
 import Equipments from './Equipment/index'
 import Pumps from './pump/index'
 import Transfer from './transfer/index'
+import AllocationModal from '../../fixedAssets/equipmentInfo/modal/allocationModal'
 import store from '../../../store';
 
 
@@ -36,7 +37,9 @@ class EquipmentPro extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            current: 0
+            current: 0,
+            allocationModalVisble: false,
+            allocationEqiipmentInfo: {}
         }
     }
 
@@ -62,13 +65,26 @@ class EquipmentPro extends Component {
 
     SubInfo() {
         message.success('创建设备成功')
+        this.props.inputChange(false)
         this.setState({
             current: 0,
         })
     }
+
+    allocation = () => {
+        this.setState({
+            allocationModalVisble: true
+        })
+    }
+
+    closeModal = () => {
+        this.setState({
+            allocationModalVisble: false
+        })
+    }
     
     render() {
-        const { current } = this.state
+        const { current, allocationModalVisble, allocationEqiipmentInfo } = this.state
         return (
             <div>
                 <div className="name">设备创建配置流程</div>
@@ -91,7 +107,7 @@ class EquipmentPro extends Component {
                             </Button>
                         )}
                         {current === steps.length - 1 && (
-                            <Button type="primary" onClick={() => message.success('Processing complete!')} style={{marginLeft:'8px'}}>
+                            <Button type="primary" onClick={() => this.allocation()} style={{marginLeft:'8px'}}>
                                 设备调拨
                             </Button>
                         )}
@@ -102,6 +118,11 @@ class EquipmentPro extends Component {
                         )}
                     </div>
                     <div style={{clear: 'both'}}></div>
+                    <AllocationModal
+                        visible = {allocationModalVisble}
+                        closeModal={ this.closeModal }
+                        data = { allocationEqiipmentInfo }
+                    />
                 </div>
             </div>
         )
