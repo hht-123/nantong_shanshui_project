@@ -1,0 +1,39 @@
+.sensorInfo {
+  margin-left: 120px;
+}
+.sensorInfo .sensorTitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.sensorInfo .sensorCont {
+  display: flex;
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+.sensorInfo .sensorCont div label {
+  margin-right: 10px;
+}
+.sensorInfo .sensorCont div span {
+  display: inline-block;
+  width: 120px;
+}
+.baseInfoss {
+  display: flex;
+  margin: 20px 80px;
+}
+.baseInfoss ul li {
+  line-height: 40px;
+  list-style: none;
+}
+.baseInfoss ul li label,
+.baseInfoss span {
+  font-size: 18px;
+}
+.leftInfo {
+  margin-left: 200px;
+}
+.pumpInfos {
+  margin: 60px 120px;
+  font-size: 18px;
+}

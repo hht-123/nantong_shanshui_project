@@ -22,20 +22,14 @@
   padding-top: 20px;
 }
 .steps-action {
-  width: 200px;
-  margin: 24px 1040px;
+  width: 250px;
+  margin-top: 24px;
+  float: right;
 }
 .pump_father {
   display: inline-block;
   width: 40%;
   margin-top: 20px;
-}
-.creatPumps {
-  width: 300px;
-  margin-top: 20px;
-}
-.creatPumps .pumpTitle {
-  font-size: 30px;
 }
 .pump_name {
   width: 200px;

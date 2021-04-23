@@ -1,6 +1,6 @@
 import React,{ Component } from 'react'
 import { connect } from 'react-redux'
-import { message, Button } from 'antd'
+import { message } from 'antd'
 import './sensorStyle.less'
 import SensorSetting from '../../../fixedAssets/equipmentInfo/modal/SensorSetting'
 import ModelModal from '../../sensorInfo/modal/modelModal';

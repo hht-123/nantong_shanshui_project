@@ -60,6 +60,13 @@ class EquipmentPro extends Component {
         }
     }
 
+    SubInfo() {
+        message.success('创建设备成功')
+        this.setState({
+            current: 0,
+        })
+    }
+    
     render() {
         const { current } = this.state
         return (
@@ -79,12 +86,12 @@ class EquipmentPro extends Component {
                             </Button>
                         )}
                         {current === steps.length - 1 && (
-                            <Button type="primary" onClick={() => message.success('Processing complete!')}>
+                            <Button type="primary" onClick={() => this.SubInfo()}>
                                 完成
                             </Button>
                         )}
                         {current === steps.length - 1 && (
-                            <Button type="primary" onClick={() => message.success('Processing complete!')}>
+                            <Button type="primary" onClick={() => message.success('Processing complete!')} style={{marginLeft:'8px'}}>
                                 设备调拨
                             </Button>
                         )}
@@ -94,6 +101,7 @@ class EquipmentPro extends Component {
                             </Button>
                         )}
                     </div>
+                    <div style={{clear: 'both'}}></div>
                 </div>
             </div>
         )
